@@ -204,7 +204,8 @@ namespace MYBUSINESS.Controllers
                 var store = new DailyBalanceVnd
                 {
                     OpeningDate = DateTime.UtcNow,
-                    OpeningBalance = storeDto.OpeningBalance
+                    OpeningBalance = storeDto.OpeningBalance,
+                    OpeningCurrencyDetail = storeDto.OpeningCurrencyDetail
                 };
                 db.DailyBalanceVnds.Add(store);
                 db.SaveChanges();
@@ -219,7 +220,8 @@ namespace MYBUSINESS.Controllers
             var store = new DailyBalanceVnd
             {
                 ClosingDate = DateTime.UtcNow,
-                ClosingBalance = storeDto.OpeningBalance
+                ClosingBalance = storeDto.ClosingBalance,
+                ClosingCurrencyDetail = storeDto.ClosingCurrencyDetail
             };
             db.DailyBalanceVnds.Add(store);
             db.SaveChanges();

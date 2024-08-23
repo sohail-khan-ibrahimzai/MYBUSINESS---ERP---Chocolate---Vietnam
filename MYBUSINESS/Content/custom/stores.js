@@ -10,7 +10,50 @@ $('#openShop').click(function () {
         const element = document.querySelector('.storeids');
         // Get the value of data-storeid
         const storeIds = element.getAttribute('data-storeid');
+        var formattedString = "";
+        if (openingCurrencyDetalInVnd.length > 0) {
+            debugger;
+            formattedString = openingCurrencyDetalInVnd.map(item => {
+                // Set the fixed denomination value
+                let denominationValue = 0;
 
+                switch (item.denomination) {
+                    case 'oneThsndVnd':
+                        denominationValue = 1000;
+                        break;
+                    case 'twoThsndVnd':
+                        denominationValue = 2000;
+                        break;
+                    case 'fiveThsndVnd':
+                        denominationValue = 5000;
+                        break;
+                    case 'tenThsndVnd':
+                        denominationValue = 10000;
+                        break;
+                    case 'twentyThsndVnd':
+                        denominationValue = 20000;
+                        break;
+                    case 'fiftyThsndVnd':
+                        denominationValue = 50000;
+                        break;
+                    case 'oneLacVnd':
+                        denominationValue = 100000;
+                        break;
+                    case 'twoLacVnd':
+                        denominationValue = 200000;
+                        break;
+                    case 'fiveLacVnd':
+                        denominationValue = 500000;
+                        break;
+                    default:
+                        denominationValue = 0;
+                }
+
+                // Use the fixed denomination value in the formatted string
+                return `${denominationValue}@${item.count}`;
+            }).join(':');
+        }
+        //formattedString = openingCurrencyDetalInVnd.map(item => `${item.totalValue}@${item.count}`).join(':');
         //storeId from layout/shared.js
         storeId = storeIds;
         if (storeIds != null || storeIds != undefined) { localStorage.setItem('storeId', storeId); }
@@ -32,6 +75,7 @@ $('#openShop').click(function () {
 
         var storeViewModel = {
             OpeningBalance: selectedBlance, // Assuming you have an input field with id="openingBalance"
+            OpeningCurrencyDetail: formattedString
         };
 
         // Make the AJAX POST request to server-side
@@ -47,7 +91,7 @@ $('#openShop').click(function () {
             success: function (response) {
                 if (response.Success) {
                     //alert(response.Message);
-                    window.location.href('/SOSR/Create?IsReturn=false')
+                    window.location.href = '/SOSR/Create?IsReturn=false';
                     $('#storeOpeningPopup').modal('hide');
                 } else {
                     alert('Error: ' + response.Message);
@@ -61,3 +105,51 @@ $('#openShop').click(function () {
         alert("Operation cancelled.");
     }
 });
+function calculateTotal(inputId, denominationValue, outputId) {
+    debugger;
+    const count = parseInt(document.getElementById(inputId).value) || 0;
+    const total = count * denominationValue;
+    document.getElementById(outputId).value = total;
+
+    // Update the overall totals
+    updateOverallTotals();
+}
+var openingCurrencyDetalInVnd = [];
+function updateOverallTotals() {
+    debugger;
+    const inputIds = ['oneThsndVnd', 'twoThsndVnd', 'fiveThsndVnd', 'tenThsndVnd', 'twentyThsndVnd', 'fiftyThsndVnd', 'oneLacVnd', 'twoLacVnd', 'fiveLacVnd'];
+    const outputIds = ['totalOneThsndVnd', 'totalTwoThsndVnd', 'totalFiveThsndVnd', 'totalTenThsndVnd', 'totalTwentyThsndVnd', 'totalFiftyThsndVnd', 'totalOneLacVnd', 'totalTwoLacVnd', 'totalFiveLacVnd'];
+
+    let totalNotes = 0;
+    let totalValue = 0;
+    openingCurrencyDetalInVnd = [];
+    inputIds.forEach((id, index) => {
+        const count = parseInt(document.getElementById(id).value) || 0;
+        totalNotes += count;
+
+        // Get the corresponding total value
+        const value = parseInt(document.getElementById(outputIds[index]).value) || 0;
+        totalValue += value;
+
+        // Push the note count and value to the array
+        if (count > 0) {
+            openingCurrencyDetalInVnd.push({
+                denomination: id,  // Identifier for the denomination (e.g., 'oneThsndVnd')
+                count: count,
+                totalValue: value
+            });
+        }
+    });
+    //inputIds.forEach((id, index) => {
+    //    const count = parseInt(document.getElementById(id).value) || 0;
+    //    totalNotes += count;
+    //});
+
+    //outputIds.forEach(id => {
+    //    const value = parseInt(document.getElementById(id).value) || 0;
+    //    totalValue += value;
+    //});
+
+    document.getElementById('totalVnd').value = totalNotes;
+    document.getElementById('totalVndCount').value = totalValue;
+}

@@ -13,9 +13,9 @@
 
     <link rel="stylesheet" href="~/bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/bower_components/font-awesome/css/all.min.css">
-  
+
     <link rel="stylesheet" href="~/dist/css/AdminLTE.min.css">
-    
+
     <link rel="stylesheet" href="~/dist/css/skins/_all-skins.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
@@ -23,7 +23,7 @@
 
     <!-- jQuery 3 -->
     <script src="~/bower_components/jquery/dist/jquery.min.js"></script>
-   
+
     <script>
         $.widget.bridge('uibutton', $.ui.button);
     </script>
@@ -35,7 +35,7 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Latest compiled JavaScript -->
-    
+
     <script src="~/Content/custom/shared.js"></script>
     <style>
         .form-group {
@@ -338,8 +338,13 @@
                             @*<li><a href="https://www.youtube.com/watch?v=iVlDTNcOb3c&list=PLDTx5VG5ZidanCCtYhp_JwbZeqCotZVdA">How To Use</a></li>*@
                             @*<li><a href="https://www.myASP.NET/index?r=100971661">Free Hosting</a></li>*@
                             @*<li><a href="https://www.fiverr.com/waqaslinks">Tech Support</a></li>*@
-                            <li><a href="#" id="closeStore">Close POS</a></li>
-                            MYBUSINESS.Models.Employee currentUser = (MYBUSINESS.Models.Employee)HttpContext.Current.Session["CurrentUser"];
+                        MYBUSINESS.Models.Employee currentUser = (MYBUSINESS.Models.Employee)HttpContext.Current.Session["CurrentUser"];
+                        //if (currentUser.StoreId != null && storeId != 0)
+                        if (currentUser.StoreId != null)
+                        {
+                                <li><a href="#" id="closeStore">Close POS</a></li>
+                            }
+
                             if (currentUser.EmployeeTypeId == 0)
                             {
                                 <li>@Html.ActionLink("Support", "Contact", "Home")</li>
@@ -799,55 +804,108 @@
                                                 <h4 class="card-title">VND (₫)</h4>
                                                 <div class="form-group flex-row">
                                                     <label for="oneThsndVndClose">1 000 (₫)</label>
-                                                    <input type="text" autocomplete="off" class="form-control" name="oneThsndVndClose" id="oneThsndVndClose" value="0"> &nbsp;&nbsp;&nbsp;
+                                                    <input type="text" autocomplete="off" class="form-control" name="oneThsndVndClose" id="oneThsndVndClose" value="0" oninput="calculateTotalClose('oneThsndVndClose', 1000, 'totalOneThsndVndClose')"> &nbsp;&nbsp;&nbsp;
                                                     <input type="text" autocomplete="off" class="form-control" name="totalOneThsndVndClose" id="totalOneThsndVndClose" value="0">
                                                 </div>
                                                 <div class="form-group flex-row">
                                                     <label for="twoThsndVndClose">2 000 (₫)</label>
-                                                    <input type="text" class="form-control" name="twoThsndVnd" id="twoThsndVndClose" value="0">&nbsp;&nbsp;&nbsp;
+                                                    <input type="text" class="form-control" name="twoThsndVndClose" id="twoThsndVndClose" value="0" oninput="calculateTotalClose('twoThsndVndClose', 2000, 'totalTwoThsndVndClose')">&nbsp;&nbsp;&nbsp;
                                                     <input type="text" class="form-control" name="totalTwoThsndVndClose" id="totalTwoThsndVndClose" value="0">
                                                 </div>
                                                 <div class="form-group flex-row">
                                                     <label for="fiveThsndVndClose">5 000 (₫)</label>
-                                                    <input type="text" class="form-control" name="fiveThsndVndClose" id="fiveThsndVndClose" value="0">&nbsp;&nbsp;&nbsp;
-                                                    <input type="text" class="form-control" name="totalThsndVndClose" id="totalThsndVndClose" value="0">
+                                                    <input type="text" class="form-control" name="fiveThsndVndClose" id="fiveThsndVndClose" value="0" oninput="calculateTotalClose('fiveThsndVndClose', 5000, 'totalFiveThsndVndClose')">&nbsp;&nbsp;&nbsp;
+                                                    <input type="text" class="form-control" name="totalFiveThsndVndClose" id="totalFiveThsndVndClose" value="0">
                                                 </div>
                                                 <div class="form-group flex-row">
                                                     <label for="tenThsndVndClose">10 000 (₫)</label>
-                                                    <input type="text" class="form-control" name="tenThsndVndClose" id="tenThsndVndClose" value="0">&nbsp;&nbsp;&nbsp;
-                                                    <input type="text" class="form-control" name="toalTenThsndVndClose" id="toalTenThsndVndClose" value="0">
+                                                    <input type="text" class="form-control" name="tenThsndVndClose" id="tenThsndVndClose" value="0" oninput="calculateTotalClose('tenThsndVndClose', 10000, 'totalTenThsndVndClose')">&nbsp;&nbsp;&nbsp;
+                                                    <input type="text" class="form-control" name="totalTenThsndVndClose" id="totalTenThsndVndClose" value="0">
                                                 </div>
                                                 <div class="form-group flex-row">
                                                     <label for="twentyThsndVndClose">20 000 (₫)</label>
-                                                    <input type="text" class="form-control" name="twentyThsndVndClose" id="twentyThsndVndClose" value="0">&nbsp;&nbsp;&nbsp;
+                                                    <input type="text" class="form-control" name="twentyThsndVndClose" id="twentyThsndVndClose" value="0" oninput="calculateTotalClose('twentyThsndVndClose', 20000, 'totalTwentyThsndVndClose')">&nbsp;&nbsp;&nbsp;
                                                     <input type="text" class="form-control" name="totalTwentyThsndVndClose" id="totalTwentyThsndVndClose" value="0">
                                                 </div>
                                                 <div class="form-group flex-row">
                                                     <label for="fiftyThsndVndClose">50 000 (₫)</label>
-                                                    <input type="text" class="form-control" name="fiftyThsndVndClose" id="fiftyThsndVndClose" value="0">&nbsp;&nbsp;&nbsp;
+                                                    <input type="text" class="form-control" name="fiftyThsndVndClose" id="fiftyThsndVndClose" value="0" oninput="calculateTotalClose('fiftyThsndVndClose', 50000, 'totalFiftyThsndVndClose')">&nbsp;&nbsp;&nbsp;
                                                     <input type="text" class="form-control" name="totalFiftyThsndVndClose" id="totalFiftyThsndVndClose" value="0">
                                                 </div>
                                                 <div class="form-group flex-row">
                                                     <label for="oneLacVndClose">100 000 (₫)</label>
-                                                    <input type="text" class="form-control" name="oneLacVndClose" id="oneLacVndClose" value="0">&nbsp;&nbsp;&nbsp;
-                                                    <input type="text" class="form-control" name="totalOneLacVndClose" id="totalOneLacVndClose" value="0">
+                                                    <input type="text" class="form-control" name="oneLacVndClose" id="oneLacVndClose" value="0" oninput="calculateTotalClose('oneLacVndClose', 100000, 'totalOneLacVndClose')">&nbsp;&nbsp;&nbsp;
+                                                    <input type="text" class="form-control" name="totalOneLacVnClose" id="totalOneLacVndClose" value="0">
                                                 </div>
                                                 <div class="form-group flex-row">
                                                     <label for="twoLacVndClose">200 000 (₫)</label>
-                                                    <input type="text" class="form-control" name="twoLacVnd" id="twoLacVnd" value="0">&nbsp;&nbsp;&nbsp;
-                                                    <input type="text" class="form-control" name="totalTwoLacVnd" id="totalTwoLacVnd" value="0">
+                                                    <input type="text" class="form-control" name="twoLacVndClose" id="twoLacVndClose" value="0" oninput="calculateTotalClose('twoLacVndClose', 200000, 'totalTwoLacVndClose')">&nbsp;&nbsp;&nbsp;
+                                                    <input type="text" class="form-control" name="totalTwoLacVndClose" id="totalTwoLacVndClose" value="0">
                                                 </div>
                                                 <div class="form-group flex-row">
-                                                    <label for="fiveLacVndClose">500 000 (₫)</label>
-                                                    <input type="text" class="form-control" name="fiveLacVndClose" id="fiveLacVndClose" value="0">&nbsp;&nbsp;&nbsp;
+                                                    <label for="fiveLacVnd">500 000 (₫)</label>
+                                                    <input type="text" class="form-control" name="fiveLacVndClose" id="fiveLacVndClose" value="0" oninput="calculateTotalClose('fiveLacVndClose', 500000, 'totalFiveLacVndClose')">&nbsp;&nbsp;&nbsp;
                                                     <input type="text" class="form-control" name="totalFiveLacVndClose" id="totalFiveLacVndClose" value="0">
                                                 </div>
                                                 <div class="form-group flex-row">
                                                     <label for="totalVndClose">Total</label>
-                                                    <input type="text" class="form-control" name="totalVnd" id="totalVndClose" value="0">&nbsp;&nbsp;&nbsp; Total (₫)
+                                                    <input type="text" class="form-control" name="totalVndClose" id="totalVndClose" value="0">&nbsp;&nbsp;&nbsp; Total (₫)
                                                     <input type="text" class="form-control" name="totalVndCountClose" id="totalVndCountClose" value="0">
                                                 </div>
                                             </form>
+                                            @*<form>
+                                                    <h4 class="card-title">VND (₫)</h4>
+                                                    <div class="form-group flex-row">
+                                                        <label for="oneThsndVndClose">1 000 (₫)</label>
+                                                        <input type="text" autocomplete="off" class="form-control" name="oneThsndVndClose" id="oneThsndVndClose" value="0"> &nbsp;&nbsp;&nbsp;
+                                                        <input type="text" autocomplete="off" class="form-control" name="totalOneThsndVndClose" id="totalOneThsndVndClose" value="0">
+                                                    </div>
+                                                    <div class="form-group flex-row">
+                                                        <label for="twoThsndVndClose">2 000 (₫)</label>
+                                                        <input type="text" class="form-control" name="twoThsndVnd" id="twoThsndVndClose" value="0">&nbsp;&nbsp;&nbsp;
+                                                        <input type="text" class="form-control" name="totalTwoThsndVndClose" id="totalTwoThsndVndClose" value="0">
+                                                    </div>
+                                                    <div class="form-group flex-row">
+                                                        <label for="fiveThsndVndClose">5 000 (₫)</label>
+                                                        <input type="text" class="form-control" name="fiveThsndVndClose" id="fiveThsndVndClose" value="0">&nbsp;&nbsp;&nbsp;
+                                                        <input type="text" class="form-control" name="totalThsndVndClose" id="totalThsndVndClose" value="0">
+                                                    </div>
+                                                    <div class="form-group flex-row">
+                                                        <label for="tenThsndVndClose">10 000 (₫)</label>
+                                                        <input type="text" class="form-control" name="tenThsndVndClose" id="tenThsndVndClose" value="0">&nbsp;&nbsp;&nbsp;
+                                                        <input type="text" class="form-control" name="toalTenThsndVndClose" id="toalTenThsndVndClose" value="0">
+                                                    </div>
+                                                    <div class="form-group flex-row">
+                                                        <label for="twentyThsndVndClose">20 000 (₫)</label>
+                                                        <input type="text" class="form-control" name="twentyThsndVndClose" id="twentyThsndVndClose" value="0">&nbsp;&nbsp;&nbsp;
+                                                        <input type="text" class="form-control" name="totalTwentyThsndVndClose" id="totalTwentyThsndVndClose" value="0">
+                                                    </div>
+                                                    <div class="form-group flex-row">
+                                                        <label for="fiftyThsndVndClose">50 000 (₫)</label>
+                                                        <input type="text" class="form-control" name="fiftyThsndVndClose" id="fiftyThsndVndClose" value="0">&nbsp;&nbsp;&nbsp;
+                                                        <input type="text" class="form-control" name="totalFiftyThsndVndClose" id="totalFiftyThsndVndClose" value="0">
+                                                    </div>
+                                                    <div class="form-group flex-row">
+                                                        <label for="oneLacVndClose">100 000 (₫)</label>
+                                                        <input type="text" class="form-control" name="oneLacVndClose" id="oneLacVndClose" value="0">&nbsp;&nbsp;&nbsp;
+                                                        <input type="text" class="form-control" name="totalOneLacVndClose" id="totalOneLacVndClose" value="0">
+                                                    </div>
+                                                    <div class="form-group flex-row">
+                                                        <label for="twoLacVndClose">200 000 (₫)</label>
+                                                        <input type="text" class="form-control" name="twoLacVnd" id="twoLacVnd" value="0">&nbsp;&nbsp;&nbsp;
+                                                        <input type="text" class="form-control" name="totalTwoLacVnd" id="totalTwoLacVnd" value="0">
+                                                    </div>
+                                                    <div class="form-group flex-row">
+                                                        <label for="fiveLacVndClose">500 000 (₫)</label>
+                                                        <input type="text" class="form-control" name="fiveLacVndClose" id="fiveLacVndClose" value="0">&nbsp;&nbsp;&nbsp;
+                                                        <input type="text" class="form-control" name="totalFiveLacVndClose" id="totalFiveLacVndClose" value="0">
+                                                    </div>
+                                                    <div class="form-group flex-row">
+                                                        <label for="totalVndClose">Total</label>
+                                                        <input type="text" class="form-control" name="totalVnd" id="totalVndClose" value="0">&nbsp;&nbsp;&nbsp; Total (₫)
+                                                        <input type="text" class="form-control" name="totalVndCountClose" id="totalVndCountClose" value="0">
+                                                    </div>
+                                                </form>*@
                                         </div>
                                         <div class="col-md-6">
                                             <!-- Content for the third column (4 columns wide) -->

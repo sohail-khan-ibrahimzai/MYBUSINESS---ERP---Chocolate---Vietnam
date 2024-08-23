@@ -19,8 +19,50 @@ $(document).on('click', '#closeShop', function () {
         //// Get the value of data-storeid
         //const storeId = element.getAttribute('data-storeid');
         //alert(storeId);
+        var formattedString = "";
+        if (closeCurrencyDetalInVnd.length > 0) {
+            debugger;
+            formattedString = closeCurrencyDetalInVnd.map(item => {
+                // Set the fixed denomination value
+                let denominationValue = 0;
 
-        var selectedBlance;
+                switch (item.denomination) {
+                    case 'oneThsndVndClose':
+                        denominationValue = 1000;
+                        break;
+                    case 'twoThsndVndClose':
+                        denominationValue = 2000;
+                        break;
+                    case 'fiveThsndVndClose':
+                        denominationValue = 5000;
+                        break;
+                    case 'tenThsndVndClose':
+                        denominationValue = 10000;
+                        break;
+                    case 'twentyThsndVndClose':
+                        denominationValue = 20000;
+                        break;
+                    case 'fiftyThsndVndClose':
+                        denominationValue = 50000;
+                        break;
+                    case 'oneLacVndClose':
+                        denominationValue = 100000;
+                        break;
+                    case 'twoLacVndClose':
+                        denominationValue = 200000;
+                        break;
+                    case 'fiveLacVndClose':
+                        denominationValue = 500000;
+                        break;
+                    default:
+                        denominationValue = 0;
+                }
+
+                // Use the fixed denomination value in the formatted string
+                return `${denominationValue}@${item.count}`;
+            }).join(':');
+        }
+        var selectedBlance = 0;
         var vndBalance = parseFloat($('#totalVndCountClose').val());
         var dollarBalance = parseFloat($('#totalDollarsCountClose').val());
         var jpyBalance = parseFloat($('#totalYensCountClose').val());
@@ -37,6 +79,7 @@ $(document).on('click', '#closeShop', function () {
 
         var storeViewModel = {
             ClosingBalance: selectedBlance, // Assuming you have an input field with id="openingBalance"
+            ClosingCurrencyDetail: formattedString
         };
 
         // Make the AJAX POST request to server-side
@@ -51,7 +94,8 @@ $(document).on('click', '#closeShop', function () {
             //},
             success: function (response) {
                 if (response.Success) {
-                    alert(response.Message);
+                    //alert(response.Message);
+                    window.location.href = '/Stores/StoreDashboard';
                 } else {
                     alert('Error: ' + response.Message);
                 }
@@ -64,3 +108,51 @@ $(document).on('click', '#closeShop', function () {
         alert("Operation cancelled.");
     }
 });
+function calculateTotalClose(inputId, denominationValue, outputId) {
+    debugger;
+    const count = parseInt(document.getElementById(inputId).value) || 0;
+    const total = count * denominationValue;
+    document.getElementById(outputId).value = total;
+
+    // Update the overall totals
+    updateOverallTotalsClose();
+}
+var closeCurrencyDetalInVnd = [];
+function updateOverallTotalsClose() {
+    debugger;
+    const inputIds = ['oneThsndVndClose', 'twoThsndVndClose', 'fiveThsndVndClose', 'tenThsndVndClose', 'twentyThsndVndClose', 'fiftyThsndVndClose', 'oneLacVndClose', 'twoLacVndClose', 'fiveLacVndClose'];
+    const outputIds = ['totalOneThsndVndClose', 'totalTwoThsndVndClose', 'totalFiveThsndVndClose', 'totalTenThsndVndClose', 'totalTwentyThsndVndClose', 'totalFiftyThsndVndClose', 'totalOneLacVndClose', 'totalTwoLacVndClose', 'totalFiveLacVndClose'];
+
+    let totalNotes = 0;
+    let totalValue = 0;
+    closeCurrencyDetalInVnd = [];
+    inputIds.forEach((id, index) => {
+        const count = parseInt(document.getElementById(id).value) || 0;
+        totalNotes += count;
+
+        // Get the corresponding total value
+        const value = parseInt(document.getElementById(outputIds[index]).value) || 0;
+        totalValue += value;
+
+        // Push the note count and value to the array
+        if (count > 0) {
+            closeCurrencyDetalInVnd.push({
+                denomination: id,  // Identifier for the denomination (e.g., 'oneThsndVnd')
+                count: count,
+                totalValue: value
+            });
+        }
+    });
+    //inputIds.forEach((id, index) => {
+    //    const count = parseInt(document.getElementById(id).value) || 0;
+    //    totalNotes += count;
+    //});
+
+    //outputIds.forEach(id => {
+    //    const value = parseInt(document.getElementById(id).value) || 0;
+    //    totalValue += value;
+    //});
+
+    document.getElementById('totalVndClose').value = totalNotes;
+    document.getElementById('totalVndCountClose').value = totalValue;
+}

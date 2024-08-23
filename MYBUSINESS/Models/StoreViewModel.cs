@@ -9,9 +9,12 @@ namespace MYBUSINESS.Models
     {
         public int Id { get; set; }
         public decimal OpeningBalance { get; set; }
+        public string OpeningCurrencyDetail { get; set; }
         public decimal ClosingBalance { get; set; }
+        public string ClosingCurrencyDetail { get; set; }
+
 
     }
 
-   
+
 }
