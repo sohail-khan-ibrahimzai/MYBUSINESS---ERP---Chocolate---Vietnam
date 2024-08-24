@@ -3,6 +3,9 @@
 //    $('#storeOpeningPopup').modal('show');
 //});
 var storeId = 0;
+if (storeId != null) {
+    
+}
 $(document).on('click', '#closeStore', function () {
     debugger;
     $('#storeClosingPopup').modal('show');
@@ -96,6 +99,7 @@ $(document).on('click', '#closeShop', function () {
                 if (response.Success) {
                     //alert(response.Message);
                     window.location.href = '/Stores/StoreDashboard';
+                    localStorage.removeItem('storeId');
                 } else {
                     alert('Error: ' + response.Message);
                 }
@@ -155,4 +159,12 @@ function updateOverallTotalsClose() {
 
     document.getElementById('totalVndClose').value = totalNotes;
     document.getElementById('totalVndCountClose').value = totalValue;
+}
+function logout() {
+    debugger
+    // Clear all items from localStorage
+    localStorage.clear();
+
+    // Redirect to logout action on the server
+    window.location.href = '/UserManagement/Logout';
 }

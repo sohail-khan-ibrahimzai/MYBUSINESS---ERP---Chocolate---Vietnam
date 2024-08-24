@@ -15,7 +15,12 @@ var x, y;
 var _total = 0;
 var IsReturn = "false";
 var num = 0;
-
+//var storeIds = storeId;
+//if (storeIds != null || storeIds != undefined) {
+//    debugger;
+//    document.getElementById('closeStore').style.display = 'block';
+//    document.getElementById("StorageItem").value = storeIds;
+//}
 function OnTypeCustomerName(param) {
     debugger;
     $(param).mcautocomplete({
@@ -56,7 +61,6 @@ function OnTypeName(param) {
         clickedIdNum = clickedTextboxId.substring(4);
 
     });
-
 
     $(param).mcautocomplete({
         showHeader: true,
@@ -103,7 +107,10 @@ function OnTypeName(param) {
     //alert("yes");
 }
 
-
+function addProduct(element) {
+    debugger;
+    alert('Abcd');
+}
 $(function () {
     //OnTypeName('#name0');
     //alert('#' + clickedTextboxId);
@@ -1062,7 +1069,7 @@ function update_itemTotal() {
     $('#total').val(total.toFixed(2));
     $('#paid').val(total.toFixed(2));
     //$('#cardvnd').val(total.toFixed(2));
-  
+
     _total = total;
     //alert(ItemsTotal + ", " + discount + ", " + ReturnsTotal + ", " + prevBal);
     var paid = $('#paid').val();
@@ -1088,7 +1095,6 @@ function update_itemTotal() {
     if (!isNaN(totalItemNumber)) {
         // Use toFixed to format the number to 2 decimal places
         var formattedTotalItem = totalItemNumber.toFixed(2);
-
         // Store the formatted value in localStorage
         localStorage.setItem('totalItems', formattedTotalItem);
     } else {

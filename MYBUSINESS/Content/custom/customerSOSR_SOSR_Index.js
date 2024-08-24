@@ -16,6 +16,13 @@ var _total = 0;
 var IsReturn = "false";
 var num = 0;
 
+//var storeId = localStorage.getItem('storeId');
+//var storeIds = storeId;
+//if (storeIds != null || storeIds != undefined) {
+//    debugger;
+//    //document.getElementById('closeStore').style.display = 'block';
+//    document.getElementById("StorageItem").value = storeIds;
+//}
 function OnTypeCustomerName(param) {
 
     $(param).mcautocomplete({
@@ -450,7 +457,7 @@ $(document).ready(function () {
         //var kiaHai = checkAvaiableStock();
         //alert(kiaHai);
         if (checkAvaiableStock() == false) return false;
-      
+
         //if ($('#ItemsTotal').val() == 0) {
         //    alert('Please add at least one product to proceed');
         //    return;

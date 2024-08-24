@@ -23,6 +23,13 @@ namespace MYBUSINESS.Controllers
         // GET: POes
         public ActionResult Index()
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            var parseId = int.Parse(storeId);
+
             DateTime PKDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
             var dtStartDate = new DateTime(PKDate.Year, PKDate.Month, 1);
             var dtEndtDate = dtStartDate.AddMonths(1).AddSeconds(-1);
@@ -51,7 +58,8 @@ namespace MYBUSINESS.Controllers
             ViewBag.StartDate = dtStartDate.ToString("dd-MMM-yyyy");
             ViewBag.EndDate = dtEndtDate.ToString("dd-MMM-yyyy");
             ViewBag.POSerial = thisSerial;
-            return View(pOes.OrderByDescending(i => i.Date).ToList());
+            var purchaseOrderQuotation = pOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();
+            return View(purchaseOrderQuotation);
         }
         //public ActionResult SearchData(string custName, DateTime startDate, DateTime endDate)
 
@@ -273,6 +281,11 @@ namespace MYBUSINESS.Controllers
         // GET: POes/Create
         public ActionResult Create(string IsReturn)
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name");
             //ViewBag.Products = db.Products;
 
@@ -550,7 +563,8 @@ namespace MYBUSINESS.Controllers
             if (emp.Login == "LahoreKarachi")
             { viewer.LocalReport.ReportPath = Server.MapPath("~/Reports/Purchase_LahoreKarachi.rdlc"); }
             else
-            { viewer.LocalReport.ReportPath = Server.MapPath("~/Reports/Purchase_Receipt.rdlc"); }
+            //{ viewer.LocalReport.ReportPath = Server.MapPath("~/Reports/Purchase_Receipt.rdlc"); }
+            { viewer.LocalReport.ReportPath = Server.MapPath("~/Reports/Quotation_Receipt.rdlc"); }
 
             ReportDataSource reportDataSource = new ReportDataSource();
 

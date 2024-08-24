@@ -23,8 +23,14 @@ namespace MYBUSINESS.Controllers
 
         public ActionResult Index(string id)
         {
-
-            return View(DAL.dbCustomers);
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            var parseId = int.Parse(storeId);
+            var customers = DAL.dbCustomers.Where(x => x.StoreId == parseId);
+            return View(customers);
         }
 
         // GET: Customers/Details/5
@@ -45,6 +51,11 @@ namespace MYBUSINESS.Controllers
         // GET: Customers/Create
         public ActionResult Create()
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //int maxId = db.Customers.Max(p => p.Id);
             decimal maxId = db.Customers.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
             maxId += 1;
@@ -61,7 +72,7 @@ namespace MYBUSINESS.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (customer.Balance==null)
+                if (customer.Balance == null)
                 {
                     customer.Balance = 0;
                 }
@@ -79,7 +90,7 @@ namespace MYBUSINESS.Controllers
             //{
             //    return View(customer);
             //}
-            
+
             return View(customer);
         }
 
@@ -107,7 +118,7 @@ namespace MYBUSINESS.Controllers
         {
             if (ModelState.IsValid)
             {
-                
+
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

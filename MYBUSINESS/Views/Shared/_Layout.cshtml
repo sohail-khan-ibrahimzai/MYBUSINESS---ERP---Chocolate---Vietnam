@@ -338,19 +338,22 @@
                             @*<li><a href="https://www.youtube.com/watch?v=iVlDTNcOb3c&list=PLDTx5VG5ZidanCCtYhp_JwbZeqCotZVdA">How To Use</a></li>*@
                             @*<li><a href="https://www.myASP.NET/index?r=100971661">Free Hosting</a></li>*@
                             @*<li><a href="https://www.fiverr.com/waqaslinks">Tech Support</a></li>*@
-                        MYBUSINESS.Models.Employee currentUser = (MYBUSINESS.Models.Employee)HttpContext.Current.Session["CurrentUser"];
-                        //if (currentUser.StoreId != null && storeId != 0)
-                        if (currentUser.StoreId != null)
-                        {
+                            MYBUSINESS.Models.Employee currentUser = (MYBUSINESS.Models.Employee)HttpContext.Current.Session["CurrentUser"];
+                            //if (currentUser.StoreId != null && storeId != 0)
+                            var storeId = Session["StoreId"] as string;
+                            if (storeId != null)
+                            {
                                 <li><a href="#" id="closeStore">Close POS</a></li>
                             }
-
                             if (currentUser.EmployeeTypeId == 0)
                             {
                                 <li>@Html.ActionLink("Support", "Contact", "Home")</li>
                             }
                             <li>@Html.ActionLink(user.Login, "Edit", "Employees", new { id = 0 }, null)</li>
-                            <li>@Html.ActionLink("Logout", "Logout", "UserManagement")</li>
+                            @*<li>@Html.ActionLink("Logout", "Logout", "UserManagement")</li>*@
+                            <li>
+                                <a href="#" onclick="logout()">Logout</a>
+                            </li>
                         }
                     </ul>
                 </div>
@@ -572,6 +575,7 @@
                             </ul>
                         </li>*@
                 </ul>
+                @*<input type="hidden" id="StorageItem" name="StorageItem" value="" />*@
             </section>
             <!-- /.sidebar -->
         </aside>
@@ -579,6 +583,9 @@
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <section class="content-header">
+                <form id="hiddenForm" method="post" action="@Url.Action("StoreValue", "UserManagement")">
+                    <input type="hidden" name="storeId" id="storeIdInput" />
+                </form>
                 @*<h1>
                         Dashboard
                         <small>Control panel</small>
@@ -792,10 +799,9 @@
             <div class="modal-body">
                 <div class="container mt-5">
                     <div class="row justify-content-center">
-                        <div class="col-md-9">
+                        <div class="col-md-9" style="height: 537px !important; overflow-y:scroll;">
                             <div class="card">
                                 <div class="card-header">
-                                    @*<h4 class="card-title">Total</h4>*@
                                 </div>
                                 <div class="card-body">
                                     <div class="row">

@@ -1,4 +1,5 @@
-﻿using MYBUSINESS.Models;
+﻿using Azure.Core;
+using MYBUSINESS.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,6 @@ namespace MYBUSINESS.CustomClasses
     public class DAL
     {
         private BusinessContext db = new BusinessContext();
-
         //public static List<Customer> dbCustomers()
         //{
         //    return db.Customers.Where(x => x.Status != "D").ToList<Customer>();

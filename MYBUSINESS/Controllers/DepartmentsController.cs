@@ -17,7 +17,14 @@ namespace MYBUSINESS.Controllers
         // GET: Departments
         public ActionResult Index()
         {
-            return View(db.Departments.ToList());
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            var parseId = int.Parse(storeId);
+            var departments = db.Departments.Where(x => x.StoreId == parseId).ToList();
+            return View(departments);
         }
 
         // GET: Departments/Details/5

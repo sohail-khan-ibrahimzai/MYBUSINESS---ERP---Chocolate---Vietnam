@@ -23,6 +23,13 @@ namespace MYBUSINESS.Controllers
         // GET: POes
         public ActionResult Index()
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            var parseId = int.Parse(storeId);
+
             DateTime PKDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
             var dtStartDate = new DateTime(PKDate.Year, PKDate.Month, 1);
             var dtEndtDate = dtStartDate.AddMonths(1).AddSeconds(-1);
@@ -50,7 +57,8 @@ namespace MYBUSINESS.Controllers
             ViewBag.Suppliers = DAL.dbSuppliers;
             ViewBag.StartDate = dtStartDate.ToString("dd-MMM-yyyy");
             ViewBag.EndDate = dtEndtDate.ToString("dd-MMM-yyyy");
-            return View(pOes.OrderByDescending(i => i.Date).ToList());
+            var poess = pOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();
+            return View(poess);
         }
         //public ActionResult SearchData(string custName, DateTime startDate, DateTime endDate)
 
@@ -272,6 +280,11 @@ namespace MYBUSINESS.Controllers
         // GET: POes/Create
         public ActionResult Create(string IsReturn)
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name");
             //ViewBag.Products = db.Products;
 
@@ -304,6 +317,12 @@ namespace MYBUSINESS.Controllers
             //PO pO = new PO();
             if (ModelState.IsValid)
             {
+                var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
+                var parseId = int.Parse(storeId);
                 Supplier supp = db.Suppliers.FirstOrDefault(x => x.Id == pO.SupplierId);
                 if (supp == null)
                 {//its means new customer

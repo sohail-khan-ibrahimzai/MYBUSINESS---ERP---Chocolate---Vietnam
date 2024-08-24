@@ -27,12 +27,19 @@ namespace MYBUSINESS.Controllers
         // GET: SOes
         public ActionResult Index()
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            var parseId = int.Parse(storeId);
+
             //EnterProfit();
             DateTime PKDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
             var dtStartDate = new DateTime(PKDate.Year, PKDate.Month, 1);
             var dtEndtDate = dtStartDate.AddMonths(1).AddSeconds(-1);
 
-            IQueryable<SO> sOes = db.SOes.Where(x => x.Date >= dtStartDate && x.Date <= dtEndtDate && x.SaleReturn==false).Include(s => s.Customer);
+            IQueryable<SO> sOes = db.SOes.Where(x => x.Date >= dtStartDate && x.Date <= dtEndtDate && x.SaleReturn == false).Include(s => s.Customer);
             //sOes = sOes.Where(x => x.Date >= dtStartDate && x.Date <= dtEndtDate);
             //sOes.ForEachAsync(m => m.Id = Encryption.Encrypt(m.Id, "BZNS"));
             //var sOes = db.SOes.Where(s => s.SaleReturn == false);
@@ -57,7 +64,8 @@ namespace MYBUSINESS.Controllers
             ViewBag.Customers = DAL.dbCustomers;
             ViewBag.StartDate = dtStartDate.ToString("dd-MMM-yyyy");
             ViewBag.EndDate = dtEndtDate.ToString("dd-MMM-yyyy");
-            return View(sOes.OrderByDescending(i => i.Date).ToList());
+            var salesOrderQuotation = sOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();
+            return View(salesOrderQuotation);
         }
         public ActionResult IndexReturn()
         {
@@ -108,7 +116,7 @@ namespace MYBUSINESS.Controllers
             dtSellDate = DateTime.ParseExact(sellDate, "d/M/yyyy", CultureInfo.InvariantCulture);
             //dtEndDate = DateTime.Parse(endDate);
 
-            selectedSOes = db.ProductDetails.Where(so => so.ProductId == intProdId &&  (so.RentStartDate >= dtSellDate || so.RentEndDate >= dtSellDate)).ToList();
+            selectedSOes = db.ProductDetails.Where(so => so.ProductId == intProdId && (so.RentStartDate >= dtSellDate || so.RentEndDate >= dtSellDate)).ToList();
 
             //return PartialView("_SelectedSOSR", selectedSOes.OrderByDescending(i => i.Date).ToList());
             return PartialView("_ProductDetail", selectedSOes);//.ToList());
@@ -259,7 +267,7 @@ namespace MYBUSINESS.Controllers
                 dtStartDate = DateTime.Parse(startDate);
                 dtEndtDate = DateTime.Parse(endDate);
 
-                selectedSOes = db.SOes.Where(so => so.CustomerId == intCustId && so.Date >= dtStartDate && so.Date <= dtEndtDate && so.SaleReturn==true);
+                selectedSOes = db.SOes.Where(so => so.CustomerId == intCustId && so.Date >= dtStartDate && so.Date <= dtEndtDate && so.SaleReturn == true);
 
             }
 
@@ -744,7 +752,7 @@ namespace MYBUSINESS.Controllers
             return View(saleOrderViewModel);
         }
 
-     
+
 
 
         //[OutputCache(NoStore = true, Duration = 0)]
@@ -760,7 +768,7 @@ namespace MYBUSINESS.Controllers
             {
 
                 Customer cust = db.Customers.FirstOrDefault(x => x.Id == sO.CustomerId);
-                
+
                 if (cust == null)
                 {//its means new customer
                     //sO.CustomerId = 10;
@@ -776,7 +784,7 @@ namespace MYBUSINESS.Controllers
                 {//its means old customer. old customer balance should be updated.
                  //Customer.Id = (int)sO.CustomerId;
                     if (cust.Balance == null) cust.Balance = 0;
-                    if (sO.SaleReturn==false)
+                    if (sO.SaleReturn == false)
                     {
                         cust.Balance += sO.Balance;
                     }
@@ -784,7 +792,7 @@ namespace MYBUSINESS.Controllers
                     {
                         cust.Balance -= sO.Balance;
                     }
-                    
+
                     db.Entry(cust).State = EntityState.Modified;
                     //db.SaveChanges();
 
@@ -815,7 +823,7 @@ namespace MYBUSINESS.Controllers
                 {
                     sO.Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
                 }
-                
+
                 //sO.SaleReturn = false;
                 sO.Id = System.Guid.NewGuid().ToString().ToUpper();
                 sO.SaleOrderAmount = 0;
@@ -830,7 +838,7 @@ namespace MYBUSINESS.Controllers
                 //db.SaveChanges();
                 int sno = 0;
                 decimal totalPurchaseAmount = 0;
-                Product newProd=null;
+                Product newProd = null;
                 //sOD.RemoveAll(so => so.ProductId == null);
                 if (sOD != null)
                 {
@@ -838,16 +846,28 @@ namespace MYBUSINESS.Controllers
                     foreach (SOD sod in sOD)
                     {
                         Product dbProd = db.Products.FirstOrDefault(x => x.Id == sod.ProductId);
-                        
-                        if (dbProd ==null || dbProd.Name != sod.Product.Name)
+
+                        if (dbProd == null || dbProd.Name != sod.Product.Name)
                         {
                             decimal maxId = db.Products.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
                             maxId += 1;
                             sod.ProductId = maxId;
                             sod.PerPack = 1;
-                            newProd = new Product { Id = maxId, CreateDate = DateTime.Today, IsService = true, Name = sod.Product.Name, PurchasePrice = 0,
-                                SalePrice = sod.SalePrice.Value, Stock = 0, totalPiece = 0, Saleable = true,PerPack=1,ShowIn="S" };
-                            
+                            newProd = new Product
+                            {
+                                Id = maxId,
+                                CreateDate = DateTime.Today,
+                                IsService = true,
+                                Name = sod.Product.Name,
+                                PurchasePrice = 0,
+                                SalePrice = sod.SalePrice.Value,
+                                Stock = 0,
+                                totalPiece = 0,
+                                Saleable = true,
+                                PerPack = 1,
+                                ShowIn = "S"
+                            };
+
                             db.Products.Add(newProd);
                             db.SaveChanges();
                         }
@@ -858,7 +878,7 @@ namespace MYBUSINESS.Controllers
                         sod.SOId = sO.Id;
 
                         Product product = db.Products.FirstOrDefault(x => x.Id == sod.ProductId);
-                        if (product==null)
+                        if (product == null)
                         {
                             //its mean new product
                             product = newProd;
@@ -872,7 +892,7 @@ namespace MYBUSINESS.Controllers
                         sod.PerPack = 1;
                         if (sod.SaleType == false)//sale
                         {
-                            
+
                             if (sod.IsPack == false)
                             {//piece
                                 sO.SaleOrderAmount += (sod.Quantity * sod.SalePrice);
@@ -929,7 +949,7 @@ namespace MYBUSINESS.Controllers
             }
             return RedirectToAction("Create", new { IsReturn = "false" });
         }
-        
+
 
         public FileContentResult PrintSO2(string id)
         {
@@ -1244,8 +1264,8 @@ namespace MYBUSINESS.Controllers
                 // assign balance of this customer
                 //Customer customer = db.Customers.Where(x => x.Id == newSO.CustomerId).FirstOrDefault();
                 if (customer.Balance == null) customer.Balance = 0;
-                
-                if (sO.SaleReturn==false)
+
+                if (sO.SaleReturn == false)
                 {
                     customer.Balance -= beforeEditSOBalance;//revert the old balnace first
                     customer.Balance += newSO.Balance;
@@ -1254,8 +1274,8 @@ namespace MYBUSINESS.Controllers
                 {
                     customer.Balance += beforeEditSOBalance;//revert the old balnace first
                     customer.Balance -= newSO.Balance;
-                }    
-                
+                }
+
                 //assign customer and customerId in SO
                 sO.CustomerId = newSO.CustomerId;
                 sO.Customer = customer;
@@ -1396,7 +1416,7 @@ namespace MYBUSINESS.Controllers
             //return View(sO);
             SaleOrderViewModel saleOrderViewModel = new SaleOrderViewModel();
 
-            saleOrderViewModel.Products = DAL.dbProducts.Where(x=>x.Saleable==true );
+            saleOrderViewModel.Products = DAL.dbProducts.Where(x => x.Saleable == true);
             return View(saleOrderViewModel);
             //return View();
         }

@@ -49,6 +49,11 @@ namespace MYBUSINESS.Controllers
         // GET: Customers/Create
         public ActionResult Create()
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //int maxId = db.Customers.Max(p => p.Id);
             decimal maxId = db.Stores.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
             maxId += 1;
@@ -217,6 +222,7 @@ namespace MYBUSINESS.Controllers
         public ActionResult CloseShop(StoreViewModel storeDto)
         {
             if (storeDto == null) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+            Session["StoreId"] = null;
             var store = new DailyBalanceVnd
             {
                 ClosingDate = DateTime.UtcNow,

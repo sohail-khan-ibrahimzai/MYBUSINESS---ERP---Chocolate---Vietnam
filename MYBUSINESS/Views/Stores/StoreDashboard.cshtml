@@ -46,7 +46,8 @@
 
                     <div class="col-lg-3 col-xs-6">
                         <!-- small box -->
-                        <div class="small-box @colors[index % colors.Length] storeids" id="storeids" data-storeid="@item.Id">
+                        @*<div class="small-box @colors[index % colors.Length] storeids" id="storeids" data-storeid="@item.Id">*@
+                        <div class="small-box @colors[index % colors.Length] storeids" data-storeid="@item.Id">
                             <div class="inner">
                                 <h3>@*@ViewBag.SOCount*@</h3>
                                 <p>@Html.DisplayFor(modelItem => item.Name)</p>
@@ -79,7 +80,7 @@
             <div class="modal-body">
                 <div class="container mt-5">
                     <div class="row justify-content-center">
-                        <div class="col-md-9">
+                        <div class="col-md-9" style="height: 537px !important; overflow-y:scroll;">
                             <div class="card">
                                 <div class="card-header">
                                     @*<h4 class="card-title">Total</h4>*@

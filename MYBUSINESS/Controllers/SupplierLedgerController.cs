@@ -24,6 +24,12 @@ namespace MYBUSINESS.Controllers
         public ActionResult Index(int SuppId)
         {
             //EnterProfit();
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            var parseId = int.Parse(storeId);
 
             IQueryable<PO> pOes = db.POes.Include(s => s.Supplier).Where(x => x.SupplierId == SuppId);
 
@@ -48,7 +54,8 @@ namespace MYBUSINESS.Controllers
             ViewBag.ThisSupplier = db.Suppliers.Where(x => x.Id == SuppId).FirstOrDefault();
 
             ViewBag.Suppliers = DAL.dbSuppliers;
-            return View(pOes.OrderBy(i => i.Date).ToList());
+            var purchaseOrders = pOes.Where(x => x.StoreId == parseId).OrderBy(i => i.Date).ToList();
+            return View(purchaseOrders);
         }
 
         private void GetTotalBalance(ref IQueryable<PO> POes)
@@ -86,7 +93,7 @@ namespace MYBUSINESS.Controllers
                 endDate = string.Empty;
             }
 
-            int intSuppId=0;
+            int intSuppId = 0;
             DateTime dtStartDate = DateTime.Parse("1-1-1800");
             DateTime dtEndtDate = DateTime.Parse("1-1-2099");
 
@@ -195,11 +202,11 @@ namespace MYBUSINESS.Controllers
 
 
         }
-        
 
-        
 
-      
+
+
+
 
         private string Decode(string id)
         {
@@ -212,7 +219,7 @@ namespace MYBUSINESS.Controllers
 
 
 
-        
+
     }
 
 }

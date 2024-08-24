@@ -16118,6 +16118,8 @@
     <Content Include="Views\Stores\_StoresDashboard.cshtml" />
     <Content Include="Views\Dashboard\_SelectedSOSR.cshtml" />
     <Content Include="Views\Stores\_SelectedStoreDashboard.cshtml" />
+    <Content Include="Views\UserManagement\StoreNotFound.cshtml" />
+    <Content Include="Views\SOSR\Create - Copy - Sohail.cshtml" />
     <None Include="Web.Debug.Config">
       <DependentUpon>Web.Config</DependentUpon>
     </None>
@@ -16152,6 +16154,12 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\Sale_Receipt - Copy.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\Quotation_Receipt.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

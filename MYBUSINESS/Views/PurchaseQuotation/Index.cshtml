@@ -13,12 +13,11 @@
 <!-- Latest compiled JavaScript -->
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+
 <link href="@Url.Content("~/Content/custom/downloads/jquery-ui-1.12.1.custom/jquery-ui.min.css")" rel="stylesheet" type="text/css" />
 <script src="~/Content/custom/downloads/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 
-<!--<link href="@Url.Content("~/Content/custom/downloads/jquery-ui-1.12.1.custom/jquery-ui.min.css")" rel="stylesheet" type="text/css" />-->
-@*<link href="@Url.Content("~/Content/custom/downloads/jquery-ui.min.css")" rel="stylesheet" type="text/css" />*@
-<!--<script src="~/Content/custom/downloads/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>-->
+
 @*<link href="@Url.Content("~/Content/custom/custom.css")" rel="stylesheet" type="text/css" />*@
 <script src="~/Content/custom/supplierPOPR.js"></script>
 
@@ -71,8 +70,8 @@
 
 <!-- Button trigger modal -->
 @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Launch demo modal
-</button>*@
+        Launch demo modal
+    </button>*@
 
 <!-- Modal -->
 <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden="true">
@@ -90,14 +89,14 @@
                         <div class="col-md-6">
                             <div class="card">
                                 @*<div class="card-header">
-                                    <h4 class="card-title">Update Status</h4>
-                                </div>*@
+                                        <h4 class="card-title">Update Status</h4>
+                                    </div>*@
                                 <div class="card-body">
                                     <form>
                                         <div class="form-group">
                                             <label for="inputField">Order No</label>
                                             @*<input type="text" class="form-control" id="poslatestserial" placeholder="Enter something" data-poserial="@ViewBag.POSerial">*@
-                                            <input type="text" class="form-control" id="poslatestserial" placeholder="Enter something">
+                                            <input type="text" class="form-control" id="poslatestserial" placeholder="Enter order number">
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-block btnupdatestatus">Submit</button>
                                     </form>
@@ -109,7 +108,7 @@
             </div>
             <div class="modal-footer">
                 @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>*@
+                    <button type="button" class="btn btn-primary">Save changes</button>*@
             </div>
         </div>
     </div>
@@ -142,11 +141,12 @@
 
     //$('#myModal').on('shown.bs.modal', function () {
     $(document).ready(function ($) {
-        $("#opentatusmodal").on("click", function (event) {
-            event.preventDefault();
-            //jQuery.noConflict();
-            $('#statusModal').modal('show');
-        });
+
+    });
+    $("#opentatusmodal").on("click", function (event) {
+        event.preventDefault();
+        //jQuery.noConflict();
+        $('#statusModal').modal('show');
     });
     //})
     $('.btnupdatestatus').click(function upadtePurhcaseOrder(event) {
@@ -170,6 +170,7 @@
                 if (response.Success === true) {
                     alert("Success: " + response.Message);
                     $('#statusModal').modal('hide');
+                    $('#poslatestserial').val('');
                 } else {
                     alert("Failed: " + response.Message);
                 }

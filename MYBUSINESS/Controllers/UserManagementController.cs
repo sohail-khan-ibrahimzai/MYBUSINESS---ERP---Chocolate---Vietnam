@@ -16,27 +16,27 @@ namespace MYBUSINESS.Controllers
         private BusinessContext db = new BusinessContext();
         public ActionResult Login()
         {
-            
+
             //if (StaticClass.CurrentAction != null) StaticClass.ReturnUrl = ControllerContext.HttpContext.Request.UrlReferrer.ToString();
             //if (StaticClass.PreviousAction != null) StaticClass.ReturnUrl = ControllerContext.HttpContext.Request.Url.ToString();
             //if (StaticClass.CurrentAction != null) StaticClass.ReturnUrl = ControllerContext.HttpContext.Request.Url.ToString();
             //if (CurrentAction != "Login")
-            
+
             Session.Clear();
             Session.Abandon();
-            
+
             //return Redirect(ControllerContext.HttpContext.Request.UrlReferrer.ToString());
             return View();
         }
-       
+
         public ActionResult Logout()
         {
-            
+
             Session.Clear();
             Session.Abandon();
 
             return RedirectToAction("Login");
-            
+
 
         }
 
@@ -44,8 +44,8 @@ namespace MYBUSINESS.Controllers
         public ActionResult Login(Employee emp)
         //public ActionResult Login(Employee emp, Right right)
         {
-            
-            string unl= Encryption.Decrypt("WuQ65MCb4JWsdtu2Sypl6g==", "d3A#");//abc123
+
+            string unl = Encryption.Decrypt("WuQ65MCb4JWsdtu2Sypl6g==", "d3A#");//abc123
 
             if (emp.Password == null) { emp.Password = string.Empty; }
             emp.Password = Encryption.Encrypt(emp.Password, "d3A#");
@@ -58,7 +58,7 @@ namespace MYBUSINESS.Controllers
                 //user = db.Employees.FirstOrDefault();
                 Session.Add("CurrentUser", user);
                 //return RedirectToAction("Create", "SOSR",new {IsReturn="false" });//change it from 'if condtion' to here
-                if (emp.Login=="admin")
+                if (emp.Login == "admin")
                 {
                     //return RedirectToAction("Index", "Dashboard");//change it from 'if condtion' to here
                     return RedirectToAction("StoreDashboard", "Stores");//change it from 'if condtion' to here
@@ -67,7 +67,7 @@ namespace MYBUSINESS.Controllers
                 {
                     return RedirectToAction("Create", "SOSR");//change it from 'if condtion' to here
                 }
-                
+
                 //return View("Index", "DashBoard",user);
             }
             else
@@ -75,9 +75,9 @@ namespace MYBUSINESS.Controllers
                 TempData["message"] = "Password is not valid";
                 return RedirectToAction("Login", "UserManagement");
             }
-            
+
             //return RedirectToAction("RecoverPassword", "UserManagement");
-            
+
             //return RenderAction("Login", "UserManagement");
         }
 
@@ -196,6 +196,25 @@ namespace MYBUSINESS.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+        [HttpPost]
+        public ActionResult StoreValue(string storeId)
+        {
+            if (!string.IsNullOrEmpty(storeId))
+            {
+                // Store the value in the session
+                Session["StoreId"] = storeId;
+
+                // Optionally, redirect to another action or view
+                return Json(new { Success = true, Message = "" });
+            }
+
+            // Handle the case where no storeId is provided
+            return RedirectToAction("Stores/StoresDashboard");
+        }
+        public ActionResult StoreNotFound()
+        {
+            return View();
         }
     }
 }

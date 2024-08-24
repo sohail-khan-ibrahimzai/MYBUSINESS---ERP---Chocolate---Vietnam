@@ -219,16 +219,16 @@ namespace MYBUSINESS.Controllers
                                 }
 
                                 //string pName = string.Empty;
-                                
-                                    if (!string.IsNullOrEmpty(uploadingProduct.Name.Trim()) && db.Products.Where(x => x.Name.ToUpper().Trim() == uploadingProduct.Name.ToUpper().Trim()).ToList().Count == 0
-                                    && LstUploadingProduct.Where(x => x.Name.ToUpper().Trim() == uploadingProduct.Name.ToUpper().Trim()).ToList().Count == 0)
-                                    {
-                                        
-                                        LstUploadingProduct.Add(uploadingProduct);
 
-                                    }
+                                if (!string.IsNullOrEmpty(uploadingProduct.Name.Trim()) && db.Products.Where(x => x.Name.ToUpper().Trim() == uploadingProduct.Name.ToUpper().Trim()).ToList().Count == 0
+                                && LstUploadingProduct.Where(x => x.Name.ToUpper().Trim() == uploadingProduct.Name.ToUpper().Trim()).ToList().Count == 0)
+                                {
 
-                                
+                                    LstUploadingProduct.Add(uploadingProduct);
+
+                                }
+
+
 
                             }
                             db.Products.AddRange(LstUploadingProduct);
@@ -262,8 +262,14 @@ namespace MYBUSINESS.Controllers
         // GET: Products
         public ActionResult Index()
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            var parseId = int.Parse(storeId);
             ViewBag.Suppliers = DAL.dbSuppliers;
-            return View(DAL.dbProducts.ToList());
+            return View(DAL.dbProducts.Where(x => x.StoreId == parseId).ToList());
         }
 
         public ActionResult SearchData(string suppId)
@@ -289,6 +295,11 @@ namespace MYBUSINESS.Controllers
 
         public ActionResult Create()
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //int maxId = db.Products.Max(p => p.Id);
             decimal maxId = db.Products.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
             maxId += 1;
