@@ -16120,6 +16120,7 @@
     <Content Include="Views\Stores\_SelectedStoreDashboard.cshtml" />
     <Content Include="Views\UserManagement\StoreNotFound.cshtml" />
     <Content Include="Views\SOSR\Create - Copy - Sohail.cshtml" />
+    <Content Include="Views\Stores\GetStoreVndBalance.cshtml" />
     <None Include="Web.Debug.Config">
       <DependentUpon>Web.Config</DependentUpon>
     </None>

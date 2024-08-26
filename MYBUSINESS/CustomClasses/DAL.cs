@@ -41,6 +41,12 @@ namespace MYBUSINESS.CustomClasses
         {
             get { return db.Stores.Where(x => x.Status != "D"); }
             //set { products = value; }
+        } 
+        public IQueryable<DailyBalanceVnd> dbVndBalance
+        {
+            //get { return db.DailyBalanceVnds.Where(x => x.Status != "D"); }
+            get { return db.DailyBalanceVnds; }
+            //set { products = value; }
         }
     }
 }

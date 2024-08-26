@@ -25,6 +25,18 @@ namespace MYBUSINESS.Controllers
         {
             return View(DAL.dbStore);
         }
+        public ActionResult GetStoreVndBalance()
+        {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            var parseId = int.Parse(storeId);
+            var getDailyBalance = DAL.dbVndBalance.Where(x => x.StoreId == parseId).ToList();
+
+            return View(getDailyBalance);
+        }
         // GET: Stores Dashboard
         public ActionResult StoreDashboard(string id)
         {

@@ -46,12 +46,13 @@
         background: #fff;
         padding: 20px;
         box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+    }
 
-    }
     .scrollable-div {
-    max-height:400px;
-    overflow-y:scroll;
+        max-height: 400px;
+        overflow-y: scroll;
     }
+
     .scrollable-container {
         /*max-height: 100px !important;*/ /* Set desired height */
         /*height: 100px !important;*/ /* Set desired height */
@@ -82,9 +83,7 @@
 
 @* @using (Html.BeginForm(null, null, FormMethod.Post, new { name = "SOEdit", id = "SOEdit" })) *@
 @using (Html.BeginForm("Create", "SOSR", FormMethod.Post, new { name = "SOCreate", id = "SOCreate" }))
-
 {
-
 
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -95,7 +94,6 @@
                 <div class="row">
                     <div id="saleOrder" class="col-sm-offset-5"><h2>Sale <b>Order</b></h2></div>
                     <div id="saleReturn" class="col-sm-offset-5"><h2>Sale <b>Return</b></h2></div>
-
                 </div>
 
                 <input type="hidden" name="SaleOrder.SaleReturn" id="saleReturn" value=@ViewBag.IsReturn />
@@ -119,7 +117,13 @@
                 <div class="col-md-6 scrollable-div">
                     @foreach (var product in Model.ProductList)
                     {
-                        <div class="col-md-4 col-sm-4 mb-4" onclick="addProduct(Model)">
+                        var settings = new Newtonsoft.Json.JsonSerializerSettings
+                        {
+                            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                        };
+                        var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
+                        var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
+                        <div class="col-md-4 col-sm-4 mb-4" onclick="addProduct('@encodedProductJson')">
                             <div class="small-box bg-info text-white p-3 scrollable-box">
                                 <div class="inner">
                                     <h4>@product.Name</h4>
@@ -167,40 +171,51 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td id="SNo0">1</td>
-                                <td style="display:none;"><input type="hidden" name="SaleOrderDetail.Index" value="0" /></td>
-                                <td style="display:none;"><input type="text" readonly class="form-control classBGcolor" name="SaleOrderDetail[0].ProductId" id="idn0"></td>
-                                @*<td><input type="text" class="form-control" name="name0" id="name0" onkeyup="myFunction()" data-toggle="tooltip" data-placement="top" title="Type product name"></td>*@
-                                @*<td><input type="text" autocomplete="off"  class="form-control" name="name0" id="name0" onkeyup="myFunction()"></td>*@
-                                <td><input type="text" autocomplete="off" class="form-control" name="SaleOrderDetail[0].Product.Name" id="name0" placeholder="Type product name" data-toggle="tooltip" data-placement="top" title="Type product name"></td>
-                                <td><input type="text" autocomplete="off" class="form-control classBGcolor" name="SaleOrderDetail[0].SalePrice" id="salePrice0"></td>
-                                <td><input type="text" autocomplete="off" class="form-control" name="SaleOrderDetail[0].Quantity" id="quantity0"></td>
+                            @*commented due to new changes sohail*@
+                            <!--<tr>-->
+                            @*commented due to new changes sohail*@
+                            @*<td id="SNo0" style="display:none;">1</td>*@
+                            @*commented due to new changes sohail*@
+                            @*<td style="display:none;"><input type="hidden" name="SaleOrderDetail.Index" value="0" /></td>*@
+                            @*commented due to new changes sohail*@
+                            @*<td style="display:none;"><input type="text" readonly class="form-control classBGcolor" name="SaleOrderDetail[0].ProductId" id="idn0"></td>*@
+                            @*<td><input type="text" class="form-control" name="name0" id="name0" onkeyup="myFunction()" data-toggle="tooltip" data-placement="top" title="Type product name"></td>*@
+                            @*<td><input type="text" autocomplete="off"  class="form-control" name="name0" id="name0" onkeyup="myFunction()"></td>*@
 
-                                <td style="display:none;">
+                            @*commented due to new changes sohail*@
+                            @*<td><input type="text" autocomplete="off" class="form-control" name="SaleOrderDetail[0].Product.Name" id="name0" placeholder="Type product name" data-toggle="tooltip" data-placement="top" title="Type product name"></td>
+                                <td><input type="text" autocomplete="off" class="form-control classBGcolor" name="SaleOrderDetail[0].SalePrice" id="salePrice0"></td>
+                                <td><input type="text" autocomplete="off" class="form-control" name="SaleOrderDetail[0].Quantity" id="quantity0"></td>*@
+                            @*commented due to new changes sohail*@
+                            @*<td style="display:none;">
                                     <select class="form-control" name="SaleOrderDetail[0].IsPack" id="isPack0">
                                         <option value="false">Piece</option>
                                         <option value="true" selected>Pack</option>
                                     </select>
-                                </td>
-                                <td style="display:none;"><input type="text" readonly autocomplete="off" class="form-control" name="SaleOrderDetail[0].PerPack" id="perPack0"></td>
-                                <td><input type="text" readonly class="form-control classBGcolor" name="itemTotal0" id="itemTotal0" tabindex="-1"></td>
-                                <td style="display:none;">
+                                </td>*@
+                            @*<td style="display:none;"><input type="text" readonly autocomplete="off" class="form-control" name="SaleOrderDetail[0].PerPack" id="perPack0"></td>*@
+
+                            @*commented due to new changes sohail*@
+                            @*<td><input type="text" readonly class="form-control classBGcolor" name="itemTotal0" id="itemTotal0" tabindex="-1"></td>*@
+                            @*commented due to new changes sohail*@
+                            @*<td style="display:none;">
                                     <select class="form-control" name="SaleOrderDetail[0].SaleType" id="saleType0">
                                         <option value="false" selected>Order</option>
                                         <option value="true">Return</option>
                                     </select>
-                                </td>
+                                </td>*@
 
-                                <td>
-                                    @*<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
-                                        <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>*@
-                                    @*<a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>*@
-                                    @*<i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip">&#xE872;</a></i>*@
-                                    @*<button type="button" id="delete0" class="delete btn btn-default add-new"> <i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip">&#xE872;</a></i></button>*@
-                                    <button type="button" id="delete0" class="delete btn btn-default add-new"><a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></button>
-                                </td>
-                            </tr>
+                            @*<td>*@
+                            @*<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+                                <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>*@
+                            @*<a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>*@
+                            @*<i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip">&#xE872;</a></i>*@
+                            @*<button type="button" id="delete0" class="delete btn btn-default add-new"> <i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip">&#xE872;</a></i></button>*@
+
+                            @*commented due to new changes sohail*@
+                            @*<button type="button" id="delete0" class="delete btn btn-default add-new"><a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></button>*@
+                            @*</td>*@
+                            <!--</tr>-->
 
                         </tbody>
 
