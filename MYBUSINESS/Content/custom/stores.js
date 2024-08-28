@@ -15,18 +15,21 @@ document.querySelectorAll('.storeids').forEach(function (element) {
     });
 });
 $('#openShop').click(function () {
+    debugger;
     const storeIds = $(this).data('storeid');
     if (!storeIds) {
         alert('No store selected. Please select a store first.');
         return;
     }
-    if (confirm("You input 0, are you sure?")) {
+    var totalAmountVnd = document.getElementById('totalVndCount').value;
+    if (totalAmountVnd == '0') totalAmountVnd = 0;
+    if (confirm(`You input '${totalAmountVnd}', are you sure?`)) {
         debugger;
         // Select the element
         //const element = document.querySelector('.storeids');
         //// Get the value of data-storeid
         //const storeIds = element.getAttribute('data-storeid');
-        
+
         if (openingCurrencyDetalInVnd.length > 0) {
             debugger;
             formattedString = openingCurrencyDetalInVnd.map(item => {
@@ -77,6 +80,8 @@ $('#openShop').click(function () {
         }
     } else {
         alert("Operation cancelled.");
+        $('#storeOpeningPopup').modal('hide');
+        $('#storeOpeningPopup').find('input, textarea, select').val('0');
     }
 });
 
@@ -281,8 +286,11 @@ function openShop() {
     } else if (!isNaN(jpyBalance) && jpyBalance !== 0) {
         selectedBlance = jpyBalance;
     } else {
-        alert('No balance available');
-        return;
+        vndBalance = 0;
+        dollarBalance = 0;
+        jpyBalance = 0;
+        //alert('No balance available');
+        //return;
     }
 
     var storeViewModel = {
@@ -299,7 +307,8 @@ function openShop() {
         dataType: 'json',
         success: function (response) {
             if (response.Success) {
-                window.location.href = '/SOSR/Index';
+                debugger;
+                window.location.href = '/SOSR/Create?IsReturn=false';
                 $('#storeOpeningPopup').modal('hide');
             } else {
                 alert('Error: ' + response.Message);

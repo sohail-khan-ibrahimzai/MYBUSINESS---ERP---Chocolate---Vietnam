@@ -440,6 +440,7 @@
           <Property Name="BankAccountId" Type="nvarchar" MaxLength="36" />
           <Property Name="Quotation" Type="bit" />
           <Property Name="StoreId" Type="int" />
+          <Property Name="BillPaidByCash" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="SOD">
           <Key>
@@ -2106,6 +2107,7 @@
           <NavigationProperty Name="Employee" Relationship="Models.FK_SO_Employee" FromRole="SO" ToRole="Employee" />
           <NavigationProperty Name="Payments" Relationship="Models.FK_Payment_SO" FromRole="SO" ToRole="Payment" />
           <NavigationProperty Name="SODs" Relationship="Models.FK_SOD_SO" FromRole="SO" ToRole="SOD" />
+          <Property Name="BillPaidByCash" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="SOD">
           <Key>
@@ -3285,6 +3287,7 @@
           <EntitySetMapping Name="SOes">
             <EntityTypeMapping TypeName="Models.SO">
               <MappingFragment StoreEntitySet="SO">
+                <ScalarProperty Name="BillPaidByCash" ColumnName="BillPaidByCash" />
                 <ScalarProperty Name="StoreId" ColumnName="StoreId" />
                 <ScalarProperty Name="Quotation" ColumnName="Quotation" />
                 <ScalarProperty Name="BankAccountId" ColumnName="BankAccountId" />

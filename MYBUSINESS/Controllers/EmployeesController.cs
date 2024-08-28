@@ -93,6 +93,13 @@ namespace MYBUSINESS.Controllers
                 userChanges.Password = Encryption.Encrypt(pass2, "d3A#");
                 if (ModelState.IsValid)
                 {
+                    var storeId = Session["StoreId"] as string;
+                    if (storeId == null)
+                    {
+                        return RedirectToAction("StoreNotFound", "UserManagement");
+                    }
+                    var parseId = int.Parse(storeId);
+                    userChanges.StoreId = parseId;
                     //// due to on public use. ref youtube //comments following 3 lines
                     db.Entry(userChanges).State = EntityState.Modified;
                     db.SaveChanges();

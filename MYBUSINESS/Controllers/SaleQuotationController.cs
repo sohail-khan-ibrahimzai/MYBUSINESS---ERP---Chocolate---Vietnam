@@ -766,7 +766,12 @@ namespace MYBUSINESS.Controllers
             //SO sO = new SO();
             if (ModelState.IsValid)
             {
-
+                var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
+                var parseId = int.Parse(storeId);
                 Customer cust = db.Customers.FirstOrDefault(x => x.Id == sO.CustomerId);
 
                 if (cust == null)
@@ -777,6 +782,7 @@ namespace MYBUSINESS.Controllers
                     maxId += 1;
                     Customer.Id = maxId;
                     Customer.Balance += sO.Balance;
+                    Customer.StoreId = parseId;
                     db.Customers.Add(Customer);
                     //db.SaveChanges();
                 }
@@ -792,7 +798,7 @@ namespace MYBUSINESS.Controllers
                     {
                         cust.Balance -= sO.Balance;
                     }
-
+                    cust.StoreId = parseId;
                     db.Entry(cust).State = EntityState.Modified;
                     //db.SaveChanges();
 
@@ -831,6 +837,7 @@ namespace MYBUSINESS.Controllers
                 sO.SaleOrderQty = 0;
 
                 sO.Profit = 0;
+                sO.StoreId = parseId;
                 Employee emp = (Employee)Session["CurrentUser"];
                 sO.EmployeeId = emp.Id;
 
@@ -1213,6 +1220,12 @@ namespace MYBUSINESS.Controllers
             List<SOD> newSODs = saleOrderViewModel1.SaleOrderDetail;
             if (ModelState.IsValid)
             {
+                var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
+                var parseId = int.Parse(storeId);
                 newSO.Id = Encryption.Decrypt(saleOrderViewModel1.SaleOrder.Id, "BZNS");//
                 SO sO = db.SOes.Where(x => x.Id == newSO.Id).FirstOrDefault();
                 //sO.Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));//
@@ -1228,6 +1241,7 @@ namespace MYBUSINESS.Controllers
                 sO.PaymentMethod = newSO.PaymentMethod;
                 sO.PaymentDetail = newSO.PaymentDetail;
                 sO.BankAccountId = newSO.BankAccountId;
+                sO.StoreId = parseId;
                 //sO.SOSerial = newSO.SOSerial;//should be unchanged
 
                 ///////////////////////////////////////////
@@ -1243,11 +1257,13 @@ namespace MYBUSINESS.Controllers
                     maxId += 1;
 
                     customer.Id = maxId;
+                    customer.StoreId = parseId;
                     //customer.Balance = newSO.Balance;
                     db.Customers.Add(customer);
                 }
                 else
                 {
+                    customer.StoreId = parseId;
                     db.Entry(customer).State = EntityState.Modified;
                 }
 

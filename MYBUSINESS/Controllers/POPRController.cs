@@ -285,6 +285,7 @@ namespace MYBUSINESS.Controllers
             {
                 return RedirectToAction("StoreNotFound", "UserManagement");
             }
+            //var parseId = int.Parse(storeId);
             //ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name");
             //ViewBag.Products = db.Products;
 
@@ -332,12 +333,14 @@ namespace MYBUSINESS.Controllers
                     maxId += 1;
                     Supplier.Id = maxId;
                     Supplier.Balance = pO.Balance;
+                    Supplier.StoreId = parseId;
                     db.Suppliers.Add(Supplier);
                     //db.SaveChanges();
                 }
                 else
                 {//its means old customer. old customer balance should be updated.
                     //Supplier.Id = (int)pO.SupplierId;
+                    supp.StoreId = parseId;
                     supp.Balance = pO.Balance;
                     db.Entry(supp).State = EntityState.Modified;
                     //db.SaveChanges();
@@ -370,7 +373,7 @@ namespace MYBUSINESS.Controllers
                 pO.PurchaseOrderAmount = 0;
                 
                 pO.PurchaseOrderQty = 0;
-                
+                pO.StoreId = parseId;
                 Employee emp = (Employee)Session["CurrentUser"];
                 pO.EmployeeId = emp.Id;
                 db.POes.Add(pO);
@@ -637,6 +640,12 @@ namespace MYBUSINESS.Controllers
             List<POD> newPODs = purchaseOrderViewModel1.PurchaseOrderDetail;
             if (ModelState.IsValid)
             {
+                var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
+                var parseId = int.Parse(storeId);
                 newPO.Id = Encryption.Decrypt(purchaseOrderViewModel1.PurchaseOrder.Id, "BZNS");//
                 PO PO = db.POes.Where(x => x.Id == newPO.Id).FirstOrDefault();
                 //PO.Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));//
@@ -652,6 +661,7 @@ namespace MYBUSINESS.Controllers
                 PO.FundingSourceId = newPO.FundingSourceId;
                 PO.BankAccountId = newPO.BankAccountId;
                 PO.Date = newPO.Date;
+                PO.StoreId = parseId;
                 //PO.POSerial = newPO.POSerial;//should be unchanged
 
                 ///////////////////////////////////////////

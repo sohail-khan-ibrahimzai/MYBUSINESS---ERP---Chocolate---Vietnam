@@ -125,108 +125,108 @@ $(document).ready(function () {
         $("#pd3").val("Paid");
     }
 
-    $('#abc').scannerDetection({
+    //$('#abc').scannerDetection({
 
-        //https://github.com/kabachello/jQuery-Scanner-Detection
+    //    //https://github.com/kabachello/jQuery-Scanner-Detection
 
-        timeBeforeScanTest: 200, // wait for the next character for upto 200ms
-        avgTimeByChar: 40, // it's not a barcode if a character takes longer than 100ms
-        //preventDefault: false,
+    //    timeBeforeScanTest: 200, // wait for the next character for upto 200ms
+    //    avgTimeByChar: 40, // it's not a barcode if a character takes longer than 100ms
+    //    //preventDefault: false,
 
-        endChar: [13],
-        onComplete: function (barcode, qty) {
-            validScan = true;
-            //$('#customer').val(barcode);
-            //alert(barcode);
-
-
-            var activeControlId = $(document.activeElement).attr("id");
-            //alert(activeControlId);
-
-            if (activeControlId.substring(0, 4) != 'name') {
-                alert("To scan product barcode, please place cursor in product name text box.");
-                return false;
-            }
-
-            //var result = $.grep(products, function (e) { return e.Barcode == barcode; });
-            //alert('lakdsfjkljs');
-
-            var result = [];
-            //if (typeof result === "undefined") {
-            //    alert("something is undefined");
-            //}
-
-            //for (var i = 0, len = products.length; i < len; i++) {
-            //    alert(products[i]);
-            //    if (products[i][0] === barcode) {
-            //        result = products[i];
-            //        break;
-            //    }
-            //}
-
-            //var abc = productsBarcodes[2];
-            //alert(productsBarcodes.length);
-            for (var i = 0, len = productsBarcodes.length; i < len; i++) {
-                //alert(productsBarcodes[i][1]);
-                if (productsBarcodes[i][1] === barcode) {
-                    /*alert('found');*/
-                    result = products[i];
-                    break;
-                }
-            }
+    //    endChar: [13],
+    //    onComplete: function (barcode, qty) {
+    //        validScan = true;
+    //        //$('#customer').val(barcode);
+    //        //alert(barcode);
 
 
-            if (result.length === 0) {
-                alert('unfortunately, No item found against this barcode ');
-                return false;
-            }
+    //        var activeControlId = $(document.activeElement).attr("id");
+    //        //alert(activeControlId);
+
+    //        if (activeControlId.substring(0, 4) != 'name') {
+    //            alert("To scan product barcode, please place cursor in product name text box.");
+    //            return false;
+    //        }
+
+    //        //var result = $.grep(products, function (e) { return e.Barcode == barcode; });
+    //        //alert('lakdsfjkljs');
+
+    //        var result = [];
+    //        //if (typeof result === "undefined") {
+    //        //    alert("something is undefined");
+    //        //}
+
+    //        //for (var i = 0, len = products.length; i < len; i++) {
+    //        //    alert(products[i]);
+    //        //    if (products[i][0] === barcode) {
+    //        //        result = products[i];
+    //        //        break;
+    //        //    }
+    //        //}
+
+    //        //var abc = productsBarcodes[2];
+    //        //alert(productsBarcodes.length);
+    //        for (var i = 0, len = productsBarcodes.length; i < len; i++) {
+    //            //alert(productsBarcodes[i][1]);
+    //            if (productsBarcodes[i][1] === barcode) {
+    //                /*alert('found');*/
+    //                result = products[i];
+    //                break;
+    //            }
+    //        }
 
 
-            pfound = 0;
-            $('#selectedProducts > tbody  > tr').each(function () {
-
-                if ($(this).find("[id^='idn']").val() == result[0]) {
-                    num = + $(this).find("[id^='quantity']").val() + 1;
-                    $(this).find("[id^='quantity']").val(num);
-                    //alert($(this).find("[id^='quantity']").val());
-                    //$(this).find("[id^='quantity']").val() += 1;
-                    //alert(ui.item[0]);
-                    update_itemTotal();
-                    pfound = 1;
-                    return false;
-                }
-            })
-            if (pfound == 0) {
-                $('#name' + clickedIdNum).val(ui.item ? ui.item[1] : '');
-                $('#perPack' + clickedIdNum).val(ui.item ? ui.item[4] : '');
-                //}
-
-                $('#salePrice' + clickedIdNum).val(ui.item ? ui.item[2] : '');
-                $('#quantity' + clickedIdNum).val(ui.item ? 1 : '');
-                $('#idn' + clickedIdNum).val(ui.item ? ui.item[0] : '');
-                update_itemTotal();
-                $('#addNewRow').trigger('click');
-            }
+    //        if (result.length === 0) {
+    //            alert('unfortunately, No item found against this barcode ');
+    //            return false;
+    //        }
 
 
+    //        pfound = 0;
+    //        $('#selectedProducts > tbody  > tr').each(function () {
+
+    //            if ($(this).find("[id^='idn']").val() == result[0]) {
+    //                num = + $(this).find("[id^='quantity']").val() + 1;
+    //                $(this).find("[id^='quantity']").val(num);
+    //                //alert($(this).find("[id^='quantity']").val());
+    //                //$(this).find("[id^='quantity']").val() += 1;
+    //                //alert(ui.item[0]);
+    //                update_itemTotal();
+    //                pfound = 1;
+    //                return false;
+    //            }
+    //        })
+    //        if (pfound == 0) {
+    //            $('#name' + clickedIdNum).val(ui.item ? ui.item[1] : '');
+    //            $('#perPack' + clickedIdNum).val(ui.item ? ui.item[4] : '');
+    //            //}
+
+    //            $('#salePrice' + clickedIdNum).val(ui.item ? ui.item[2] : '');
+    //            $('#quantity' + clickedIdNum).val(ui.item ? 1 : '');
+    //            $('#idn' + clickedIdNum).val(ui.item ? ui.item[0] : '');
+    //            update_itemTotal();
+    //            $('#addNewRow').trigger('click');
+    //        }
 
 
 
 
-        } // main callback function	,
-        //,
-        //onError: function (string, qty) {
-        //    var activeControlId = $(document.activeElement).attr("id");
-        //    if (activeControlId.substring(0, 4) != 'name') {
-        //        alert("To scan product barcode, please place cursor in product name text box.");
-        //        return false;
-        //    }
-        //    alert("unfortunately not found product against this barcode" );
-        //    //$('#customerAddress').val($('#customerAddress').val() + string);
-        //}
 
 
-    });
+    //    } // main callback function	,
+    //    //,
+    //    //onError: function (string, qty) {
+    //    //    var activeControlId = $(document.activeElement).attr("id");
+    //    //    if (activeControlId.substring(0, 4) != 'name') {
+    //    //        alert("To scan product barcode, please place cursor in product name text box.");
+    //    //        return false;
+    //    //    }
+    //    //    alert("unfortunately not found product against this barcode" );
+    //    //    //$('#customerAddress').val($('#customerAddress').val() + string);
+    //    //}
+
+
+    //});
 
     //$(this).closest('form').find("input[type=text], textarea").val("");
 

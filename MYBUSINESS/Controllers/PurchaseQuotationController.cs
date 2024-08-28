@@ -318,6 +318,12 @@ namespace MYBUSINESS.Controllers
             //PO pO = new PO();
             if (ModelState.IsValid)
             {
+                var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
+                var parseId = int.Parse(storeId);
                 Supplier supp = db.Suppliers.FirstOrDefault(x => x.Id == pO.SupplierId);
                 if (supp == null)
                 {//its means new customer
@@ -327,6 +333,7 @@ namespace MYBUSINESS.Controllers
                     maxId += 1;
                     Supplier.Id = maxId;
                     Supplier.Balance = pO.Balance;
+                    Supplier.StoreId = parseId;
                     db.Suppliers.Add(Supplier);
                     //db.SaveChanges();
                 }
@@ -334,6 +341,7 @@ namespace MYBUSINESS.Controllers
                 {//its means old customer. old customer balance should be updated.
                     //Supplier.Id = (int)pO.SupplierId;
                     supp.Balance = pO.Balance;
+                    supp.StoreId = parseId;
                     db.Entry(supp).State = EntityState.Modified;
                     //db.SaveChanges();
 
@@ -356,6 +364,7 @@ namespace MYBUSINESS.Controllers
                 maxId1 += 1;
                 pO.POSerial = maxId1;
                 pO.Quotation = true;
+                pO.StoreId = parseId;
                 //pO.Date = DateTime.Now;
                 if (string.IsNullOrEmpty(Convert.ToString(pO.Date)))
                 {
@@ -617,6 +626,12 @@ namespace MYBUSINESS.Controllers
             List<POD> newPODs = purchaseOrderViewModel1.PurchaseOrderDetail;
             if (ModelState.IsValid)
             {
+                var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
+                var parseId = int.Parse(storeId);
                 newPO.Id = Encryption.Decrypt(purchaseOrderViewModel1.PurchaseOrder.Id, "BZNS");//
                 PO PO = db.POes.Where(x => x.Id == newPO.Id).FirstOrDefault();
                 //PO.Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));//
@@ -633,6 +648,7 @@ namespace MYBUSINESS.Controllers
                 PO.BankAccountId = newPO.BankAccountId;
                 PO.Date = newPO.Date;
                 PO.Quotation = true;
+                PO.StoreId = parseId;
                 //PO.POSerial = newPO.POSerial;//should be unchanged
 
                 ///////////////////////////////////////////

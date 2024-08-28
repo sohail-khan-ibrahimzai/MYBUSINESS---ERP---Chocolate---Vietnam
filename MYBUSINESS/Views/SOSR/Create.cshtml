@@ -93,7 +93,7 @@
             <div class="table-title">
                 <div class="row">
                     <div id="saleOrder" class="col-sm-offset-5"><h2>Sale <b>Order</b></h2></div>
-                    <div id="saleReturn" class="col-sm-offset-5"><h2>Sale <b>Return</b></h2></div>
+                    @*<div id="saleReturn" class="col-sm-offset-5"><h2>Sale <b>Return</b></h2></div>*@
                 </div>
 
                 <input type="hidden" name="SaleOrder.SaleReturn" id="saleReturn" value=@ViewBag.IsReturn />
@@ -127,7 +127,9 @@
                             <div class="small-box bg-info text-white p-3 scrollable-box">
                                 <div class="inner">
                                     <h4>@product.Name</h4>
-                                    <p>@product.PurchasePrice.ToString("C")</p> <!-- Display price as currency -->
+                                    <p>@("₫ " + product.PurchasePrice.ToString("N0"))</p>
+                                    @*<p>@(product.PurchasePrice.ToString("N0") + " ₫")</p>*@
+                                    @*<p>@product.PurchasePrice.ToString("C")</p>*@ <!-- Display price as currency -->
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
@@ -198,6 +200,7 @@
                             @*commented due to new changes sohail*@
                             @*<td><input type="text" readonly class="form-control classBGcolor" name="itemTotal0" id="itemTotal0" tabindex="-1"></td>*@
                             @*commented due to new changes sohail*@
+                            @*commented due to new changes sohail*@
                             @*<td style="display:none;">
                                     <select class="form-control" name="SaleOrderDetail[0].SaleType" id="saleType0">
                                         <option value="false" selected>Order</option>
@@ -225,27 +228,47 @@
 
 
 
-            <div class="table-title">
+            <div class="table-title" style="display:none;">
                 <div class="row">
                     <div class="col-sm-2">
                         <button type="button" id="addNewRow" class="btn btn-primary add-new" style="background-color: #2bbdb9;"><i class="fa fa-plus"></i> New Row</button>
                     </div>
                 </div>
-            </div>
+            </div> 
+            @*<div class="table-title">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <button type="button" id="addNewRow" class="btn btn-primary add-new" style="background-color: #2bbdb9;"><i class="fa fa-plus"></i> New Row</button>
+                    </div>
+                </div>
+            </div>*@
 
             <div style="display:inline" id="dvCalculations">
                 <div class="row" style="margin-top:30px;">
                     <div class="col-md-6">
                         @Html.DropDownList("SaleOrder.BankAccountId", (IEnumerable<SelectListItem>)ViewBag.BankAccounts, null, new { @class = "form-control", @style = "display:none" })
-                        <select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method">
+                        @*<select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method">
+                                <option value="Cash" selected>Cash</option>
+                                <option value="Online">Online</option>
+                                <option value="Cheque">Cheque</option>
+                                <option value="Other">Other</option>
+                            </select>*@
+                        @*<input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
+                            <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
+                            <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea>
+                            <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea>*@
+
+                        <select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method" style="display:none;">
                             <option value="Cash" selected>Cash</option>
                             <option value="Online">Online</option>
                             <option value="Cheque">Cheque</option>
                             <option value="Other">Other</option>
                         </select>
-                        <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
-                        <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea>
-                        <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea>
+
+                        <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want" style="display:none;">
+                        <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want" style="display:none;">
+                        <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill" style="display:none;"></textarea>
+                        <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill" style="display:none;"></textarea>
                     </div>
                     <div class="col-md-6" style="margin-top:20px;">
 
@@ -281,12 +304,20 @@
                                     <td style="background-color: #c5deed;"><input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaid" id="paid" value="0"></td>
                                 </tr>
                                 <tr style="display:none;">
+                                    <td style="background-color: #c5deed;"><input type="text" readonly class="form-control classBorder0" name="pdc3" id="pdc3" value="Bill Paid By Cash" tabindex="-1"></td>
+                                    <td style="background-color: #c5deed;"><input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaidByCash" id="paidByCash" value="0"></td>
+                                </tr>
+                                <tr style="display:none;">
                                     <td><input type="text" readonly class="form-control classBorder0" name="bl3" id="bl3" value="Balance" tabindex="-1"></td>
                                     <td><input readonly type="text" autocomplete="off" class="form-control" name="SaleOrder.Balance" id="balance" value="0" tabindex="-1"></td>
                                 </tr>
                                 <tr>
                                     @*<td colspan="2" rowspan="2"><button type="button" id="CreateSO" class="btn btn-primary" style="background-color: #2bbdb9; width: 300px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 32px;">Pay</button></td>*@
                                     <td colspan="2" rowspan="2"><button type="button" id="CreateSO" class="btn btn-primary" style="background-color: #2bbdb9; width: 300px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 32px;">Pay</button></td>
+                                    <td style="width: 20px;"></td>
+                                    <td colspan="2" rowspan="2"><button type="button" id="totalofAllSelecteProducts" class="btn btn-primary" style="width: 91px; height: 40px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 13px">Total</button></td>
+                                    <td style="width: 20px;"></td>
+                                    <td colspan="2" rowspan="2"><button type="button" id="deleteAllProducts" class="btn btn-danger" style="width: 126px; height: 40px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 13px ">Delete All Products</button></td>
                                 </tr>
                             </tbody>
                         </table>

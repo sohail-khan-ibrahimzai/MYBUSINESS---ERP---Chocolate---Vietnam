@@ -4,18 +4,23 @@
 //});
 var storeId = 0;
 if (storeId != null) {
-    
+
 }
-$(document).on('click', '#closeStore', function () {
+$(document).on('click', '#closeStore', function (e) {
     debugger;
+    e.preventDefault();
     $('#storeClosingPopup').modal('show');
+    $('#storeClosingPopup1').modal('show');
 });
 //$('#closeStore').click(function () {
 //    alert('Hi');
 //    $('#storeOpeningPopup').modal('show');
 //});
 $(document).on('click', '#closeShop', function () {
-    if (confirm("You input 0, are you sure?")) {
+    //if (confirm("You input 0, are you sure?")) {
+    var totalAmountVndClose = document.getElementById('totalVndCountClose').value;
+    if (totalAmountVndClose == '0') totalAmountVndClose = 0;
+    if (confirm(`You input '${totalAmountVndClose}', are you sure?`)) {
         debugger;
         // Select the element
         //const element = document.querySelector('.storeids');
@@ -77,7 +82,10 @@ $(document).on('click', '#closeShop', function () {
         } else if (!isNaN(jpyBalance) && jpyBalance !== 0) {
             selectedBlance = jpyBalance;
         } else {
-            alert('No balance available');
+            vndBalance = 0;
+            dollarBalance = 0;
+            jpyBalance = 0;
+            //alert('No balance available');
         }
 
         var storeViewModel = {
@@ -110,6 +118,8 @@ $(document).on('click', '#closeShop', function () {
         });
     } else {
         alert("Operation cancelled.");
+        $('#storeClosingPopup').modal('hide');
+        $('#storeClosingPopup').find('input, textarea, select').val('0');
     }
 });
 function calculateTotalClose(inputId, denominationValue, outputId) {

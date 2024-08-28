@@ -72,6 +72,13 @@ namespace MYBUSINESS.Controllers
         {
             if (ModelState.IsValid)
             {
+                var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
+                var parseId = int.Parse(storeId);
+                customer.StoreId = parseId;
                 if (customer.Balance == null)
                 {
                     customer.Balance = 0;
@@ -118,7 +125,13 @@ namespace MYBUSINESS.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
+                var parseId = int.Parse(storeId);
+                customer.StoreId = parseId;
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

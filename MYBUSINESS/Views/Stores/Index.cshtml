@@ -88,10 +88,11 @@
                                         </td>*@
 
                                         <td class="noPrint">
-                                            @Html.ActionLink("Update", "Edit", new { id = item.Id }, new { @class = "btn btn-info" }) |
+                                            @Html.ActionLink("Update", "Edit", new { id = item.Id }, new { @class = "btn btn-info" }) 
+                                            @*|  *@
                                             @*@Html.ActionLink("Ledger", "Index", "CustomerLedger", new { custId = item.Id }, new { @class = "btn btn-success",  data_toggle = "tooltip", data_placement = "top", title = "Click to view transection history of this customer" }) |*@
                                             @*@Html.ActionLink("Customer Wise Sale", "CustomerWiseSale", "SOSR", new { custId = item.Id, custName = item.Name }, new { @class = "btn btn-primary",  data_toggle = "tooltip", data_placement = "top", title = "Sales, Returns and Profit Gain of This Customer" }) |*@
-                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                                            @*@Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })*@
                                         </td>
                                     </tr>
                                 }

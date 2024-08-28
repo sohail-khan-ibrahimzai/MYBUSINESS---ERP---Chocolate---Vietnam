@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebSockets;
 using MYBUSINESS.CustomClasses;
 using MYBUSINESS.Models;
 
@@ -25,7 +26,7 @@ namespace MYBUSINESS.Controllers
         {
             return View(DAL.dbStore);
         }
-        public ActionResult GetStoreVndBalance()
+        public ActionResult GetStoreVndBalance(string id)
         {
             var storeId = Session["StoreId"] as string;
             if (storeId == null)
@@ -118,6 +119,58 @@ namespace MYBUSINESS.Controllers
             }
             return View(store);
         }
+        public ActionResult EditStoreBalance(int id)
+        {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            //var parseId = int.Parse(storeId);
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            DailyBalanceVnd dailyBalanceVnd = db.DailyBalanceVnds.Find(id);
+            if (dailyBalanceVnd == null)
+            {
+                return HttpNotFound();
+            }
+            return View(dailyBalanceVnd);
+        }
+        [HttpPost]
+        public ActionResult UpdateDailyBalance([Bind(Include = "Id,Name,OpeningBalance,ClosingBalance,OpeningCurrencyDetail,ClosingCurrencyDetail")] DailyBalanceVnd dailyBalanceVnd)
+        {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            var parseId = int.Parse(storeId);
+            var getDaiyBalance = db.DailyBalanceVnds.FirstOrDefault(x => x.Id == dailyBalanceVnd.Id && x.StoreId == parseId);
+            if (getDaiyBalance == null)
+            {
+                return HttpNotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                var dailyBlanceVnd = new DailyBalanceVnd
+                {
+                    OpeningDate = DateTime.Now,
+                    ClosingDate = DateTime.Now,
+                    OpeningBalance = dailyBalanceVnd.OpeningBalance,
+                    ClosingBalance = dailyBalanceVnd.ClosingBalance,
+                    OpeningCurrencyDetail = dailyBalanceVnd.OpeningCurrencyDetail,
+                    ClosingCurrencyDetail = dailyBalanceVnd.ClosingCurrencyDetail,
+                    StoreId = parseId
+                };
+                //db.DailyBalanceVnds.Add(dailyBlanceVnd);
+                db.Entry(dailyBalanceVnd).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("GetStoreVndBalance");
+            }
+            return View(dailyBalanceVnd);
+        }
 
         // POST: Customers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -197,7 +250,6 @@ namespace MYBUSINESS.Controllers
 
             if (selectedSOes != null)
             {
-
                 //return PartialView("_SelectedSOSR", selectedSOes.OrderByDescending(i => i.Date).ToList());
                 return PartialView("_SelectedSOSR", null);
             }
@@ -208,12 +260,17 @@ namespace MYBUSINESS.Controllers
             }
             //return View("Some thing went wrong");
 
-
         }
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public ActionResult OpenShop(StoreViewModel storeDto)
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            var parseId = int.Parse(storeId);
             if (storeDto.Id == 0)
             {
                 //if (storeDto.OpeningBalance==0)
@@ -222,7 +279,8 @@ namespace MYBUSINESS.Controllers
                 {
                     OpeningDate = DateTime.UtcNow,
                     OpeningBalance = storeDto.OpeningBalance,
-                    OpeningCurrencyDetail = storeDto.OpeningCurrencyDetail
+                    OpeningCurrencyDetail = storeDto.OpeningCurrencyDetail,
+                    StoreId = parseId
                 };
                 db.DailyBalanceVnds.Add(store);
                 db.SaveChanges();
@@ -234,15 +292,22 @@ namespace MYBUSINESS.Controllers
         public ActionResult CloseShop(StoreViewModel storeDto)
         {
             if (storeDto == null) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-            Session["StoreId"] = null;
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            var parseId = int.Parse(storeId);
             var store = new DailyBalanceVnd
             {
                 ClosingDate = DateTime.UtcNow,
                 ClosingBalance = storeDto.ClosingBalance,
-                ClosingCurrencyDetail = storeDto.ClosingCurrencyDetail
+                ClosingCurrencyDetail = storeDto.ClosingCurrencyDetail,
+                StoreId = parseId
             };
             db.DailyBalanceVnds.Add(store);
             db.SaveChanges();
+            Session["StoreId"] = null;
             return Json(new { Success = true, Message = "Shop closed successfully" });
         }
         protected override void Dispose(bool disposing)
