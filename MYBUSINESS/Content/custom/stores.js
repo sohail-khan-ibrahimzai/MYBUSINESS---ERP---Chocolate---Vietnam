@@ -5,11 +5,13 @@
 
 ////////////////
 var formattedString = "";
+var storeName = "";
 document.querySelectorAll('.storeids').forEach(function (element) {
     element.addEventListener('click', function () {
+        debugger;
         // Get the value of data-storeid from the clicked element
         const storeIds = this.getAttribute('data-storeid');
-
+        storeName = this.getAttribute('data-storename');
         // Set this storeId on the openShop button's data attribute for later use
         $('#openShop').data('storeid', storeIds);
     });
@@ -76,6 +78,7 @@ $('#openShop').click(function () {
         storeId = storeIds;
         if (storeIds != null || storeIds != undefined) {
             localStorage.setItem('storeId', storeId);
+            localStorage.setItem('storeName', storeName);
             setSession(); // Call setSession function to make an AJAX request
         }
     } else {
@@ -250,13 +253,14 @@ function updateOverallTotals() {
 function setSession() {
     debugger;
     var storeIds = localStorage.getItem('storeId');
+    var storesName = localStorage.getItem('storeName');
 
     if (storeIds !== null && storeIds !== undefined) {
         // Perform an AJAX call to set the session value on the server
         $.ajax({
             url: '/UserManagement/StoreValue',  // Replace with your actual controller/action path
             type: 'POST',
-            data: { storeId: storeIds },
+            data: { storeId: storeIds, storeName: storesName },
             success: function (response) {
                 if (response.Success) {
                     // Proceed to open the shop after successfully setting the session

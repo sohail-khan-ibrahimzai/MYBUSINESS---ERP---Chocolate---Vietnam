@@ -10,7 +10,7 @@ $(document).on('click', '#closeStore', function (e) {
     debugger;
     e.preventDefault();
     $('#storeClosingPopup').modal('show');
-    $('#storeClosingPopup1').modal('show');
+    //$('#storeClosingPopup1').modal('show');
 });
 //$('#closeStore').click(function () {
 //    alert('Hi');

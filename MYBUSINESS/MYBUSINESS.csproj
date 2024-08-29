@@ -16123,6 +16123,7 @@
     <Content Include="Views\Stores\GetStoreVndBalance.cshtml" />
     <Content Include="Views\Popups\StoreClosePopup.cshtml" />
     <Content Include="Views\Stores\EditStoreBalance.cshtml" />
+    <Content Include="Views\Shared\StoreClosePopup1.cshtml" />
     <None Include="Web.Debug.Config">
       <DependentUpon>Web.Config</DependentUpon>
     </None>

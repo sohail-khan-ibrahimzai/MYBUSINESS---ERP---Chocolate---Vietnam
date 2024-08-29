@@ -198,12 +198,13 @@ namespace MYBUSINESS.Controllers
             base.Dispose(disposing);
         }
         [HttpPost]
-        public ActionResult StoreValue(string storeId)
+        public ActionResult StoreValue(string storeId, string storeName)
         {
-            if (!string.IsNullOrEmpty(storeId))
+            if (!string.IsNullOrEmpty(storeId) && !string.IsNullOrEmpty(storeName))
             {
                 // Store the value in the session
                 Session["StoreId"] = storeId;
+                Session["StoreName"] = storeName;
 
                 // Optionally, redirect to another action or view
                 return Json(new { Success = true, Message = "" });

@@ -47,7 +47,7 @@
                     <div class="col-lg-3 col-xs-6">
                         <!-- small box -->
                         @*<div class="small-box @colors[index % colors.Length] storeids" id="storeids" data-storeid="@item.Id">*@
-                        <div class="small-box @colors[index % colors.Length] storeids" data-storeid="@item.Id">
+                        <div class="small-box @colors[index % colors.Length] storeids" data-storeid="@item.Id" data-storename="@item.Name">
                             <div class="inner">
                                 <h3>@*@ViewBag.SOCount*@</h3>
                                 <p>@Html.DisplayFor(modelItem => item.Name)</p>
