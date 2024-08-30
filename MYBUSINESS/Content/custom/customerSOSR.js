@@ -39,8 +39,8 @@ function OnTypeCustomerName(param) {
             $('#vndCustomerVat').val(ui.item ? ui.item[5] : '');
             $('#vndCustomerCompany').val(ui.item ? ui.item[6] : '');
             //$('#PreviousBalance').val(ui.item ? ui.item[3] : '');
-            update_itemTotal();
-            document.getElementById('name' + txtSerialNum).focus();
+            //update_itemTotal();
+            //document.getElementById('name' + txtSerialNum).focus();
             return false;
         }
 
@@ -620,7 +620,140 @@ function addProduct(encodedProductJson) {
         handleProductAddition(encodedProductJson, quantityFromModal);
     });
 }
+//function handleProductAddition(encodedProductJson, quantityFromModal) {
+//    debugger;
+//    // Parse the JSON string into a JavaScript object
+//    var product = JSON.parse(encodedProductJson);
+//    var rowIndex = document.querySelectorAll('#selectedProducts tbody tr').length; // Zero-based index
+
+//    // Retrieve the SuggestedNewProductId value from the hidden input field
+//    var suggestedNewProductId = document.getElementById('suggestedNewProductId').value;
+
+//    // Search for the product in the table
+//    var existingRow = findProductRow(product.Name);
+
+//    if (existingRow) {
+//        // Existing product logic
+//        var qtyCell = existingRow.cells[3]; // Assuming quantity is the 4th cell (index 3)
+//        var totalCell = existingRow.cells[5]; // Assuming total price is the 6th cell (index 5)
+//        var currentQty = parseInt(qtyCell.innerText, 10);
+//        var newQty = currentQty + quantityFromModal;
+
+//        // Calculate the new total price
+//        var newTotalPrice = newQty * product.SalePrice;
+
+//        // Format the total price using the custom function
+//        totalCell.innerText = formatNumberWithDots(newTotalPrice);
+
+//        // Update quantity
+//        qtyCell.innerText = newQty;
+
+//        // Update hidden inputs
+//        var hiddenQtyInput = existingRow.querySelector("[name^='SaleOrderDetail'][name$='Quantity']");
+//        hiddenQtyInput.value = newQty;
+
+//        // Update the totalVndBalanceHeader by adding the difference in price
+//        var oldTotalPrice = currentQty * product.SalePrice;
+//        totalVndBalanceHeader += newTotalPrice - oldTotalPrice;
+//    } else {
+//        // Create a new row if the product does not exist
+//        var newRow = document.createElement('tr');
+//        var indexCell = document.createElement('td');
+//        var nameCell = document.createElement('td');
+//        var priceCell = document.createElement('td');
+//        var qtyCell = document.createElement('td');
+//        var billNumberCell = document.createElement('td'); // Bill Number Cell
+//        var totalCell = document.createElement('td');
+//        totalCell.name = 'selectedProductTotal';
+//        totalCell.id = 'selectedProductTotal';
+//        var actionsCell = document.createElement('td');
+
+//        // Fill the cells with product data
+//        indexCell.innerText = rowIndex + 1; // Row index starts from 1
+//        nameCell.innerText = product.Name;
+
+//        // Format the SalePrice using the custom function
+//        priceCell.innerText = formatNumberWithDots(product.SalePrice);
+//        qtyCell.innerText = quantityFromModal;
+
+//        // Directly set Bill Number to SuggestedNewProductId (do not perform calculations on it)
+//        billNumberCell.innerText = suggestedNewProductId;
+
+//        // Calculate total based on SalePrice and quantity
+//        var totalAmount = quantityFromModal * product.SalePrice;
+//        totalCell.innerText = formatNumberWithDots(totalAmount);
+
+//        // Accumulate the total price to totalVndBalanceHeader
+//        totalVndBalanceHeader += totalAmount;
+
+//        // Create hidden inputs
+//        var hiddenProductIdInput = document.createElement('input');
+//        hiddenProductIdInput.type = 'hidden';
+//        hiddenProductIdInput.name = 'SaleOrderDetail[' + rowIndex + '].ProductId';
+//        hiddenProductIdInput.value = product.Id;
+
+//        var hiddenProductNameInput = document.createElement('input');
+//        hiddenProductNameInput.type = 'hidden';
+//        hiddenProductNameInput.name = 'SaleOrderDetail[' + rowIndex + '].Product.Name';
+//        hiddenProductNameInput.value = product.Name;
+
+//        var hiddenSalePriceInput = document.createElement('input');
+//        hiddenSalePriceInput.type = 'hidden';
+//        hiddenSalePriceInput.name = 'SaleOrderDetail[' + rowIndex + '].SalePrice';
+//        hiddenSalePriceInput.value = product.SalePrice;
+
+//        var hiddenPurchasePriceInput = document.createElement('input');
+//        hiddenPurchasePriceInput.type = 'hidden';
+//        hiddenPurchasePriceInput.name = 'SaleOrderDetail[' + rowIndex + '].PurchasePrice';
+//        hiddenPurchasePriceInput.value = product.PurchasePrice;
+
+//        var hiddenQuantityInput = document.createElement('input');
+//        hiddenQuantityInput.type = 'hidden';
+//        hiddenQuantityInput.name = 'SaleOrderDetail[' + rowIndex + '].Quantity';
+//        hiddenQuantityInput.value = quantityFromModal;
+
+//        // Add an action button
+//        var removeButton = document.createElement('button');
+//        removeButton.type = 'button';
+//        removeButton.className = 'btn btn-sm';
+//        var icon = document.createElement('i');
+//        icon.className = 'material-icons';
+//        icon.innerText = 'delete';
+//        icon.style.color = '#FF6F6F';
+//        removeButton.appendChild(icon);
+//        removeButton.onclick = function () {
+//            removeProduct(newRow, product.SalePrice);
+//        };
+//        actionsCell.appendChild(removeButton);
+
+//        // Append the cells to the new row
+//        newRow.appendChild(indexCell);
+//        newRow.appendChild(nameCell);
+//        newRow.appendChild(priceCell);
+//        newRow.appendChild(qtyCell);
+//        newRow.appendChild(billNumberCell); // Append Bill Number Cell
+//        newRow.appendChild(totalCell);
+//        newRow.appendChild(actionsCell);
+
+//        // Append hidden inputs to the row
+//        newRow.appendChild(hiddenProductIdInput);
+//        newRow.appendChild(hiddenProductNameInput);
+//        newRow.appendChild(hiddenSalePriceInput);
+//        newRow.appendChild(hiddenPurchasePriceInput);
+//        newRow.appendChild(hiddenQuantityInput);
+
+//        // Append the new row to the table body
+//        document.querySelector('#selectedProducts tbody').appendChild(newRow);
+
+//        // Update row indices
+//        updateRowIndices();
+//    }
+
+//    // Update the total amount for the "Pay" button
+//    updatePayButton();
+//}
 function handleProductAddition(encodedProductJson, quantityFromModal) {
+    debugger;
     // Parse the JSON string into a JavaScript object
     var product = JSON.parse(encodedProductJson);
     var rowIndex = document.querySelectorAll('#selectedProducts tbody tr').length; // Zero-based index
@@ -663,6 +796,8 @@ function handleProductAddition(encodedProductJson, quantityFromModal) {
         var qtyCell = document.createElement('td');
         var billNumberCell = document.createElement('td'); // Bill Number Cell
         var totalCell = document.createElement('td');
+        totalCell.name = 'selectedProductTotal';
+        totalCell.id = 'selectedProductTotal' + rowIndex; // Make sure ID is unique per row
         var actionsCell = document.createElement('td');
 
         // Fill the cells with product data
@@ -765,7 +900,7 @@ function findProductRow(productName) {
 // Function to remove a product row and update the quantities and total
 function removeProduct(row, pricePerUnit) {
     var qtyCell = row.cells[3]; // Assuming quantity is the 4th cell (index 3)
-    var totalCell = row.cells[4]; // Assuming total price is the 5th cell (index 4)
+    var totalCell = row.cells[5]; // Assuming total price is the 5th cell (index 4)
     var currentQty = parseInt(qtyCell.innerText, 10);
 
     if (currentQty > 1) {
@@ -785,6 +920,7 @@ function removeProduct(row, pricePerUnit) {
 }
 
 // Function to update the total amount for the "Pay" button
+var totalAmountForSelectedProduct = 0;
 function updatePayButton() {
     debugger;
     //var total = 0;
@@ -814,11 +950,12 @@ function updatePayButton() {
 
     //totalPayableBill = totalAmount;
     //totalBillPaid = totalAmount;
+    debugger;
     var totalAmount = 0;
 
-    // Iterate through each row in the table body
+    // Iterate through each row in the table body to calculate the total amount
     $('#selectedProducts tbody tr').each(function () {
-        // Find the text of the total cell, which is in the 5th cell (index 4)
+        // Find the text of the total cell, which is in the 5th cell (index 5 in your updated code)
         var totalCell = $(this).find('td:nth-child(6)').text().trim(); // Ensure no spaces around the number
 
         // Remove dots from the number to prepare for conversion
@@ -829,24 +966,61 @@ function updatePayButton() {
     });
 
     // Update the "Total Amount" display element with the calculated total amount
-    // Assuming '#ItemsTotal' is the total field ID
     $('#ItemsTotal').val(totalAmount.toLocaleString('de-DE')); // Format number with dots again if needed
 
     // Set totalPayableBill and totalBillPaid to the calculated total amount
     totalPayableBill = totalAmount;
     totalBillPaid = totalAmount;
 
-    //totalPayableBill = totalAmount.toFixed(2);
-    //totalBillPaid = totalAmount.toFixed(2);
-
     // Optionally update the Pay button text
-    // $("#CreateSO").html("Pay " + totalAmount.toFixed(2)); // Assuming '#PayButton' is the button ID
     $("#CreateSO")
         .html("Pay")                // Set the visible text to "Pay"
         .attr("data-amount", totalAmount);
-    //.attr("data-amount", totalAmount.toFixed(2));
-    //$("#totalofAllSelecteProducts").html("₫ "+ totalAmount.toFixed(2)); // Assuming '#PayButton' is the button ID
-    $("#totalofAllSelecteProducts").html("₫ " + formatNumberWithDots(totalAmount)); // Assuming '#PayButton' is the button ID
+
+    $("#totalofAllSelecteProducts").attr("data-amounts", totalAmount);
+
+    // Update the total of all selected products
+    var getSelectedProductTotal = totalAmount.toLocaleString('de-DE');
+    $("#totalofAllSelecteProducts").html("₫ " + getSelectedProductTotal); // Update with the formatted total amount
+    totalAmountForSelectedProduct = getSelectedProductTotal;
+    totalVndBalanceHeader = getSelectedProductTotal;
+    //var totalAmount = 0;
+
+    //// Iterate through each row in the table body
+    //$('#selectedProducts tbody tr').each(function () {
+    //    // Find the text of the total cell, which is in the 5th cell (index 4)
+    //    var totalCell = $(this).find('td:nth-child(6)').text().trim(); // Ensure no spaces around the number
+
+    //    // Remove dots from the number to prepare for conversion
+    //    var totalCellNumber = parseFloat(totalCell.replace(/\./g, '')) || 0; // Replace all dots and parse as float
+
+    //    // Add the parsed number to the totalAmount
+    //    totalAmount += totalCellNumber;
+    //});
+
+    //// Update the "Total Amount" display element with the calculated total amount
+    //// Assuming '#ItemsTotal' is the total field ID
+    //$('#ItemsTotal').val(totalAmount.toLocaleString('de-DE')); // Format number with dots again if needed
+
+    //// Set totalPayableBill and totalBillPaid to the calculated total amount
+    //totalPayableBill = totalAmount;
+    //totalBillPaid = totalAmount;
+
+    ////totalPayableBill = totalAmount.toFixed(2);
+    ////totalBillPaid = totalAmount.toFixed(2);
+
+    //// Optionally update the Pay button text
+    //// $("#CreateSO").html("Pay " + totalAmount.toFixed(2)); // Assuming '#PayButton' is the button ID
+    //$("#CreateSO")
+    //    .html("Pay")                // Set the visible text to "Pay"
+    //    .attr("data-amount", totalAmount);
+    ////.attr("data-amount", totalAmount.toFixed(2));
+    ////$("#totalofAllSelecteProducts").html("₫ "+ totalAmount.toFixed(2)); // Assuming '#PayButton' is the button ID
+
+    //var getSelectedProductTotal = document.getElementById('selectedProductTotal').textContent;
+    ////alert(getSelectedProductTotal);
+    ////$("#totalofAllSelecteProducts").html("₫ " + formatNumberWithDots(totalAmount)); // Assuming '#PayButton' is the button ID
+    //$("#totalofAllSelecteProducts").html("₫ " + getSelectedProductTotal); // Assuming '#PayButton' is the button ID
 }
 
 // Function to update row indices after a row is added or removed
@@ -1106,8 +1280,14 @@ $(document).ready(function () {
         //alert('Hi');
         // Remove all rows from the tbody
         $('#selectedProducts tbody').empty();
-        $("#CreateSO").html("Pay " + '0.00');
+        //$("#CreateSO").html("Pay " + '0.00');
+        $("#CreateSO").html("Pay ");
         $("#totalofAllSelecteProducts").html("₫ " + '0.00');
+        //$('#cashvnd').val('0');
+        //$('#cardvnd').val('0');
+        totalAmountForSelectedProduct = 0;
+        totalVndBalanceHeader = 0;
+        //$('#payallbycard').text('Pay all by card');
     });
     $('#CreateSO').keydown(function (event) {
         if (event.keyCode == 13) {
@@ -1266,32 +1446,90 @@ $(document).ready(function () {
         //}
         debugger;
         var storedTotal = totalVndBalanceHeader;
-        if (!isNaN($('#total').val())) {
+        if (!isNaN($('#total').val()) || !$('#total').val('0')) {
             //$('#lefttotalvnd').val(storedTotal);
             $('#totalitsmspan').text(storedTotal);
             //set total in header title
             $('#totalitsmspan').text(storedTotal);
             $('#payModal').modal('show');
+            // Use the shown.bs.modal event to focus on the input after the modal is fully shown
+            $('#payModal').on('shown.bs.modal', function () {
+                $('#cashvnd').focus();
+            });
+        }
+        else {
+            alert('please select product first');
         }
         //$("#CreateSO").attr("disabled", true);
         $('form').preventDoubleSubmission();
 
     });
+    $('.cancelPaymentButton').on('click', function (e) {
+        $('#lefttopayvnd').val('0');
+        $('#cashvnd').val('0');
+        $('#cardvnd').val('0');
+        //totalVndBalanceHeader = 0;
+        //$('#totalitsmspan').text('0');
+        $('#payallbycard').text('Pay all by card');
+        //$('#validatepyment').prop('disabled', true);
+        $('#payModal').modal('hide'); // Hide the modal
+        $('#validatepyment').prop('disabled', true);
+    });
     $('#payallbycard').click(function () {
         debugger;
-        $('#lefttopayvnd').val('0');
+        if (totalAmountForSelectedProduct != 0) {
+            $('#lefttopayvnd').val('0');
+            $('#cashvnd').val('0');
+            $('#cardvnd').val(totalAmountForSelectedProduct);
+            $('#payallbycard').text(totalAmountForSelectedProduct);
+            $('#totalitsmspan').text(totalAmountForSelectedProduct);
+            //$('#validatepyment').prop('disabled', false);
+        }
+        else {
+            $('#lefttopayvnd').val('0');
+            $('#cashvnd').val('0');
+            $('#cardvnd').val('0');
+            $('#payallbycard').text('Pay all by card');
+            //$('#validatepyment').prop('disabled', true);
+        }
         // Get the text from #CreateSO and remove "Pay " prefix
         //var totalpaymentText = $('#CreateSO').text();
 
-        var totalpaymentText = $("#CreateSO").data("amount");
-        var totalpayment = totalpaymentText; // Remove "Pay " prefix
+        // Try to get the element by ID
 
+        // Check if the element exists
+        //if (updatedSelectedProductTotalElement) {
+        //    // If the element exists, get its text content
+        //    var updatedSelectedProductTotalElement = selectedProductTotalElement.textContent;
+
+        //} else {
+        //    // If the element does not exist, set a default value
+        //    var getSelectedProductTotalVnd = '0';
+        //}
+        //$('#cardvnd').val(getSelectedProductTotalVnd);
+        //if (getSelectedProductTotalVnd != 0)
+        //    $('#payallbycard').text(getSelectedProductTotalVnd);
+        //else
+        //    $('#payallbycard').text('Pay all by card');
+        //$('#validatepyment').prop('disabled', false);
+
+
+        //alert(getSelectedProductTotal);
+        //$("#totalofAllSelecteProducts").html("₫ " + formatNumberWithDots(totalAmount)); // Assuming '#PayButton' is the button ID
+
+        //////
         //var totalpaymentText = $("#CreateSO").data("amount");
-        //var totalpayment = totalpaymentText.replace('Pay ', '').trim(); // Remove "Pay " prefix
+        //var totalpayment = totalpaymentText; // Remove "Pay " prefix
 
-        // Assign the cleaned value to #cardvnd
-        $('#validatepyment').prop('disabled', false);
-        $('#cardvnd').val(formatNumberWithDots(totalpayment));
+        ////var totalpaymentText = $("#CreateSO").data("amount");
+        ////var totalpayment = totalpaymentText.replace('Pay ', '').trim(); // Remove "Pay " prefix
+
+        //// Assign the cleaned value to #cardvnd
+        //$('#validatepyment').prop('disabled', false);
+        //$('#cardvnd').val(formatNumberWithDots(totalpayment));
+
+        ////
+
         //var totalpayment = $('#total').val();
         //$('#lefttotalvnd').val('');
     });
@@ -1548,10 +1786,25 @@ function TriggerFooterEvents() {
 
         //
     });
-    // Attach the keyup event handler to both inputs
-    $('#cardvnd, #cashvnd').keyup(function () {
+    // Attach the keyup event handler to both inputs old working by sohail
+    //$('#cardvnd, #cashvnd').keyup(function () {
+    //    calculateLeftToPay();
+    //});
+
+
+    $('#cardvnd, #cashvnd').on('input', function () {
+        // Remove any non-numeric characters (except for the period which is used for thousands separator)
+        let inputVal = $(this).val().replace(/[^0-9]/g, '');
+
+        // Convert the cleaned value back to an integer, format it, and update the input field
+        let formattedVal = formatNumberWithDots(inputVal);
+        $(this).val(formattedVal);
+        // Recalculate payment totals
         calculateLeftToPay();
     });
+
+
+
     //set value of Pay Modal form
     //$("#cardvnd").keyup(function () {
     //    debugger;
@@ -1588,35 +1841,74 @@ function showHiddenInputs() {
     });
 }
 function calculateLeftToPay() {
-    var cdVnd = parseFloat($('#cardvnd').val()) || 0;  // Card payment
-    var cashVnd = parseFloat($('#cashvnd').val()) || 0; // Cash payment
-    //var totalpaymentText = $('#CreateSO').text();
+    // Get values for card payment, cash payment, and total payment
+    //var cdVnd = parseFloat($('#cardvnd').val()) || 0;  // Card payment
+    //var cashVnd = parseFloat($('#cashvnd').val()) || 0; // Cash payment
+    //var totalpaymentText = $("#CreateSO").data("amount"); // Total payment amount from data attribute
+    //var totalpayment = parseFloat(totalpaymentText) || 0; // Parse to number
 
-    var totalpaymentText = $("#CreateSO").data("amount");
-    var totalpayment = parseFloat(totalpaymentText) || 0;
 
-    //var totalpaymentText = $("#CreateSO").data("amount");
-    //var totalpayment = parseFloat(totalpaymentText.replace('Pay ', '').trim()) || 0;
+    // Get values for card payment, cash payment, and total payment
+    var cdVnd = parseFloat($('#cardvnd').val().replace(/\./g, '')) || 0;  // Remove dots and convert to number
+    var cashVnd = parseFloat($('#cashvnd').val().replace(/\./g, '')) || 0; // Remove dots and convert to number
+    var totalpaymentText = $("#CreateSO").data("amount"); // Total payment amount from data attribute
+    var totalpayment = parseFloat(totalpaymentText) || 0; // Parse to number
+
+
 
     // Calculate the remaining amount to pay
     var leftToPayVndBalance = totalpayment - (cdVnd + cashVnd);
-    cardVndBalance = cdVnd;
-    cashVndBalance = cashVnd;
-    //console.log('cardVndBalance : ' + cardVndBalance + '' + 'cashVndBalance : ' + cashVndBalance);
+    // Update the value for left to pay field
+    $('#lefttopayvnd').val(formatNumberWithDots(leftToPayVndBalance));
 
-    //$('#lefttopayvnd').val(leftToPayVndBalance.toFixed(2));
-    $('#lefttopayvnd').val(leftToPayVndBalance);
-    leftVndBalance = $('#lefttopayvnd').val();
-    totalBillPaid = cdVnd + cashVnd;  // Total amount paid
+    // Calculate total amount paid
+    var totalBillPaid = cdVnd + cashVnd;
 
+    // Check if total paid matches total amount
+    if (totalBillPaid === totalpayment) {
+        $('#validatepyment').prop('disabled', false); // Enable the button if fully paid
+    } else {
+        $('#validatepyment').prop('disabled', true); // Disable the button if not fully paid
+    }
 
-    // Optionally, update other parts of the UI
+    // Optional UI updates
     // if (IsReturn == 'false') {
     //     $("#CreateSO").html("Pay " + leftToPayVndBalance.toFixed(2));
     // } else {
     //     $("#CreateSO").html("Return " + leftToPayVndBalance.toFixed(2));
     // }
 }
+//function calculateLeftToPay() {
+//    var cdVnd = parseFloat($('#cardvnd').val()) || 0;  // Card payment
+//    var cashVnd = parseFloat($('#cashvnd').val()) || 0; // Cash payment
+//    //var totalpaymentText = $('#CreateSO').text();
+
+//    var totalpaymentText = $("#CreateSO").data("amount");
+//    //var totalpaymentText = $("#totalofAllSelecteProducts").data("amounts");
+//    var totalpayment = parseFloat(totalpaymentText) || 0;
+
+//    //var totalpaymentText = $("#CreateSO").data("amount");
+//    //var totalpayment = parseFloat(totalpaymentText.replace('Pay ', '').trim()) || 0;
+
+//    // Calculate the remaining amount to pay
+//    var leftToPayVndBalance = totalpayment - (cdVnd + cashVnd);
+//    cardVndBalance = cdVnd;
+//    cashVndBalance = cashVnd;
+//    //console.log('cardVndBalance : ' + cardVndBalance + '' + 'cashVndBalance : ' + cashVndBalance);
+
+//    //$('#lefttopayvnd').val(leftToPayVndBalance.toFixed(2));
+//    $('#lefttopayvnd').val(leftToPayVndBalance);
+//    leftVndBalance = $('#lefttopayvnd').val();
+//    totalBillPaid = cdVnd + cashVnd;  // Total amount paid
+
+
+//    // Optionally, update other parts of the UI
+//    // if (IsReturn == 'false') {
+//    //     $("#CreateSO").html("Pay " + leftToPayVndBalance.toFixed(2));
+//    // } else {
+//    //     $("#CreateSO").html("Return " + leftToPayVndBalance.toFixed(2));
+//    // }
+//}
 function ConfigDialogueCreateCustomer() {
     //alert("create customer configured");
     $("#dialog-CreateCustomer").dialog({
@@ -1703,248 +1995,250 @@ function update_itemTotal() {
     var returnQtyPiece = 0;
     var SN = 0;
 
-    $("#OrderTotal").val('Order Total(' + parseInt(orderQty) + ')');
+    //$("#OrderTotal").val('Order Total(' + parseInt(orderQty) + ')');
 
-    $('#selectedProducts > tbody  > tr').each(function () {
+    //$('#selectedProducts > tbody  > tr').each(function () {
 
-        //$(this).find("[id^='isPack']").prop('disabled', true);
-        //$(this).find("[id^='isPack']").prop('selectedIndex', 1);
+    //    //$(this).find("[id^='isPack']").prop('disabled', true);
+    //    //$(this).find("[id^='isPack']").prop('selectedIndex', 1);
 
-        if (IsReturn == 'false') {//if (IsReturn == 'True') { c# model uses 'T'rue and java script user 't'rue
-            //$('#name').prop('selectedIndex', 0);
+    //    if (IsReturn == 'false') {//if (IsReturn == 'True') { c# model uses 'T'rue and java script user 't'rue
+    //        //$('#name').prop('selectedIndex', 0);
 
-            $(this).find("[id^='saleType']").prop('selectedIndex', 0);
-        }
-        else {
+    //        $(this).find("[id^='saleType']").prop('selectedIndex', 0);
+    //    }
+    //    else {
 
-            $(this).find("[id^='saleType']").prop('selectedIndex', 1);
-        }
-
-        SN += 1;
-        $(this).find("[id^='SNo']").text(SN);
-
-        var qty = 0;
-        var price = 0;
-        var perPack = 0;
-        //alert(IsReturn);
-
-        //alert($(this).find("[id^='saleType']").val());
-        //if ($(this).find("[id^='saleType']").val() == "false") {//sale order
-        if (IsReturn == 'false') {
-            //Sale
-
-            qty = $(this).find("[id^='quantity']").val();
-
-            if (!(qty)) { qty = 0; }
-            price = $(this).find("[id^='salePrice']").val();
-
-            var itemAmount = (qty * price);
-
-            if ($(this).find("[id^='isPack']").val() == "true") {//false=item true=PerPack
-                perPack = $(this).find("[id^='perPack']").val();
-                if (perPack == 0) perPack = 1;
-                itemAmount = itemAmount * perPack;
-                orderQty += parseInt(qty);
-                //alert(itemAmount);
-                //alert("pack true");
-                //$(this).find("[id^='perPack']").val($(this).find("[id^='perPackHidden']").val());
-                //$(this).find("[id^='perPackHidden']").remove();
-            }
-            else {
-                //alert("pack false");
-                orderQtyPiece += parseInt(qty);
-                //$("[id^='perPack']").hide();
-                //$("[id^='perPack']").after('<input type="hidden" id="perPackHidden' + txtSerialNum + '"  value="' + $("#perPack").val() + '" />').val("").attr("disabled", true);
-            }
-
-            ItemsTotal += itemAmount;
-            $(this).find("[id^='itemTotal']").val(itemAmount.toFixed(2));
-        } else {
-            //Return
-            //alert($('#saleType').val());
-            qty = $(this).find("[id^='quantity']").val();
-            if (!(qty)) { qty = 0; }
-            price = $(this).find("[id^='salePrice']").val();
-
-            var ItemAmount = (qty * price);
-
-            if ($(this).find("[id^='isPack']").val() == "true") {//false=item true=PerPack
-                perPack = $(this).find("[id^='perPack']").val();
-                if (perPack == 0) perPack = 1;
-                ItemAmount = ItemAmount * perPack;
-                orderQty += parseInt(qty);
-                //alert(ItemAmount);
-            } else {
-                orderQtyPiece += parseInt(qty);
-            }
-
-
-            ItemsTotal += ItemAmount;
-            //alert(ItemsTotal);
-            $(this).find("[id^='itemTotal']").val(ItemAmount.toFixed(2));
-
-
-        }
-
-        /*$("#OrderTotal").val('Order Total(' + parseInt(orderQty) + ' pack, ' + parseInt(orderQtyPiece) + ' piece)');*/
-        $("#OrderTotal").val('Order Total(' + parseInt(orderQty) + ')');
-
-    });
-
-    //checkAvaiableStock();
-
-    //$('[id^="name"]').focusout(function () {
-    //    alert("hello");
-
-    //});
-    //$('#OpenNewCustForm').click(function () {
-    //    $("#dialog-CreateCustomer").dialog("open");
-    //});
-
-    //$('[id^="quantity"]').change(function () {
-    //    alert("");
-    //});
-
-    //jQuery('[id^="quantity"]').on('change input propertychange paste', function () {
-    //    alert("c");
-    //});
-
-    /////////////////////////////////
-    ////$('[id^="quantity"]').blur(function () {
-    ////var inputObj = this;
-    //var EnteredQty = 0;
-    //var EnteredProductId = 0;
-    //var tblProductStock = 0;
-    //var tblProductId = 0;
-    //var saleType = false;
-    //EnteredQty = this.value.trim();
-    ////alert(this.value.trim());
-    //EnteredProductId = $(this).closest("tr").find("[id^='idn']").val().trim();
-    //saleType = $(this).closest("tr").find("[id^='saleType']").val().trim();
-
-
-    ////$('#productsTable tr').each(function () {
-    ////    tblProductId = $(this).find(".ProductId").html();
-
-    ////    if (typeof tblProductId != 'undefined') {
-    ////        if (EnteredProductId == tblProductId.trim()) {
-    ////            //alert('abc');
-    ////            tblProductStock = $(this).find(".stock").html().trim();
-    ////            //alert(tblProductStock.trim());
-    ////            //if (EnteredQty.trim() > tblProductStock.trim()) {
-    ////            //    alert("available stock is " + tblProductStock);
-    ////            //    return false; 
-    ////            //}
-    ////            //return false;
-    ////        }
-    ////    }
-    ////});
-    //for (var i = 0, l = products.length; i < l; i++) {
-    //    tblProductId = products[i][0];
-    //    if (typeof tblProductId != 'undefined') {
-    //        if (EnteredProductId == tblProductId.trim()) {
-    //            tblProductStock = products[i][3];
-    //        }
+    //        $(this).find("[id^='saleType']").prop('selectedIndex', 1);
     //    }
 
-    //}
-    ////alert(EnteredQty.trim());
-    ////alert(tblProductStock.trim());
-    //if (Number(EnteredQty) > Number(tblProductStock) && saleType == "false") {
+    //    SN += 1;
+    //    $(this).find("[id^='SNo']").text(SN);
 
-    //    alert("available stock is " + tblProductStock);
-    //    $(this).closest("tr").find("[id^='quantity']").val(EnteredQty.trim());
-    //    //return false;
+    //    var qty = 0;
+    //    var price = 0;
+    //    var perPack = 0;
+    //    //alert(IsReturn);
 
-    //}
+    //    //alert($(this).find("[id^='saleType']").val());
+    //    //if ($(this).find("[id^='saleType']").val() == "false") {//sale order
+    //    if (IsReturn == 'false') {
+    //        //Sale
 
-    ////$('#productsTable .ProductIdd').each(function () {
-    ////    alert($(this).html());
+    //        qty = $(this).find("[id^='quantity']").val();
+
+    //        if (!(qty)) { qty = 0; }
+    //        price = $(this).find("[id^='salePrice']").val();
+
+    //        var itemAmount = (qty * price);
+
+    //        if ($(this).find("[id^='isPack']").val() == "true") {//false=item true=PerPack
+    //            perPack = $(this).find("[id^='perPack']").val();
+    //            if (perPack == 0) perPack = 1;
+    //            itemAmount = itemAmount * perPack;
+    //            orderQty += parseInt(qty);
+    //            //alert(itemAmount);
+    //            //alert("pack true");
+    //            //$(this).find("[id^='perPack']").val($(this).find("[id^='perPackHidden']").val());
+    //            //$(this).find("[id^='perPackHidden']").remove();
+    //        }
+    //        else {
+    //            //alert("pack false");
+    //            orderQtyPiece += parseInt(qty);
+    //            //$("[id^='perPack']").hide();
+    //            //$("[id^='perPack']").after('<input type="hidden" id="perPackHidden' + txtSerialNum + '"  value="' + $("#perPack").val() + '" />').val("").attr("disabled", true);
+    //        }
+
+    //        ItemsTotal += itemAmount;
+    //        $(this).find("[id^='itemTotal']").val(itemAmount.toFixed(2));
+    //    } else {
+    //        //Return
+    //        //alert($('#saleType').val());
+    //        qty = $(this).find("[id^='quantity']").val();
+    //        if (!(qty)) { qty = 0; }
+    //        price = $(this).find("[id^='salePrice']").val();
+
+    //        var ItemAmount = (qty * price);
+
+    //        if ($(this).find("[id^='isPack']").val() == "true") {//false=item true=PerPack
+    //            perPack = $(this).find("[id^='perPack']").val();
+    //            if (perPack == 0) perPack = 1;
+    //            ItemAmount = ItemAmount * perPack;
+    //            orderQty += parseInt(qty);
+    //            //alert(ItemAmount);
+    //        } else {
+    //            orderQtyPiece += parseInt(qty);
+    //        }
+
+
+    //        ItemsTotal += ItemAmount;
+    //        //alert(ItemsTotal);
+    //        $(this).find("[id^='itemTotal']").val(ItemAmount.toFixed(2));
+
+
+    //    }
+
+    //    /*$("#OrderTotal").val('Order Total(' + parseInt(orderQty) + ' pack, ' + parseInt(orderQtyPiece) + ' piece)');*/
+    //    $("#OrderTotal").val('Order Total(' + parseInt(orderQty) + ')');
+
+    //});
+
+    ////checkAvaiableStock();
+
+    ////$('[id^="name"]').focusout(function () {
+    ////    alert("hello");
+
+    ////});
+    ////$('#OpenNewCustForm').click(function () {
+    ////    $("#dialog-CreateCustomer").dialog("open");
     ////});
 
+    ////$('[id^="quantity"]').change(function () {
+    ////    alert("");
     ////});
-    /////////////////////////////////////
+
+    ////jQuery('[id^="quantity"]').on('change input propertychange paste', function () {
+    ////    alert("c");
+    ////});
+
+    ///////////////////////////////////
+    //////$('[id^="quantity"]').blur(function () {
+    //////var inputObj = this;
+    ////var EnteredQty = 0;
+    ////var EnteredProductId = 0;
+    ////var tblProductStock = 0;
+    ////var tblProductId = 0;
+    ////var saleType = false;
+    ////EnteredQty = this.value.trim();
+    //////alert(this.value.trim());
+    ////EnteredProductId = $(this).closest("tr").find("[id^='idn']").val().trim();
+    ////saleType = $(this).closest("tr").find("[id^='saleType']").val().trim();
+
+
+    //////$('#productsTable tr').each(function () {
+    //////    tblProductId = $(this).find(".ProductId").html();
+
+    //////    if (typeof tblProductId != 'undefined') {
+    //////        if (EnteredProductId == tblProductId.trim()) {
+    //////            //alert('abc');
+    //////            tblProductStock = $(this).find(".stock").html().trim();
+    //////            //alert(tblProductStock.trim());
+    //////            //if (EnteredQty.trim() > tblProductStock.trim()) {
+    //////            //    alert("available stock is " + tblProductStock);
+    //////            //    return false; 
+    //////            //}
+    //////            //return false;
+    //////        }
+    //////    }
+    //////});
+    ////for (var i = 0, l = products.length; i < l; i++) {
+    ////    tblProductId = products[i][0];
+    ////    if (typeof tblProductId != 'undefined') {
+    ////        if (EnteredProductId == tblProductId.trim()) {
+    ////            tblProductStock = products[i][3];
+    ////        }
+    ////    }
+
+    ////}
+    //////alert(EnteredQty.trim());
+    //////alert(tblProductStock.trim());
+    ////if (Number(EnteredQty) > Number(tblProductStock) && saleType == "false") {
+
+    ////    alert("available stock is " + tblProductStock);
+    ////    $(this).closest("tr").find("[id^='quantity']").val(EnteredQty.trim());
+    ////    //return false;
+
+    ////}
+
+    //////$('#productsTable .ProductIdd').each(function () {
+    //////    alert($(this).html());
+    //////});
+
+    //////});
+    ///////////////////////////////////////
 
 
 
 
-    //$('[id^="saleType"]').change(function () {
-    //    //var end = this.value;
-    //    //var firstDropVal = $('#saleType').val();
-    //    update_itemTotal();
-    //});
+    ////$('[id^="saleType"]').change(function () {
+    ////    //var end = this.value;
+    ////    //var firstDropVal = $('#saleType').val();
+    ////    update_itemTotal();
+    ////});
 
-    //$('[id^="quantity"]').change(function () {
-    //    //var end = this.value;
-    //    //var firstDropVal = $('#saleType').val();
+    ////$('[id^="quantity"]').change(function () {
+    ////    //var end = this.value;
+    ////    //var firstDropVal = $('#saleType').val();
 
-    //    update_itemTotal();
-    //});
+    ////    update_itemTotal();
+    ////});
 
 
-    //jQuery('[id^="quantity"]').on('input propertychange paste', function () {
-    //    alert("qunatity was entered");
-    //});
+    ////jQuery('[id^="quantity"]').on('input propertychange paste', function () {
+    ////    alert("qunatity was entered");
+    ////});
 
-    //if (ItemsTotal > 0 || ReturnsTotal > 0) {
-    //    $('#dvCalculations').show();
+    ////if (ItemsTotal > 0 || ReturnsTotal > 0) {
+    ////    $('#dvCalculations').show();
+    ////} else {
+    ////    $('#dvCalculations').hide();
+    ////}
+    //debugger;
+    //$('#ItemsTotal').val(ItemsTotal.toFixed(2));//for input element
+
+
+    //var discount = $('#discount').val();
+    //var prevBal = parseFloat($("#PreviousBalance").val());
+    //var subtotal = ItemsTotal - discount;
+    //var total = 0;
+    //if (IsReturn == 'false') {
+    //    total = subtotal + prevBal;
+    //    $('#pb3').val('Prev. Balance');
+    //}
+    //else {
+    //    total = subtotal - prevBal;
+    //    $('#pb3').val('Prev. Balance                                 -');
+    //}
+
+    ////total += $("#PreviousBalance").val();
+    ////alert(subtotal);
+    //$('#subtotal').val(subtotal.toFixed(2));
+    //$('#total').val(total.toFixed(2));
+    //$('#paid').val(total.toFixed(2));
+    ////$('#cardvnd').val(total.toFixed(2));
+
+    //_total = total;
+    ////alert(ItemsTotal + ", " + discount + ", " + ReturnsTotal + ", " + prevBal);
+    //var paid = $('#paid').val();
+    //var balance = balance = _total - paid;
+    //$('#balance').val(balance.toFixed(2));
+    //$('#lefttopayvnd').val(balance.toFixed(2));
+    ///*alert(IsReturn);*/
+    //if (IsReturn == 'false') {
+    //    $("#CreateSO").html("Pay " + paid);
+    //}
+    //else {
+    //    $("#CreateSO").html("Return " + paid);
+    //}
+    ////$('#ItemsTotal > tbody > tr > td').val(ItemsTotal);
+    ////just update the total to sum
+    ////$('.total').text(ItemsTotal);
+    //debugger
+    ////var totalItem = $('#total').val();
+    //var totalItem = $('#total').val();
+
+    //// Convert the string value to a number
+    //var totalItemNumber = parseFloat(totalItem);
+
+    //// Check if the conversion was successful and the value is a number
+    //if (!isNaN(totalItemNumber)) {
+    //    // Use toFixed to format the number to 2 decimal places
+    //    var formattedTotalItem = totalItemNumber.toFixed(2);
+    //    // Store the formatted value in localStorage
+    //    localStorage.setItem('totalItems', formattedTotalItem);
     //} else {
-    //    $('#dvCalculations').hide();
+    //    console.error('Invalid number: ' + totalItem);
     //}
-
-    $('#ItemsTotal').val(ItemsTotal.toFixed(2));//for input element
-
-
-    var discount = $('#discount').val();
-    var prevBal = parseFloat($("#PreviousBalance").val());
-    var subtotal = ItemsTotal - discount;
-    var total = 0;
-    if (IsReturn == 'false') {
-        total = subtotal + prevBal;
-        $('#pb3').val('Prev. Balance');
-    }
-    else {
-        total = subtotal - prevBal;
-        $('#pb3').val('Prev. Balance                                 -');
-    }
-
-    //total += $("#PreviousBalance").val();
-    //alert(subtotal);
-    $('#subtotal').val(subtotal.toFixed(2));
-    $('#total').val(total.toFixed(2));
-    $('#paid').val(total.toFixed(2));
-    //$('#cardvnd').val(total.toFixed(2));
-
-    _total = total;
-    //alert(ItemsTotal + ", " + discount + ", " + ReturnsTotal + ", " + prevBal);
-    var paid = $('#paid').val();
-    var balance = balance = _total - paid;
-    $('#balance').val(balance.toFixed(2));
-    $('#lefttopayvnd').val(balance.toFixed(2));
-    /*alert(IsReturn);*/
-    if (IsReturn == 'false') {
-        $("#CreateSO").html("Pay " + paid);
-    }
-    else {
-        $("#CreateSO").html("Return " + paid);
-    }
-    //$('#ItemsTotal > tbody > tr > td').val(ItemsTotal);
-    //just update the total to sum
-    //$('.total').text(ItemsTotal);
-    var totalItem = $('#total').val();
-
-    // Convert the string value to a number
-    var totalItemNumber = parseFloat(totalItem);
-
-    // Check if the conversion was successful and the value is a number
-    if (!isNaN(totalItemNumber)) {
-        // Use toFixed to format the number to 2 decimal places
-        var formattedTotalItem = totalItemNumber.toFixed(2);
-        // Store the formatted value in localStorage
-        localStorage.setItem('totalItems', formattedTotalItem);
-    } else {
-        console.error('Invalid number: ' + totalItem);
-    }
 }
 //openPayModal(){
 //    $('#payModal').modal('show');

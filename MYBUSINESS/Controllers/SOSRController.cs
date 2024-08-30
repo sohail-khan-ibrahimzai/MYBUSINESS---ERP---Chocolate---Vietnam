@@ -1211,7 +1211,7 @@ namespace MYBUSINESS.Controllers
 
             try
             {
-                string url = "https://0106026495-998.minvoice.pro/api/InvoiceApi78/Save"; // Endpoint to add customer details
+                string url = "https://0106026495-998.minvoice.pro/api/InvoiceApi78/Save";
 
                 using (var client = new HttpClient())
                 {
@@ -1219,57 +1219,54 @@ namespace MYBUSINESS.Controllers
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
 
-                    //var requestBody = new
-                    //{
-                    //    // Map your customer properties here
-                    //    inv_invoiceIssuedDate = DateTime.UtcNow, //Datetime
-                    //    inv_invoiceSeries = "1C24MPE",                    //string
-                    //    inv_paymentMethodName = "TM/CK",                 //string   
-                    //    inv_buyerDisplayName = cust.Name,               //string
-                    //    ma_dt = "Cust_00123_dt",                       //string
-                    //    inv_buyerLegalName = cust.Name,               //string 
-                    //    inv_buyerTaxCode = "inv_buyr_Tax_Code",      //string 
-                    //    inv_buyerAddressLine = cust.Address,        //string  
-                    //    inv_buyerEmail = cust.Email,               //string
-                    //    amount_to_word = "Amount in word",        //string
-                    //    inv_TotalAmount = 0.00,                         //decimal
-                    //    inv_discountAmount = 0.00,                     //decimal
-                    //    inv_vatAmount = 0.00,                         //decimal  
-                    //    TotalAmountWithoutVat = 0.00,                //decimal
-                    //    key_api = "HN-20242908-001",               //string
-                    //    inv_itemCode = "#134 Item Code",      //string
-                    //    inv_itemName = "item Name",          //string
-                    //    inv_quantity = 11.22,                    //decimal
-                    //    inv_unitPrice = 22.00,                  //decimal
-                    //    inv_discountPercentage = 10.13,        //decimal
-                    //    inv_TotalAmountWithoutVat = 2.13,     //decimal
-                    //    ma_thue = "Thue",               //string    
-                    //};
-                    var requestBody = new
+                    // Creating the request model
+                    var invoiceDetails = saleOrderDetails.Select(detail => new InvoiceDetail
                     {
-                        inv_invoiceSeries = "1C24MPE ",
-                        inv_invoiceIssuedDate = "2024-29-08",
-                        inv_currencyCode = "VND",
-                        inv_exchangeRate = 1,
-                        so_benh_an = "HN-20242908-001",
-                        inv_buyerDisplayName = "Mister XYZ",
-                        inv_buyerLegalName = "company A",
-                        inv_buyerTaxCode = "0401485182",
-                        inv_buyerAddressLine = "Company A address",
-                        inv_buyerEmail = "companya@gmail.com",
-                        inv_buyerBankAccount = "",
-                        inv_buyerBankName = "",
-                        inv_paymentMethodName = "TM/CK",
-                        inv_discountAmount = 0,
-                        inv_TotalAmountWithoutVat = 220000,
-                        inv_vatAmount = 17600,
-                        inv_TotalAmount = 237600,
-                        key_api = "HN-20242908-001",
+                        tchat = 1,
+                        stt_rec0 = detail.SODId ?? 0, // Use null-coalescing operator to handle null values
+                        inv_itemCode = "CB001",//detail.Product != null ? "CB001" : "", // Provide a default value if Product is null
+                        inv_itemName = detail.Product?.Name ?? "Unknown Product", // Use null-conditional operator and provide a default value
+                        inv_unitCode = detail.Product != null ? "Box/Pack" : "Unknown", // Check if Product is not null
+                        inv_quantity = detail.Quantity ?? 0, // Provide a default value if Quantity is null
+                        inv_unitPrice = detail.PurchasePrice ?? 0m, // Provide a default value if PurchasePrice is null
+                        inv_discountPercentage = 0, // Detail-specific value or default
+                        inv_discountAmount = 20, // Provide a fixed value or calculate if needed
+                        inv_TotalAmountWithoutVat = 220000,//saleOrder.BillAmount ?? 0, // Provide a default value if BillAmount is null
+                        ma_thue = 8, // Detail-specific value
+                        inv_vatAmount = 0, // Detail-specific value
+                        inv_TotalAmount = 0 // Detail-specific value
+                    }).ToList();
+
+                    var invoice = new Invoice
+                    {
+                        inv_invoiceSeries = "1C24MPE",
+                        inv_invoiceIssuedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),//DateTime.Now.ToString("yyyy-MM-dd",CultureInfo.InvariantCulture), //saleOrder.InvoiceIssuedDate.ToString("yyyy-MM-dd"),
+                        inv_currencyCode = "VND",//saleOrder.CurrencyCode,
+                        inv_exchangeRate = 1,//saleOrder.ExchangeRate,
+                        so_benh_an = "HN-20243008-010", //saleOrder.SOSerial.ToString(),
+                        inv_buyerDisplayName = cust.Name,
+                        inv_buyerLegalName = cust.Name,
+                        inv_buyerTaxCode = "0401485182", //cust.TaxCode,
+                        inv_buyerAddressLine = cust.Address,
+                        inv_buyerEmail = cust.Email,
+                        inv_paymentMethodName = "TM/CK", //saleOrder.PaymentMethod,
+                        inv_discountAmount = saleOrder.Discount,
+                        inv_TotalAmountWithoutVat = 0,//saleOrder.TotalAmountWithoutVat,
+                        inv_vatAmount = 0,//saleOrder.VatAmount,
+                        inv_TotalAmount = saleOrder.BillPaid,
+                        key_api = "HN-20243008-010", //saleOrder.ApiKey,
+                        details = new List<InvoiceDetailsWrapper> { new InvoiceDetailsWrapper { data = invoiceDetails } }
+                    };
+
+                    var requestBody = new InvoiceRequest
+                    {
+                        editmode = 1,
+                        data = new List<Invoice> { invoice }
                     };
 
                     string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
 
-                    // Make sure to use await and async
+                    // Sending the request to the web service
                     HttpResponseMessage response = await client.PostAsync(url, new StringContent(jsonRequestBody, System.Text.Encoding.UTF8, "application/json"));
 
                     if (response.IsSuccessStatusCode)
@@ -1292,10 +1289,6 @@ namespace MYBUSINESS.Controllers
                                     return Json(new { Success = false, Message = "Unexpected response code.", Response = jsonResponse });
                                 }
                             }
-                            //catch (Exception ex)
-                            //{
-                            //    //log.Error("Error in ", ex);
-                            //}
                             catch (JsonException jsonEx)
                             {
                                 return Json(new { Success = false, Message = "Error parsing JSON response.", Error = jsonEx.Message });
@@ -1318,6 +1311,94 @@ namespace MYBUSINESS.Controllers
                 // Log the exception or handle it as needed
                 return Json(new { Success = false, Message = $"An error occurred: {ex.Message}" });
             }
+            //if (string.IsNullOrEmpty(authToken))
+            //{
+            //    return Json(new { Success = false, Message = "Invalid token" });
+            //}
+
+            //try
+            //{
+            //    string url = "https://0106026495-998.minvoice.pro/api/InvoiceApi78/Save"; // Endpoint to add customer details
+
+            //    using (var client = new HttpClient())
+            //    {
+            //        client.DefaultRequestHeaders.Accept.Clear();
+            //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+
+            //        var requestBody = new
+            //        {
+            //            inv_invoiceSeries = "1C24MPE ",
+            //            inv_invoiceIssuedDate = "2024-29-08",
+            //            inv_currencyCode = "VND",
+            //            inv_exchangeRate = 1,
+            //            so_benh_an = "HN-20242908-001",
+            //            inv_buyerDisplayName = "Mister XYZ",
+            //            inv_buyerLegalName = "company A",
+            //            inv_buyerTaxCode = "0401485182",
+            //            inv_buyerAddressLine = "Company A address",
+            //            inv_buyerEmail = "companya@gmail.com",
+            //            inv_buyerBankAccount = "",
+            //            inv_buyerBankName = "",
+            //            inv_paymentMethodName = "TM/CK",
+            //            inv_discountAmount = 0,
+            //            inv_TotalAmountWithoutVat = 220000,
+            //            inv_vatAmount = 17600,
+            //            inv_TotalAmount = 237600,
+            //            key_api = "HN-20242908-001",
+            //        };
+
+            //        string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
+
+            //        // Make sure to use await and async
+            //        HttpResponseMessage response = await client.PostAsync(url, new StringContent(jsonRequestBody, System.Text.Encoding.UTF8, "application/json"));
+
+            //        if (response.IsSuccessStatusCode)
+            //        {
+            //            string responseBody = await response.Content.ReadAsStringAsync();
+
+            //            if (response.Content.Headers.ContentType.MediaType == "application/json")
+            //            {
+            //                try
+            //                {
+            //                    dynamic jsonResponse = JsonConvert.DeserializeObject(responseBody);
+
+            //                    // Check for the "code" field in the response to determine success
+            //                    if (jsonResponse.code == "00")
+            //                    {
+            //                        return Json(new { Success = true, Message = jsonResponse.message, Data = jsonResponse.data });
+            //                    }
+            //                    else
+            //                    {
+            //                        return Json(new { Success = false, Message = "Unexpected response code.", Response = jsonResponse });
+            //                    }
+            //                }
+            //                //catch (Exception ex)
+            //                //{
+            //                //    //log.Error("Error in ", ex);
+            //                //}
+            //                catch (JsonException jsonEx)
+            //                {
+            //                    return Json(new { Success = false, Message = "Error parsing JSON response.", Error = jsonEx.Message });
+            //                }
+            //            }
+            //            else
+            //            {
+            //                return Json(new { Success = false, Message = "Received non-JSON response.", Response = responseBody });
+            //            }
+            //        }
+            //        else
+            //        {
+            //            string errorContent = await response.Content.ReadAsStringAsync();
+            //            return Json(new { Success = false, Message = $"Failed to add customer details. Status code: {response.StatusCode}. Response: {errorContent}" });
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    // Log the exception or handle it as needed
+            //    return Json(new { Success = false, Message = $"An error occurred: {ex.Message}" });
+            //}
 
 
 
@@ -1458,8 +1539,59 @@ namespace MYBUSINESS.Controllers
             //    System.Diagnostics.Debug.WriteLine("Exception occurred in AddWebServiceCustomerDetails: " + ex.Message);
             //    return Json(new { Success = false, Message = $"An error occurred: {ex.Message}" });
             //}
-            return Json(new { Success = true, Message = "" });
+
+            //return Json(new { Success = true, Message = "" });
         }
+
+        //public InvoiceRequest CreateInvoiceRequest(Customer customer, SO saleOrder, List<SOD> saleOrderDetails)
+        //{
+        //    // Assuming you have methods or logic to get these values from your database or application
+        //    var invoiceDetails = saleOrderDetails.Select(detail => new InvoiceDetail
+        //    {
+        //        tchat = detail.SomeValue,
+        //        stt_rec0 = detail.Sequence,
+        //        inv_itemCode = detail.ItemCode,
+        //        inv_itemName = detail.ItemName,
+        //        inv_unitCode = detail.UnitCode,
+        //        inv_quantity = detail.Quantity,
+        //        inv_unitPrice = detail.UnitPrice,
+        //        inv_discountPercentage = detail.DiscountPercentage,
+        //        inv_discountAmount = detail.DiscountAmount,
+        //        inv_TotalAmountWithoutVat = detail.TotalAmountWithoutVat,
+        //        ma_thue = detail.TaxCode,
+        //        inv_vatAmount = detail.VatAmount,
+        //        inv_TotalAmount = detail.TotalAmount
+        //    }).ToList();
+
+        //    var invoice = new Invoice
+        //    {
+        //        inv_invoiceSeries = saleOrder.InvoiceSeries,
+        //        inv_invoiceIssuedDate = saleOrder.InvoiceIssuedDate.ToString("yyyy-MM-dd"),
+        //        inv_currencyCode = saleOrder.CurrencyCode,
+        //        inv_exchangeRate = saleOrder.ExchangeRate,
+        //        so_benh_an = saleOrder.SaleOrderNumber,
+        //        inv_buyerDisplayName = customer.DisplayName,
+        //        inv_buyerLegalName = customer.LegalName,
+        //        inv_buyerTaxCode = customer.TaxCode,
+        //        inv_buyerAddressLine = customer.AddressLine,
+        //        inv_buyerEmail = customer.Email,
+        //        inv_paymentMethodName = saleOrder.PaymentMethodName,
+        //        inv_discountAmount = saleOrder.DiscountAmount,
+        //        inv_TotalAmountWithoutVat = saleOrder.TotalAmountWithoutVat,
+        //        inv_vatAmount = saleOrder.VatAmount,
+        //        inv_TotalAmount = saleOrder.TotalAmount,
+        //        key_api = saleOrder.ApiKey,
+        //        details = new List<InvoiceDetailsWrapper> { new InvoiceDetailsWrapper { data = invoiceDetails } }
+        //    };
+
+        //    return new InvoiceRequest
+        //    {
+        //        editmode = 1, // or whatever is appropriate
+        //        data = new List<Invoice> { invoice }
+        //    };
+        //}
+
+
         public FileContentResult PrintSO2(string id)
         {
             id = Decode(id);

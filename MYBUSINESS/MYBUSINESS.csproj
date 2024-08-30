@@ -424,6 +424,7 @@
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\InvoiceDetail.cs" />
     <Compile Include="Models\Loan.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
