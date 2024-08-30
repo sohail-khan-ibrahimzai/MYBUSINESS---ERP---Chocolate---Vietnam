@@ -786,7 +786,7 @@ namespace MYBUSINESS.Controllers
         //{
         //public ActionResult Create(
         public ActionResult Create(
-    [Bind(Prefix = "Customer", Include = "Name,Address,Email,Vat,CompanyName")] Customer Customer,
+    [Bind(Prefix = "Customer", Include = "Name,Address,Email,Vat,CompanyName")] Customer Customer, 
     [Bind(Prefix = "SaleOrder", Include = "BillAmount,Balance,PrevBalance,BillPaid,BillPaidByCash,Discount,CustomerId,Remarks,Remarks2,PaymentMethod,PaymentDetail,SaleReturn,BankAccountId,Date")] SO sO,
     [Bind(Prefix = "SaleOrderDetail", Include = "ProductId,SalePrice,PurchasePrice,Quantity,SaleType,PerPack,IsPack,Product.Name,Product")] List<SOD> sOD,
     FormCollection collection
