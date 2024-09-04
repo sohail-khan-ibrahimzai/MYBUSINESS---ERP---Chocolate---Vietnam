@@ -188,6 +188,14 @@
           <Property Name="bizId" Type="varchar" MaxLength="50" />
           <Property Name="StoreId" Type="int" />
         </EntityType>
+        <EntityType Name="MetaDetaDescription">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Symble" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="MyBusinessInfo">
           <Key>
             <PropertyRef Name="Id" />
@@ -471,6 +479,15 @@
           <Property Name="DateModified" Type="datetime" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="StoreProduct">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StoreId" Type="int" />
+          <Property Name="ProductId" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Stock" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
         <EntityType Name="Supplier">
           <Key>
             <PropertyRef Name="Id" />
@@ -486,6 +503,16 @@
           <Property Name="Type" Type="int" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
           <Property Name="StoreId" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="UserAuthorization">
           <Key>
@@ -945,6 +972,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_StoreProduct_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="StoreProduct" Type="Self.StoreProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StoreProduct">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StoreProduct_Store">
+          <End Role="Store" Type="Self.Store" Multiplicity="0..1" />
+          <End Role="StoreProduct" Type="Self.StoreProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Store">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StoreProduct">
+              <PropertyRef Name="StoreId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Supplier_Business">
           <End Role="BusinessInfo" Type="Self.BusinessInfo" Multiplicity="0..1" />
           <End Role="Supplier" Type="Self.Supplier" Multiplicity="*" />
@@ -1021,6 +1072,7 @@
           <EntitySet Name="Loan" EntityType="Self.Loan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoanDetail" EntityType="Self.LoanDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MetaDetaDescription" EntityType="Self.MetaDetaDescription" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MyBusinessInfo" EntityType="Self.MyBusinessInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PO" EntityType="Self.PO" Schema="dbo" store:Type="Tables" />
@@ -1036,7 +1088,9 @@
           <EntitySet Name="SO" EntityType="Self.SO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SOD" EntityType="Self.SOD" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Store" EntityType="Self.Store" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StoreProduct" EntityType="Self.StoreProduct" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAuthorization" EntityType="Self.UserAuthorization" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Customer_Business" Association="Self.FK_Customer_Business">
             <End Role="BusinessInfo" EntitySet="BusinessInfo" />
@@ -1185,6 +1239,14 @@
           <AssociationSet Name="FK_SOD_SO" Association="Self.FK_SOD_SO">
             <End Role="SO" EntitySet="SO" />
             <End Role="SOD" EntitySet="SOD" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreProduct_Product" Association="Self.FK_StoreProduct_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="StoreProduct" EntitySet="StoreProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreProduct_Store" Association="Self.FK_StoreProduct_Store">
+            <End Role="Store" EntitySet="Store" />
+            <End Role="StoreProduct" EntitySet="StoreProduct" />
           </AssociationSet>
           <AssociationSet Name="FK_Supplier_Business" Association="Self.FK_Supplier_Business">
             <End Role="BusinessInfo" EntitySet="BusinessInfo" />
@@ -1426,6 +1488,17 @@
           <AssociationSet Name="FK_SOD_SO" Association="Models.FK_SOD_SO">
             <End Role="SO" EntitySet="SOes" />
             <End Role="SOD" EntitySet="SODs" />
+          </AssociationSet>
+          <EntitySet Name="MetaDetaDescriptions" EntityType="Models.MetaDetaDescription" />
+          <EntitySet Name="StoreProducts" EntityType="Models.StoreProduct" />
+          <EntitySet Name="sysdiagrams" EntityType="Models.sysdiagram" />
+          <AssociationSet Name="FK_StoreProduct_Product" Association="Models.FK_StoreProduct_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="StoreProduct" EntitySet="StoreProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreProduct_Store" Association="Models.FK_StoreProduct_Store">
+            <End Role="Store" EntitySet="Stores" />
+            <End Role="StoreProduct" EntitySet="StoreProducts" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="spExpenseReport_Result">
@@ -1924,6 +1997,7 @@
           <NavigationProperty Name="RentDetails" Relationship="Models.FK_RentDetail_Product" FromRole="Product" ToRole="RentDetail" />
           <NavigationProperty Name="ServiceDetails" Relationship="Models.FK_ServiceDetail_Product" FromRole="Product" ToRole="ServiceDetail" />
           <NavigationProperty Name="SODs" Relationship="Models.FK_SOD_Product" FromRole="Product" ToRole="SOD" />
+          <NavigationProperty Name="StoreProducts" Relationship="Models.FK_StoreProduct_Product" FromRole="Product" ToRole="StoreProduct" />
         </EntityType>
         <EntityType Name="ProductDetail">
           <Key>
@@ -2139,6 +2213,7 @@
           <Property Name="DateCreated" Type="DateTime" Precision="3" />
           <Property Name="DateModified" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="StoreProducts" Relationship="Models.FK_StoreProduct_Store" FromRole="Store" ToRole="StoreProduct" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -2627,6 +2702,59 @@
             </Principal>
             <Dependent Role="SOD">
               <PropertyRef Name="SOId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="MetaDetaDescription">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Symble" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="StoreProduct">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="StoreId" Type="Int32" />
+          <Property Name="ProductId" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Stock" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="Product" Relationship="Models.FK_StoreProduct_Product" FromRole="StoreProduct" ToRole="Product" />
+          <NavigationProperty Name="Store" Relationship="Models.FK_StoreProduct_Store" FromRole="StoreProduct" ToRole="Store" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_StoreProduct_Product">
+          <End Type="Models.Product" Role="Product" Multiplicity="0..1" />
+          <End Type="Models.StoreProduct" Role="StoreProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StoreProduct">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StoreProduct_Store">
+          <End Type="Models.Store" Role="Store" Multiplicity="0..1" />
+          <End Type="Models.StoreProduct" Role="StoreProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Store">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StoreProduct">
+              <PropertyRef Name="StoreId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3368,6 +3496,36 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="UrlPath" ColumnName="UrlPath" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MetaDetaDescriptions">
+            <EntityTypeMapping TypeName="Models.MetaDetaDescription">
+              <MappingFragment StoreEntitySet="MetaDetaDescription">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Symble" ColumnName="Symble" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StoreProducts">
+            <EntityTypeMapping TypeName="Models.StoreProduct">
+              <MappingFragment StoreEntitySet="StoreProduct">
+                <ScalarProperty Name="Stock" ColumnName="Stock" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="StoreId" ColumnName="StoreId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Models.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

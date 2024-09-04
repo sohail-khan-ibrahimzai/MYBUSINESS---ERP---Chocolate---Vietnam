@@ -4,16 +4,18 @@
     ViewBag.Title = "Create Product";
     //Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-
-<link href="@Url.Content("~/Content/custom/downloads/jquery-ui-1.12.1.custom/jquery-ui.min.css")" rel="stylesheet" type="text/css" />
-@*<link href="@Url.Content("~/Content/custom/downloads/jquery-ui.min.css")" rel="stylesheet" type="text/css" />*@
-<script src="~/Content/custom/downloads/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
-
-
-@*<link href="@Url.Content("~/Content/custom/custom.css")" rel="stylesheet" type="text/css" />*@
-<script src="~/Content/custom/supplierPOPR.js"></script>
+<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-timepicker-addon.css">
+<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-sliderAccess.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-timepicker-addon.js"></script>
+<link href="@Url.Content("~/Content/custom/custom.css")" rel="stylesheet" type="text/css" />
+<script src="~/Content/custom/products.js"></script>
 <script src="~/Content/custom/downloads/jquery.mcautocomplete.js"></script>
+<script src="~/Content/custom/downloads/jquery.scannerdetection.js"></script>
+
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <section class="content">
@@ -34,19 +36,18 @@
 
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label" })
+                                    @*@Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label" })*@
+                                    <lebel>Product Ref</lebel>
 
                                     @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.SuggestedId, @readonly = "readonly" } })
                                     @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
 
                                 </div>
 
-
-
                                 @*@Html.HiddenFor(model => model.IsService, new { Value = "false" })*@
                                 @Html.HiddenFor(model => model.ShowIn, new { Value = "P" })
 
-                                <div class="form-group">
+                                <div  style="display:none;" class="form-group">
                                     <select class="form-control" name="IsService" id="isService">
                                         <option value="false" selected>Product</option>
                                         <option value="true">Service</option>
@@ -61,16 +62,54 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                                    @*@Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })*@
+                                    <lebel><b>Product Name English</b></lebel>
 
                                     @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
                                     @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
 
                                 </div>
 
-                                <div id="pprice" class="form-group">
-                                    @Html.LabelFor(model => model.PurchasePrice, htmlAttributes: new { @class = "control-label" })
+                                <div class="form-group">
+                                    <lebel><b>Product Name Vietnamese</b></lebel>
+                                    <input type="text" class="form-control" name="prouctNameInVnd" id="prouctNameInVnd" />
+                                </div>
 
+                                <div class="form-group">
+                                    @*@Html.LabelFor(model => model.Saleable, htmlAttributes: new { @class = "control-label" })*@
+                                    <label>Supplier </label>
+                                    <input type="text" autocomplete="off" class="form-control" name="Supplier.Name" id="supplier" value="" placeholder="Supplier" data-toggle="tooltip" data-placement="top" title="Supplier">
+                                </div>
+
+                                <div class="form-group">
+                                    <lebel>
+                                        <b>Category</b>
+                                    </lebel>
+                                    <select class="form-control" id="selectCategory">
+                                        <option>Select</option>
+                                        <option>Box</option>
+                                        <option>Bar</option>
+                                        <option>Bag</option>
+                                        <option>Miscellanous</option>
+                                    </select>
+
+                                </div>
+                                <div class="form-group">
+                                    <lebel>
+                                        <b>Unit</b>
+                                    </lebel>
+                                    <select class="form-control">
+                                        <option>Select</option>
+                                        <option>Box</option>
+                                        <option>Kg</option>
+                                        <option>Liter</option>
+                                    </select>
+
+                                </div>
+
+                                <div id="pprice" class="form-group">
+                                    @*@Html.LabelFor(model => model.PurchasePrice, htmlAttributes: new { @class = "control-label" })*@
+                               <lebel><b>Purchase Price</b></lebel>
                                     @Html.EditorFor(model => model.PurchasePrice, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.PurchasePrice, "", new { @class = "text-danger" })
 
@@ -78,6 +117,14 @@
 
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.SalePrice, htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.SalePrice, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.SalePrice, "", new { @class = "text-danger" })
+
+                                </div>
+
+                                <div class="form-group">
+                                    <leble><b>Excluded Sale Price (VAT) </b></leble>
 
                                     @Html.EditorFor(model => model.SalePrice, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.SalePrice, "", new { @class = "text-danger" })
@@ -125,11 +172,28 @@
 
 
 
-                                <div style="display:none;" class="form-group">
-                                    @Html.LabelFor(model => model.Saleable, htmlAttributes: new { @class = "control-label" })
 
 
 
+
+                                <!--<div style="display:none;" class="form-group">
+                                @Html.LabelFor(model => model.Saleable, htmlAttributes: new { @class = "control-label" })
+
+
+
+                                @Html.EditorFor(model => model.Saleable)-->
+                                @*@Html.EditorFor(model => model.Saleable, new[] { new SelectListItem { Text = "Yes", Value = "True", Selected = true }, new SelectListItem { Text = "No", Value = "False" } })*@
+
+                                @*@Html.CheckBoxFor(m => m.Saleable, new { @value = "true" })*@
+
+                                <!--@Html.ValidationMessageFor(model => model.Saleable, "", new { @class = "text-danger" })
+
+                                </div>-->
+
+                                <div class="form-group">
+                                    @*@Html.LabelFor(model => model.Saleable, htmlAttributes: new { @class = "control-label" })*@
+                                    <label>Can be sold in POS </label>
+                                    &nbsp;
                                     @Html.EditorFor(model => model.Saleable)
 
                                     @*@Html.EditorFor(model => model.Saleable, new[] { new SelectListItem { Text = "Yes", Value = "True", Selected = true }, new SelectListItem { Text = "No", Value = "False" } })*@
@@ -137,16 +201,18 @@
                                     @*@Html.CheckBoxFor(m => m.Saleable, new { @value = "true" })*@
 
                                     @Html.ValidationMessageFor(model => model.Saleable, "", new { @class = "text-danger" })
-
+                                    &nbsp;
+                                    &nbsp;
+                                    &nbsp;
+                                    <label>Can be Purchased </label>
+                                    &nbsp;
+                                    <input type="checkbox" checked />
                                 </div>
-
                             </div>
-
                             <div class="box-footer">
                                 <input type="submit" value="Create" id="CreateProduct" class="btn btn-primary" />
                                 @Html.ActionLink("Back to List", "Index")
                             </div>
-
 
                         </form>
                     }
@@ -160,6 +226,17 @@
 
 
 <script>
+    //txtSerialNum = 0;
+    TriggerBodyEvents();
+@foreach (var d in ViewBag.Suppliers)
+{
+    @*@:products.push(["@d.Name","@d.PurchasePrice","@d.Stock"]);*@
+    @:suppliers.push(["@d.Id","@d.Name", "@d.Address", "@d.Balance"]);
+}
+
+
+    OnTypeSupplierName('#supplier');
+
     $('#stock').keyup(function () {
         this.value = this.value.replace(/[^0-9]/g, '');
     });

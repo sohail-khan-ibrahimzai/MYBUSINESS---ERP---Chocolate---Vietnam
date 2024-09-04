@@ -71,6 +71,11 @@
         <AssociationConnector Association="Models.FK_RentDetail_Rent" />
         <AssociationConnector Association="Models.FK_ServiceDetail_Service" />
         <AssociationConnector Association="Models.FK_SOD_SO" />
+        <EntityTypeShape EntityType="Models.MetaDetaDescription" Width="1.5" PointX="3.375" PointY="4.75" />
+        <EntityTypeShape EntityType="Models.StoreProduct" Width="1.5" PointX="7.5" PointY="15.5" />
+        <EntityTypeShape EntityType="Models.sysdiagram" Width="1.5" PointX="5.375" PointY="4.75" />
+        <AssociationConnector Association="Models.FK_StoreProduct_Product" />
+        <AssociationConnector Association="Models.FK_StoreProduct_Store" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

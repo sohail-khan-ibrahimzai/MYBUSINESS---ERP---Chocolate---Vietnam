@@ -392,11 +392,13 @@ namespace MYBUSINESS.Controllers
                         pod.POId = pO.Id;
 
                         Product product = db.Products.FirstOrDefault(x => x.Id == pod.ProductId);
+                        StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == pod.ProductId && x.StoreId == parseId);
 
                         //dont do this. when user made a bill and chnage sale price. it does not reflect in bill and calculations geting wrong
                         //pod.PurchasePrice = product.PurchasePrice;
                         if (pod.Quantity == null) { pod.Quantity = 0; }
-                        pod.OpeningStock = product.Stock;
+                        //pod.OpeningStock = product.Stock;
+                        pod.OpeningStock = storeProduct.Stock;
                         pod.PerPack = 1;
                         if (pod.SaleType == false)//purchase
                         {
@@ -406,8 +408,7 @@ namespace MYBUSINESS.Controllers
                                 pO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice);
                                 //int pieceSold = (int)(sod.Quantity * product.Stock);
                                 decimal qty = (decimal)pod.Quantity;// / (decimal)product.PerPack;
-                                //product.Stock += qty;--due to qutation
-
+                                //storeProduct.Stock += qty;  //--due to qutation
                                 pO.PurchaseOrderQty += qty;//(int)sod.Quantity;
 
                             }
@@ -415,7 +416,7 @@ namespace MYBUSINESS.Controllers
                             {//pack
 
                                 pO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice * pod.PerPack);
-                                //product.Stock += (int)pod.Quantity * pod.PerPack;--due to qutation
+                                //storeProduct.Stock += (int)pod.Quantity * pod.PerPack;  //--due to qutation
 
                                 pO.PurchaseOrderQty += (int)pod.Quantity * pod.PerPack;
 
@@ -428,17 +429,15 @@ namespace MYBUSINESS.Controllers
                             {
                                 pO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice);
                                 decimal qty = (decimal)pod.Quantity;// / (decimal)product.PerPack;
-                                //product.Stock -= qty;--due to qutation
+                                //storeProduct.Stock -= qty;//--due to qutation
                                 pO.PurchaseOrderQty += qty;//(int)sod.Quantity;
 
                             }
                             else
                             {
                                 pO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice * pod.PerPack);
-                                //product.Stock -= (int)pod.Quantity * pod.PerPack; //--due to qutation
-
+                                //storeProduct.Stock -= (int)pod.Quantity * pod.PerPack; //--due to qutation
                                 pO.PurchaseOrderQty += (int)pod.Quantity * pod.PerPack;
-
                             }
 
                         }
@@ -836,6 +835,12 @@ namespace MYBUSINESS.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult UpadtePurhcaseOrder(decimal? poSerialNumber)
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            var parseId = int.Parse(storeId);
             var poSerialNumbers = db.POes.FirstOrDefault(x => x.POSerial == poSerialNumber);
             if (poSerialNumbers == null)
             {
@@ -851,6 +856,7 @@ namespace MYBUSINESS.Controllers
                     sno += 1;
 
                     Product product = db.Products.FirstOrDefault(x => x.Id == pod.ProductId);
+                    StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == pod.ProductId && x.StoreId == parseId);
 
                     //dont do this. when user made a bill and chnage sale price. it does not reflect in bill and calculations geting wrong
                     //pod.PurchasePrice = product.PurchasePrice;
@@ -861,14 +867,15 @@ namespace MYBUSINESS.Controllers
                         if (pod.IsPack == false)
                         {//piece
 
-
                             decimal qty = (decimal)pod.Quantity;// / (decimal)product.PerPack;
-                            product.Stock += qty;
+                            storeProduct.Stock += qty;
+                            //product.Stock += qty;
                         }
                         else
                         {//pack
 
-                            product.Stock += (int)pod.Quantity * pod.PerPack;
+                            //product.Stock += (int)pod.Quantity * pod.PerPack;
+                            storeProduct.Stock += (int)pod.Quantity * pod.PerPack;
 
                         }
 
@@ -879,11 +886,13 @@ namespace MYBUSINESS.Controllers
                         {
 
                             decimal qty = (decimal)pod.Quantity;// / (decimal)product.PerPack;
-                            product.Stock -= qty;
+                            storeProduct.Stock -= qty;
+                            //product.Stock -= qty;
                         }
                         else
                         {
-                            product.Stock -= (int)pod.Quantity * pod.PerPack;
+                            storeProduct.Stock -= (int)pod.Quantity * pod.PerPack;
+                            //product.Stock -= (int)pod.Quantity * pod.PerPack;
                         }
 
                     }

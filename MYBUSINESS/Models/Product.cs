@@ -25,6 +25,7 @@ namespace MYBUSINESS.Models
             this.RentDetails = new HashSet<RentDetail>();
             this.ServiceDetails = new HashSet<ServiceDetail>();
             this.SODs = new HashSet<SOD>();
+            this.StoreProducts = new HashSet<StoreProduct>();
         }
     
         public decimal Id { get; set; }
@@ -66,5 +67,7 @@ namespace MYBUSINESS.Models
         public virtual ICollection<ServiceDetail> ServiceDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SOD> SODs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StoreProduct> StoreProducts { get; set; }
     }
 }

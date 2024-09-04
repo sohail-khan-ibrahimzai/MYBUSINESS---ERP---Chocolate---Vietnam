@@ -806,6 +806,10 @@ function handleProductAddition(encodedProductJson, quantityFromModal) {
 
         // Format the SalePrice using the custom function
         priceCell.innerText = formatNumberWithDots(product.SalePrice);
+
+        //Hide Price cell
+        priceCell.style.display = 'none';
+
         qtyCell.innerText = quantityFromModal;
 
         // Directly set Bill Number to SuggestedNewProductId (do not perform calculations on it)
@@ -844,6 +848,12 @@ function handleProductAddition(encodedProductJson, quantityFromModal) {
         hiddenQuantityInput.name = 'SaleOrderDetail[' + rowIndex + '].Quantity';
         hiddenQuantityInput.value = quantityFromModal;
 
+        //var hiddenSaleTypeInput = document.createElement('input');
+        //hiddenSaleTypeInput.type = 'hidden';
+        //hiddenSaleTypeInput.name = 'SaleOrderDetail[' + rowIndex + '].SaleType';
+        //hiddenSaleTypeInput.value = product.SaleType;
+        //hiddenSaleTypeInput.value = 'true';
+        
         // Add an action button
         var removeButton = document.createElement('button');
         removeButton.type = 'button';
@@ -873,6 +883,7 @@ function handleProductAddition(encodedProductJson, quantityFromModal) {
         newRow.appendChild(hiddenSalePriceInput);
         newRow.appendChild(hiddenPurchasePriceInput);
         newRow.appendChild(hiddenQuantityInput);
+        //newRow.appendChild(hiddenSaleTypeInput);
 
         // Append the new row to the table body
         document.querySelector('#selectedProducts tbody').appendChild(newRow);
@@ -1483,7 +1494,7 @@ $(document).ready(function () {
             $('#cardvnd').val(totalAmountForSelectedProduct);
             $('#payallbycard').text(totalAmountForSelectedProduct);
             $('#totalitsmspan').text(totalAmountForSelectedProduct);
-            //$('#validatepyment').prop('disabled', false);
+            $('#validatepyment').prop('disabled', false);
         }
         else {
             $('#lefttopayvnd').val('0');

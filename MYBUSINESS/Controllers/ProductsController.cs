@@ -269,7 +269,7 @@ namespace MYBUSINESS.Controllers
             }
             var parseId = int.Parse(storeId);
             ViewBag.Suppliers = DAL.dbSuppliers;
-            return View(DAL.dbProducts.Where(x => x.StoreId == parseId).ToList());
+            return View(DAL.dbProducts.Include(x => x.StoreProducts).Where(x => x.StoreId == parseId).ToList());
         }
 
         public ActionResult SearchData(string suppId)
@@ -365,6 +365,9 @@ namespace MYBUSINESS.Controllers
 
                     POD pOD = new POD { POId = pO.Id, PODId = 1, ProductId = product.Id, OpeningStock = 0, Quantity = (int)product.Stock, PurchasePrice = 0, PerPack = 1, IsPack = true, SaleType = false };
                     db.PODs.Add(pOD);
+
+                    StoreProduct storeProduct = new StoreProduct { ProductId = product.Id, StoreId = parseId, Stock = (int)product.Stock, };
+                    db.StoreProducts.Add(storeProduct);
                 }
                 db.SaveChanges();
                 return RedirectToAction("Index");

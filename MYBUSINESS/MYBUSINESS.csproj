@@ -438,6 +438,9 @@
     <Compile Include="CustomClasses\MetaDataClasses\Product_Metadata.cs" />
     <Compile Include="Models\ExpenseViewModel.cs" />
     <Compile Include="Models\LoanViewModel.cs" />
+    <Compile Include="Models\MetaDetaDescription.cs">
+      <DependentUpon>BusinessDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MyBusinessInfo.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
@@ -475,6 +478,9 @@
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ServiceDetail.cs">
+      <DependentUpon>BusinessDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StoreProduct.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\StoreViewModel.cs" />
@@ -517,6 +523,9 @@
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Supplier.cs">
+      <DependentUpon>BusinessDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserAuthorization.cs">
@@ -15576,6 +15585,7 @@
     <Content Include="Content\custom\downloads\datetimepicker-master\tests\tests\methods.js" />
     <Content Include="Content\custom\downloads\datetimepicker-master\tests\tests\options.js" />
     <Content Include="Content\custom\downloads\jquery.scannerdetection.js" />
+    <Content Include="Content\custom\products.js" />
     <Content Include="Content\custom\supplierPOPR.js" />
     <Content Include="Content\custom\downloads\DataTables-1.10.18\css\dataTables.bootstrap.css" />
     <Content Include="Content\custom\downloads\DataTables-1.10.18\css\dataTables.bootstrap.min.css" />

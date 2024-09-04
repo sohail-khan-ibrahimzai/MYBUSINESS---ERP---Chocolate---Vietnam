@@ -786,7 +786,7 @@ namespace MYBUSINESS.Controllers
         //{
         //public ActionResult Create(
         public ActionResult Create(
-    [Bind(Prefix = "Customer", Include = "Name,Address,Email,Vat,CompanyName")] Customer Customer, 
+    [Bind(Prefix = "Customer", Include = "Name,Address,Email,Vat,CompanyName")] Customer Customer,
     [Bind(Prefix = "SaleOrder", Include = "BillAmount,Balance,PrevBalance,BillPaid,BillPaidByCash,Discount,CustomerId,Remarks,Remarks2,PaymentMethod,PaymentDetail,SaleReturn,BankAccountId,Date")] SO sO,
     [Bind(Prefix = "SaleOrderDetail", Include = "ProductId,SalePrice,PurchasePrice,Quantity,SaleType,PerPack,IsPack,Product.Name,Product")] List<SOD> sOD,
     FormCollection collection
@@ -886,6 +886,7 @@ namespace MYBUSINESS.Controllers
                     foreach (SOD sod in sOD)
                     {
                         Product dbProd = db.Products.FirstOrDefault(x => x.Id == sod.ProductId);
+                        StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == sod.ProductId && x.StoreId==parseId);
 
                         if (dbProd == null || dbProd.Name != sod.Product.Name)
                         {
@@ -906,10 +907,15 @@ namespace MYBUSINESS.Controllers
                                 Saleable = true,
                                 PerPack = 1,
                                 ShowIn = "S",
-                                StoreId = parseId
-
+                                StoreId = parseId,
                             };
-
+                            // Create and initialize StoreProduct instances
+                            var storeProducts = new StoreProduct
+                            {
+                                StoreId = parseId, // Associate with the store
+                                ProductId = newProd.Id, // Associate with the product
+                                Stock = 0 // Set initial stock value
+                            };
                             db.Products.Add(newProd);
                             db.SaveChanges();
                         }
@@ -930,9 +936,11 @@ namespace MYBUSINESS.Controllers
                         //dont do this uneessary and sacary(no we have to do it here but not in update. if we not do it here then purchase price will remain empty. and cause error in productwisesale etc)
                         sod.PurchasePrice = product.PurchasePrice;
                         if (sod.Quantity == null) { sod.Quantity = 0; }
-                        sod.OpeningStock = product.Stock;
+                        //sod.OpeningStock = product.Stock;
+                        sod.OpeningStock = storeProduct.Stock;
                         sod.PerPack = 1;
-                        if (sod.SaleType == false)//sale
+                        sod.SaleType = true;
+                        if (sod.SaleType == true)//sale
                         {
 
                             if (sod.IsPack == false)
@@ -940,7 +948,8 @@ namespace MYBUSINESS.Controllers
                                 sO.SaleOrderAmount += (sod.Quantity * sod.SalePrice);
                                 //int pieceSold = (int)(sod.Quantity * product.Stock);
                                 decimal qty = (decimal)sod.Quantity;// / (decimal)product.PerPack;
-                                product.Stock -= qty;
+                                storeProduct.Stock -= qty;
+                                //product.Stock -= qty;
 
                                 sO.SaleOrderQty += qty;//(int)sod.Quantity;
                                 sO.Profit += (qty * sod.SalePrice) - (decimal)(qty * product.PurchasePrice); //- (decimal)(sO.Discount);
@@ -949,7 +958,8 @@ namespace MYBUSINESS.Controllers
                             {
 
                                 sO.SaleOrderAmount += (sod.Quantity * sod.SalePrice * sod.PerPack);
-                                product.Stock -= (int)sod.Quantity * sod.PerPack;
+                                storeProduct.Stock -= (int)sod.Quantity * sod.PerPack;
+                                //product.Stock -= (int)sod.Quantity * sod.PerPack;
 
                                 sO.SaleOrderQty += (int)sod.Quantity * sod.PerPack;
                                 sO.Profit += (sod.Quantity * sod.SalePrice * sod.PerPack) - (decimal)(sod.Quantity * product.PurchasePrice * sod.PerPack); //- (decimal)(sO.Discount);
@@ -961,14 +971,16 @@ namespace MYBUSINESS.Controllers
                             {
                                 sO.SaleOrderAmount += (sod.Quantity * sod.SalePrice);
                                 decimal qty = (decimal)sod.Quantity;// / (decimal)product.PerPack;
-                                product.Stock += qty;
+                                storeProduct.Stock += qty;
+                                //product.Stock += qty;
                                 sO.SaleOrderQty += qty;//(int)sod.Quantity;
                                 sO.Profit += (qty * sod.SalePrice) - (decimal)(qty * product.PurchasePrice); //- (decimal)(sO.Discount);
                             }
                             else
                             {
                                 sO.SaleOrderAmount += (sod.Quantity * sod.SalePrice * sod.PerPack);
-                                product.Stock += (int)sod.Quantity * sod.PerPack;
+                                storeProduct.Stock += (int)sod.Quantity * sod.PerPack;
+                                //product.Stock += (int)sod.Quantity * sod.PerPack;
 
                                 sO.SaleOrderQty += (int)sod.Quantity * sod.PerPack;
                                 sO.Profit += (sod.Quantity * sod.SalePrice * sod.PerPack) - (decimal)(sod.Quantity * product.PurchasePrice * sod.PerPack); //- (decimal)(sO.Discount);
@@ -986,9 +998,7 @@ namespace MYBUSINESS.Controllers
                     dynamic jsonResponse = JsonConvert.DeserializeObject(loginToWebService.ContentType);
                     string authToken = jsonResponse.token;
                     if (loginToWebService == null)
-                    {
                         return Json(new { Success = false, Messsag = "Invalid Login attempt to web service,please use correct credentials" });
-                    }
                     // Call the async method synchronously
                     var addWebServiceCustomerDetails = AddWebServiceCustomerDetails(authToken, cust, sO, sOD);
                     //var addWebServiceCuromerDetails =  AddWebServiceCustomerDetails(authToken, cust,sO,sOD);
@@ -1209,6 +1219,22 @@ namespace MYBUSINESS.Controllers
                 return Json(new { Success = false, Message = "Invalid token" });
             }
 
+            // Check for null references in the input parameters
+            if (cust == null)
+            {
+                return Json(new { Success = false, Message = "Customer information is missing." });
+            }
+
+            if (saleOrder == null)
+            {
+                return Json(new { Success = false, Message = "Sale order information is missing." });
+            }
+
+            if (saleOrderDetails == null || saleOrderDetails.Count == 0)
+            {
+                return Json(new { Success = false, Message = "Sale order details are missing." });
+            }
+
             try
             {
                 string url = "https://0106026495-998.minvoice.pro/api/InvoiceApi78/Save";
@@ -1218,43 +1244,52 @@ namespace MYBUSINESS.Controllers
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+                   
+                    var getCurrentYear = DateTime.Now.Year; // Gets the current year (e.g., 2024)
+                    var lastTwoDigits = getCurrentYear % 100; // Extracts the last two digits (e.g., 24)
+                    var lastTwoDigitsString = lastTwoDigits.ToString("D2");
 
-                    // Creating the request model
-                    var invoiceDetails = saleOrderDetails.Select(detail => new InvoiceDetail
-                    {
-                        tchat = 1,
-                        stt_rec0 = detail.SODId ?? 0, // Use null-coalescing operator to handle null values
-                        inv_itemCode = "CB001",//detail.Product != null ? "CB001" : "", // Provide a default value if Product is null
-                        inv_itemName = detail.Product?.Name ?? "Unknown Product", // Use null-conditional operator and provide a default value
-                        inv_unitCode = detail.Product != null ? "Box/Pack" : "Unknown", // Check if Product is not null
-                        inv_quantity = detail.Quantity ?? 0, // Provide a default value if Quantity is null
-                        inv_unitPrice = detail.PurchasePrice ?? 0m, // Provide a default value if PurchasePrice is null
-                        inv_discountPercentage = 0, // Detail-specific value or default
-                        inv_discountAmount = 20, // Provide a fixed value or calculate if needed
-                        inv_TotalAmountWithoutVat = 220000,//saleOrder.BillAmount ?? 0, // Provide a default value if BillAmount is null
-                        ma_thue = 8, // Detail-specific value
-                        inv_vatAmount = 0, // Detail-specific value
-                        inv_TotalAmount = 0 // Detail-specific value
-                    }).ToList();
+                    // Safely create the request model
+                    var invoiceDetails = saleOrderDetails
+                        .Where(detail => detail != null && detail.Product != null)
+                        .Select(detail => new InvoiceDetail
+                        {
+                            tchat = 1,
+                            stt_rec0 = 1,// detail.SODId ?? 0,
+                            inv_itemCode = "CB002",//detail.Product != null ? "CB001" : "", // Default value if Product is null
+                            inv_itemName = detail.Product?.Name ?? "Unknown Product", // Default value if Product.Name is null
+                            inv_unitCode = "Box",//detail.Product != null ? "Box/Pack" : "Unknown",
+                            inv_quantity = detail.Quantity ?? 0,
+                            inv_unitPrice = detail.SalePrice ?? 0m,
+                            inv_discountPercentage = 0,
+                            inv_discountAmount = 20,
+                            inv_TotalAmountWithoutVat = saleOrder.BillAmount,//saleOrder.BillAmount ?? 0 // Assuming BillAmount is required
+                            ma_thue = 8,
+                            inv_vatAmount = 0,
+                            inv_TotalAmount = 0
+                        })
+                        .ToList();
 
+                    // Ensure saleOrder properties are not null before using them
                     var invoice = new Invoice
                     {
-                        inv_invoiceSeries = "1C24MPE",
-                        inv_invoiceIssuedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),//DateTime.Now.ToString("yyyy-MM-dd",CultureInfo.InvariantCulture), //saleOrder.InvoiceIssuedDate.ToString("yyyy-MM-dd"),
-                        inv_currencyCode = "VND",//saleOrder.CurrencyCode,
-                        inv_exchangeRate = 1,//saleOrder.ExchangeRate,
-                        so_benh_an = "HN-20243008-010", //saleOrder.SOSerial.ToString(),
-                        inv_buyerDisplayName = cust.Name,
-                        inv_buyerLegalName = cust.Name,
-                        inv_buyerTaxCode = "0401485182", //cust.TaxCode,
-                        inv_buyerAddressLine = cust.Address,
-                        inv_buyerEmail = cust.Email,
-                        inv_paymentMethodName = "TM/CK", //saleOrder.PaymentMethod,
-                        inv_discountAmount = saleOrder.Discount,
-                        inv_TotalAmountWithoutVat = 0,//saleOrder.TotalAmountWithoutVat,
-                        inv_vatAmount = 0,//saleOrder.VatAmount,
-                        inv_TotalAmount = saleOrder.BillPaid,
-                        key_api = "HN-20243008-010", //saleOrder.ApiKey,
+                        //inv_invoiceSeries = saleOrder.InvoiceSeries ?? "1C24MPE", // Default value if InvoiceSeries is null
+                        inv_invoiceSeries = $"1C{lastTwoDigitsString}MPE",//"1C24MPE", // Default value if InvoiceSeries is null
+                        inv_invoiceIssuedDate = DateTime.Now.AddDays(21).ToString("yyyy-MM-dd HH:mm:ss"),//saleOrder.InvoiceIssuedDate?.ToString("yyyy-MM-dd") ?? DateTime.Now.AddDays(13).ToString("yyyy-MM-dd"),
+                        inv_currencyCode = "VND",//saleOrder.CurrencyCode ?? "VND",
+                        inv_exchangeRate = 1,//saleOrder.ExchangeRate ?? 1,
+                        so_benh_an = "HN-20242309-002", //saleOrder.SOSerial ?? "HN-20241509-001",
+                        inv_buyerDisplayName = cust.Name ?? "Unknown Buyer",
+                        inv_buyerLegalName = cust.Name ?? "Unknown Buyer",
+                        inv_buyerTaxCode = "0401485182",//cust.TaxCode ?? "0401485182",
+                        inv_buyerAddressLine = cust.Address ?? "Unknown Address",
+                        inv_buyerEmail = cust.Email ?? "unknown@example.com",
+                        inv_paymentMethodName = saleOrder.PaymentMethod ?? "TM/CK",
+                        inv_discountAmount = saleOrder.Discount ?? 0,
+                        inv_TotalAmountWithoutVat = saleOrder.BillAmount,//saleOrder.TotalAmountWithoutVat ?? 0,
+                        inv_vatAmount = 17600,//saleOrder.VatAmount ?? 0,
+                        inv_TotalAmount = saleOrder.BillAmount,//saleOrder.BillPaid ?? 0,
+                        key_api = "HN-20242309-002",//saleOrder.ApiKey ?? "HN-20241509-001",
                         details = new List<InvoiceDetailsWrapper> { new InvoiceDetailsWrapper { data = invoiceDetails } }
                     };
 
@@ -1279,7 +1314,6 @@ namespace MYBUSINESS.Controllers
                             {
                                 dynamic jsonResponse = JsonConvert.DeserializeObject(responseBody);
 
-                                // Check for the "code" field in the response to determine success
                                 if (jsonResponse.code == "00")
                                 {
                                     return Json(new { Success = true, Message = jsonResponse.message, Data = jsonResponse.data });
@@ -1308,9 +1342,137 @@ namespace MYBUSINESS.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it as needed
                 return Json(new { Success = false, Message = $"An error occurred: {ex.Message}" });
             }
+
+
+
+
+
+
+
+
+
+
+            //if (string.IsNullOrEmpty(authToken))
+            //{
+            //    return Json(new { Success = false, Message = "Invalid token" });
+            //}
+
+            //try
+            //{
+            //    string url = "https://0106026495-998.minvoice.pro/api/InvoiceApi78/Save";
+
+            //    using (var client = new HttpClient())
+            //    {
+            //        client.DefaultRequestHeaders.Accept.Clear();
+            //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+
+            //        // Creating the request model
+            //        var invoiceDetails = saleOrderDetails.Select(detail => new InvoiceDetail
+            //        {
+            //            tchat = 1,
+            //            stt_rec0 = detail.SODId ?? 0, // Use null-coalescing operator to handle null values
+            //            inv_itemCode = "CB001",//detail.Product != null ? "CB001" : "", // Provide a default value if Product is null
+            //            inv_itemName = detail.Product?.Name ?? "Unknown Product", // Use null-conditional operator and provide a default value
+            //            inv_unitCode = detail.Product != null ? "Box/Pack" : "Unknown", // Check if Product is not null
+            //            inv_quantity = detail.Quantity ?? 0, // Provide a default value if Quantity is null
+            //            inv_unitPrice = detail.PurchasePrice ?? 0m, // Provide a default value if PurchasePrice is null
+            //            inv_discountPercentage = 0, // Detail-specific value or default
+            //            inv_discountAmount = 20, // Provide a fixed value or calculate if needed
+            //            inv_TotalAmountWithoutVat = 220000,//saleOrder.BillAmount ?? 0, // Provide a default value if BillAmount is null
+            //            ma_thue = 8, // Detail-specific value
+            //            inv_vatAmount = 0, // Detail-specific value
+            //            inv_TotalAmount = 0 // Detail-specific value
+            //        }).ToList();
+
+            //        var invoice = new Invoice
+            //        {
+            //            inv_invoiceSeries = "1C24MPE",
+            //            inv_invoiceIssuedDate = DateTime.Now.AddDays(13).ToString("yyyy-MM-dd"),//DateTime.Now.ToString("yyyy-MM-dd",CultureInfo.InvariantCulture), //saleOrder.InvoiceIssuedDate.ToString("yyyy-MM-dd"),
+            //            inv_currencyCode = "VND",//saleOrder.CurrencyCode,
+            //            inv_exchangeRate = 1,//saleOrder.ExchangeRate,
+            //            so_benh_an = "HN-20241509-001", //saleOrder.SOSerial.ToString(),
+            //            inv_buyerDisplayName = cust.Name,
+            //            inv_buyerLegalName = cust.Name,
+            //            inv_buyerTaxCode = "0401485182", //cust.TaxCode,
+            //            inv_buyerAddressLine = cust.Address,
+            //            inv_buyerEmail = cust.Email,
+            //            inv_paymentMethodName = "TM/CK", //saleOrder.PaymentMethod,
+            //            inv_discountAmount = saleOrder.Discount,
+            //            inv_TotalAmountWithoutVat = 0,//saleOrder.TotalAmountWithoutVat,
+            //            inv_vatAmount = 0,//saleOrder.VatAmount,
+            //            inv_TotalAmount = saleOrder.BillPaid,
+            //            key_api = "HN-20241509-001", //saleOrder.ApiKey,
+            //            details = new List<InvoiceDetailsWrapper> { new InvoiceDetailsWrapper { data = invoiceDetails } }
+            //        };
+
+            //        var requestBody = new InvoiceRequest
+            //        {
+            //            editmode = 1,
+            //            data = new List<Invoice> { invoice }
+            //        };
+
+            //        string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
+
+            //        // Sending the request to the web service
+            //        HttpResponseMessage response = await client.PostAsync(url, new StringContent(jsonRequestBody, System.Text.Encoding.UTF8, "application/json"));
+
+            //        if (response.IsSuccessStatusCode)
+            //        {
+            //            string responseBody = await response.Content.ReadAsStringAsync();
+
+            //            if (response.Content.Headers.ContentType.MediaType == "application/json")
+            //            {
+            //                try
+            //                {
+            //                    dynamic jsonResponse = JsonConvert.DeserializeObject(responseBody);
+
+            //                    // Check for the "code" field in the response to determine success
+            //                    if (jsonResponse.code == "00")
+            //                    {
+            //                        return Json(new { Success = true, Message = jsonResponse.message, Data = jsonResponse.data });
+            //                    }
+            //                    else
+            //                    {
+            //                        return Json(new { Success = false, Message = "Unexpected response code.", Response = jsonResponse });
+            //                    }
+            //                }
+            //                catch (JsonException jsonEx)
+            //                {
+            //                    return Json(new { Success = false, Message = "Error parsing JSON response.", Error = jsonEx.Message });
+            //                }
+            //            }
+            //            else
+            //            {
+            //                return Json(new { Success = false, Message = "Received non-JSON response.", Response = responseBody });
+            //            }
+            //        }
+            //        else
+            //        {
+            //            string errorContent = await response.Content.ReadAsStringAsync();
+            //            return Json(new { Success = false, Message = $"Failed to add customer details. Status code: {response.StatusCode}. Response: {errorContent}" });
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    // Log the exception or handle it as needed
+            //    return Json(new { Success = false, Message = $"An error occurred: {ex.Message}" });
+            //}
+
+
+
+
+
+
+
+
+
+
+
+
             //if (string.IsNullOrEmpty(authToken))
             //{
             //    return Json(new { Success = false, Message = "Invalid token" });

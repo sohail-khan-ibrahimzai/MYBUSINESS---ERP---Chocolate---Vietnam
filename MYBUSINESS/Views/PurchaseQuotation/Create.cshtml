@@ -375,14 +375,24 @@
     //var products = [['Ciplet', '10', '60'], ['Gaviscon', '85', '12'], ['Surficol', '110', '8']];
     //alert(products);
      @{
+         var storeProductStock = 0;
          var carton = 0; //= (d.Stock / d.PerPack);
          var piece = 0;
          foreach (var d in Model.Products)
          {
-            carton = (int)(d.Stock / d.PerPack);
-            piece = (int)(d.Stock % d.PerPack);
-            if (piece == 0)
-            {
+             foreach (var sp in d.StoreProducts)
+             {
+                 if (sp.StoreId == 1)
+                 {
+                     storeProductStock = (int)sp.Stock;
+                     break; // Exit loop once the store is found
+                 }
+             }
+
+             carton = (int)(storeProductStock / d.PerPack);
+             piece = (int)(storeProductStock % d.PerPack);
+             if (piece == 0)
+             {
                  @:products.push(["@d.Id", "@d.Name", "@d.PurchasePrice", "@carton", "@d.PerPack"]);
             }
             else
@@ -390,6 +400,18 @@
                  @:products.push(["@d.Id", "@d.Name", "@d.PurchasePrice", "@carton,@piece", "@d.PerPack"]);
             }
              @:productsBarcodes.push(["@d.Id", "@d.BarCode"]);
+
+             @*carton = (int)(d.Stock / d.PerPack);
+             piece = (int)(d.Stock % d.PerPack);
+             if (piece == 0)
+             {
+                 @:products.push(["@d.Id", "@d.Name", "@d.PurchasePrice", "@carton", "@d.PerPack"]);
+            }
+            else
+            {
+                 @:products.push(["@d.Id", "@d.Name", "@d.PurchasePrice", "@carton,@piece", "@d.PerPack"]);
+            }
+             @:productsBarcodes.push(["@d.Id", "@d.BarCode"]);*@
          }
       }
     //alert(products);

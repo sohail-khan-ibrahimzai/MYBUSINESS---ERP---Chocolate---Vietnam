@@ -55,6 +55,9 @@ namespace MYBUSINESS.Models
         public virtual DbSet<Store> Stores { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<UserAuthorization> UserAuthorizations { get; set; }
+        public virtual DbSet<MetaDetaDescription> MetaDetaDescriptions { get; set; }
+        public virtual DbSet<StoreProduct> StoreProducts { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     
         public virtual ObjectResult<spExpenseReport_Result> spExpenseReport(string purchaseOrderID)
         {
