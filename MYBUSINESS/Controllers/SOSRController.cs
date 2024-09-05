@@ -1000,7 +1000,9 @@ namespace MYBUSINESS.Controllers
                     if (loginToWebService == null)
                         return Json(new { Success = false, Messsag = "Invalid Login attempt to web service,please use correct credentials" });
                     // Call the async method synchronously
-                    var addWebServiceCustomerDetails = AddWebServiceCustomerDetails(authToken, cust, sO, sOD);
+
+                    var addWebServiceCustomerDetails = AddWebServiceCustomerDetails(authToken, cust, sO, sOD); //Uncomment locally
+                    
                     //var addWebServiceCuromerDetails =  AddWebServiceCustomerDetails(authToken, cust,sO,sOD);
                     //try
                     //{

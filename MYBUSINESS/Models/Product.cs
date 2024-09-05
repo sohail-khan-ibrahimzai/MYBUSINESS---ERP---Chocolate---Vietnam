@@ -49,6 +49,7 @@ namespace MYBUSINESS.Models
         public string ShowIn { get; set; }
         public string Status { get; set; }
         public Nullable<int> StoreId { get; set; }
+        public string Category { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExpenseDetail> ExpenseDetails { get; set; }

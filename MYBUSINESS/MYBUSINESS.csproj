@@ -15586,6 +15586,7 @@
     <Content Include="Content\custom\downloads\datetimepicker-master\tests\tests\options.js" />
     <Content Include="Content\custom\downloads\jquery.scannerdetection.js" />
     <Content Include="Content\custom\products.js" />
+    <Content Include="Content\custom\quotationPOPR.js" />
     <Content Include="Content\custom\supplierPOPR.js" />
     <Content Include="Content\custom\downloads\DataTables-1.10.18\css\dataTables.bootstrap.css" />
     <Content Include="Content\custom\downloads\DataTables-1.10.18\css\dataTables.bootstrap.min.css" />
@@ -16135,6 +16136,7 @@
     <Content Include="Views\Popups\StoreClosePopup.cshtml" />
     <Content Include="Views\Stores\EditStoreBalance.cshtml" />
     <Content Include="Views\Shared\StoreClosePopup1.cshtml" />
+    <Content Include="Views\PurchaseQuotation\CreatePOByCategory.cshtml" />
     <None Include="Web.Debug.Config">
       <DependentUpon>Web.Config</DependentUpon>
     </None>

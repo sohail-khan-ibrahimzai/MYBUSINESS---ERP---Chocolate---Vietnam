@@ -287,6 +287,7 @@
           <Property Name="ShowIn" Type="nvarchar" MaxLength="50" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
           <Property Name="StoreId" Type="int" />
+          <Property Name="Category" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="ProductDetail">
           <Key>
@@ -1998,6 +1999,7 @@
           <NavigationProperty Name="ServiceDetails" Relationship="Models.FK_ServiceDetail_Product" FromRole="Product" ToRole="ServiceDetail" />
           <NavigationProperty Name="SODs" Relationship="Models.FK_SOD_Product" FromRole="Product" ToRole="SOD" />
           <NavigationProperty Name="StoreProducts" Relationship="Models.FK_StoreProduct_Product" FromRole="Product" ToRole="StoreProduct" />
+          <Property Name="Category" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ProductDetail">
           <Key>
@@ -3246,6 +3248,7 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="Models.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Category" ColumnName="Category" />
                 <ScalarProperty Name="StoreId" ColumnName="StoreId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ShowIn" ColumnName="ShowIn" />

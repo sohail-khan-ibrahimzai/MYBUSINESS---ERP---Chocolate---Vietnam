@@ -245,15 +245,51 @@ namespace MYBUSINESS.Controllers
         private void GetTotalBalance(ref IQueryable<PO> POes)
         {
             //IQueryable<SO> DistSOes = SOes.Select(x => x.CustomerId).Distinct();
-            IQueryable<PO> DistPOes = POes.GroupBy(x => x.SupplierId).Select(y => y.FirstOrDefault());
+            //IQueryable<PO> DistPOes = POes.GroupBy(x => x.SupplierId).Select(y => y.FirstOrDefault());
 
+            //decimal TotalBalance = 0;
+            //foreach (PO itm in DistPOes)
+            //{
+            //    Supplier cust = db.Suppliers.Where(x => x.Id == itm.SupplierId).FirstOrDefault();
+            //    TotalBalance += (decimal)cust.Balance;
+            //}
+            //ViewBag.TotalBalance = TotalBalance;
             decimal TotalBalance = 0;
-            foreach (PO itm in DistPOes)
+
+            try
             {
-                Supplier cust = db.Suppliers.Where(x => x.Id == itm.SupplierId).FirstOrDefault();
-                TotalBalance += (decimal)cust.Balance;
+                IQueryable<PO> DistPOes = POes.GroupBy(x => x.SupplierId).Select(y => y.FirstOrDefault());
+
+                foreach (PO itm in DistPOes)
+                {
+                    try
+                    {
+                        Supplier cust = db.Suppliers.Where(x => x.Id == itm.SupplierId).FirstOrDefault();
+
+                        if (cust != null && cust.Balance.HasValue) // Check if cust and Balance are not null
+                        {
+                            TotalBalance += (decimal)cust.Balance;
+                        }
+                        else
+                        {
+                            TotalBalance = 0;
+                            System.Diagnostics.Debug.WriteLine($"Supplier with ID {itm.SupplierId} not found or has no balance.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error processing supplier with ID {itm.SupplierId}: {ex.Message}");
+                    }
+                }
+
+                ViewBag.TotalBalance = TotalBalance;
             }
-            ViewBag.TotalBalance = TotalBalance;
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error calculating total balance: {ex.Message}");
+
+                ViewBag.TotalBalance = 0; // Or set another default value
+            }
 
         }
         //[ChildActionOnly]
@@ -299,6 +335,48 @@ namespace MYBUSINESS.Controllers
             purchaseOrderViewModel.Suppliers = DAL.dbSuppliers;
             purchaseOrderViewModel.Products = DAL.dbProducts.Where(x => x.Saleable == true && x.IsService == false);
             //purchaseOrderViewModel.FundingSources = db.FundingSources.ToList() ;
+            ViewBag.FundingSources = new SelectList(db.Suppliers.Where(x => x.IsCreditor == true), "Id", "Name");//db.FundingSources.ToList(); ;
+            ViewBag.BankAccounts = new SelectList(db.BankAccounts, "Id", "Name");
+            ViewBag.MalaysiaTime = DateTime.UtcNow.AddHours(8);
+            ViewBag.IsReturn = IsReturn;
+            Supplier defaultSupplier = db.Suppliers.FirstOrDefault(x => x.IsCreditor == false);
+            ViewBag.DefaultSuppId = defaultSupplier.Id;
+            ViewBag.DefaultSuppName = defaultSupplier.Name;
+            ViewBag.ReportId = TempData["ReportId"] as string;
+            return View(purchaseOrderViewModel);
+        }
+        // GET: POes/CreatePOByCategory
+        public ActionResult CreatePOByCategory(string IsReturn)
+        {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            //ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name");
+            //ViewBag.Products = db.Products;
+
+            //int maxId = db.Suppliers.Max(p => p.Id);
+            decimal maxId = db.Suppliers.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
+            maxId += 1;
+            ViewBag.SuggestedNewSuppId = maxId;
+
+
+            PurchaseOrderViewModel purchaseOrderViewModel = new PurchaseOrderViewModel();
+            purchaseOrderViewModel.Suppliers = DAL.dbSuppliers;
+            purchaseOrderViewModel.Products = DAL.dbProducts.Where(x => x.Saleable == true && x.IsService == false);
+            //purchaseOrderViewModel.ProductListCategory = db.Products.ToList();
+            //purchaseOrderViewModel.FundingSources = db.FundingSources.ToList() ;
+            var products = db.Products.ToList();
+
+            // Group products by category, handling null categories by assigning "Uncategorized"
+            var groupedProducts = products
+                .GroupBy(p => string.IsNullOrEmpty(p.Category) ? "Uncategorized" : p.Category)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            // Pass the grouped products to the view using ViewBag
+            ViewBag.ProductCategory = groupedProducts;
+
             ViewBag.FundingSources = new SelectList(db.Suppliers.Where(x => x.IsCreditor == true), "Id", "Name");//db.FundingSources.ToList(); ;
             ViewBag.BankAccounts = new SelectList(db.BankAccounts, "Id", "Name");
             ViewBag.MalaysiaTime = DateTime.UtcNow.AddHours(8);
@@ -476,6 +554,170 @@ namespace MYBUSINESS.Controllers
                 //return RedirectToAction("PrintSO3", new { id = POId });
                 TempData["ReportId"] = pO.Id;
                 return RedirectToAction("Create", new { IsReturn = "false" });
+                //return RedirectToAction("Index");
+            }
+
+            //ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name", pO.SupplierId);
+            //return View(pO);
+            PurchaseOrderViewModel purchaseOrderViewModel = new PurchaseOrderViewModel();
+            purchaseOrderViewModel.Suppliers = DAL.dbSuppliers;
+            purchaseOrderViewModel.Products = DAL.dbProducts.Where(x => x.Saleable == true && x.IsService == false);
+            return View(purchaseOrderViewModel);
+            //return View();
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreatePOByCategory([Bind(Prefix = "Supplier", Include = "Name,Address")] Supplier Supplier, [Bind(Prefix = "PurchaseOrder", Include = "BillAmount,Balance,PrevBalance,BillPaid,Discount,SupplierId,Remarks,Remarks2,PaymentMethod,PaymentDetail,PurchaseReturn,FundingSourceId,BankAccountId,Date")] PO pO, [Bind(Prefix = "PurchaseOrderDetail", Include = "ProductId,Quantity,SaleType,PerPack,IsPack,PurchasePrice")] List<POD> pOD)
+        {
+            //PO pO = new PO();
+            if (ModelState.IsValid)
+            {
+                var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
+                var parseId = int.Parse(storeId);
+                Supplier supp = db.Suppliers.FirstOrDefault(x => x.Id == pO.SupplierId);
+                if (supp == null)
+                {//its means new customer
+                    //pO.SupplierId = 10;
+                    //int maxId = db.Suppliers.Max(p => p.Id);
+                    decimal maxId = db.Suppliers.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
+                    maxId += 1;
+                    Supplier.Id = maxId;
+                    Supplier.Balance = pO.Balance;
+                    Supplier.StoreId = parseId;
+                    db.Suppliers.Add(Supplier);
+                    //db.SaveChanges();
+                }
+                else
+                {//its means old customer. old customer balance should be updated.
+                    //Supplier.Id = (int)pO.SupplierId;
+                    supp.Balance = pO.Balance;
+                    supp.StoreId = parseId;
+                    db.Entry(supp).State = EntityState.Modified;
+                    //db.SaveChanges();
+
+                    //Payment payment = new Payment();
+                    //payment = db.Payments.Find(orderId);
+                    //payment.Status = true;
+                    //db.Entry(payment).State = EntityState.Modified;
+                    //db.SaveChanges();
+
+                }
+
+                ////////////////////////////////////////
+                BankAccount bankAccount = db.BankAccounts.FirstOrDefault(x => x.Id == pO.BankAccountId);
+                bankAccount.Balance -= pO.BillPaid;
+                db.BankAccounts.Attach(bankAccount);
+                db.Entry(bankAccount).Property(x => x.Balance).IsModified = true;
+                ////////////////////////////////////////
+                //int maxId = db.POes.Max(p => p.Auto);
+                decimal maxId1 = (int)db.POes.DefaultIfEmpty().Max(p => p == null ? 0 : p.POSerial);
+                maxId1 += 1;
+                pO.POSerial = maxId1;
+                pO.Quotation = true;
+                pO.StoreId = parseId;
+                //pO.Date = DateTime.Now;
+                if (string.IsNullOrEmpty(Convert.ToString(pO.Date)))
+                {
+                    pO.Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
+                }
+                //pO.SaleReturn = false;
+                pO.Id = System.Guid.NewGuid().ToString().ToUpper();
+                pO.PurchaseOrderAmount = 0;
+
+                pO.PurchaseOrderQty = 0;
+
+                Employee emp = (Employee)Session["CurrentUser"];
+                pO.EmployeeId = emp.Id;
+                db.POes.Add(pO);
+                //db.SaveChanges();
+                int sno = 0;
+                if (pOD != null)
+                {
+                    //pOD.RemoveAll(so => so.ProductId == null);
+                    foreach (POD pod in pOD)
+                    {
+                        sno += 1;
+                        pod.PODId = sno;
+                        pod.PO = pO;
+                        pod.POId = pO.Id;
+
+                        Product product = db.Products.FirstOrDefault(x => x.Id == pod.ProductId);
+                        StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == pod.ProductId && x.StoreId == parseId);
+
+                        //dont do this. when user made a bill and chnage sale price. it does not reflect in bill and calculations geting wrong
+                        //pod.PurchasePrice = product.PurchasePrice;
+                        if (pod.Quantity == null || pod.Quantity == 0) { pod.Quantity = 0; }
+                        //pod.OpeningStock = product.Stock;
+                        pod.OpeningStock = storeProduct.Stock;
+                        pod.PerPack = 1;
+                        if (pod.SaleType == false)//purchase
+                        {
+
+                            if (pod.IsPack == false)
+                            {//piece
+                                if (pod.Quantity != null || pod.Quantity > 0)
+                                {
+                                    pO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice);
+
+                                    //int pieceSold = (int)(sod.Quantity * product.Stock);
+                                    decimal qty = (decimal)pod.Quantity;// / (decimal)product.PerPack;
+                                                                        //storeProduct.Stock += qty;  //--due to qutation
+                                    pO.PurchaseOrderQty += qty;//(int)sod.Quantity;
+                                }
+
+                            }
+                            else
+                            {//pack
+                                if (pod.Quantity != null || pod.Quantity > 0)
+                                {
+                                    pO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice * pod.PerPack);
+                                    //storeProduct.Stock += (int)pod.Quantity * pod.PerPack;  //--due to qutation
+
+                                    pO.PurchaseOrderQty += (int)pod.Quantity * pod.PerPack;
+
+                                }
+                            }
+
+                        }
+                        else//return
+                        {
+                            if (pod.IsPack == false)
+                            {
+                                if (pod.Quantity != null || pod.Quantity > 0)
+                                {
+                                    pO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice);
+                                    decimal qty = (decimal)pod.Quantity;// / (decimal)product.PerPack;
+                                                                        //storeProduct.Stock -= qty;//--due to qutation
+                                    pO.PurchaseOrderQty += qty;//(int)sod.Quantity;
+                                }
+
+                            }
+                            else
+                            {
+                                if (pod.Quantity != null || pod.Quantity > 0)
+                                {
+                                    pO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice * pod.PerPack);
+                                    //storeProduct.Stock -= (int)pod.Quantity * pod.PerPack; //--due to qutation
+                                    pO.PurchaseOrderQty += (int)pod.Quantity * pod.PerPack;
+                                }
+                            }
+
+                        }
+
+                    }
+                    db.PODs.AddRange(pOD);
+                }
+                db.SaveChanges();
+
+                string POId = string.Join("-", ASCIIEncoding.ASCII.GetBytes(Encryption.Encrypt(pO.Id, "BZNS")));
+                TempData["ReportId"] = pO.Id;
+                return RedirectToAction("CreatePOByCategory", new { IsReturn = "false" });
                 //return RedirectToAction("Index");
             }
 

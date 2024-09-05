@@ -389,7 +389,9 @@ namespace MYBUSINESS.Controllers
             }
 
             Product product = db.Products.Find(id);
-            product.Stock = product.Stock / product.PerPack;
+            StoreProduct storeProdcut = db.StoreProducts.FirstOrDefault(x => x.ProductId == id);
+            storeProdcut.Stock = storeProdcut.Stock / product.PerPack;
+            product.Stock = storeProdcut.Stock;
             //ViewBag.SuppName = product.Supplier.Name;
             if (product == null)
             {
@@ -435,7 +437,9 @@ namespace MYBUSINESS.Controllers
 
             product.Stock = product.Stock * product.PerPack;
             product.StoreId = parseId;
-            decimal StockInDB = (decimal)db.Products.AsNoTracking().FirstOrDefault(x => x.Id == product.Id).Stock;
+            //decimal StockInDB = (decimal)db.Products.AsNoTracking().FirstOrDefault(x => x.Id == product.Id).Stock;
+            decimal StockInDB = (decimal)db.StoreProducts.AsNoTracking().FirstOrDefault(x => x.ProductId == product.Id).Stock;
+            var getProductStock = db.StoreProducts.FirstOrDefault(x => x.ProductId == product.Id);
             if (ModelState.IsValid)
             {
 
@@ -451,6 +455,7 @@ namespace MYBUSINESS.Controllers
 
                     POD pOD = new POD { POId = pO.Id, PODId = 1, ProductId = product.Id, OpeningStock = StockInDB, Quantity = (int)(product.Stock - StockInDB), PurchasePrice = 0, PerPack = 1, IsPack = true, SaleType = false };
                     db.PODs.Add(pOD);
+                    getProductStock.Stock = product.Stock;
                 }
 
                 if (product.Stock < StockInDB)
@@ -465,9 +470,11 @@ namespace MYBUSINESS.Controllers
 
                     POD pOD = new POD { POId = pO.Id, PODId = 1, ProductId = product.Id, OpeningStock = StockInDB, Quantity = (int)(StockInDB - product.Stock), PurchasePrice = 0, PerPack = 1, IsPack = true, SaleType = true };
                     db.PODs.Add(pOD);
+                    getProductStock.Stock = product.Stock;
                 }
 
                 db.Entry(product).State = EntityState.Modified;
+                db.Entry(getProductStock).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

@@ -153,18 +153,6 @@
                                             </td>
 
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Discount)
-                                                @{
-                                                    if (item.PurchaseReturn == false)
-                                                    {
-                                                        Discount += (decimal)item.Discount;
-                                                    }
-                                                    else
-                                                    {
-                                                        Discount -= (decimal)item.Discount;
-                                                    }
-
-                                                }
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.PrevBalance)
