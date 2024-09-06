@@ -760,6 +760,15 @@ namespace MYBUSINESS.Controllers
 
             maxId = db.SOes.DefaultIfEmpty().Max(p => p == null ? 0 : p.SOSerial).Value;
             maxId += 1;
+            // Convert maxId to integer for formatting with leading zeros
+            //int serialNumber = (int)maxId; //For int
+            string prefix = "HN";
+            string datePart = DateTime.Now.ToString("yyyyMMdd"); // Format current date as YYYYMMDD
+            //string formattedSerial = $"{prefix}-{datePart}-{serialNumber:D3}"; // Format serial with leading zeros for int
+            string formattedSerial = $"{prefix}-{datePart}-{maxId:000}"; // Format serial with leading zeros for decimal
+
+            // Set ViewBag.SuggestedNewProductId to the formatted serial number
+            ViewBag.SuggestedNewProductIds = formattedSerial;
             ViewBag.SuggestedNewProductId = maxId;
 
 
@@ -777,8 +786,6 @@ namespace MYBUSINESS.Controllers
         }
 
 
-
-
         //[OutputCache(NoStore = true, Duration = 0)]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -787,7 +794,7 @@ namespace MYBUSINESS.Controllers
         //public ActionResult Create(
         public ActionResult Create(
     [Bind(Prefix = "Customer", Include = "Name,Address,Email,Vat,CompanyName")] Customer Customer,
-    [Bind(Prefix = "SaleOrder", Include = "BillAmount,Balance,PrevBalance,BillPaid,BillPaidByCash,Discount,CustomerId,Remarks,Remarks2,PaymentMethod,PaymentDetail,SaleReturn,BankAccountId,Date")] SO sO,
+    [Bind(Prefix = "SaleOrder", Include = "Id,BillAmount,Balance,PrevBalance,BillPaid,BillPaidByCash,Discount,CustomerId,Remarks,Remarks2,PaymentMethod,PaymentDetail,SaleReturn,BankAccountId,Date")] SO sO,
     [Bind(Prefix = "SaleOrderDetail", Include = "ProductId,SalePrice,PurchasePrice,Quantity,SaleType,PerPack,IsPack,Product.Name,Product")] List<SOD> sOD,
     FormCollection collection
     )
@@ -863,7 +870,7 @@ namespace MYBUSINESS.Controllers
                 }
 
                 //sO.SaleReturn = false;
-                sO.Id = System.Guid.NewGuid().ToString().ToUpper();
+                //sO.Id = System.Guid.NewGuid().ToString().ToUpper(); //Commented due to Bill Number
                 sO.SaleOrderAmount = 0;
 
                 sO.SaleOrderQty = 0;

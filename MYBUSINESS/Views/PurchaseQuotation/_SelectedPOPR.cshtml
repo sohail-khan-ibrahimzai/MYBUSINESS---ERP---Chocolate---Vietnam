@@ -237,12 +237,21 @@
 
                                                     if (currentUser.EmployeeTypeId == 0)
                                                     {
+                                                        @Html.ActionLink("Update", "EditPOSByCategory", new { id = item.Id, update = true }, new { @class = "btn btn-info" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.ActionLink(whtieSpace + "View", "Edit", new { id = item.Id, update = false }, new { @class = "btn btn-info" })
+                                                    } 
+                                                
+                                                @*if (currentUser.EmployeeTypeId == 0)
+                                                    {
                                                         @Html.ActionLink("Update", "Edit", new { id = item.Id, update = true }, new { @class = "btn btn-info" })
                                                     }
                                                     else
                                                     {
                                                         @Html.ActionLink(whtieSpace + "View", "Edit", new { id = item.Id, update = false }, new { @class = "btn btn-info" })
-                                                    }
+                                                    }*@
 
                                                 }
                                                 |

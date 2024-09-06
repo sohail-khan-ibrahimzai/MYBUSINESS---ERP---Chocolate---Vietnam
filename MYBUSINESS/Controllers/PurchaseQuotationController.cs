@@ -367,15 +367,30 @@ namespace MYBUSINESS.Controllers
             purchaseOrderViewModel.Products = DAL.dbProducts.Where(x => x.Saleable == true && x.IsService == false);
             //purchaseOrderViewModel.ProductListCategory = db.Products.ToList();
             //purchaseOrderViewModel.FundingSources = db.FundingSources.ToList() ;
-            var products = db.Products.ToList();
+            var products = db.Products
+              .Select(p => new
+              {
+                  Product = p,
+                  Stock = db.StoreProducts
+                      .Where(sp => sp.ProductId == p.Id)
+                      .Sum(sp => sp.Stock) // Sum stock from StoreProduct
+              })
+              .ToList();
+                    // Group products by category, handling null categories by assigning "Uncategorized"
+                    var groupedSelectedProducts = products
+                        .GroupBy(p => string.IsNullOrEmpty(p.Product.Category) ? "Uncategorized" : p.Product.Category)
+                        .ToDictionary(
+                            g => g.Key,
+                            g => g.Select(p => new
+                            {
+                                p.Product.Name,
+                                p.Product.Id,
+                                p.Product.PurchasePrice,
+                                p.Stock
+                            }).ToList()
+                        );
 
-            // Group products by category, handling null categories by assigning "Uncategorized"
-            var groupedProducts = products
-                .GroupBy(p => string.IsNullOrEmpty(p.Category) ? "Uncategorized" : p.Category)
-                .ToDictionary(g => g.Key, g => g.ToList());
-
-            // Pass the grouped products to the view using ViewBag
-            ViewBag.ProductCategory = groupedProducts;
+            ViewBag.SelectedProductCategory = groupedSelectedProducts;
 
             ViewBag.FundingSources = new SelectList(db.Suppliers.Where(x => x.IsCreditor == true), "Id", "Name");//db.FundingSources.ToList(); ;
             ViewBag.BankAccounts = new SelectList(db.BankAccounts, "Id", "Name");
@@ -1156,11 +1171,6 @@ namespace MYBUSINESS.Controllers
 
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            //byte[] BytesArr = id.Split('-').Select(byte.Parse).ToArray();
-            //id = new string( Encoding.UTF8.GetString(BytesArr).ToCharArray());
-            //id = Encryption.Decrypt(id,"BZNS");
-
             decimal maxId = db.Suppliers.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
             maxId += 1;
             ViewBag.SuggestedNewSuppId = maxId;
@@ -1177,7 +1187,6 @@ namespace MYBUSINESS.Controllers
                         };
             ViewBag.OptionLst = myOptionLst;
 
-            ////////////////
             List<MyPaymentMethod> myPaymentOptionLst = new List<MyPaymentMethod> {
                             new MyPaymentMethod {
                                 Text = "Cash",
@@ -1212,14 +1221,6 @@ namespace MYBUSINESS.Controllers
 
             ViewBag.UnitTypeOptionList = myUnitTypeOptionList;
             string iid = Decode(id);
-            //Payment pmnt = db.Payments.Where(x => x.SOId == iid).FirstOrDefault();
-            //if (pmnt != null)
-            //{
-            //    ViewBag.paymentMethod = pmnt.PaymentMethod;
-            //    ViewBag.paymentRemarks = pmnt.Remarks;
-            //}
-            ///////////////////
-
             id = Decode(id);
 
             PO pO = db.POes.Find(id);
@@ -1235,19 +1236,19 @@ namespace MYBUSINESS.Controllers
             pO.Id = Encryption.Encrypt(pO.Id, "BZNS");
             purchaseOrderViewModel.PurchaseOrder = pO;
             int orderQty = 0;
-            int orderQtyPiece = 0;//orderQtyPiece 'P for piece' 
+            int orderQtyPiece = 0;
             int returnQty = 0;
-            int returnQtyPiece = 0;//orderQtyPiece 'P for piece' 
+            int returnQtyPiece = 0;
             foreach (var item in pod)
             {
                 if (pO.PurchaseReturn == false)
                 {
                     if (item.IsPack == true)
-                    {//Pack
+                    {
                         orderQty += (int)item.Quantity;
                     }
                     else
-                    {//Item
+                    {
                         orderQtyPiece += (int)item.Quantity;
                     }
                 }
@@ -1265,20 +1266,12 @@ namespace MYBUSINESS.Controllers
                 }
 
             }
-
-            //List<SelectListItem> FundingSources = new List<SelectListItem>();
-            //foreach (FundingSource fundingSource in db.FundingSources)
-            //{
-            //    FundingSources.Add(new SelectListItem() { Text = fundingSource.Source, Value = fundingSource.Id.ToString() });
-            //}
-            //ViewBag.FundingSources = db.Suppliers.Where(x => x.IsCreditor == true).ToList();//FundingSources;
             ViewBag.FundingSources = new SelectList(db.Suppliers.Where(x => x.IsCreditor == true), "Id", "Name");//db.FundingSources.ToList(); ;
             ViewBag.BankAccounts = new SelectList(db.BankAccounts, "Id", "Name");
             ViewBag.orderQty = orderQty;
             ViewBag.orderQtyPiece = orderQtyPiece;
             ViewBag.returnQty = returnQty;
             ViewBag.returnQtyPiece = returnQtyPiece;
-            //ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name", sO.SupplierId);
             ViewBag.SupplierName = pO.Supplier.Name;
             ViewBag.SupplierAddress = pO.Supplier.Address;
             decimal subTotal = (decimal)(pO.PurchaseOrderAmount - pO.Discount);
@@ -1289,6 +1282,341 @@ namespace MYBUSINESS.Controllers
             return View(purchaseOrderViewModel);
         }
 
+        // GET: POes/Edit/5
+        public ActionResult EditPOSByCategory(string id, bool update)
+        {
+
+            if (id == null)
+            {
+
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            decimal maxId = db.Suppliers.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
+            maxId += 1;
+            ViewBag.SuggestedNewSuppId = maxId;
+
+            List<MySaleType> myOptionLst = new List<MySaleType> {
+                            new MySaleType {
+                                Text = "Order",
+                                Value = "false"
+                            },
+                            new MySaleType {
+                                Text = "Return",
+                                Value = "true"
+                            }
+                        };
+            ViewBag.OptionLst = myOptionLst;
+
+            List<MyPaymentMethod> myPaymentOptionLst = new List<MyPaymentMethod> {
+                            new MyPaymentMethod {
+                                Text = "Cash",
+                                Value = "Cash"
+                            },
+                            new MyPaymentMethod {
+                                Text = "Online",
+                                Value = "Online"
+                            },
+                            new MyPaymentMethod {
+                                Text = "Cheque",
+                                Value = "Cheque"
+                            },
+                            new MyPaymentMethod {
+                                Text = "Other",
+                                Value = "Other"
+                            }
+                        };
+
+            ViewBag.PaymentMethodOptionLst = myPaymentOptionLst;
+
+            List<MyUnitType> myUnitTypeOptionList = new List<MyUnitType> {
+                            new MyUnitType {
+                                Text = "Piece",
+                                Value = "false"
+                            },
+                            new MyUnitType {
+                                Text = "Pack",
+                                Value = "true"
+                            }
+                        };
+
+            ViewBag.UnitTypeOptionList = myUnitTypeOptionList;
+            string iid = Decode(id);
+            id = Decode(id);
+
+            PO pO = db.POes.Find(id);
+            if (pO == null)
+            {
+                return HttpNotFound();
+            }
+            PurchaseOrderViewModel purchaseOrderViewModel = new PurchaseOrderViewModel();
+            List<POD> pod = db.PODs.Where(x => x.POId == id).ToList();
+            purchaseOrderViewModel.Products = DAL.dbProducts.Where(x => x.Saleable == true && x.IsService == false);
+            purchaseOrderViewModel.Suppliers = DAL.dbSuppliers;
+            purchaseOrderViewModel.PurchaseOrderDetail = pod;
+            pO.Id = Encryption.Encrypt(pO.Id, "BZNS");
+            purchaseOrderViewModel.PurchaseOrder = pO;
+            int orderQty = 0;
+            int orderQtyPiece = 0;
+            int returnQty = 0;
+            int returnQtyPiece = 0;
+            foreach (var item in pod)
+            {
+                if (pO.PurchaseReturn == false)
+                {
+                    if (item.IsPack == true)
+                    {
+                        orderQty += (int)item.Quantity;
+                    }
+                    else
+                    {
+                        orderQtyPiece += (int)item.Quantity;
+                    }
+                }
+                else
+                {
+                    if (item.IsPack == true)
+                    {//Pack
+                        returnQty += (int)item.Quantity;
+                    }
+                    else
+                    {//Item
+                        returnQtyPiece += (int)item.Quantity;
+                    }
+
+                }
+
+            }
+            ViewBag.FundingSources = new SelectList(db.Suppliers.Where(x => x.IsCreditor == true), "Id", "Name");//db.FundingSources.ToList(); ;
+            ViewBag.BankAccounts = new SelectList(db.BankAccounts, "Id", "Name");
+            ViewBag.orderQty = orderQty;
+            ViewBag.orderQtyPiece = orderQtyPiece;
+            ViewBag.returnQty = returnQty;
+            ViewBag.returnQtyPiece = returnQtyPiece;
+            ViewBag.SupplierName = pO.Supplier.Name;
+            ViewBag.SupplierAddress = pO.Supplier.Address;
+            decimal subTotal = (pO.PurchaseOrderAmount ?? 0) - (pO.Discount ?? 0);
+            ViewBag.SubTotal = subTotal;
+            ViewBag.Total = subTotal + (pO.PrevBalance ?? 0);
+            ViewBag.IsUpdate = update;
+            var products = db.Products.Include(x => x.StoreProducts).ToList();
+
+            // Group products by category, handling null categories by assigning "Uncategorized"
+            var groupedSelectedProducts = products
+                .GroupBy(p => string.IsNullOrEmpty(p.Category) ? "Uncategorized" : p.Category)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            // Pass the grouped products to the view using ViewBag
+            ViewBag.SelectedProductCategory = groupedSelectedProducts;
+            ViewBag.IsReturn = pO.PurchaseReturn.ToString().ToLower();
+            return View(purchaseOrderViewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //public ActionResult Edit([Bind(Prefix = "PurchaseOrder", Include = "BillAmount,Balance,BillPaid,Discount")] PO pO, [Bind(Prefix = "PurchaseOrderDetail", Include = "ProductId,Quantity")] List<POD> pOD)
+        public ActionResult UpdatePOByCategory(PurchaseOrderViewModel purchaseOrderViewModel1)
+        {
+            PO newPO = purchaseOrderViewModel1.PurchaseOrder;
+            List<POD> newPODs = purchaseOrderViewModel1.PurchaseOrderDetail;
+            if (ModelState.IsValid)
+            {
+                var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
+                var parseId = int.Parse(storeId);
+                newPO.Id = Encryption.Decrypt(purchaseOrderViewModel1.PurchaseOrder.Id, "BZNS");//
+                PO PO = db.POes.Where(x => x.Id == newPO.Id).FirstOrDefault();
+                //PO.Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));//
+                //PO.PurchaseReturn = false;//
+                PO.BillAmount = newPO.BillAmount;//
+                PO.Discount = newPO.Discount;//
+                PO.BillPaid = newPO.BillPaid;//
+                PO.Balance = newPO.Balance;//
+                PO.Remarks = newPO.Remarks;//
+                PO.Remarks2 = newPO.Remarks;//
+                PO.PaymentMethod = newPO.PaymentMethod;
+                PO.PaymentDetail = newPO.PaymentDetail;
+                PO.FundingSourceId = newPO.FundingSourceId;
+                PO.BankAccountId = newPO.BankAccountId;
+                PO.Date = newPO.Date;
+                PO.Quotation = true;
+                PO.StoreId = parseId;
+                //PO.POSerial = newPO.POSerial;//should be unchanged
+
+                ///////////////////////////////////////////
+
+                //Supplier cust = db.Suppliers.FirstOrDefault(x => x.Id == newPO.SupplierId);
+                Supplier supplier = db.Suppliers.Where(x => x.Id == newPO.SupplierId).FirstOrDefault();
+                if (supplier == null)
+                {//its means new supplier(not in db)
+                 //PO.SupplierId = 10;
+                 //int maxId = db.Suppliers.Max(p => p.Id);
+                    supplier = purchaseOrderViewModel1.Supplier;
+                    decimal maxId = db.Suppliers.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
+                    maxId += 1;
+
+                    supplier.Id = maxId;
+                    //supplier.Balance = newPO.Balance;
+                    db.Suppliers.Add(supplier);
+                }
+                else
+                {
+                    db.Entry(supplier).State = EntityState.Modified;
+                }
+
+                if (PO.SupplierId != newPO.SupplierId)
+                {//POme other db supplier
+                 //first revert the previous supplier balance 
+                    Supplier oldSupplier = db.Suppliers.Where(x => x.Id == PO.SupplierId).FirstOrDefault();
+                    oldSupplier.Balance = db.POes.Where(x => x.Id == PO.Id).FirstOrDefault().PrevBalance;
+                    db.Entry(oldSupplier).State = EntityState.Modified;
+                }
+
+                PO.PrevBalance = newPO.PrevBalance;//
+                // assign balance of this supplier
+                //Supplier supplier = db.Suppliers.Where(x => x.Id == newPO.SupplierId).FirstOrDefault();
+                supplier.Balance = newPO.Balance;
+                //assign supplier and supplierId in PO
+                PO.SupplierId = newPO.SupplierId;
+                PO.Supplier = supplier;
+
+                /////////////////////////////////////////////////////////////////////////////
+
+
+
+                List<POD> oldPODs = db.PODs.Where(x => x.POId == newPO.Id).ToList();
+
+                //handling old prodcts quantity. add old quantites back to the stock, then in next loop product quantity will be minus. this is simple and stateforward.
+                //due to quotation
+                //foreach (POD pod in oldPODs)
+                //{
+                //    Product product = db.Products.FirstOrDefault(x => x.Id == pod.ProductId);
+                //    if (pod.SaleType == false)//purchase
+                //    {
+                //        //product.Stock -= pod.Quantity;
+
+                //        if (pod.IsPack == false)
+                //        {
+                //            decimal qty = (decimal)pod.Quantity;// / (decimal)product.PerPack;
+                //            product.Stock -= qty;
+                //        }
+                //        else
+                //        {
+                //            product.Stock -= (int)pod.Quantity * pod.PerPack;
+                //        }
+
+                //    }
+                //    else//return
+                //    {
+                //        //product.Stock += pod.Quantity;
+
+                //        if (pod.IsPack == false)
+                //        {
+                //            decimal qty = (decimal)pod.Quantity;// / (decimal)product.PerPack;
+                //            product.Stock += qty;
+                //        }
+                //        else
+                //        {
+                //            product.Stock += (int)pod.Quantity * pod.PerPack;
+                //        }
+
+
+                //    }
+                //    db.Entry(product).State = EntityState.Modified;
+                //}
+
+                db.PODs.RemoveRange(oldPODs);
+                //////////////////////////////////////////////////////////////////////////////
+
+                PO.PurchaseOrderAmount = 0;
+
+                PO.PurchaseOrderQty = 0;
+
+                //PO.Profit = 0;
+                int sno = 0;
+
+                if (newPODs != null)
+                {
+
+                    foreach (POD pod in newPODs)
+                    {
+                        sno += 1;
+                        pod.PODId = sno;
+                        pod.PO = PO;
+                        pod.POId = PO.Id;
+
+                        Product product = db.Products.FirstOrDefault(x => x.Id == pod.ProductId);
+                        //POd.purchasePrice is now from view
+                        //POd.PurchasePrice = product.PurchasePrice;
+                        //dont do this. calculation are geting wrong. when user open an old bill and just press save. all calculations distrubs
+                        //pod.PurchasePrice = product.PurchasePrice;
+                        if (pod.Quantity == null) { pod.Quantity = 0; }
+                        pod.OpeningStock = product.Stock;
+                        if (pod.SaleType == false)//purchase
+                        {
+
+                            if (pod.IsPack == false)
+                            {//piece
+                                PO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice);
+                                //int pieceSold = (int)(sod.Quantity * product.Stock);
+                                decimal qty = (decimal)pod.Quantity;// / (decimal)product.PerPack;
+                                //product.Stock += qty;//due to quotation
+
+                                PO.PurchaseOrderQty += qty;//(int)sod.Quantity;
+
+                            }
+                            else
+                            {//pack
+
+                                PO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice * pod.PerPack);
+                                //product.Stock += (int)pod.Quantity * pod.PerPack;//due to quotation
+
+                                PO.PurchaseOrderQty += (int)pod.Quantity * pod.PerPack;
+
+                            }
+                        }
+                        else//return
+                        {
+                            if (pod.IsPack == false)
+                            {
+                                PO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice);
+                                decimal qty = (decimal)pod.Quantity;// / (decimal)product.PerPack;
+                                //product.Stock -= qty;//due to quotation
+                                PO.PurchaseOrderQty += qty;//(int)sod.Quantity;
+
+                            }
+                            else
+                            {
+                                PO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice * pod.PerPack);
+                                //product.Stock -= (int)pod.Quantity * pod.PerPack;//due to quotation
+
+                                PO.PurchaseOrderQty += (int)pod.Quantity * pod.PerPack;
+
+                            }
+
+                        }
+
+                    }
+                    //PO.Profit -= (decimal)PO.Discount;
+                    db.Entry(PO).State = EntityState.Modified;
+                    db.Entry(PO).Property(x => x.POSerial).IsModified = false;
+                    db.PODs.AddRange(newPODs);
+
+                }
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            //ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name", PO.SupplierId);
+            //return View(PO);
+            PurchaseOrderViewModel purchaseOrderViewModel = new PurchaseOrderViewModel();
+
+            purchaseOrderViewModel.Products = DAL.dbProducts.Where(x => x.Saleable == true && x.IsService == false);
+            return View(purchaseOrderViewModel);
+            //return View();
+        }
 
         // GET: POes/Delete/5
         public ActionResult Delete(string id)

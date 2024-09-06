@@ -47,37 +47,98 @@
         padding: 20px;
         box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
     }
+    .scrollable-div {
+        max-height: 400px; /* Adjust as needed */
+        overflow-y: auto; /* Enable vertical scrolling */
+        padding: 0; /* Optional: remove padding */
+    }
+    /*.scrollable-div {
+        max-height: 400px;*/ /* Adjust as needed */
+        /*overflow-y: auto;
+        padding: 0;*/ /* Remove padding to align items correctly */
+        /*display: flex;
+        flex-wrap: wrap;*/ /* Allow wrapping of items */
+    /*}*/
+
+        .scrollable-div .col-md-3 {
+            padding: 0; /* Remove padding to control space manually */
+        }
+
+    .small-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100px; /* Fixed height for boxes */
+        margin-bottom: 15px; /* Space between rows */
+        margin-right: 15px; /* Space between columns */
+        box-sizing: border-box; /* Ensure padding and border are included in width/height */
+    }
+
+        .small-box:last-child {
+            margin-right: 4px; /* Remove right margin for last box in row */
+            margin-bottom: 5px;
+        }
+
+    .inner {
+        flex: 1; /* Ensure content takes available space */
+    }
+
+    .icon {
+        text-align: center;
+    }
+    .label-like-input {
+        background-color: transparent;
+        border: none;
+        color: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        padding: 0;
+        width: auto;
+        cursor: default;
+        margin-top: -7px;
+        margin-left: -34px;
+    }
+
+        .label-like-input:focus {
+            outline: none; /* Remove the focus outline */
+        }
+    /*.table-wrapper2 {
+        margin: 30px auto;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+    }
 
     .scrollable-div {
         max-height: 400px;
         overflow-y: scroll;
     }
 
-    .scrollable-container {
+    .scrollable-container {*/
         /*max-height: 100px !important;*/ /* Set desired height */
         /*height: 100px !important;*/ /* Set desired height */
-        overflow-y: auto; /* Enable vertical scrolling */
-        overflow-x: hidden; /* Prevent horizontal scrolling */
-        padding: 10px; /* Optional: add padding for aesthetics */
-        border: 1px solid #ddd; /* Optional: add border for visibility */
-        border-radius: 0.25rem; /* Optional: rounded corners */
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: box shadow */
-    }
+        /*overflow-y: auto;*/ /* Enable vertical scrolling */
+        /*overflow-x: hidden;*/ /* Prevent horizontal scrolling */
+        /*padding: 10px;*/ /* Optional: add padding for aesthetics */
+        /*border: 1px solid #ddd;*/ /* Optional: add border for visibility */
+        /*border-radius: 0.25rem;*/ /* Optional: rounded corners */
+        /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/ /* Optional: box shadow */
+    /*}
 
     .small-box {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        height: 150px; /* Optional: set a fixed height for each box */
-    }
+        height: 100px;*/ /* Optional: set a fixed height for each box */
+    /*}
 
     .inner {
-        flex: 1; /* Ensure the content takes available space */
-    }
+        flex: 1;*/ /* Ensure the content takes available space */
+    /*}
 
     .icon {
         text-align: center;
-    }
+    }*/
 </style>
 @*<h2>Create</h2>*@
 
@@ -92,7 +153,7 @@
         <div class="table-wrapper2">
             <div class="table-title">
                 <div class="row">
-                    <div id="saleOrder" class="col-sm-offset-5"><h2>Sale <b>Order</b></h2></div>
+                    @*<div id="saleOrder" class="col-sm-offset-5"><h2>Sale <b>Order</b></h2></div>*@
                     @*<div id="saleReturn" class="col-sm-offset-5"><h2>Sale <b>Return</b></h2></div>*@
                 </div>
 
@@ -112,7 +173,8 @@
                 </div>
 
             </div>
-            <div style="margin-top: -55px;">
+            @*<div style="margin-top: -55px;">*@
+            <div>
                 @{
                     var storeName = Session["storeName"] as string;
                     if (storeName != null)
@@ -139,7 +201,6 @@
                 }
             }
             @*End function for formating numbers in thousands*@
-
             <div class="row">
                 <div class="col-md-6 scrollable-div">
                     @foreach (var product in Model.ProductList)
@@ -151,16 +212,13 @@
                         var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
                         var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
 
-                        //use of formatted function
+                        // Format the price
                         string formattedPrice = FormatNumberWithDots(product.SalePrice);
-                        <div class="col-md-4 col-sm-4 mb-4" onclick="addProduct('@encodedProductJson')">
+                        <div class="col-md-3 col-sm-6 mb-3" onclick="addProduct('@encodedProductJson')">
                             <div class="small-box bg-info text-white p-3 scrollable-box">
                                 <div class="inner">
                                     <h4>@product.Name</h4>
                                     <p>₫ @formattedPrice</p>
-                                    @*<p>@("₫ " + product.PurchasePrice.ToString())</p>*@
-                                    @*<p>@(product.PurchasePrice.ToString("N0") + " ₫")</p>*@
-                                    @*<p>@product.PurchasePrice.ToString("C")</p>*@ <!-- Display price as currency -->
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
@@ -170,98 +228,35 @@
                     }
                 </div>
                 <div class="col-md-6">
-                    <!-- Add a hidden input field to store the SuggestedNewProductId -->
+                    <!-- Hidden input field for SuggestedNewProductId -->
                     <input type="hidden" id="suggestedNewProductId" value="@ViewBag.SuggestedNewProductId" />
-                    <table id="selectedProducts" class="table table-bordered">
+                    @*<div style="display:flex; margin-top: -31px;">*@
+                    <div style="display: flex; margin-top: -26px;">
+                        <label style="width: 127px;">Bill Number:</label>
+                        @*<label name="SaleOrder.Id">@ViewBag.SuggestedNewProductIds</label>*@
+                        <input type="text" name="SaleOrder.Id" class="form-control label-like-input" value="@ViewBag.SuggestedNewProductIds"/>
+                    </div>
+                    <br /> <br />
+                    <table id="selectedProducts" class="table table-bordered" style="margin-top: -34px !important;">
                         <thead>
                             <tr>
                                 <th style="width:5%;">#</th>
-
-                                <th style="width:25%;">
-                                    Name
-                                </th>
-                                @*Hide Price Cell Header*@
-                                <th style="display:none;">
-                                    Price
-                                </th>
-                                <th>
-                                    Qty
-                                </th>
-                                <th>
-                                    Bill Number
-                                </th>
-                                @*<th style="display:none;">
-                                        Unit
-                                    </th>
-                                    <th style="display:none;">
-                                        PerPack
-                                    </th>*@
-
-                                <th style="width: auto;">
-                                    Total
-                                </th>
-
-                                <th style="display:none;">
-                                    Type
-                                </th>
-                                <th style="width: 62px;">
-                                    Actions
-                                </th>
+                                <th style="width:25%;">Name</th>
+                                <th style="display:none;">Price</th>
+                                <th>Qty</th>
+                                <th style="display:none;">Bill Number</th>
+                                <th style="width: auto;">Total</th>
+                                <th style="display:none;">Type</th>
+                                <th style="width: 62px;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @*commented due to new changes sohail*@
-                            <!--<tr>-->
-                            @*commented due to new changes sohail*@
-                            @*<td id="SNo0" style="display:none;">1</td>*@
-                            @*commented due to new changes sohail*@
-                            @*<td style="display:none;"><input type="hidden" name="SaleOrderDetail.Index" value="0" /></td>*@
-                            @*commented due to new changes sohail*@
-                            @*<td style="display:none;"><input type="text" readonly class="form-control classBGcolor" name="SaleOrderDetail[0].ProductId" id="idn0"></td>*@
-                            @*<td><input type="text" class="form-control" name="name0" id="name0" onkeyup="myFunction()" data-toggle="tooltip" data-placement="top" title="Type product name"></td>*@
-                            @*<td><input type="text" autocomplete="off"  class="form-control" name="name0" id="name0" onkeyup="myFunction()"></td>*@
-
-                            @*commented due to new changes sohail*@
-                            @*<td><input type="text" autocomplete="off" class="form-control" name="SaleOrderDetail[0].Product.Name" id="name0" placeholder="Type product name" data-toggle="tooltip" data-placement="top" title="Type product name"></td>
-                                <td><input type="text" autocomplete="off" class="form-control classBGcolor" name="SaleOrderDetail[0].SalePrice" id="salePrice0"></td>
-                                <td><input type="text" autocomplete="off" class="form-control" name="SaleOrderDetail[0].Quantity" id="quantity0"></td>*@
-                            @*commented due to new changes sohail*@
-                            @*<td style="display:none;">
-                                    <select class="form-control" name="SaleOrderDetail[0].IsPack" id="isPack0">
-                                        <option value="false">Piece</option>
-                                        <option value="true" selected>Pack</option>
-                                    </select>
-                                </td>*@
-                            @*<td style="display:none;"><input type="text" readonly autocomplete="off" class="form-control" name="SaleOrderDetail[0].PerPack" id="perPack0"></td>*@
-
-                            @*commented due to new changes sohail*@
-                            @*<td><input type="text" readonly class="form-control classBGcolor" name="itemTotal0" id="itemTotal0" tabindex="-1"></td>*@
-                            @*commented due to new changes sohail*@
-                            @*commented due to new changes sohail*@
-                            @*<td style="display:none;">
-                                    <select class="form-control" name="SaleOrderDetail[0].SaleType" id="saleType0">
-                                        <option value="false" selected>Order</option>
-                                        <option value="true">Return</option>
-                                    </select>
-                                </td>*@
-
-                            @*<td>*@
-                            @*<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
-                                <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>*@
-                            @*<a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>*@
-                            @*<i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip">&#xE872;</a></i>*@
-                            @*<button type="button" id="delete0" class="delete btn btn-default add-new"> <i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip">&#xE872;</a></i></button>*@
-
-                            @*commented due to new changes sohail*@
-                            @*<button type="button" id="delete0" class="delete btn btn-default add-new"><a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></button>*@
-                            @*</td>*@
-                            <!--</tr>-->
-
+                            <!-- Add your rows here -->
                         </tbody>
-
                     </table>
                 </div>
             </div>
+
 
 
 
@@ -273,27 +268,27 @@
                 </div>
             </div>
             @*<div class="table-title">
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <button type="button" id="addNewRow" class="btn btn-primary add-new" style="background-color: #2bbdb9;"><i class="fa fa-plus"></i> New Row</button>
-                        </div>
-                    </div>
-                </div>*@
+            <div class="row">
+                <div class="col-sm-2">
+                    <button type="button" id="addNewRow" class="btn btn-primary add-new" style="background-color: #2bbdb9;"><i class="fa fa-plus"></i> New Row</button>
+                </div>
+            </div>
+        </div>*@
 
             <div style="display:inline" id="dvCalculations">
                 <div class="row" style="margin-top:30px;">
                     <div class="col-md-6">
                         @Html.DropDownList("SaleOrder.BankAccountId", (IEnumerable<SelectListItem>)ViewBag.BankAccounts, null, new { @class = "form-control", @style = "display:none" })
                         @*<select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method">
-                                <option value="Cash" selected>Cash</option>
-                                <option value="Online">Online</option>
-                                <option value="Cheque">Cheque</option>
-                                <option value="Other">Other</option>
-                            </select>*@
+                        <option value="Cash" selected>Cash</option>
+                        <option value="Online">Online</option>
+                        <option value="Cheque">Cheque</option>
+                        <option value="Other">Other</option>
+                    </select>*@
                         @*<input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
-                            <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
-                            <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea>
-                            <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea>*@
+                    <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
+                    <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea>
+                    <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea>*@
 
                         <select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method" style="display:none;">
                             <option value="Cash" selected>Cash</option>
@@ -317,9 +312,9 @@
                                     <td><input type="text" readonly class="form-control classBorder0" name="SaleOrder.BillAmount" id="ItemsTotal" value="0" tabindex="-1"></td>
                                 </tr>
                                 @*<tr>
-                                        <td><input type="text" readonly class="form-control classBorder0" name="ReturnTotal" id="ReturnTotal" value="Return Total" tabindex="-1"></td>
-                                        <td><input type="text" readonly class="form-control classBorder0" name="ReturnItemsTotal" id="ReturnItemsTotal" value="0" tabindex="-1"></td>
-                                    </tr>*@
+                                <td><input type="text" readonly class="form-control classBorder0" name="ReturnTotal" id="ReturnTotal" value="Return Total" tabindex="-1"></td>
+                                <td><input type="text" readonly class="form-control classBorder0" name="ReturnItemsTotal" id="ReturnItemsTotal" value="0" tabindex="-1"></td>
+                            </tr>*@
                                 <tr style="display:none;">
                                     <td><input type="text" readonly class="form-control classBorder0" name="dc3" id="dc3" value="Order Discount" tabindex="-1"></td>
                                     <td><input type="text" autocomplete="off" class="form-control" name="SaleOrder.Discount" id="discount" value="0"></td>
@@ -400,139 +395,124 @@
     </div>
 
     <!-- Pay Modal -->
-    <div class="modal fade bd-pay-modal-lg" id="payModal" tabindex="-1" role="dialog" aria-labelledby="payModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="payModalTitle" style="text-align:center;">Total : <span id="totalitsmspan">0</span> </h5>
-                    <button type="button" class="close cancelPaymentButton" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="container mt-5">
-                        <div class="row justify-content-center">
-                            <div class="col-md-9">
-                                <div class="card">
-                                    <div class="card-header">
-                                        @*<h4 class="card-title">Total</h4>*@
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-3">
-
-                                                <!-- Content for the first column (2 columns wide) -->
-                                                <!-- Content for the second column (5 columns wide) -->
-                                                <h4 class="card-title">VND(₫)</h4>
-                                                <div id="inputFields">
-                                                    <input type="text" class="form-control styled-input" value="1000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="2000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="2000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="5000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="10 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="20 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="50 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="100 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="100 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="500 000 ₫" readonly><br />
+<div class="modal fade bd-pay-modal-lg" id="payModal" tabindex="-1" role="dialog" aria-labelledby="payModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="payModalTitle" style="text-align:center;">Total : <span id="totalitsmspan">0</span> </h5>
+                <button type="button" class="close cancelPaymentButton" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container mt-5">
+                    <div class="row justify-content-center">
+                        <div class="col-md-9">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <h4 class="card-title">VND(₫)</h4>
+                                            <div id="inputFields">
+                                                <input type="text" class="form-control styled-input" value="1000 ₫" readonly><br />
+                                                <input type="text" class="form-control styled-input" value="2000 ₫" readonly><br />
+                                                <input type="text" class="form-control styled-input" value="2000 ₫" readonly><br />
+                                                <input type="text" class="form-control styled-input" value="5000 ₫" readonly><br />
+                                                <input type="text" class="form-control styled-input" value="10 000 ₫" readonly><br />
+                                                <input type="text" class="form-control styled-input" value="20 000 ₫" readonly><br />
+                                                <input type="text" class="form-control styled-input" value="50 000 ₫" readonly><br />
+                                                <input type="text" class="form-control styled-input" value="100 000 ₫" readonly><br />
+                                                <input type="text" class="form-control styled-input" value="200 000 ₫" readonly><br />
+                                                <input type="text" class="form-control styled-input" value="500 000 ₫" readonly><br />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div style="display:flex;">
+                                                <button type="button" class="btn btn-primary" id="payallbycard">Pay all by card</button> &nbsp;
+                                                <div style="display:flex;">
+                                                    &nbsp;
+                                                    &nbsp;
+                                                    &nbsp;
+                                                    <label for="payInMultipleCurrenciesLabel" style="font-size: 11px;">Pay in multiple currencies</label>
+                                                    <input type="checkbox" id="payInMultipleCurrencies" onclick="showHiddenInputs()" style="margin-top: -18px; margin-left: 16px;">
                                                 </div>
                                             </div>
-                                            <div class="col-md-5">
-                                                <div style="display:flex;">
-                                                    <button type="button" class="btn btn-primary" id="payallbycard">Pay all by card</button> &nbsp;
-                                                    <div style="display:flex;">
-                                                        &nbsp;
-                                                        &nbsp;
-                                                        &nbsp;
-                                                        <label for="payInMultipleCurrenciesLabel" style="font-size: 11px;">Pay in multiple currencies</label>
-                                                        <input type="checkbox" id="payInMultipleCurrencies" onclick="showHiddenInputs()" style="margin-top: -18px; margin-left: 16px;">
+                                            <br />
+                                            <form>
+                                                <div class="form-group">
+                                                    <label for="inputField">Card VND</label>
+                                                    <input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaid" id="cardvnd" value="0">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="inputField">Cash VND</label>
+                                                    <input type="text" class="form-control" id="cashvnd" placeholder="Cash Vnd">
+                                                </div>
+
+                                                <div class="form-group hiddenCurrencyInputs" style="display:none;">
+                                                    <label for="inputField">Change (USD)</label>
+                                                    <input type="text" class="form-control" id="changeusvnd" value="" placeholder="Change USD">
+                                                </div>
+
+                                                <div class="form-group hiddenCurrencyInputs" style="display:none;">
+                                                    <label for="inputField">Change (JPY)</label>
+                                                    <input type="text" class="form-control" id="changejpy" value="" placeholder="Change JPY">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="inputField">Left to pay VND</label>
+                                                    <input readonly type="text" autocomplete="off" class="form-control" name="SaleOrder.Balance" id="lefttopayvnd" value="0" tabindex="-1">
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <!-- Calculator buttons -->
+                                            <div class="calculator">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(7)">7</button>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(8)">8</button>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(9)">9</button>
                                                     </div>
                                                 </div>
                                                 <br />
-                                                <form>
-                                                    @*<div class="form-group" style="display:flex">*@
-                                                    <div class="form-group">
-                                                        <label for="inputField">Card VND</label>
-                                                        @*<input type="text" readonly class="form-control classBorder0" name="cardVnd" id="cardVnd" value="cardVnd" tabindex="-1">*@
-                                                        <input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaid" id="cardvnd" value="0">
-                                                        @*<input type="text" class="form-control" name="cardvnd" id="cardvnd" placeholder="Card Vnd">*@
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(4)">4</button>
                                                     </div>
-
-                                                    <div class="form-group">
-                                                        <label for="inputField">Cash VND</label>
-                                                        <input type="text" class="form-control" id="cashvnd" placeholder="Cash Vnd">
+                                                    <div class="col-md-4">
+                                                        <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(5)">5</button>
                                                     </div>
-                                                    <div class="form-group hiddenCurrencyInputs" style="display:none;">
-                                                        <label for="inputField">Change (USD)</label>
-                                                        <input type="text" class="form-control" id="changeusvnd" value="" placeholder="Change USD">
+                                                    <div class="col-md-4">
+                                                        <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(6)">6</button>
                                                     </div>
-                                                    <div class="form-group hiddenCurrencyInputs" style="display:none;">
-                                                        <label for="inputField">Change (JPY)</label>
-                                                        <input type="text" class="form-control" id="changejpy" value="" placeholder="Change JPY">
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(1)">1</button>
                                                     </div>
-                                                    @*<div class="form-group">
-                                                            <label for="inputField">Change (Vnd)</label>
-                                                            <input type="text" class="form-control" id="changevnd" placeholder="Change VND">
-                                                        </div>*@
-                                                    <div class="form-group">
-                                                        <label for="inputField">Left to pay VND</label>
-                                                        @*<input type="text" readonly class="form-control classBorder0" name="LeftToPayVnd" id="LeftToPayVnd" value="LeftToPayVnd" tabindex="-1">*@
-                                                        <input readonly type="text" autocomplete="off" class="form-control" name="SaleOrder.Balance" id="lefttopayvnd" value="0" tabindex="-1">
-                                                        @*<input type="text" class="form-control" name="lefttotalvnd" id="lefttotalvnd" value="0" tabindex="-1" placeholder="Left to Pay Vnd">*@
+                                                    <div class="col-md-4">
+                                                        <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(2)">2</button>
                                                     </div>
-                                                    @*<button type="submit" class="btn btn-primary btn-block btnupdatestatus">Submit</button>*@
-                                                </form>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <!-- Content for the third column (4 columns wide) -->
-                                                <!-- Calculator buttons -->
-                                                <div class="calculator">
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button">7</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button">8</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button">9</button>
-                                                        </div>
+                                                    <div class="col-md-4">
+                                                        <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(3)">3</button>
                                                     </div>
-                                                    <br />
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button">4</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button">5</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button">6</button>
-                                                        </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <button class="btn btn-secondary btn-block" type="button" onclick="clearInput()">CE</button>
                                                     </div>
-                                                    <br />
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button">1</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button">2</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button">3</button>
-                                                        </div>
+                                                    <div class="col-md-4">
+                                                        <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(0)">0</button>
                                                     </div>
-                                                    <br />
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button">CE</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btnbtn-secondary btn-block" type="button">0</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btnbtn-secondary btn-block" type="button">X</button>
-                                                        </div>
+                                                    <div class="col-md-4">
+                                                        <button class="btn btn-secondary btn-block" type="button" onclick="deleteLast()">X</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -543,35 +523,14 @@
                         </div>
                     </div>
                 </div>
-                <!--<div class="modal-body">
-                <div class="container mt-5">
-                    <div class="row justify-content-center">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-header">
-                                        <h4 class="card-title">Total</h4>
-                                    </div>
-                                <div class="card-body">-->
-                @*<form>
-                        <div class="form-group">
-                            <label for="inputField">Order No</label>
-                            <input type="text" class="form-control" id="poslatestserial" placeholder="Enter something">
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block btnupdatestatus">Submit</button>
-                    </form>*@
-                <!--</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary cancelPaymentButton" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" name="validatepyment" id="validatepyment" disabled>Validate</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary cancelPaymentButton" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" name="validatepyment" id="validatepyment" disabled>Validate</button>
             </div>
         </div>
     </div>
+</div>
 
 
     <!-- Curomer Tex Modal -->
@@ -802,7 +761,8 @@
     @foreach (var d in Model.Customers)
     {
         @*@:products.push(["@d.Name","@d.SalePrice","@d.Stock"]);*@
-        @:customers.push(["@d.Id","@d.Name", "@d.Address", "@d.Balance","@d.Email","@d.Vat","@d.CompanyName"]);
+        //@:customers.push(["@d.Id","@d.Name", "@d.Address", "@d.Balance","@d.Email","@d.Vat","@d.CompanyName"]);
+        @:customers.push(["@d.Id","@d.CompanyName","@d.Vat"]);
     }
 
     OnTypeCustomerName('#customer');

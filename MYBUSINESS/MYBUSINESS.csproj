@@ -16137,6 +16137,7 @@
     <Content Include="Views\Stores\EditStoreBalance.cshtml" />
     <Content Include="Views\Shared\StoreClosePopup1.cshtml" />
     <Content Include="Views\PurchaseQuotation\CreatePOByCategory.cshtml" />
+    <Content Include="Views\PurchaseQuotation\EditPOSByCategory.cshtml" />
     <None Include="Web.Debug.Config">
       <DependentUpon>Web.Config</DependentUpon>
     </None>

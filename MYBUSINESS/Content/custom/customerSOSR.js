@@ -2,7 +2,8 @@
 //var products = []; //[['Ciplet', '10', '60'], ['Gaviscon', '85', '12'], ['Surficol', '110', '8']];
 var products = new Array();
 
-var customerColumns = [{ name: 'Id', minWidth: '100px' }, { name: 'Name', minWidth: '100px' }, { name: 'Address', minWidth: '160px' }, { name: 'Balance', minWidth: '100px' }, { name: 'Email', minWidth: '190px' }, { name: 'Vat', minWidth: '100px' }, { name: 'CompanyName', minWidth: '100px' }];
+var customerColumns = [{ name: 'Code', minWidth: '100px' }, { name: 'CompanyName', minWidth: '170px' }, { name: 'Vat', minWidth: '100px' }];
+//var customerColumns = [{ name: 'Id', minWidth: '100px' }, { name: 'Name', minWidth: '100px' }, { name: 'Address', minWidth: '160px' }, { name: 'Balance', minWidth: '100px' }, { name: 'Email', minWidth: '190px' }, { name: 'Vat', minWidth: '100px' }, { name: 'CompanyName', minWidth: '100px' }];
 //var products = []; //[['Ciplet', '10', '60'], ['Gaviscon', '85', '12'], ['Surficol', '110', '8']];
 var customers = new Array();
 var productsBarcodes = new Array();
@@ -32,12 +33,16 @@ function OnTypeCustomerName(param) {
             this.value = (ui.item ? ui.item[1] : '');
             //productName = this.value;
             $('#idnCustomer').val(ui.item ? ui.item[0] : '');
-            $('#customerAddress').val(ui.item ? ui.item[2] : '');
-            $('#vndCustomerName').val(ui.item ? ui.item[1] : '');
-            $('#vndCustomerAddress').val(ui.item ? ui.item[2] : '');
-            $('#vndCustomerEmail').val(ui.item ? ui.item[4] : '');
-            $('#vndCustomerVat').val(ui.item ? ui.item[5] : '');
-            $('#vndCustomerCompany').val(ui.item ? ui.item[6] : '');
+            $('#vndCustomerCompany').val(ui.item ? ui.item[1] : '');
+            $('#vndCustomerVat').val(ui.item ? ui.item[2] : '');
+
+            //$('#idnCustomer').val(ui.item ? ui.item[0] : '');
+            //$('#customerAddress').val(ui.item ? ui.item[2] : '');
+            //$('#vndCustomerName').val(ui.item ? ui.item[1] : '');
+            //$('#vndCustomerAddress').val(ui.item ? ui.item[2] : '');
+            //$('#vndCustomerEmail').val(ui.item ? ui.item[4] : '');
+            //$('#vndCustomerVat').val(ui.item ? ui.item[5] : '');
+            //$('#vndCustomerCompany').val(ui.item ? ui.item[6] : '');
             //$('#PreviousBalance').val(ui.item ? ui.item[3] : '');
             //update_itemTotal();
             //document.getElementById('name' + txtSerialNum).focus();
@@ -814,6 +819,8 @@ function handleProductAddition(encodedProductJson, quantityFromModal) {
 
         // Directly set Bill Number to SuggestedNewProductId (do not perform calculations on it)
         billNumberCell.innerText = suggestedNewProductId;
+        //Hide bill NumberCell cell
+        billNumberCell.style.display = 'none';
 
         // Calculate total based on SalePrice and quantity
         var totalAmount = quantityFromModal * product.SalePrice;
@@ -853,7 +860,7 @@ function handleProductAddition(encodedProductJson, quantityFromModal) {
         //hiddenSaleTypeInput.name = 'SaleOrderDetail[' + rowIndex + '].SaleType';
         //hiddenSaleTypeInput.value = product.SaleType;
         //hiddenSaleTypeInput.value = 'true';
-        
+
         // Add an action button
         var removeButton = document.createElement('button');
         removeButton.type = 'button';
@@ -1493,6 +1500,7 @@ $(document).ready(function () {
             $('#cashvnd').val('0');
             $('#cardvnd').val(totalAmountForSelectedProduct);
             $('#payallbycard').text(totalAmountForSelectedProduct);
+            cardVndBalance = totalAmountForSelectedProduct;
             $('#totalitsmspan').text(totalAmountForSelectedProduct);
             $('#validatepyment').prop('disabled', false);
         }
@@ -1596,9 +1604,6 @@ $(document).ready(function () {
     //$('[id^="saleType"]').change(function () {
     //    update_itemTotal();
     //});
-
-
-
 
 });
 
@@ -1772,7 +1777,6 @@ function TriggerBodyEvents() {
     });
     //packing0
 
-
 }
 
 
@@ -1876,7 +1880,7 @@ function calculateLeftToPay() {
     var totalBillPaid = cdVnd + cashVnd;
 
     // Check if total paid matches total amount
-    if (totalBillPaid === totalpayment) {
+    if (totalBillPaid === totalpayment || totalBillPaid > totalpayment) {
         $('#validatepyment').prop('disabled', false); // Enable the button if fully paid
     } else {
         $('#validatepyment').prop('disabled', true); // Disable the button if not fully paid
@@ -2251,6 +2255,7 @@ function update_itemTotal() {
     //    console.error('Invalid number: ' + totalItem);
     //}
 }
+
 //openPayModal(){
 //    $('#payModal').modal('show');
 //}
