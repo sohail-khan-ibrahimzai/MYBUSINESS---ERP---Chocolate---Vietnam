@@ -809,7 +809,8 @@ namespace MYBUSINESS.Controllers
             //SO sO = new SO();
             //if (ModelState.IsValid)
             //{
-            if (string.IsNullOrEmpty(sO.Id))
+            //if (string.IsNullOrEmpty(sO.Id)) //Commented By Sohail to add plan text Id in table SO Format(XX-XXXXXXXX-XXX)
+            if (!string.IsNullOrEmpty(sO.Id))
             {
                 Customer cust = db.Customers.FirstOrDefault(x => x.Id == sO.CustomerId);
 
@@ -893,7 +894,7 @@ namespace MYBUSINESS.Controllers
                     foreach (SOD sod in sOD)
                     {
                         Product dbProd = db.Products.FirstOrDefault(x => x.Id == sod.ProductId);
-                        StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == sod.ProductId && x.StoreId==parseId);
+                        StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == sod.ProductId && x.StoreId == parseId);
 
                         if (dbProd == null || dbProd.Name != sod.Product.Name)
                         {
@@ -944,7 +945,7 @@ namespace MYBUSINESS.Controllers
                         sod.PurchasePrice = product.PurchasePrice;
                         if (sod.Quantity == null) { sod.Quantity = 0; }
                         //sod.OpeningStock = product.Stock;
-                        sod.OpeningStock = storeProduct.Stock;
+                        sod.OpeningStock = storeProduct.Stock ?? 0;
                         sod.PerPack = 1;
                         sod.SaleType = true;
                         if (sod.SaleType == true)//sale
@@ -1009,7 +1010,7 @@ namespace MYBUSINESS.Controllers
                     // Call the async method synchronously
 
                     var addWebServiceCustomerDetails = AddWebServiceCustomerDetails(authToken, cust, sO, sOD); //Uncomment locally
-                    
+
                     //var addWebServiceCuromerDetails =  AddWebServiceCustomerDetails(authToken, cust,sO,sOD);
                     //try
                     //{
@@ -1034,7 +1035,8 @@ namespace MYBUSINESS.Controllers
             }
             db.SaveChanges();
             TempData["ReportId"] = sO.Id;
-            SOId = string.Join("-", ASCIIEncoding.ASCII.GetBytes(Encryption.Encrypt(sO.Id, "BZNS")));
+
+            //SOId = string.Join("-", ASCIIEncoding.ASCII.GetBytes(Encryption.Encrypt(sO.Id, "BZNS"))); //Commented due to Id decrypted Id save in Db table SO
             //}
             return RedirectToAction("Create", new { IsReturn = "false" });
         }
@@ -1253,7 +1255,7 @@ namespace MYBUSINESS.Controllers
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
-                   
+
                     var getCurrentYear = DateTime.Now.Year; // Gets the current year (e.g., 2024)
                     var lastTwoDigits = getCurrentYear % 100; // Extracts the last two digits (e.g., 24)
                     var lastTwoDigitsString = lastTwoDigits.ToString("D2");

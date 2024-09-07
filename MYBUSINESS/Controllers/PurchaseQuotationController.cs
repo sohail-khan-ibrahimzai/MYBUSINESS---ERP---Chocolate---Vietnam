@@ -367,28 +367,54 @@ namespace MYBUSINESS.Controllers
             purchaseOrderViewModel.Products = DAL.dbProducts.Where(x => x.Saleable == true && x.IsService == false);
             //purchaseOrderViewModel.ProductListCategory = db.Products.ToList();
             //purchaseOrderViewModel.FundingSources = db.FundingSources.ToList() ;
+            //var products = db.Products
+            //  .Select(p => new
+            //  {
+            //      Product = p,
+            //      Stock = db.StoreProducts
+            //          .Where(sp => sp.ProductId == p.Id)
+            //          .Sum(sp => sp.Stock) // Sum stock from StoreProduct
+            //  })
+            //  .ToList();
+            //        // Group products by category, handling null categories by assigning "Uncategorized"
+            //        var groupedSelectedProducts = products
+            //            .GroupBy(p => string.IsNullOrEmpty(p.Product.Category) ? "Uncategorized" : p.Product.Category)
+            //            .ToDictionary(
+            //                g => g.Key,
+            //                g => g.Select(p => new
+            //                {
+            //                    p.Product.Name,
+            //                    p.Product.Id,
+            //                    p.Product.PurchasePrice,
+            //                    p.Stock
+            //                }).ToList()
+            //            );
+
+            //ViewBag.SelectedProductCategory = groupedSelectedProducts;
             var products = db.Products
-              .Select(p => new
-              {
-                  Product = p,
-                  Stock = db.StoreProducts
-                      .Where(sp => sp.ProductId == p.Id)
-                      .Sum(sp => sp.Stock) // Sum stock from StoreProduct
-              })
-              .ToList();
-                    // Group products by category, handling null categories by assigning "Uncategorized"
-                    var groupedSelectedProducts = products
-                        .GroupBy(p => string.IsNullOrEmpty(p.Product.Category) ? "Uncategorized" : p.Product.Category)
-                        .ToDictionary(
-                            g => g.Key,
-                            g => g.Select(p => new
-                            {
-                                p.Product.Name,
-                                p.Product.Id,
-                                p.Product.PurchasePrice,
-                                p.Stock
-                            }).ToList()
-                        );
+    .Select(p => new
+    {
+        Product = p,
+        Stock = db.StoreProducts
+            .Where(sp => sp.ProductId == p.Id)
+            .Sum(sp => sp.Stock) // Sum stock from StoreProduct
+    })
+    .ToList();
+
+            // Group products by category, handling null categories by assigning "Uncategorized"
+            var groupedSelectedProducts = products
+                .GroupBy(p => string.IsNullOrEmpty(p.Product.Category) ? "Uncategorized" : p.Product.Category)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(p => new MYBUSINESS.Models.Product // Convert to Product
+                    {
+                        Id = p.Product.Id,
+                        Name = p.Product.Name,
+                        PurchasePrice = p.Product.PurchasePrice,
+                        // Include other properties you need
+                        Stock = p.Stock // Add Stock as an extra property or handle it separately
+                    }).ToList()
+                );
 
             ViewBag.SelectedProductCategory = groupedSelectedProducts;
 
@@ -669,7 +695,7 @@ namespace MYBUSINESS.Controllers
                         //pod.PurchasePrice = product.PurchasePrice;
                         if (pod.Quantity == null || pod.Quantity == 0) { pod.Quantity = 0; }
                         //pod.OpeningStock = product.Stock;
-                        pod.OpeningStock = storeProduct.Stock;
+                        pod.OpeningStock = storeProduct.Stock ?? 0;
                         pod.PerPack = 1;
                         if (pod.SaleType == false)//purchase
                         {

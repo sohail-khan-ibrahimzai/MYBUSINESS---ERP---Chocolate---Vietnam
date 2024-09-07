@@ -16,6 +16,7 @@ $(document).on('click', '#closeStore', function (e) {
 //    alert('Hi');
 //    $('#storeOpeningPopup').modal('show');
 //});
+
 $(document).on('click', '#closeShop', function () {
     //if (confirm("You input 0, are you sure?")) {
     var totalAmountVndClose = document.getElementById('totalVndCountClose').value;

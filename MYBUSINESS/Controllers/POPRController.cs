@@ -35,7 +35,7 @@ namespace MYBUSINESS.Controllers
             var dtEndtDate = dtStartDate.AddMonths(1).AddSeconds(-1);
 
             //IQueryable<PO> pOes = db.POes.Include(s => s.Supplier);
-            IQueryable<PO> pOes = db.POes.Where(x => x.Date >= dtStartDate && x.Date <= dtEndtDate && x.SupplierId >0).Include(s => s.Supplier);
+            IQueryable<PO> pOes = db.POes.Where(x => x.Date >= dtStartDate && x.Date <= dtEndtDate && x.SupplierId > 0).Include(s => s.Supplier);
             //pOes.ForEachAsync(m => m.Id = Encryption.Encrypt(m.Id, "BZNS"));
             //var pOes = db.POes.Where(s => s.SaleReturn == false);
             GetTotalBalance(ref pOes);
@@ -250,7 +250,7 @@ namespace MYBUSINESS.Controllers
             foreach (PO itm in DistPOes)
             {
                 Supplier cust = db.Suppliers.Where(x => x.Id == itm.SupplierId).FirstOrDefault();
-                TotalBalance += (decimal)cust.Balance;
+                TotalBalance += (decimal)(cust.Balance ?? 0);
             }
             ViewBag.TotalBalance = TotalBalance;
 
@@ -261,7 +261,7 @@ namespace MYBUSINESS.Controllers
 
         //    return PartialView(db.POes);
         //}
-        
+
         // GET: POes/Details/5
         public ActionResult Details(decimal id)
         {
@@ -297,9 +297,9 @@ namespace MYBUSINESS.Controllers
 
             PurchaseOrderViewModel purchaseOrderViewModel = new PurchaseOrderViewModel();
             purchaseOrderViewModel.Suppliers = DAL.dbSuppliers;
-            purchaseOrderViewModel.Products = DAL.dbProducts.Include(x=>x.StoreProducts).Where(x => x.Saleable == true && x.IsService==false);
+            purchaseOrderViewModel.Products = DAL.dbProducts.Include(x => x.StoreProducts).Where(x => x.Saleable == true && x.IsService == false);
             //purchaseOrderViewModel.FundingSources = db.FundingSources.ToList() ;
-            ViewBag.FundingSources = new SelectList(db.Suppliers.Where(x=>x.IsCreditor==true), "Id", "Name");//db.FundingSources.ToList(); ;
+            ViewBag.FundingSources = new SelectList(db.Suppliers.Where(x => x.IsCreditor == true), "Id", "Name");//db.FundingSources.ToList(); ;
             ViewBag.BankAccounts = new SelectList(db.BankAccounts, "Id", "Name");
             ViewBag.MalaysiaTime = DateTime.UtcNow.AddHours(8);
             ViewBag.IsReturn = IsReturn;
@@ -371,7 +371,7 @@ namespace MYBUSINESS.Controllers
                 //pO.SaleReturn = false;
                 pO.Id = System.Guid.NewGuid().ToString().ToUpper();
                 pO.PurchaseOrderAmount = 0;
-                
+
                 pO.PurchaseOrderQty = 0;
                 pO.StoreId = parseId;
                 Employee emp = (Employee)Session["CurrentUser"];
@@ -482,7 +482,7 @@ namespace MYBUSINESS.Controllers
             //return View(pO);
             PurchaseOrderViewModel purchaseOrderViewModel = new PurchaseOrderViewModel();
             purchaseOrderViewModel.Suppliers = DAL.dbSuppliers;
-            purchaseOrderViewModel.Products = DAL.dbProducts.Where(x=>x.Saleable==true && x.IsService==false);
+            purchaseOrderViewModel.Products = DAL.dbProducts.Where(x => x.Saleable == true && x.IsService == false);
             return View(purchaseOrderViewModel);
             //return View();
 
@@ -520,7 +520,7 @@ namespace MYBUSINESS.Controllers
         //    reportDocument.PrintToPrinter(printerSettings, new PageSettings(), false);
 
         //}
-  
+
 
         public FileContentResult PrintSO2(string id)
         {
@@ -623,7 +623,7 @@ namespace MYBUSINESS.Controllers
             foreach (PO itm in lstSO)
             {
                 POAmount += (decimal)itm.PurchaseOrderAmount;
-                
+
 
             }
 
@@ -749,9 +749,9 @@ namespace MYBUSINESS.Controllers
                 //////////////////////////////////////////////////////////////////////////////
 
                 PO.PurchaseOrderAmount = 0;
-                
+
                 PO.PurchaseOrderQty = 0;
-                
+
                 //PO.Profit = 0;
                 int sno = 0;
 
