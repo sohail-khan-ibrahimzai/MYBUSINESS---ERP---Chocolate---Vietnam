@@ -7,7 +7,10 @@ var customerColumns = [{ name: 'Code', minWidth: '100px' }, { name: 'CompanyName
 //var products = []; //[['Ciplet', '10', '60'], ['Gaviscon', '85', '12'], ['Surficol', '110', '8']];
 var customers = new Array();
 var productsBarcodes = new Array();
-var productsBarcodess = new Array();
+var productsBarcodess = [];
+debugger;
+console.log(productsBarcodes); // Check the contents of the array
+//var productsBarcodess = new Array();
 //var focusedBtnId = "";
 //var focusedBtnSno = "";
 var txtSerialNum = 0;
@@ -23,8 +26,6 @@ var num = 0;
 //    document.getElementById('closeStore').style.display = 'block';
 //    document.getElementById("StorageItem").value = storeIds;
 //}
-debugger;
-alert(productsBarcodess);
 function OnTypeCustomerName(param) {
     //debugger;
     $(param).mcautocomplete({

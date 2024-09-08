@@ -233,30 +233,35 @@
                 }
             }
             @*End function for formating numbers in thousands*@
+            <div>
+                <input type="text" id="barcodeInput" placeholder="Scan or type the barcode here" />
+            </div>
+
+
             <div class="row">
                 <div class="col-md-6 scrollable-div">
                     @*@foreach (var product in Model.ProductList)
-                        {
-                            var settings = new Newtonsoft.Json.JsonSerializerSettings
-                            {
-                                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                            };
-                            var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
-                            var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
+                {
+                    var settings = new Newtonsoft.Json.JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                    };
+                    var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
+                    var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
 
-                            string formattedPrice = FormatNumberWithDots(product.SalePrice);
-                            <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
-                                <div class="small-box bg-info text-black p-3 scrollable-box">
-                                    <div class="inner">
-                                        <h4 class="product-name">@product.Name</h4>
-                                        <p class="product-name">₫ @formattedPrice</p>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="ion ion-bag"></i>
-                                    </div>
-                                </div>
+                    string formattedPrice = FormatNumberWithDots(product.SalePrice);
+                    <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
+                        <div class="small-box bg-info text-black p-3 scrollable-box">
+                            <div class="inner">
+                                <h4 class="product-name">@product.Name</h4>
+                                <p class="product-name">₫ @formattedPrice</p>
                             </div>
-                        }*@
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                        </div>
+                    </div>
+                }*@
                     @foreach (var product in Model.ProductList)
                     {
                         var settings = new Newtonsoft.Json.JsonSerializerSettings
@@ -285,6 +290,7 @@
                         </div>
                     }
                 </div>
+
                 <div class="col-md-6">
                     <!-- Hidden input field for SuggestedNewProductId -->
                     <input type="hidden" id="suggestedNewProductId" value="@ViewBag.SuggestedNewProductId" />
@@ -326,27 +332,27 @@
                 </div>
             </div>
             @*<div class="table-title">
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <button type="button" id="addNewRow" class="btn btn-primary add-new" style="background-color: #2bbdb9;"><i class="fa fa-plus"></i> New Row</button>
-                        </div>
-                    </div>
-                </div>*@
+            <div class="row">
+                <div class="col-sm-2">
+                    <button type="button" id="addNewRow" class="btn btn-primary add-new" style="background-color: #2bbdb9;"><i class="fa fa-plus"></i> New Row</button>
+                </div>
+            </div>
+        </div>*@
 
             <div style="display:inline" id="dvCalculations">
                 <div class="row" style="margin-top:30px;">
                     <div class="col-md-6">
                         @Html.DropDownList("SaleOrder.BankAccountId", (IEnumerable<SelectListItem>)ViewBag.BankAccounts, null, new { @class = "form-control", @style = "display:none" })
                         @*<select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method">
-                                <option value="Cash" selected>Cash</option>
-                                <option value="Online">Online</option>
-                                <option value="Cheque">Cheque</option>
-                                <option value="Other">Other</option>
-                            </select>*@
+                        <option value="Cash" selected>Cash</option>
+                        <option value="Online">Online</option>
+                        <option value="Cheque">Cheque</option>
+                        <option value="Other">Other</option>
+                    </select>*@
                         @*<input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
-                            <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
-                            <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea>
-                            <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea>*@
+                    <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
+                    <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea>
+                    <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea>*@
 
                         <select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method" style="display:none;">
                             <option value="Cash" selected>Cash</option>
@@ -370,9 +376,9 @@
                                     <td><input type="text" readonly class="form-control classBorder0" name="SaleOrder.BillAmount" id="ItemsTotal" value="0" tabindex="-1"></td>
                                 </tr>
                                 @*<tr>
-                                        <td><input type="text" readonly class="form-control classBorder0" name="ReturnTotal" id="ReturnTotal" value="Return Total" tabindex="-1"></td>
-                                        <td><input type="text" readonly class="form-control classBorder0" name="ReturnItemsTotal" id="ReturnItemsTotal" value="0" tabindex="-1"></td>
-                                    </tr>*@
+                                <td><input type="text" readonly class="form-control classBorder0" name="ReturnTotal" id="ReturnTotal" value="Return Total" tabindex="-1"></td>
+                                <td><input type="text" readonly class="form-control classBorder0" name="ReturnItemsTotal" id="ReturnItemsTotal" value="0" tabindex="-1"></td>
+                            </tr>*@
                                 <tr style="display:none;">
                                     <td><input type="text" readonly class="form-control classBorder0" name="dc3" id="dc3" value="Order Discount" tabindex="-1"></td>
                                     <td><input type="text" autocomplete="off" class="form-control" name="SaleOrder.Discount" id="discount" value="0"></td>
@@ -830,8 +836,9 @@
     //var productColumns = [{ name: 'Product', minWidth: '320px' }, { name: 'Price', minWidth: '100px' }, { name: 'Qty', minWidth: '70px' }];
     //var products = [['Ciplet', '10', '60'], ['Gaviscon', '85', '12'], ['Surficol', '110', '8']];
     //alert(products);
+    var productsBarcodesss = [];
     @{
-        var carton = 0; //= (d.Stock / d.PerPack);
+        var carton = 0;
         var piece = 0;
         foreach (var d in Model.Products)
         {
@@ -839,17 +846,16 @@
             piece = (int)(d.Stock % d.PerPack);
             if (piece == 0)
             {
-                @:products.push(["@d.Id", "@d.Name", "@d.SalePrice", "@carton", "@d.PerPack", "@d.WholeSalePrice"]);
-            }
-            else
-            {
-                @:products.push(["@d.Id", "@d.Name", "@d.SalePrice", "@carton,@piece", "@d.PerPack", "@d.WholeSalePrice"]);
-            }
-            @:productsBarcodes.push(["@d.Id", "@d.BarCode"]);
-            @:productsBarcodess.push(["@d.Id", "@d.Name", "@d.SalePrice", "@carton,@piece", "@d.PerPack", "@d.WholeSalePrice"])
-
+            @:products.push(["@d.Id", "@d.Name", "@d.SalePrice", "@carton", "@d.PerPack", "@d.WholeSalePrice"]);
         }
-     }
+        else
+        {
+            @:products.push(["@d.Id", "@d.Name", "@d.SalePrice", "@carton,@piece", "@d.PerPack", "@d.WholeSalePrice"]);
+        }
+
+        @:productsBarcodesss.push({ Id: "@d.Id", Name: "@d.Name", SalePrice: "@d.SalePrice", BarCode: "@d.BarCode" });
+        }
+}
 
     //alert(products);
 
@@ -931,25 +937,49 @@
 
 <script type="text/javascript">
     debugger;
-    @*@Html.Raw(productListJson);*@
+    //document.getElementById('barcodeInput').focus();
+    //document.getElementById('barcodeInput').addEventListener('keyup', function (event) {
+    //    if (event.key === 'Enter') {
+    //        var barcode = event.target.value;
+    //        if (typeof barcode === 'string') {
+    //            barcode = barcode.trim(); // Remove any leading/trailing spaces
+    //        }
+    //        console.log('Barcode entered:', barcode);
+    //        onBarcodeScans(barcode);
+    //        event.target.value = ''; // Clear the input after processing
+    //    }
+    //});
 
-    document.addEventListener('keyup', function (event) {
-        // Assuming your scanner sends the barcode followed by Enter key
+
+    let barcode = '';
+
+    document.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
-            debugger;
-            var barcode = event.target.value; // Get the barcode value from the input
-            onBarcodeScans(barcode); // Handle the barcode scan
-            event.target.value = ''; // Clear the input after processing
+            if (barcode) {
+                barcode = barcode.trim(); // Remove any leading/trailing spaces
+                console.log('Barcode entered:', barcode);
+                onBarcodeScans(barcode);
+                barcode = ''; // Clear the barcode after processing
+            }
+        } else {
+            barcode += event.key; // Accumulate the characters
         }
     });
-    function onBarcodeScans(barcode) {
+
+
+
+     function onBarcodeScans(barcode) {
         debugger;
-   var productList =@Html.Raw(productListJson);
-     alert(productList);
-        var product = productList.find(p => p.Barcode === barcode);
-     alert(product);
+        //alert(barcode);
+   ////var productList =@Html.Raw(productListJson);
+         var productList = productsBarcodesss;
+         console.log(productList);
+     //alert(productList);
+        var product = productList.find(p => p.BarCode === barcode);
+        //alert(barcode);
+        //alert(product);
      var encodedProductJson = JSON.stringify(product);
-     alert(JSON.stringify(product));
+     //alert(JSON.stringify(product));
      if (product) {
          // Handle the product addition with quantity 1
          handleProductAddition(encodedProductJson, 1);
@@ -957,8 +987,6 @@
          alert('Product not found');
      }
 }
-
-
     @if (ViewBag.ReportId != null && ViewBag.ReportId != "") {
         @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
     }
