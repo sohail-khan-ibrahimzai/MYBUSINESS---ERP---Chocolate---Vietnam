@@ -16151,7 +16151,7 @@
     <Content Include="Reports\Purchase_Receipt.rdlc" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\Sale_Receipt.rdlc" />
+    <Content Include="Reports\Sale_Receipt - Copy 1.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
@@ -16161,10 +16161,13 @@
     <TypeScriptCompile Include="Scripts\index.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\Sale_Receipt - Copy.rdlc" />
+    <Content Include="Reports\Sale_Receipt.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Reports\Quotation_Receipt.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\Sale_Receipt - Copy.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

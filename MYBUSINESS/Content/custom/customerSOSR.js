@@ -616,11 +616,27 @@ function formatNumberWithDots(number) {
 //    // Update the total amount for the "Pay" button
 //    updatePayButton();
 //}
+function validateQuantityInput(event) {
+    // Allow only numeric values
+    const value = event.target.value;
+    // Remove non-numeric characters
+    if (!/^\d*$/.test(value)) {
+        event.target.value = value.replace(/\D/g, '');
+    }
+
+    // Limit to 10 digits
+    if (value.length > 10) {
+        event.target.value = value.slice(0, 10);
+    }
+}
 function addProduct(encodedProductJson) {
     //debugger;
 
     // Show the modal and set up the event listener for quantity validation
     $('#quantityAddpopup').modal('show');
+    $('#quantityAddpopup').on('shown.bs.modal', function () {
+        $('#productQuantity').focus();
+    });
     $('#validateQuantity').off('click').on('click', function (e) {
         var quantityFromModal = parseInt($('#productQuantity').val(), 10) || 0; // Ensure it's a number and default to 0 if invalid
         $('#quantityAddpopup').modal('hide'); // Hide the modal
@@ -1698,7 +1714,65 @@ $(document).ready(function () {
         //$('#lefttotalvnd').val('');
     });
     $('#validatepyment').click(function () {
-        $('#taxModal').modal('show');
+        // Make the GET request
+        $.ajax({
+            url: '/SOSR/USRLWB', // Ensure this matches your route
+            type: 'GET',
+            success: function (response) {
+                try {
+                    debugger;
+                    // If response is already an object, you can access it directly
+                    var data = response;
+                    var aa = data.Response.Response;
+                    var datas = JSON.parse(aa);
+                    $('#vndCustomerCompany').val(datas.ten_cty);
+                    $('#vndCustomerAddress').val(datas.dia_chi);
+                    $('#taxModal').modal('show');
+                   
+                } catch (error) {
+                    // Handle errors if property access fails
+                    console.error('Error accessing data:', error);
+                }
+            }
+        });
+        //$.ajax({
+        //    url: '/SOSR/USRLWB',
+        //    type: 'GET',
+        //    success: function (response) {
+        //        debugger;
+        //        // Handle success
+        //        console.log('Success:', response);
+        //        //$('#taxModal').modal('show');
+        //    },
+        //    error: function (xhr, status, error) {
+        //        // Handle error
+        //        console.error('Error:', status, error);
+        //    }
+        //});
+        //var postData = {
+        //    "username": "PHEVA",
+        //    "password": "2BM@g0J%5sguJ@",
+        //    "ma_dvcs": "VP"
+        //};
+
+        //// Make the POST request
+        //$.ajax({
+        //    url: 'https://0106026495-998.minvoice.pro/api/Account/Login',
+        //    type: 'POST',
+        //    contentType: 'application/json',
+        //    data: JSON.stringify(postData),
+        //    success: function (response) {
+        //        debugger;
+        //        // Handle success
+        //        console.log('Success:', response);
+        //    },
+        //    error: function (xhr, status, error) {
+        //        // Handle error
+        //        console.error('Error:', status, error);
+        //    }
+        //});
+        
+        
     });
     //$('#addQuantityModal').click(function (event) { debugger; $('#quantityAddpopup').modal('show'); });
     jQuery.fn.preventDoubleSubmission = function () {

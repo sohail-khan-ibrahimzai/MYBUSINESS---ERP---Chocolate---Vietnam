@@ -777,10 +777,39 @@ namespace MYBUSINESS.Controllers
             SaleOrderViewModel saleOrderViewModel = new SaleOrderViewModel();
             saleOrderViewModel.Customers = DAL.dbCustomers;
             saleOrderViewModel.Products = DAL.dbProducts.Where(x => x.Saleable == true);
+
+            //New Code to get Products by Category
+            var productsByCategory = db.Products
+              .Select(p => new
+              {
+                  Product = p,
+                  Stock = db.StoreProducts
+                      .Where(sp => sp.ProductId == p.Id)
+                      .Sum(sp => sp.Stock) // Sum stock from StoreProduct
+              })
+                .ToList();
+
+            // Group products by category, handling null categories by assigning "Uncategorized"
+            var groupedSelectedProducts = productsByCategory
+                .GroupBy(p => string.IsNullOrEmpty(p.Product.Category) ? "Uncategorized" : p.Product.Category)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(p => new MYBUSINESS.Models.Product // Convert to Product
+                    {
+                        Id = p.Product.Id,
+                        Name = p.Product.Name,
+                        PurchasePrice = p.Product.PurchasePrice,
+                        SalePrice = p.Product.SalePrice,
+                        Category = p.Product.Category,
+                        // Include other properties you need
+                        Stock = p.Stock // Add Stock as an extra property or handle it separately
+                    }).ToList()
+                );
             //bool IsReturn1 = true;
             ViewBag.IsReturn = IsReturn;
             //string isReturn1 = "true";
             //ViewBag.isReturn = isReturn1;
+            ViewBag.SelectedProductListByCategory = groupedSelectedProducts;
             ViewBag.ReportId = TempData["ReportId"] as string;
             return View(saleOrderViewModel);
         }
@@ -793,7 +822,7 @@ namespace MYBUSINESS.Controllers
         //{
         //public ActionResult Create(
         public ActionResult Create(
-    [Bind(Prefix = "Customer", Include = "Name,Address,Email,Vat,CompanyName")] Customer Customer,
+    [Bind(Prefix = "Customer", Include = "Id,Name,Address,Email,Vat,CompanyName")] Customer Customer,
     [Bind(Prefix = "SaleOrder", Include = "Id,BillAmount,Balance,PrevBalance,BillPaid,BillPaidByCash,Discount,CustomerId,Remarks,Remarks2,PaymentMethod,PaymentDetail,SaleReturn,BankAccountId,Date")] SO sO,
     [Bind(Prefix = "SaleOrderDetail", Include = "ProductId,SalePrice,PurchasePrice,Quantity,SaleType,PerPack,IsPack,Product.Name,Product")] List<SOD> sOD,
     FormCollection collection
@@ -812,46 +841,53 @@ namespace MYBUSINESS.Controllers
             //if (string.IsNullOrEmpty(sO.Id)) //Commented By Sohail to add plan text Id in table SO Format(XX-XXXXXXXX-XXX)
             if (!string.IsNullOrEmpty(sO.Id))
             {
-                Customer cust = db.Customers.FirstOrDefault(x => x.Id == sO.CustomerId);
+                //due to customer from webservice
+                //Customer cust = db.Customers.FirstOrDefault(x => x.Id == sO.CustomerId);
 
-                if (cust == null)
-                {//its means new customer
-                    //sO.CustomerId = 10;
-                    //int maxId = db.Customers.Max(p => p.Id);
-                    decimal maxId = db.Customers.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
-                    maxId += 1;
-                    Customer.Id = maxId;
-                    Customer.Balance += sO.Balance;
-                    Customer.StoreId = parseId;
-                    db.Customers.Add(Customer);
-                    //db.SaveChanges();
-                }
-                else
-                {//its means old customer. old customer balance should be updated.
-                 //Customer.Id = (int)sO.CustomerId;
-                    if (cust.Balance == null) cust.Balance = 0;
-                    if (sO.SaleReturn == false)
-                    {
-                        cust.Balance += sO.Balance;
-                    }
-                    else
-                    {
-                        cust.Balance -= sO.Balance;
-                    }
-                    cust.StoreId = parseId;
-                    db.Entry(cust).State = EntityState.Modified;
-                    //db.SaveChanges();
+                //if (cust == null)
+                //{//its means new customer
+                //    //sO.CustomerId = 10;
+                //    //int maxId = db.Customers.Max(p => p.Id);
+                //    //decimal maxId = db.Customers.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id); //due to customer from webservice
+                //    //maxId += 1;//due to customer from webservice
+
+                //    //Customer.Id = maxId;//due to customer from webservice
+                //    //Customer.Balance += sO.Balance; // Assuming sO.Balance is the initial balance to be added //due to customer from webservice
+                //    //Customer.StoreId = parseId;      // Assuming parseId is the StoreId you want to assign //due to customer from webservice
+
+                //    //db.Customers.Add(Customer);
+                //    //db.SaveChanges();
+                //}
+                //else //due to customer from webservice
+                //{//its means old customer. old customer balance should be updated.
+                // //Customer.Id = (int)sO.CustomerId;
+                //    if (cust.Balance == null) cust.Balance = 0;
+                //    if (sO.SaleReturn == false)
+                //    {
+                //        cust.Balance += sO.Balance;
+                //    }
+                //    else
+                //    {
+                //        cust.Balance -= sO.Balance;
+                //    }
+                //    cust.StoreId = parseId;
+                //    db.Entry(cust).State = EntityState.Modified;
+                //    //db.SaveChanges();
 
 
 
 
-                    //Payment payment = new Payment();
-                    //payment = db.Payments.Find(orderId);
-                    //payment.Status = true;
-                    //db.Entry(payment).State = EntityState.Modified;
-                    //db.SaveChanges();
+                //    //Payment payment = new Payment();
+                //    //payment = db.Payments.Find(orderId);
+                //    //payment.Status = true;
+                //    //db.Entry(payment).State = EntityState.Modified;
+                //    //db.SaveChanges();
 
-                }
+                //}
+
+
+                //due to customer from webservice
+
                 ////////////////////////////////////////
                 BankAccount bankAccount = db.BankAccounts.FirstOrDefault(x => x.Id == sO.BankAccountId);
                 bankAccount.Balance += sO.BillPaid;
@@ -894,7 +930,19 @@ namespace MYBUSINESS.Controllers
                     foreach (SOD sod in sOD)
                     {
                         Product dbProd = db.Products.FirstOrDefault(x => x.Id == sod.ProductId);
+                        //StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == sod.ProductId && x.StoreId == parseId);
+                        //if (storeProduct == null)
+                        //    storeProduct.Stock = 0;
                         StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == sod.ProductId && x.StoreId == parseId);
+                        if (storeProduct == null)
+                        {
+                            storeProduct = new StoreProduct
+                            {
+                                ProductId = dbProd.Id,
+                                StoreId = parseId,
+                                Stock = 0,
+                            };
+                        }
 
                         if (dbProd == null || dbProd.Name != sod.Product.Name)
                         {
@@ -945,7 +993,8 @@ namespace MYBUSINESS.Controllers
                         sod.PurchasePrice = product.PurchasePrice;
                         if (sod.Quantity == null) { sod.Quantity = 0; }
                         //sod.OpeningStock = product.Stock;
-                        sod.OpeningStock = storeProduct.Stock ?? 0;
+
+                        sod.OpeningStock = (storeProduct.Stock ?? 0);
                         sod.PerPack = 1;
                         sod.SaleType = true;
                         if (sod.SaleType == true)//sale
@@ -1009,7 +1058,7 @@ namespace MYBUSINESS.Controllers
                         return Json(new { Success = false, Messsag = "Invalid Login attempt to web service,please use correct credentials" });
                     // Call the async method synchronously
 
-                    var addWebServiceCustomerDetails = AddWebServiceCustomerDetails(authToken, cust, sO, sOD); //Uncomment locally
+                    var addWebServiceCustomerDetails = AddWebServiceCustomerDetails(authToken, Customer, sO, sOD); //Uncomment locally
 
                     //var addWebServiceCuromerDetails =  AddWebServiceCustomerDetails(authToken, cust,sO,sOD);
                     //try
@@ -1355,14 +1404,6 @@ namespace MYBUSINESS.Controllers
             {
                 return Json(new { Success = false, Message = $"An error occurred: {ex.Message}" });
             }
-
-
-
-
-
-
-
-
 
 
             //if (string.IsNullOrEmpty(authToken))
@@ -1790,10 +1831,10 @@ namespace MYBUSINESS.Controllers
         }
         public FileContentResult PrintSO3(string id)
         {
-            if (id.Length > 36)
-            {
-                id = Decode(id);
-            }
+            //if (id.Length > 36)
+            //{
+            //    id = Decode(id);
+            //}
             int SOSerial = (int)db.SOes.FirstOrDefault(x => x.Id == id).SOSerial;
 
             // Variables
@@ -2242,7 +2283,155 @@ namespace MYBUSINESS.Controllers
             id = Encryption.Decrypt(id, "BZNS");
             return id;
         }
+        public async Task<ActionResult> USRLWB()
+        {
+            try
+            {
+                // Log entry to the method
+                System.Diagnostics.Debug.WriteLine("USRLWB action method hit.");
 
+                var loginToWebService = LoginToWebService();  // Make this asynchronous
+
+                //    if (loginToWebService == null)
+                //        return new ContentResult { Content = JsonConvert.SerializeObject(new { Success = false, Message = "Invalid login attempt to web service, please use correct credentials" }), ContentType = "application/json" };
+
+                //    dynamic jsonResponse = JsonConvert.DeserializeObject(loginToWebService.ContentType);
+                //    string authToken = jsonResponse?.token;
+
+                //    if (string.IsNullOrEmpty(authToken))
+                //        return new ContentResult { Content = JsonConvert.SerializeObject(new { Success = false, Message = "Authentication token is missing" }), ContentType = "application/json" };
+
+                //    string tax = "0401485182";
+                //    var getServiceCustomerDetails = await GetCompanyByTextCode(authToken, tax); // Await the asynchronous call
+
+                //    // Log or inspect serialized response if needed
+                //    string serializedDetails = JsonConvert.SerializeObject(getServiceCustomerDetails);
+                //    System.Diagnostics.Debug.WriteLine("Serialized Response: " + serializedDetails);
+
+                //    return new ContentResult { Content = JsonConvert.SerializeObject(new { Success = true, Response = getServiceCustomerDetails }), ContentType = "application/json" };
+                //}
+                if (loginToWebService == null || string.IsNullOrEmpty(loginToWebService.ContentType))
+                {
+                    return new ContentResult
+                    {
+                        Content = JsonConvert.SerializeObject(new { Success = false, Message = "Invalid login attempt to web service, please use correct credentials" }),
+                        ContentType = "application/json"
+                    };
+                }
+
+                // Deserialize the content of the login response
+                dynamic jsonResponse = JsonConvert.DeserializeObject(loginToWebService.ContentType);
+                string authToken = jsonResponse?.token;
+
+                if (string.IsNullOrEmpty(authToken))
+                {
+                    return new ContentResult
+                    {
+                        Content = JsonConvert.SerializeObject(new { Success = false, Message = "Authentication token is missing" }),
+                        ContentType = "application/json"
+                    };
+                }
+
+                string tax = "0401485182";
+                var getServiceCustomerDetails = await GetCompanyByTextCode(authToken, tax); // Await the asynchronous call
+
+                // Log or inspect serialized response if needed
+                string serializedDetails = JsonConvert.SerializeObject(getServiceCustomerDetails);
+                System.Diagnostics.Debug.WriteLine("Serialized Response: " + serializedDetails);
+
+                return new ContentResult
+                {
+                    Content = JsonConvert.SerializeObject(new { Success = true, Response = getServiceCustomerDetails }),
+                    ContentType = "application/json"
+                };
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details
+                System.Diagnostics.Debug.WriteLine("Exception: " + ex.ToString());
+                return new ContentResult { Content = JsonConvert.SerializeObject(new { Success = false, Message = "An internal error occurred.", Details = ex.Message }), ContentType = "application/json" };
+            }
+        }
+        public async Task<object> GetCompanyByTextCode(string authToken, string taxCode)
+        {
+            try
+            {
+                string url = $"http://mst.minvoice.com.vn/api/System/SearchTaxCode?tax={taxCode}";
+
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+                    client.Timeout = TimeSpan.FromSeconds(100); // Set timeout
+
+                    Console.WriteLine("Sending request to URL: " + url);
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    Console.WriteLine("Response Status Code: " + response.StatusCode);
+
+                    if (!response.IsSuccessStatusCode)
+                        return new { Success = false, Message = $"Error: {response.ReasonPhrase}" };
+
+                    Console.WriteLine("Reading Response Content...");
+                    string responseData = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Response Content Read Successfully");
+
+                    return new { Success = true, Response = responseData }; // Return the response data directly
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.ToString());
+                return new { Success = false, Message = "An error occurred.", Details = ex.Message };
+            }
+        }
+        //public async Task<JsonResult> USRLWB()
+        //{
+        //    var loginToWebService = LoginToWebService();
+
+        //    if (loginToWebService == null)
+        //        return Json(new { Success = false, Message = "Invalid login attempt to web service, please use correct credentials" });
+
+        //    dynamic jsonResponse = JsonConvert.DeserializeObject(loginToWebService.ContentType);
+        //    string authToken = jsonResponse.token;
+
+        //    if (string.IsNullOrEmpty(authToken))
+        //        return Json(new { Success = false, Message = "Authentication token is missing" });
+
+        //    string tax = "0401485182";
+        //    var addWebServiceCustomerDetails = await GetCompanyByTextCode(authToken, tax);
+
+        //    return Json(new { Success = true, Response = addWebServiceCustomerDetails });
+        //}
+
+        //public async Task<JsonResult> GetCompanyByTextCode(string authToken, string taxCode)
+        //{
+        //    string url = $"http://mst.minvoice.com.vn/api/System/SearchTaxCode?tax={taxCode}";
+
+        //    using (var client = new HttpClient())
+        //    {
+        //        client.DefaultRequestHeaders.Accept.Clear();
+        //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        //        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+
+        //        HttpResponseMessage response = await client.GetAsync(url);
+
+        //        if (!response.IsSuccessStatusCode)
+        //            return Json(new { Success = false, Message = $"Error: {response.ReasonPhrase}", Response = response });
+
+        //        string responseData = await response.Content.ReadAsStringAsync();
+
+        //        try
+        //        {
+        //            var result = JsonConvert.DeserializeObject(responseData);
+        //            return Json(new { Success = true, Response = result });
+        //        }
+        //        catch (JsonException)
+        //        {
+        //            return Json(new { Success = false, Message = "Received non-JSON response.", Response = responseData });
+        //        }
+        //    }
+        //}
 
         // GET: SOes/Delete/5
         public ActionResult Delete(string id)

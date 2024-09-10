@@ -12,6 +12,8 @@ namespace MYBUSINESS.Models
         public SO SaleOrder { get; set; }
         public List<SOD> SaleOrderDetail { get; set; }
         public IQueryable<Product> Products { get; set; }
+
+        //public IQueryable<Product> Products { get; set; }
         //public IEnumerable<Product> Products { get; set; }
         // New property to hold IEnumerable<Product>
         public IEnumerable<Product> ProductList

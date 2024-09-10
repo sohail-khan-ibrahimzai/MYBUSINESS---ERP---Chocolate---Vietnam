@@ -1,15 +1,18 @@
 ﻿@model MYBUSINESS.Models.SaleOrderViewModel
-
+@{
+    // Cast ViewBag.ProductListss to the correct type
+    var groupedProductLists = ViewBag.SelectedProductListByCategory as Dictionary<string, List<MYBUSINESS.Models.Product>>;
+}
 @{
     ViewBag.Title = "Create SO";
     //Layout = "~/Views/Shared/_Layout.cshtml";
 
     var categoryColors = new Dictionary<string, string>
 {
-        { "Chocolate", "#ec8a5f" },
-        { "Hun Bun", "#2fda90" },
-        { "Vanilla", "#66ddf4" },
-        { "Mango", "#fff3cd" },
+        { "Box", "#ec8a5f" },
+        { "Bar", "#2fda90" },
+        { "Bag", "#66ddf4" },
+        { "Miscellanous", "#fff3cd" },
         // Add more categories and their corresponding colors as needed
     };
     var settingss = new Newtonsoft.Json.JsonSerializerSettings
@@ -233,62 +236,104 @@
                 }
             }
             @*End function for formating numbers in thousands*@
-            <div>
-                <input type="text" id="barcodeInput" placeholder="Scan or type the barcode here" />
-            </div>
+
+            @* input type for Barcode *@
+            @*<div>
+                    <input type="text" id="barcodeInput" placeholder="Scan or type the barcode here" />
+                </div>*@
 
 
             <div class="row">
                 <div class="col-md-6 scrollable-div">
                     @*@foreach (var product in Model.ProductList)
-                {
-                    var settings = new Newtonsoft.Json.JsonSerializerSettings
-                    {
-                        ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                    };
-                    var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
-                    var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
-
-                    string formattedPrice = FormatNumberWithDots(product.SalePrice);
-                    <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
-                        <div class="small-box bg-info text-black p-3 scrollable-box">
-                            <div class="inner">
-                                <h4 class="product-name">@product.Name</h4>
-                                <p class="product-name">₫ @formattedPrice</p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-bag"></i>
-                            </div>
-                        </div>
-                    </div>
-                }*@
-                    @foreach (var product in Model.ProductList)
-                    {
-                        var settings = new Newtonsoft.Json.JsonSerializerSettings
                         {
-                            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                        };
-                        var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
-                        var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
-                        var productLists = @Html.Raw(encodedProductJson);
-                        // Retrieve the color for the product's category directly
-                        var categoryColor = categoryColors.ContainsKey(product.Category)
-                                ? categoryColors[product.Category]
-                                : "#ffffff"; // Default color if the category is not found
+                            var settings = new Newtonsoft.Json.JsonSerializerSettings
+                            {
+                                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                            };
+                            var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
+                            var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
 
-                        string formattedPrice = FormatNumberWithDots(product.SalePrice);
-                        <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
-                            <div class="small-box" style="background-color: @categoryColor; color: black; padding: 15px;">
-                                <div class="inner">
-                                    <h4 class="product-name">@product.Name</h4>
-                                    <p class="product-name">₫ @formattedPrice</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
+                            string formattedPrice = FormatNumberWithDots(product.SalePrice);
+                            <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
+                                <div class="small-box bg-info text-black p-3 scrollable-box">
+                                    <div class="inner">
+                                        <h4 class="product-name">@product.Name</h4>
+                                        <p class="product-name">₫ @formattedPrice</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-bag"></i>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        }*@
+                    @if (groupedProductLists != null)
+                    {
+                        foreach (var group in groupedProductLists)
+                        {
+
+                            foreach (var product in group.Value)
+                            {
+                                // Serialize the product object to JSON
+                                var settings = new Newtonsoft.Json.JsonSerializerSettings
+                                {
+                                    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                                };
+                                var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
+                                var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
+                                var categoryColor = categoryColors.ContainsKey(product.Category)
+                                    ? categoryColors[product.Category]
+                                    : "#ffffff"; // Default color if the category is not found
+                                string formattedPrice = FormatNumberWithDots(product.SalePrice);
+
+                                <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
+                                    <div class="small-box" style="background-color: @categoryColor; color: black; padding: 15px;">
+                                        <div class="inner">
+                                            <h4 class="product-name">@product.Name</h4>
+                                            <p class="product-name">₫ @formattedPrice</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-bag"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
                     }
+                    else
+                    {
+                        <p>No products found.</p>
+                    }
+
+
+                    @*Old working code to bind Products*@
+                    @*@foreach (var product in Model.ProductList)
+                        {
+                            var settings = new Newtonsoft.Json.JsonSerializerSettings
+                            {
+                                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                            };
+                            var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
+                            var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
+                            var productLists = @Html.Raw(encodedProductJson);
+                            // Retrieve the color for the product's category directly
+                            var categoryColor = categoryColors.ContainsKey(product.Category)
+                                    ? categoryColors[product.Category]
+                                    : "#ffffff"; // Default color if the category is not found
+
+                            string formattedPrice = FormatNumberWithDots(product.SalePrice);
+                            <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
+                                <div class="small-box" style="background-color: @categoryColor; color: black; padding: 15px;">
+                                    <div class="inner">
+                                        <h4 class="product-name">@product.Name</h4>
+                                        <p class="product-name">₫ @formattedPrice</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-bag"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        }*@
                 </div>
 
                 <div class="col-md-6">
@@ -332,27 +377,27 @@
                 </div>
             </div>
             @*<div class="table-title">
-            <div class="row">
-                <div class="col-sm-2">
-                    <button type="button" id="addNewRow" class="btn btn-primary add-new" style="background-color: #2bbdb9;"><i class="fa fa-plus"></i> New Row</button>
-                </div>
-            </div>
-        </div>*@
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <button type="button" id="addNewRow" class="btn btn-primary add-new" style="background-color: #2bbdb9;"><i class="fa fa-plus"></i> New Row</button>
+                        </div>
+                    </div>
+                </div>*@
 
             <div style="display:inline" id="dvCalculations">
                 <div class="row" style="margin-top:30px;">
                     <div class="col-md-6">
                         @Html.DropDownList("SaleOrder.BankAccountId", (IEnumerable<SelectListItem>)ViewBag.BankAccounts, null, new { @class = "form-control", @style = "display:none" })
                         @*<select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method">
-                        <option value="Cash" selected>Cash</option>
-                        <option value="Online">Online</option>
-                        <option value="Cheque">Cheque</option>
-                        <option value="Other">Other</option>
-                    </select>*@
+                                <option value="Cash" selected>Cash</option>
+                                <option value="Online">Online</option>
+                                <option value="Cheque">Cheque</option>
+                                <option value="Other">Other</option>
+                            </select>*@
                         @*<input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
-                    <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
-                    <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea>
-                    <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea>*@
+                            <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
+                            <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea>
+                            <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea>*@
 
                         <select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method" style="display:none;">
                             <option value="Cash" selected>Cash</option>
@@ -376,9 +421,9 @@
                                     <td><input type="text" readonly class="form-control classBorder0" name="SaleOrder.BillAmount" id="ItemsTotal" value="0" tabindex="-1"></td>
                                 </tr>
                                 @*<tr>
-                                <td><input type="text" readonly class="form-control classBorder0" name="ReturnTotal" id="ReturnTotal" value="Return Total" tabindex="-1"></td>
-                                <td><input type="text" readonly class="form-control classBorder0" name="ReturnItemsTotal" id="ReturnItemsTotal" value="0" tabindex="-1"></td>
-                            </tr>*@
+                                        <td><input type="text" readonly class="form-control classBorder0" name="ReturnTotal" id="ReturnTotal" value="Return Total" tabindex="-1"></td>
+                                        <td><input type="text" readonly class="form-control classBorder0" name="ReturnItemsTotal" id="ReturnItemsTotal" value="0" tabindex="-1"></td>
+                                    </tr>*@
                                 <tr style="display:none;">
                                     <td><input type="text" readonly class="form-control classBorder0" name="dc3" id="dc3" value="Order Discount" tabindex="-1"></td>
                                     <td><input type="text" autocomplete="off" class="form-control" name="SaleOrder.Discount" id="discount" value="0"></td>
@@ -625,6 +670,9 @@
                                             <div class="col-md-10">
                                                 <form>
                                                     <div class="form-group">
+                                                        <input type="text" autocomplete="off" class="form-control" name="Customer.Id" id="customerId" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" style="display:none;">
+                                                    </div>
+                                                    <div class="form-group">
                                                         <label for="dropdown">Customer</label>
                                                         <input type="text" autocomplete="off" class="form-control" name="Customer.Name" id="customer" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" title="Type customer name">
                                                     </div>
@@ -724,7 +772,19 @@
                                                 <form>
                                                     <div class="form-group">
                                                         <label for="dropdown">Add Qauntity</label>
-                                                        <input type="number" autocomplete="off" class="form-control" name="productQuantity" id="productQuantity" value="" placeholder="Type quantity" data-toggle="tooltip" data-placement="top" title="Type quantity">
+                                                        <input type="text"
+                                                               autocomplete="off"
+                                                               class="form-control"
+                                                               name="productQuantity"
+                                                               id="productQuantity"
+                                                               value="1"
+                                                               placeholder="Type quantity"
+                                                               data-toggle="tooltip"
+                                                               data-placement="top"
+                                                               title="Type quantity"
+                                                               maxlength="10"
+                                                               oninput="validateQuantityInput(event)" />
+                                                        @*<input type="number" autocomplete="off" class="form-control" name="productQuantity" id="productQuantity" value="1" placeholder="Type quantity" data-toggle="tooltip" data-placement="top" title="Type quantity" maxlength="10">*@
                                                     </div>
                                                 </form>
                                             </div>
@@ -821,7 +881,7 @@
     //});
     txtSerialNum = 0;
     TriggerBodyEvents();
-
+    var productsBarcodesList = [];
     @foreach (var d in Model.Customers)
     {
         @*@:products.push(["@d.Name","@d.SalePrice","@d.Stock"]);*@
@@ -836,7 +896,6 @@
     //var productColumns = [{ name: 'Product', minWidth: '320px' }, { name: 'Price', minWidth: '100px' }, { name: 'Qty', minWidth: '70px' }];
     //var products = [['Ciplet', '10', '60'], ['Gaviscon', '85', '12'], ['Surficol', '110', '8']];
     //alert(products);
-    var productsBarcodesss = [];
     @{
         var carton = 0;
         var piece = 0;
@@ -853,7 +912,7 @@
             @:products.push(["@d.Id", "@d.Name", "@d.SalePrice", "@carton,@piece", "@d.PerPack", "@d.WholeSalePrice"]);
         }
 
-        @:productsBarcodesss.push({ Id: "@d.Id", Name: "@d.Name", SalePrice: "@d.SalePrice", BarCode: "@d.BarCode" });
+        @:productsBarcodesList.push({ Id: "@d.Id", Name: "@d.Name", SalePrice: "@d.SalePrice", BarCode: "@d.BarCode" });
         }
 }
 
@@ -969,24 +1028,18 @@
 
 
      function onBarcodeScans(barcode) {
-        debugger;
-        //alert(barcode);
-   ////var productList =@Html.Raw(productListJson);
-         var productList = productsBarcodesss;
-         console.log(productList);
-     //alert(productList);
-        var product = productList.find(p => p.BarCode === barcode);
-        //alert(barcode);
-        //alert(product);
+     debugger;
+     var productList = productsBarcodesList;
+     console.log(productList);
+     var product = productList.find(p => p.BarCode === barcode);
      var encodedProductJson = JSON.stringify(product);
-     //alert(JSON.stringify(product));
      if (product) {
-         // Handle the product addition with quantity 1
          handleProductAddition(encodedProductJson, 1);
      } else {
          alert('Product not found');
      }
-}
+    }
+    debugger;
     @if (ViewBag.ReportId != null && ViewBag.ReportId != "") {
         @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
     }
