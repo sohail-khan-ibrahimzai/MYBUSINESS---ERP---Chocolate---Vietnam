@@ -85,7 +85,7 @@
                             var storeId = Session["StoreId"] as string;
                             if (storeId != null)
                             {
-                                <li><a href="#" id="closeStore">Close POS</a></li>
+                                <li><a href="#" id="closeStore" data-url="@Url.Action("CloseStorePopup", "SOSR")">Close POS</a></li>
                             }
                             if (currentUser.EmployeeTypeId == 0)
                             {
@@ -189,7 +189,7 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
-<div class="modal fade bd-tax-modal-lg" id="storeClosingPopup" tabindex="-1" role="dialog" aria-labelledby="storeClosingPopupLabel" aria-hidden="true">
+<!--<div class="modal fade bd-tax-modal-lg" id="storeClosingPopup" tabindex="-1" role="dialog" aria-labelledby="storeClosingPopupLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -262,9 +262,9 @@
                                                 </div>
                                             </form>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6">-->
                                             <!-- Calculator buttons -->
-                                            <div class="calculator">
+                                            <!--<div class="calculator">
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <button class="btn btn-secondary btn-block" type="button">7</button>
@@ -441,6 +441,6 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 

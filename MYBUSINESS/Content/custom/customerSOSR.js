@@ -628,6 +628,10 @@ function validateQuantityInput(event) {
     if (value.length > 10) {
         event.target.value = value.slice(0, 10);
     }
+    // Ensure the value is not equal to 0 or empty
+    if (event.target.value === '0' || event.target.value === '') {
+        event.target.value = '1';  // Default to 1 if 0 or empty is entered
+    }
 }
 function addProduct(encodedProductJson) {
     //debugger;

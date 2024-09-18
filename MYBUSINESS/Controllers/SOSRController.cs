@@ -1092,6 +1092,11 @@ namespace MYBUSINESS.Controllers
         // Function to login to the web service
         // Function to login to the web service synchronously
         //private (bool IsSuccess, string ResponseContent)  LoginToWebService()
+
+        public ActionResult CloseStorePopup()
+        {
+            return PartialView("_StoreClosePopup1");
+        }
         public JsonResult LoginToWebService()
         {
             //try

@@ -16122,7 +16122,7 @@
     <Content Include="Views\Stores\GetStoreVndBalance.cshtml" />
     <Content Include="Views\Popups\StoreClosePopup.cshtml" />
     <Content Include="Views\Stores\EditStoreBalance.cshtml" />
-    <Content Include="Views\Shared\StoreClosePopup1.cshtml" />
+    <Content Include="Views\Shared\_StoreClosePopup1.cshtml" />
     <Content Include="Views\PurchaseQuotation\CreatePOByCategory.cshtml" />
     <Content Include="Views\PurchaseQuotation\EditPOSByCategory.cshtml" />
     <None Include="Web.Debug.Config">

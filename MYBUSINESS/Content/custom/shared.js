@@ -6,11 +6,30 @@ var storeId = 0;
 if (storeId != null) {
 
 }
+//$(document).on('click', '#closeStore', function (e) {
+//    debugger;
+//    e.preventDefault();
+//    $('#storeClosingPopup').modal('show');
+//    //$('#storeClosingPopup1').modal('show');
+//});
 $(document).on('click', '#closeStore', function (e) {
-    debugger;
     e.preventDefault();
-    $('#storeClosingPopup').modal('show');
-    //$('#storeClosingPopup1').modal('show');
+    var closeStoreUrl = $(this).data('url');
+    console.log('Close Store URL:', closeStoreUrl);
+
+    $.ajax({
+        url: closeStoreUrl,
+        type: 'GET',
+        success: function (data) {
+            debugger;
+            //$('#storeClosingPopup1').html(data).modal('show');
+            $('#storeClosingPopup1').html(data).modal('show');
+        },
+        error: function (xhr, status, error) {
+            console.error('Error loading popup:', status, error);
+            alert('Error loading popup: ' + xhr.status + ' ' + xhr.statusText);
+        }
+    });
 });
 //$('#closeStore').click(function () {
 //    alert('Hi');
