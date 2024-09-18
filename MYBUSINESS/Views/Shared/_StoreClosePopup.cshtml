@@ -1,199 +1,25 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@ViewBag.Title - Hans Corp Abwabal</title>
-
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    @Styles.Render("~/Content/css")
-
-    <link href="~/Content/custom/treeView.css" rel="stylesheet" />
-
-    <link rel="stylesheet" href="~/bower_components/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="~/bower_components/font-awesome/css/all.min.css">
-
-    <link rel="stylesheet" href="~/dist/css/AdminLTE.min.css">
-
-    <link rel="stylesheet" href="~/dist/css/skins/_all-skins.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-
-    <link href="~/Content/custom/icon.css" rel="stylesheet" />
-
-    <!-- jQuery 3 -->
-    <script src="~/bower_components/jquery/dist/jquery.min.js"></script>
-
-    <script>
-        $.widget.bridge('uibutton', $.ui.button);
-    </script>
-    <!-- AdminLTE App -->
-    <!-- Latest compiled JavaScript -->
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <script src="~/Content/custom/shared.js"></script>
-    <style>
-        .form-group {
-            margin-bottom: 15px; /* Add some spacing between form groups */
-        }
-
-        .flex-row {
-            display: flex;
-            align-items: center;
-        }
-
-            .flex-row label {
-                flex: 0 0 150px; /* Adjust width as needed */
-                margin-right: 10px; /* Space between label and input */
-            }
-
-            .flex-row input {
-                flex: 1; /* Allow input to take up remaining space */
-            }
-    </style>
-</head>
-<body class="hold-transition skin-blue sidebar-mini">
-    <div class="wrapper">
-        <header class="main-header">
-            <!-- Logo -->
-            <a href="#" class="logo">
-                <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b></b></span>
-                <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>Hans Corp </b>Abwabal</span>
-            </a>
-            <!-- Header Navbar: style can be found in header.less -->
-            <nav class="navbar navbar-static-top">
-                <!-- Sidebar toggle button-->
-                <a href="#" id="menuToggle" class="sidebar-toggle" data-toggle="push-menu" role="button">
-                    <span class="sr-only">Toggle navigation</span>
-                </a>
-
-                <script>
-                   
-                </script>
-
-                <div class="navbar-custom-menu">
-                    <ul class="nav navbar-nav">
-                        @if (Session["CurrentUser"] != null)
-                        {
-                            MYBUSINESS.Models.Employee user = (MYBUSINESS.Models.Employee)HttpContext.Current.Session["CurrentUser"];
-                            MYBUSINESS.Models.Employee currentUser = (MYBUSINESS.Models.Employee)HttpContext.Current.Session["CurrentUser"];
-                            //if (currentUser.StoreId != null && storeId != 0)
-                            var storeId = Session["StoreId"] as string;
-                            if (storeId != null)
-                            {
-                                <li><a href="#" id="closeStore" data-url="/SOSR/ClosePosPopup" data-target="#modal-container">Close POS</a></li>
-                            }
-                            if (currentUser.EmployeeTypeId == 0)
-                            {
-                                <li>@Html.ActionLink("Support", "Contact", "Home")</li>
-                            }
-                            <li>@Html.ActionLink(user.Login, "Edit", "Employees", new { id = 0 }, null)</li>
-                            @*<li>@Html.ActionLink("Logout", "Logout", "UserManagement")</li>*@
-                            <li>
-                                <a href="#" onclick="logout()">Logout</a>
-                            </li>
-                        }
-                    </ul>
+﻿<!-- _StoreClosePopup1.cshtml -->
+@*<div class="modal fade" id="storeClosingModal" tabindex="-1" role="dialog" aria-labelledby="storeClosingModalTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="storeClosingModalTitle">Store Closing</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </nav>
-        </header>
-        <!-- Left side column. contains the logo and sidebar -->
-        <aside class="main-sidebar">
-            <!-- sidebar: style can be found in sidebar.less -->
-            <section class="sidebar">
-                <!-- Sidebar user panel -->
-                <!-- /.search form -->
-                <!-- sidebar menu: : style can be found in sidebar.less -->
-                <ul class="sidebar-menu" data-widget="tree">
-                    <li class="header">MAIN NAVIGATION</li>
-                    <li><a href="/Stores/StoreDashboard"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-
-
-                    <li></li>
-
-                    <li><a href="#"><i class=""></i> <span><b>Sales</b></span></a></li>
-                    <li><a href="/SOSR/Create?IsReturn=false"><i class="fa fa-sparkles"></i> <span>New Sale</span></a></li>
-                    <li><a href="/SOSR/Create?IsReturn=true"><i class="fa fa-rotate-left"></i> <span>Return Sale</span></a></li>
-                    <li><a href="/SOSR/Index"><i class="fa fa-search"></i> <span>Sales History</span></a></li>
-                    <li><a href="/SOSR/IndexReturn"><i class="fa fa-search"></i> <span>Returns History</span></a></li>
-
-                    <li><a href="#"><i class=""></i> <span><b>Purchases</b></span></a></li>
-                    <li><a href="/POPR/Create?IsReturn=false"><i class="fa fa-sparkles"></i> <span>New Purchase</span></a></li>
-                    <li><a href="/POPR/Create?IsReturn=true"><i class="fa fa-rotate-left"></i> <span>Return Purchase</span></a></li>
-                    <li><a href="/POPR/Index"><i class="fa fa-search"></i> <span>Purchases History</span></a></li>
-
-                    <li><a href="#"><i class=""></i> <span><b>Quotations</b></span></a></li>
-                    <li><a href="/PurchaseQuotation/Create?IsReturn=false"><i class="fa fa-sparkles"></i> <span>New Quotation</span></a></li>
-                    <li><a href="/PurchaseQuotation/CreatePOByCategory?IsReturn=false"><i class="fa fa-sparkles"></i> <span>New Quotation By Category</span></a></li>
-                    <li><a href="/PurchaseQuotation/Index"><i class="fa fa-search"></i> <span>Quotations History</span></a></li>
-
-                    <li><a href="#"><i class=""></i> <span><b>Products</b></span></a></li>
-                    <li><a href="/Products/Create"><i class="fa fa-sparkles"></i> <span>New Product</span></a></li>
-                    <li><a href="/Products/Index"><i class="fa fa-gift"></i> <span>Products/Services List</span></a></li>
-                    <li><a href="/StockTransections/Summary"><i class="fa fa-list"></i> <span>Stock Summary</span></a></li>
-                    
-                    <li><a href="#"><i class=""></i> <span><b>Customers</b></span></a></li>
-                    <li><a href="/Customers/Create"><i class="fa fa-sparkles"></i> <span>New Customer</span></a></li>
-                    <li><a href="/Customers/Index"><i class="fa fa-search"></i> <span>Customers List</span></a></li>
-                    
-                    <li><a href="#"><i class=""></i> <span><b>Suppliers</b></span></a></li>
-                    <li><a href="/Suppliers/Create"><i class="fa fa-sparkles"></i> <span>New Supplier</span></a></li>
-                    <li><a href="/Suppliers/Index"><i class="fa fa-search"></i> <span>Suppliers List</span></a></li>
-                    
-                    <li><a href="#"><i class=""></i> <span><b>Stores</b></span></a></li>
-                    <li><a href="/Stores/Create?IsReturn=false"><i class="fa fa-sparkles"></i> <span>New Store</span></a></li>
-                    <li><a href="/Stores/Index"><i class="fa fa-search"></i> <span>Stores History</span></a></li>
-                    <li><a href="/Stores/GetStoreVndBalance"><i class="fa fa-sparkles"></i> <span>Balance History</span></a></li>
-
-                    <li><a href="#"><i class=""></i> <span><b>Settings</b></span></a></li>
-                    <li><a href="/MyBusinessInfoes/Edit/1"><i class="fa fa-building"></i> <span>My Business Info</span></a></li>
-                    <li><a href="/UserAuthorization/Index"><i class="fa fa-square-check"></i> <span>User Permissions</span></a></li>
-
-                </ul>
-                @*<input type="hidden" id="StorageItem" name="StorageItem" value="" />*@
-            </section>
-            <!-- /.sidebar -->
-        </aside>
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <form id="hiddenForm" method="post" action="@Url.Action("StoreValue", "UserManagement")">
-                    <input type="hidden" name="storeId" id="storeIdInput" />
-                </form>
-            </section>
-            <!-- Main content -->
-            @RenderBody()
-            <!-- /.content -->
-        </div>
-        <!-- /.content-wrapper -->
-        <footer class="main-footer">
-            <div class="pull-right hidden-xs">
-                @*<b>Version</b> 1.0.0*@
+                <div class="modal-body">
+                    <p>This content is loaded dynamically from a partial view.</p>
+                </div>
             </div>
-            <strong>Copyright &copy; @DateTime.Now.Year <a href="#">Hans Corp Abwabal</a>.</strong> All rights
-            reserved.
-        </footer>
-        <script>
-            
-        </script>
-        <!-- /.control-sidebar -->
-        <!-- Add the sidebar's background. This div must be placed
-         immediately after the control sidebar -->
-        <div class="control-sidebar-bg"></div>
-    </div>
-    @RenderSection("scripts", required: false)
-</body>
-</html>
-<!--<div class="modal fade bd-tax-modal-lg" id="storeClosingPopup" tabindex="-1" role="dialog" aria-labelledby="storeClosingPopupLabel" aria-hidden="true">
+        </div>
+    </div>*@
+
+<div class="modal fade bd-tax-modal-lg" id="storeClosingModal" tabindex="-1" role="dialog" aria-labelledby="storeClosingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="storeClosingPopupTitle" style="text-align:center;">Close</h5>
+                <h5 class="modal-title" id="storeClosingModalTitle" style="text-align:center;">Close</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -262,9 +88,9 @@
                                                 </div>
                                             </form>
                                         </div>
-                                        <div class="col-md-6">-->
-                                            <!-- Calculator buttons -->
-                                            <!--<div class="calculator">
+                                        <div class="col-md-6">
+                                            Calculator buttons
+                                            <div class="calculator">
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <button class="btn btn-secondary btn-block" type="button">7</button>
@@ -441,6 +267,4 @@
             </div>
         </div>
     </div>
-</div>-->
-
-
+</div>

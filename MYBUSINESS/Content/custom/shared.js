@@ -7,11 +7,26 @@ if (storeId != null) {
 
 }
 $(document).on('click', '#closeStore', function (e) {
-    debugger;
     e.preventDefault();
-    $('#storeClosingPopup').modal('show');
-    //$('#storeClosingPopup1').modal('show');
+    var url = $(this).data('url');  // Get the URL to load the partial view
+    // Perform an AJAX request to load the modal content
+    $.get(url, function (data) {
+        // Append the modal to the body if it doesn't already exist
+        $('body').append(data);
+        // Show the modal
+        $('#storeClosingModal').modal('show');
+        // Clean up: remove the modal from the DOM when it's closed
+        $('#storeClosingModal').on('hidden.bs.modal', function () {
+            $(this).remove();
+        });
+    });
 });
+//$(document).on('click', '#closeStore', function (e) {
+//    debugger;
+//    e.preventDefault();
+//    $('#storeClosingPopup').modal('show');
+//    //$('#storeClosingPopup1').modal('show');
+//});
 //$('#closeStore').click(function () {
 //    alert('Hi');
 //    $('#storeOpeningPopup').modal('show');

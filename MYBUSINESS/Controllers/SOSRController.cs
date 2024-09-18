@@ -73,6 +73,9 @@ namespace MYBUSINESS.Controllers
             var getSoes = sOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();
             return View(getSoes);
         }
+        public ActionResult ClosePosPopup() {
+            return PartialView("_StoreClosePopup");
+        }
         public ActionResult IndexReturn()
         {
             //EnterProfit();
