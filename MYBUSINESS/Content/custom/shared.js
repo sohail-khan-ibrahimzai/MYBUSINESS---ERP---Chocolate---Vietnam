@@ -6,6 +6,12 @@ var storeId = 0;
 if (storeId != null) {
 
 }
+//$(document).on('click', '#closeStore', function (e) {
+//    debugger;
+//    e.preventDefault();
+//    $('#storeClosingPopup').modal('show');
+//    //$('#storeClosingPopup1').modal('show');
+//});
 $(document).on('click', '#closeStore', function (e) {
     e.preventDefault();
     var url = $(this).data('url');  // Get the URL to load the partial view

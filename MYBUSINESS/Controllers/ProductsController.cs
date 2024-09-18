@@ -320,7 +320,7 @@ namespace MYBUSINESS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,PurchasePrice,SalePrice,WholeSalePrice,Stock,Saleable,PerPack,IsService,ShowIn,BarCode,Remarks,StoreId")] Product product)
+        public ActionResult Create([Bind(Include = "Id,Name,PurchasePrice,SalePrice,WholeSalePrice,Stock,Saleable,PerPack,IsService,ShowIn,BarCode,Remarks,StoreId,Category")] Product product)
         {
             var storeId = Session["StoreId"] as string;
             if (storeId == null)
@@ -387,9 +387,24 @@ namespace MYBUSINESS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+            var parseId = int.Parse(storeId);
             Product product = db.Products.Find(id);
             StoreProduct storeProdcut = db.StoreProducts.FirstOrDefault(x => x.ProductId == id);
+            if (storeProdcut == null)
+            {
+                // If storeProdcut is null, initialize it and set Stock to 0
+                storeProdcut = new StoreProduct
+                {
+                    ProductId = product.Id,
+                    StoreId = parseId,
+                    Stock = 0,
+                };
+            }
             storeProdcut.Stock = storeProdcut.Stock / product.PerPack;
             product.Stock = storeProdcut.Stock;
             //ViewBag.SuppName = product.Supplier.Name;
@@ -415,7 +430,7 @@ namespace MYBUSINESS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,PurchasePrice,SalePrice,WholeSalePrice,Stock,Saleable,PerPack,IsService,ShowIn,BarCode,Remarks")] Product product)
+        public ActionResult Edit([Bind(Include = "Id,Name,PurchasePrice,SalePrice,WholeSalePrice,Stock,Saleable,PerPack,IsService,ShowIn,BarCode,Remarks,Category")] Product product)
         {
             //Product prd = db.Products.Where(x => x.Id == product.Id).FirstOrDefault();
             //product.SuppId = prd.SuppId;
@@ -438,7 +453,12 @@ namespace MYBUSINESS.Controllers
             product.Stock = product.Stock * product.PerPack;
             product.StoreId = parseId;
             //decimal StockInDB = (decimal)db.Products.AsNoTracking().FirstOrDefault(x => x.Id == product.Id).Stock;
-            decimal StockInDB = (decimal)db.StoreProducts.AsNoTracking().FirstOrDefault(x => x.ProductId == product.Id).Stock;
+            //decimal StockInDB = (decimal)db.StoreProducts.AsNoTracking().FirstOrDefault(x => x.ProductId == product.Id)?.Stock;
+            decimal StockInDB = db.StoreProducts
+                      .AsNoTracking()
+                      .Where(x => x.ProductId == product.Id)
+                      .Select(x => (decimal?)x.Stock)
+                      .FirstOrDefault() ?? 0m;
             var getProductStock = db.StoreProducts.FirstOrDefault(x => x.ProductId == product.Id);
             if (ModelState.IsValid)
             {

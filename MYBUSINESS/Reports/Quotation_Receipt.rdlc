@@ -2836,15 +2836,8 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Thanh</Value>
-                    <Style>
-                      <FontStyle>Normal</FontStyle>
-                      <FontFamily>Times New Roman</FontFamily>
-                      <FontSize>14pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                      <TextDecoration>None</TextDecoration>
-                      <Color>#000000</Color>
-                    </Style>
+                    <Value>[Category]</Value>
+                    <Style />
                   </TextRun>
                 </TextRuns>
                 <ListStyle>Bulleted</ListStyle>
@@ -3319,7 +3312,7 @@
         <Height>5.94306in</Height>
         <Style />
       </Body>
-      <Width>6.59358in</Width>
+      <Width>6.7915in</Width>
       <Page>
         <PageHeader>
           <Height>3.02821in</Height>
@@ -3333,15 +3326,8 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Chocolates</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Times New Roman</FontFamily>
-                        <FontSize>14pt</FontSize>
-                        <FontWeight>Bold</FontWeight>
-                        <TextDecoration>None</TextDecoration>
-                        <Color>#000000</Color>
-                      </Style>
+                      <Value>[Category]</Value>
+                      <Style />
                     </TextRun>
                   </TextRuns>
                   <ListStyle>Bulleted</ListStyle>
@@ -3351,8 +3337,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox31</rd:DefaultName>
-              <Top>2.34071in</Top>
-              <Left>0.14702in</Left>
+              <Top>2.60113in</Top>
+              <Left>0.1352in</Left>
               <Height>0.25in</Height>
               <Width>1.77083in</Width>
               <Style>
@@ -3466,7 +3452,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Điểm đến: SG01 - Stock Binh Thanh - Ho Chi Minh City</Value>
+                      <Value>Điểm đến: [StoreAddress]</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
                         <FontFamily>Times New Roman</FontFamily>
@@ -3503,7 +3489,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value />
+                      <Value>[ANB]</Value>
                       <Style />
                     </TextRun>
                   </TextRuns>
@@ -3514,7 +3500,7 @@
               <Top>1.9046in</Top>
               <Left>6.20955in</Left>
               <Height>0.28819in</Height>
-              <Width>0.26342in</Width>
+              <Width>0.4882in</Width>
               <ZIndex>5</ZIndex>
               <Style>
                 <Border>
@@ -3546,7 +3532,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>1</Value>
+                      <Value>[B]</Value>
                       <Style />
                     </TextRun>
                   </TextRuns>
@@ -3557,7 +3543,7 @@
               <Top>1.57474in</Top>
               <Left>6.20955in</Left>
               <Height>0.32986in</Height>
-              <Width>0.26342in</Width>
+              <Width>0.4882in</Width>
               <ZIndex>6</ZIndex>
               <Style>
                 <Border>
@@ -3577,7 +3563,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>                  Mã giao hàng : 000122</Value>
+                      <Value>                  Mã giao hàng : [DelieveryCode]</Value>
                       <Style>
                         <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
@@ -3591,9 +3577,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox31</rd:DefaultName>
               <Top>1.17335in</Top>
-              <Left>4.34485in</Left>
+              <Left>4.1537in</Left>
               <Height>0.25in</Height>
-              <Width>2.12812in</Width>
+              <Width>2.54405in</Width>
               <ZIndex>7</ZIndex>
               <Style>
                 <Border>
@@ -3657,21 +3643,10 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value xml:space="preserve">            </Value>
+                      <Value>          [ChocolateDeviertNote]</Value>
                       <Style>
                         <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>Phiếu xuất kho sô cô la</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Times New Roman</FontFamily>
-                        <FontSize>9pt</FontSize>
-                        <FontWeight>Bold</FontWeight>
-                        <TextDecoration>None</TextDecoration>
-                        <Color>#000000</Color>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -3703,7 +3678,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Ngày : 24/08/2024</Value>
+                      <Value>Ngày : [Date]</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
                         <FontFamily>Times New Roman</FontFamily>
@@ -3789,15 +3764,8 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>1-Hộp sẵn</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Times New Roman</FontFamily>
-                        <FontSize>14pt</FontSize>
-                        <FontWeight>Bold</FontWeight>
-                        <TextDecoration>None</TextDecoration>
-                        <Color>#000000</Color>
-                      </Style>
+                      <Value>[Category]</Value>
+                      <Style />
                     </TextRun>
                   </TextRuns>
                   <ListStyle>Bulleted</ListStyle>
@@ -3807,8 +3775,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox31</rd:DefaultName>
-              <Top>2.34071in</Top>
-              <Left>2.97911in</Left>
+              <Top>2.60113in</Top>
+              <Left>2.96729in</Left>
               <Height>0.25in</Height>
               <Width>1.77083in</Width>
               <ZIndex>13</ZIndex>

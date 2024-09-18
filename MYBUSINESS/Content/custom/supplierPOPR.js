@@ -280,15 +280,15 @@ $(document).ready(function () {
 
 
 
-        if (isNaN($('#total').val())) {
-            alert('Total is not valid');
-            return false;
-        }
+        //if (isNaN($('#total').val())) {
+        //    alert('Total is not valid');
+        //    return false;
+        //}
         //
-        if (isNaN($('#balance').val())) {
-            alert('Balance is not valid');
-            return false;
-        }
+        //if (isNaN($('#balance').val())) {
+        //    alert('Balance is not valid');
+        //    return false;
+        //}
 
         $('#selectedProducts > tbody  > tr').each(function () {
             idx += 1;
