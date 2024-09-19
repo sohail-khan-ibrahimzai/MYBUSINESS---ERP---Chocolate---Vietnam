@@ -2363,6 +2363,26 @@ function TriggerFooterEvents() {
         // Recalculate payment totals
         calculateLeftToPay();
     });
+    $('#cashUsd').on('input', function () {
+        // Remove any non-numeric characters (except for the period which is used for thousands separator)
+        let inputVal = $(this).val().replace(/[^0-9]/g, '');
+
+        // Convert the cleaned value back to an integer, format it, and update the input field
+        let formattedVal = formatNumberWithDots(inputVal);
+        $(this).val(formattedVal);
+        // Recalculate payment totals
+        calculateLeftToPay();
+    });
+    $('#cashJpy').on('input', function () {
+        // Remove any non-numeric characters (except for the period which is used for thousands separator)
+        let inputVal = $(this).val().replace(/[^0-9]/g, '');
+
+        // Convert the cleaned value back to an integer, format it, and update the input field
+        let formattedVal = formatNumberWithDots(inputVal);
+        $(this).val(formattedVal);
+        // Recalculate payment totals
+        calculateLeftToPay();
+    });
 
 
 
