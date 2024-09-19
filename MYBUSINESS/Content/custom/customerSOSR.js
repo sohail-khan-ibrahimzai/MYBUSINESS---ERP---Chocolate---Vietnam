@@ -1792,7 +1792,7 @@ $(document).ready(function () {
         //Binding SaleOrder Form
         $('#cardvnd').val(cardVndBalance);
         $('#cashvnd').val(cashVndBalance);
-        
+
         ///
         $('#ItemsTotal').val(totalPayableBill);
         //$('#paid').val(totalBillPaid);
@@ -2046,7 +2046,7 @@ $(document).ready(function () {
                     $('#vndCustomerCompany').val(datas.ten_cty);
                     $('#vndCustomerAddress').val(datas.dia_chi);
                     $('#taxModal').modal('show');
-                   
+
                 } catch (error) {
                     // Handle errors if property access fails
                     console.error('Error accessing data:', error);
@@ -2089,8 +2089,8 @@ $(document).ready(function () {
         //        console.error('Error:', status, error);
         //    }
         //});
-        
-        
+
+
     });
     //$('#addQuantityModal').click(function (event) { debugger; $('#quantityAddpopup').modal('show'); });
     jQuery.fn.preventDoubleSubmission = function () {
@@ -2322,7 +2322,7 @@ function TriggerBodyEvents() {
     $('#individualWithoutVAT').click(function () {
         $('#vndCustomerName').val('Người mua không lấy hóa đơn');
     });
-  
+
 }
 
 
@@ -2363,16 +2363,125 @@ function TriggerFooterEvents() {
         // Recalculate payment totals
         calculateLeftToPay();
     });
-    $('#cashUsd').on('input', function () {
-        // Remove any non-numeric characters (except for the period which is used for thousands separator)
-        let inputVal = $(this).val().replace(/[^0-9]/g, '');
+    // Set the exchange rate (USD to VND)
+    var exchangeRate = 24580; // Example rate
 
-        // Convert the cleaned value back to an integer, format it, and update the input field
-        let formattedVal = formatNumberWithDots(inputVal);
-        $(this).val(formattedVal);
-        // Recalculate payment totals
-        calculateLeftToPay();
+    // Initialize total amount to pay (this could be dynamically set elsewhere)
+    var totalAmountToPay = parseFloat($("#CreateSO").data("amount")) || 0;
+    $('#lefttopayvnd').val(totalAmountToPay);
+
+    // Handle input in #cashUsd
+    $('#cashUsd').on('input', function () {
+        // Get the entered USD amount and convert it to VND
+        var cashUsd = parseFloat($('#cashUsd').val().replace(/,/g, '')) || 0;
+        var cashInVnd = cashUsd * exchangeRate;
+
+        // Update the total amount paid (cash entered by the customer)
+        var totalPaidInVnd = cashInVnd;
+
+        // Calculate the remaining amount to pay
+        var remainingAmount = totalAmountToPay - totalPaidInVnd;
+
+        // Update the remaining amount in #lefttopayvnd
+        $('#lefttopayvnd').val(remainingAmount);
     });
+
+    // Handle input in #changeusvnd
+    $('#changeUsd').on('input', function () {
+        // Get the entered change amount in USD and convert it to VND
+        var changeUsd = parseFloat($('#changeUsd').val().replace(/,/g, '')) || 0;
+        var changeInVnd = changeUsd * exchangeRate;
+
+        // Calculate the total amount paid (cash + change)
+        //var cashUsd = parseFloat($('#cashUsd').val().replace(/,/g, '')) || 0;
+        //var totalPaidInVnd = (cashUsd * exchangeRate) + changeInVnd;
+        var totalPaidInVnd =  changeInVnd;
+
+        // Update the remaining amount to pay
+        var remainingAmount = totalAmountToPay + totalPaidInVnd;
+
+        // Update the remaining amount in #lefttopayvnd
+        $('#lefttopayvnd').val(remainingAmount);
+    });
+    //// Set the exchange rate
+    //var exchangeRate = 24580; // USD to VND
+
+    //// Set the total amount to pay (can be updated dynamically)
+    //var totalAmountToPay = parseFloat($("#CreateSO").data("amount")) || 0;
+    //$('#lefttopayvnd').val(totalAmountToPay);
+
+    //// Handle input in #cashUsd
+    //$('#cashUsd').on('input', function () {
+    //    // Get the value entered in USD and convert to VND
+    //    var cashUsd = parseFloat($('#cashUsd').val().replace(/,/g, '')) || 0;
+    //    var cashInVnd = cashUsd * exchangeRate;
+
+    //    // Calculate the remaining amount to pay
+    //    var remainingAmount = totalAmountToPay - cashInVnd;
+
+    //    // Update the remaining amount in VND
+    //    $('#lefttopayvnd').val(remainingAmount);
+
+    //    // Calculate and display change if the remaining amount is negative
+    //    if (remainingAmount < 0) {
+    //        var changeToGive = Math.abs(remainingAmount);
+    //        $('#changeToGive').text('Change to return: ' + changeToGive.toLocaleString() + ' VND');
+    //    } else {
+    //        $('#changeToGive').text('');
+    //    }
+    //});
+
+    //// Handle input in #changeusvnd
+    //$('#changeUsd').on('input', function () {
+    //    // Get the value entered in USD for change and convert to VND
+    //    var changeUsd = parseFloat($('#changeUsd').val().replace(/,/g, '')) || 0;
+    //    var changeInVnd = changeUsd * exchangeRate;
+
+    //    // Recalculate the remaining amount after considering the change
+    //    var cashUsd = parseFloat($('#cashUsd').val().replace(/,/g, '')) || 0;
+    //    var cashInVnd = cashUsd * exchangeRate;
+    //    var totalPaidInVnd = cashInVnd + changeInVnd;
+    //    var remainingAmount = totalAmountToPay - totalPaidInVnd;
+
+    //    // Update the remaining amount in VND
+    //    $('#lefttopayvnd').val(remainingAmount);
+
+    //    // Calculate and display change if the remaining amount is negative
+    //    if (remainingAmount < 0) {
+    //        var changeToGive = Math.abs(remainingAmount);
+    //        $('#lefttopayvnd').text('Change to return: ' + changeToGive.toLocaleString() + ' VND');
+    //    } else {
+    //        $('#lefttopayvnd').text('');
+    //    }
+    //});
+    
+    //$('#cashUsd').on('input', function () {
+    //    // Remove any non-numeric characters (except for the period which is used for thousands separator)
+    //    // Fetch the total amount to pay (if it's dynamically updated elsewhere, you should get it freshly)
+    //    var totalAmounts = $("#CreateSO").data("amount");
+
+    //    // Update the total amounts in the input field
+    //    $('#lefttopayvnd').val(totalAmounts);
+
+    //    // Fetch the entered USD amount and the total VND amount to pay
+    //    var cashUsd = parseFloat($('#cashUsd').val().replace(/,/g, '')) || 0; // Removing commas if present
+    //    var totalAmountPaid = parseFloat($('#lefttopayvnd').val()) || 0;
+
+    //    // Perform the calculation: Convert USD to VND (assuming 4624 is the exchange rate) and subtract from totalAmountPaid
+    //    var aaa = cashUsd * 24580;
+    //    var totalRemaining = totalAmountPaid - (cashUsd * 24580);
+    //    $('#totalDollarsToVnd').text(aaa);
+
+    //    // Update the 'lefttopayvnd' with the recalculated total remaining amount
+    //    $('#lefttopayvnd').val(totalRemaining);
+    //});
+    //$('#changeusvnd').on('input', function () {
+    //    // Fetch the entered USD amount and the total VND amount to pay
+    //    var totalAmountPaid = parseFloat($('#lefttopayvnd').val()) || 0;
+    //    var totalRemaining = (totalAmountPaid + ($('#changeusvnd').val() * 24580));
+    //    // Update the 'lefttopayvnd' with the recalculated total remaining amount
+    //    $('#lefttopayvnd').val(totalRemaining);
+    //});
     $('#cashJpy').on('input', function () {
         // Remove any non-numeric characters (except for the period which is used for thousands separator)
         let inputVal = $(this).val().replace(/[^0-9]/g, '');
