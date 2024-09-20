@@ -9,6 +9,8 @@ var customers = new Array();
 var productsBarcodes = new Array();
 var productsBarcodess = [];
 debugger;
+const usdToVndRate = 23600; // Exchange rate for USD to VND
+const jpyToVndRate = 179; // Exchange rate for JPY to VND
 console.log(productsBarcodes); // Check the contents of the array
 //var productsBarcodess = new Array();
 //var focusedBtnId = "";
@@ -2353,56 +2355,106 @@ function TriggerFooterEvents() {
     //});
 
 
-    $('#cardvnd, #cashvnd').on('input', function () {
-        // Remove any non-numeric characters (except for the period which is used for thousands separator)
-        let inputVal = $(this).val().replace(/[^0-9]/g, '');
+    // Input event listener for customer side (Cash VND, Cash USD, CASH JPY)
+    $('#cardvnd, #cashvnd, #cashUsd, #cashJpy').on('input', function () {
+        //Temporary commented
+        //let inputVal = $(this).val().replace(/[^0-9]/g, ''); // Remove non-numeric characters
+        //let formattedVal = formatNumberWithDots(inputVal);
+        //$(this).val(formattedVal);
 
-        // Convert the cleaned value back to an integer, format it, and update the input field
-        let formattedVal = formatNumberWithDots(inputVal);
-        $(this).val(formattedVal);
-        // Recalculate payment totals
+        // Recalculate the remaining amount to pay
         calculateLeftToPay();
     });
-    // Set the exchange rate (USD to VND)
-    var exchangeRate = 24580; // Example rate
 
-    // Initialize total amount to pay (this could be dynamically set elsewhere)
-    var totalAmountToPay = parseFloat($("#CreateSO").data("amount")) || 0;
-    $('#lefttopayvnd').val(totalAmountToPay);
+    // Input event listener for seller side (Change USD, Change JPY)
+    $('#changeUsd, #changejpy').on('input', function () {
+        let inputVal = $(this).val().replace(/[^0-9.]/g, ''); // Remove non-numeric characters except the decimal point
+        $(this).val(inputVal);
 
-    // Handle input in #cashUsd
-    $('#cashUsd').on('input', function () {
-        // Get the entered USD amount and convert it to VND
-        var cashUsd = parseFloat($('#cashUsd').val().replace(/,/g, '')) || 0;
-        var cashInVnd = cashUsd * exchangeRate;
-
-        // Update the total amount paid (cash entered by the customer)
-        var totalPaidInVnd = cashInVnd;
-
-        // Calculate the remaining amount to pay
-        var remainingAmount = totalAmountToPay - totalPaidInVnd;
-
-        // Update the remaining amount in #lefttopayvnd
-        $('#lefttopayvnd').val(remainingAmount);
+        // Recalculate after the seller enters the change
+        calculateLeftToPay();
     });
+    //$('#cardvnd, #cashvnd, #cashUsd').on('input', function () {
+    //    let inputVal = $(this).val().replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    //    let formattedVal = formatNumberWithDots(inputVal);
+    //    $(this).val(formattedVal);
+
+    //    // Recalculate the remaining amount to pay
+    //    calculateLeftToPay();
+    //});
+
+    //// Input event listener for seller side (Change USD)
+    //$('#changeUsd').on('input', function () {
+    //    let inputVal = $(this).val().replace(/[^0-9.]/g, ''); // Remove non-numeric characters except the decimal point
+    //    $(this).val(inputVal);
+
+    //    // Recalculate after the seller enters the change
+    //    calculateLeftToPay();
+    //});
+
+
+    //$('#cardvnd, #cashvnd, #cashUsd').on('input', function () {
+    //    // Format the VND input fields and handle calculations
+    //    let inputVal = $(this).val().replace(/[^0-9]/g, '');
+    //    let formattedVal = formatNumberWithDots(inputVal);
+    //    $(this).val(formattedVal);
+
+    //    // Recalculate the total payment and remaining amount
+    //    calculateLeftToPay();
+    //});
+
+    //$('#cardvnd, #cashvnd').on('input', function () {
+    //    // Remove any non-numeric characters (except for the period which is used for thousands separator)
+    //    let inputVal = $(this).val().replace(/[^0-9]/g, '');
+
+    //    // Convert the cleaned value back to an integer, format it, and update the input field
+    //    let formattedVal = formatNumberWithDots(inputVal);
+    //    $(this).val(formattedVal);
+    //    // Recalculate payment totals
+    //    calculateLeftToPay();
+    //});
+
+
+    //// Set the exchange rate (USD to VND)
+    //var exchangeRate = 24580; // Example rate
+
+    //// Initialize total amount to pay (this could be dynamically set elsewhere)
+    //var totalAmountToPay = parseFloat($("#CreateSO").data("amount")) || 0;
+    //$('#lefttopayvnd').val(totalAmountToPay);
+
+    //// Handle input in #cashUsd
+    //$('#cashUsd').on('input', function () {
+    //    // Get the entered USD amount and convert it to VND
+    //    var cashUsd = parseFloat($('#cashUsd').val().replace(/,/g, '')) || 0;
+    //    var cashInVnd = cashUsd * exchangeRate;
+
+    //    // Update the total amount paid (cash entered by the customer)
+    //    var totalPaidInVnd = cashInVnd;
+
+    //    // Calculate the remaining amount to pay
+    //    var remainingAmount = totalAmountToPay - totalPaidInVnd;
+
+    //    // Update the remaining amount in #lefttopayvnd
+    //    $('#lefttopayvnd').val(remainingAmount);
+    //});
 
     // Handle input in #changeusvnd
-    $('#changeUsd').on('input', function () {
-        // Get the entered change amount in USD and convert it to VND
-        var changeUsd = parseFloat($('#changeUsd').val().replace(/,/g, '')) || 0;
-        var changeInVnd = changeUsd * exchangeRate;
+    //$('#changeUsd').on('input', function () {
+    //    // Get the entered change amount in USD and convert it to VND
+    //    var changeUsd = parseFloat($('#changeUsd').val().replace(/,/g, '')) || 0;
+    //    var changeInVnd = changeUsd * exchangeRate;
 
-        // Calculate the total amount paid (cash + change)
-        //var cashUsd = parseFloat($('#cashUsd').val().replace(/,/g, '')) || 0;
-        //var totalPaidInVnd = (cashUsd * exchangeRate) + changeInVnd;
-        var totalPaidInVnd =  changeInVnd;
+    //    // Calculate the total amount paid (cash + change)
+    //    //var cashUsd = parseFloat($('#cashUsd').val().replace(/,/g, '')) || 0;
+    //    //var totalPaidInVnd = (cashUsd * exchangeRate) + changeInVnd;
+    //    var totalPaidInVnd =  changeInVnd;
 
-        // Update the remaining amount to pay
-        var remainingAmount = totalAmountToPay + totalPaidInVnd;
+    //    // Update the remaining amount to pay
+    //    var remainingAmount = totalAmountToPay + totalPaidInVnd;
 
-        // Update the remaining amount in #lefttopayvnd
-        $('#lefttopayvnd').val(remainingAmount);
-    });
+    //    // Update the remaining amount in #lefttopayvnd
+    //    $('#lefttopayvnd').val(remainingAmount);
+    //});
     //// Set the exchange rate
     //var exchangeRate = 24580; // USD to VND
 
@@ -2482,16 +2534,16 @@ function TriggerFooterEvents() {
     //    // Update the 'lefttopayvnd' with the recalculated total remaining amount
     //    $('#lefttopayvnd').val(totalRemaining);
     //});
-    $('#cashJpy').on('input', function () {
-        // Remove any non-numeric characters (except for the period which is used for thousands separator)
-        let inputVal = $(this).val().replace(/[^0-9]/g, '');
+    //$('#cashJpy').on('input', function () {
+    //    // Remove any non-numeric characters (except for the period which is used for thousands separator)
+    //    let inputVal = $(this).val().replace(/[^0-9]/g, '');
 
-        // Convert the cleaned value back to an integer, format it, and update the input field
-        let formattedVal = formatNumberWithDots(inputVal);
-        $(this).val(formattedVal);
-        // Recalculate payment totals
-        calculateLeftToPay();
-    });
+    //    // Convert the cleaned value back to an integer, format it, and update the input field
+    //    let formattedVal = formatNumberWithDots(inputVal);
+    //    $(this).val(formattedVal);
+    //    // Recalculate payment totals
+    //    calculateLeftToPay();
+    //});
 
 
 
@@ -2619,55 +2671,183 @@ function showHiddenInputs() {
     var hiddenInputs = document.querySelectorAll('.hiddenCurrencyInputs');
 
     // Toggle display based on checkbox state
-    hiddenInputs.forEach(function (input) {
+    hiddenInputs.forEach(function (input) { 
         input.style.display = checkbox.checked ? 'block' : 'none';
     });
 }
+//function calculateLeftToPay() {
+//    //debugger;
+//    // Get values for card payment, cash payment, and total payment
+//    //var cdVnd = parseFloat($('#cardvnd').val()) || 0;  // Card payment
+//    //var cashVnd = parseFloat($('#cashvnd').val()) || 0; // Cash payment
+//    //var totalpaymentText = $("#CreateSO").data("amount"); // Total payment amount from data attribute
+//    //var totalpayment = parseFloat(totalpaymentText) || 0; // Parse to number
+
+
+//    // Get values for card payment, cash payment, and total payment
+//    var cdVnd = parseFloat($('#cardvnd').val().replace(/\./g, '')) || 0;  // Remove dots and convert to number
+//    var cashVnd = parseFloat($('#cashvnd').val().replace(/\./g, '')) || 0; // Remove dots and convert to number
+//    var totalpaymentText = $("#CreateSO").data("amount"); // Total payment amount from data attribute
+//    var totalpayment = parseFloat(totalpaymentText) || 0; // Parse to number
+
+//    //var cardVndBalance;
+//    //var cashVndBalance;
+
+//    //var totalPayableBill;
+//    //var totalBillPaid;
+//    //var leftVndBalance;
+
+
+//    // Calculate the remaining amount to pay
+//    cardVndBalance = cdVnd;
+//    cashVndBalance = cashVnd;
+//    leftVndBalance = totalpayment - (cdVnd + cashVnd);
+//    // Update the value for left to pay field
+//    $('#lefttopayvnd').val(formatNumberWithDots(leftVndBalance));
+//    // Calculate total amount paid
+//    totalBillPaid = cdVnd + cashVnd;
+//    // Check if total paid matches total amount
+//    if (totalBillPaid === totalpayment || totalBillPaid > totalpayment) {
+//        $('#validatepyment').prop('disabled', false); // Enable the button if fully paid
+//    } else {
+//        $('#validatepyment').prop('disabled', true); // Disable the button if not fully paid
+//    }
+
+//    // Optional UI updates
+//    // if (IsReturn == 'false') {
+//    //     $("#CreateSO").html("Pay " + leftToPayVndBalance.toFixed(2));
+//    // } else {
+//    //     $("#CreateSO").html("Return " + leftToPayVndBalance.toFixed(2));
+//    // }
+//}
 function calculateLeftToPay() {
-    //debugger;
-    // Get values for card payment, cash payment, and total payment
-    //var cdVnd = parseFloat($('#cardvnd').val()) || 0;  // Card payment
-    //var cashVnd = parseFloat($('#cashvnd').val()) || 0; // Cash payment
-    //var totalpaymentText = $("#CreateSO").data("amount"); // Total payment amount from data attribute
-    //var totalpayment = parseFloat(totalpaymentText) || 0; // Parse to number
+    // Get VND values for card and cash payments from the customer (remove dots and convert to numbers)
+    var cdVnd = parseFloat($('#cardvnd').val().replace(/\./g, '')) || 0;
+    var cashVnd = parseFloat($('#cashvnd').val().replace(/\./g, '')) || 0;
 
+    // Get the USD payment entered by the customer
+    var cashUsd = parseFloat($('#cashUsd').val()) || 0;
+    var cashUsdInVnd = cashUsd * usdToVndRate; // Convert USD to VND
+    $('#totalDollarsToVnd').text(cashUsdInVnd.toLocaleString('en-US'));
 
-    // Get values for card payment, cash payment, and total payment
-    var cdVnd = parseFloat($('#cardvnd').val().replace(/\./g, '')) || 0;  // Remove dots and convert to number
-    var cashVnd = parseFloat($('#cashvnd').val().replace(/\./g, '')) || 0; // Remove dots and convert to number
-    var totalpaymentText = $("#CreateSO").data("amount"); // Total payment amount from data attribute
-    var totalpayment = parseFloat(totalpaymentText) || 0; // Parse to number
+    // Get the JPY payment entered by the customer
+    var cashJpy = parseFloat($('#cashJpy').val()) || 0;
+    var cashJpyInVnd = cashJpy * jpyToVndRate; // Convert JPY to VND
+    $('#totalYensToVnd').text(cashJpyInVnd.toLocaleString('en-US'));
 
-    //var cardVndBalance;
-    //var cashVndBalance;
+    // Get the USD change entered by the seller
+    var changeUsd = parseFloat($('#changeUsd').val()) || 0;
+    var changeUsdInVnd = changeUsd * usdToVndRate; // Convert USD to VND
 
-    //var totalPayableBill;
-    //var totalBillPaid;
-    //var leftVndBalance;
+    // Get the JPY change entered by the seller
+    var changeJpy = parseFloat($('#changejpy').val()) || 0;
+    var changeJpyInVnd = changeJpy * jpyToVndRate; // Convert JPY to VND
 
+    // Get the total payment amount (from the data attribute)
+    var totalPaymentText = $("#CreateSO").data("amount");
+    var totalPayment = parseFloat(totalPaymentText) || 0;
 
-    // Calculate the remaining amount to pay
-    cardVndBalance = cdVnd;
-    cashVndBalance = cashVnd;
-    leftVndBalance = totalpayment - (cdVnd + cashVnd);
-    // Update the value for left to pay field
+    // Calculate total amount paid by the customer (Card + Cash VND + Cash USD in VND + Cash JPY in VND)
+    var totalBillPaid = cdVnd + cashVnd + cashUsdInVnd + cashJpyInVnd;
+
+    // Calculate the remaining balance (Customer side payment minus total amount)
+    var leftVndBalance = totalPayment - totalBillPaid;
+
+    // Now apply the seller's ChangeUsd and ChangeJpy to adjust the remaining balance (if negative)
+    leftVndBalance += changeUsdInVnd + changeJpyInVnd; // Add seller's contribution in both USD and JPY
+
+    // If the remaining balance is negative or zero, update lefttopayvnd accordingly
     $('#lefttopayvnd').val(formatNumberWithDots(leftVndBalance));
-    // Calculate total amount paid
-    totalBillPaid = cdVnd + cashVnd;
-    // Check if total paid matches total amount
-    if (totalBillPaid === totalpayment || totalBillPaid > totalpayment) {
-        $('#validatepyment').prop('disabled', false); // Enable the button if fully paid
-    } else {
-        $('#validatepyment').prop('disabled', true); // Disable the button if not fully paid
-    }
 
-    // Optional UI updates
-    // if (IsReturn == 'false') {
-    //     $("#CreateSO").html("Pay " + leftToPayVndBalance.toFixed(2));
-    // } else {
-    //     $("#CreateSO").html("Return " + leftToPayVndBalance.toFixed(2));
-    // }
+    // Enable or disable the payment button based on whether the balance is fully paid or overpaid
+    if (leftVndBalance <= 0) {
+        $('#validatepyment').prop('disabled', false); // Enable the button if fully paid or overpaid
+    } else {
+        $('#validatepyment').prop('disabled', true);  // Disable the button if not fully paid
+    }
 }
+//function calculateLeftToPay() {
+//    // Get VND values for card and cash payments from the customer (remove dots and convert to numbers)
+//    var cdVnd = parseFloat($('#cardvnd').val().replace(/\./g, '')) || 0;
+//    var cashVnd = parseFloat($('#cashvnd').val().replace(/\./g, '')) || 0;
+
+//    // Get the USD payment entered by the customer
+//    var cashUsd = parseFloat($('#cashUsd').val()) || 0;
+//    var cashUsdInVnd = cashUsd * usdToVndRate; // Convert USD to VND
+//    $('#totalDollarsToVnd').text(cashUsdInVnd);
+
+//    // Get the USD change entered by the seller
+//    var changeUsd = parseFloat($('#changeUsd').val()) || 0;
+//    var changeUsdInVnd = changeUsd * usdToVndRate; // Convert USD to VND
+
+//    // Get the total payment amount (from the data attribute)
+//    var totalPaymentText = $("#CreateSO").data("amount");
+//    var totalPayment = parseFloat(totalPaymentText) || 0;
+
+//    // Calculate total amount paid by the customer (Card + Cash VND + Cash USD in VND)
+//    var totalBillPaid = cdVnd + cashVnd + cashUsdInVnd;
+
+//    // Calculate the remaining balance (Customer side payment minus total amount)
+//    var leftVndBalance = totalPayment - totalBillPaid;
+
+//    // Now apply the seller's ChangeUsd to adjust the remaining balance (if negative)
+//    leftVndBalance += changeUsdInVnd; // Add the seller's contribution in VND
+
+//    // If the remaining balance is negative or zero, update lefttopayvnd accordingly
+//    if (leftVndBalance < 0) {
+//        $('#lefttopayvnd').val(formatNumberWithDots(leftVndBalance)); // Display the remaining negative amount
+//    } else {
+//        $('#lefttopayvnd').val(formatNumberWithDots(leftVndBalance)); // If positive, show the remaining amount
+//    }
+
+//    // Enable or disable the payment button based on whether the balance is fully paid or overpaid
+//    if (leftVndBalance <= 0) {
+//        $('#validatepyment').prop('disabled', false); // Enable the button if fully paid or overpaid
+//    } else {
+//        $('#validatepyment').prop('disabled', true);  // Disable the button if not fully paid
+//    }
+//} 
+
+//function calculateLeftToPay() {
+//    // Get VND values for card and cash payments (after removing any dots)
+//    var cdVnd = parseFloat($('#cardvnd').val().replace(/\./g, '')) || 0;
+//    var cashVnd = parseFloat($('#cashvnd').val().replace(/\./g, '')) || 0;
+
+//    // Get the USD payment and convert to VND
+//    var cashUsd = parseFloat($('#cashUsd').val()) || 0;
+//    var cashUsdInVnd = cashUsd * usdToVndRate;
+
+//    // Get the total payment amount from the data attribute
+//    var totalPaymentText = $("#CreateSO").data("amount");
+//    var totalPayment = parseFloat(totalPaymentText) || 0;
+
+//    // Calculate the total paid amount in VND
+//    var totalBillPaid = cdVnd + cashVnd + cashUsdInVnd;
+
+//    // Calculate the remaining amount to pay in VND
+//    var leftVndBalance = totalPayment - totalBillPaid;
+
+//    // Update the Left to Pay VND field
+//    $('#lefttopayvnd').val(formatNumberWithDots(leftVndBalance));
+
+//    // If the total paid amount is more than the bill, calculate change in USD
+//    if (totalBillPaid > totalPayment) {
+//        var excessVnd = totalBillPaid - totalPayment;
+//        var changeUsd = excessVnd / usdToVndRate;
+//        $('#changeUsd').val(changeUsd.toFixed(2)); // Show change in USD
+//    } else {
+//        $('#changeUsd').val('0'); // No change required
+//    }
+
+//    // Enable/Disable payment button based on whether the bill is fully paid
+//    if (totalBillPaid >= totalPayment) {
+//        $('#validatepyment').prop('disabled', false); // Enable the button
+//    } else {
+//        $('#validatepyment').prop('disabled', true); // Disable the button
+//    }
+//}
+
+
 //function calculateLeftToPay() {
 //    var cdVnd = parseFloat($('#cardvnd').val()) || 0;  // Card payment
 //    var cashVnd = parseFloat($('#cashvnd').val()) || 0; // Cash payment

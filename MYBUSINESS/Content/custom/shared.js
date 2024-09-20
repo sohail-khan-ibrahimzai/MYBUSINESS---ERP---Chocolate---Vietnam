@@ -1,59 +1,139 @@
-﻿//$('.storeids').click(function () {
-//    alert('Hi');
-//    $('#storeOpeningPopup').modal('show');
-//});
-var storeId = 0;
+﻿var storeId = 0;
+// Declare the active input variable
+let activeInputClose = null;
 if (storeId != null) {
 
 }
-//$(document).on('click', '#closeStore', function (e) {
-//    debugger;
-//    e.preventDefault();
-//    $('#storeClosingPopup').modal('show');
-//    //$('#storeClosingPopup1').modal('show');
-//});
 $(document).on('click', '#closeStore', function (e) {
     e.preventDefault();
-    var url = $(this).data('url');  // Get the URL to load the partial view
-    // Perform an AJAX request to load the modal content
+    var url = $(this).data('url');
     $.get(url, function (data) {
-        // Append the modal to the body if it doesn't already exist
         $('body').append(data);
         // Show the modal
         $('#storeClosingModal').modal('show');
-        // Clean up: remove the modal from the DOM when it's closed
+        // Set default active input
+        // Set default active input after a brief delay
+        $('#storeClosingModal').on('shown.bs.modal', function () {
+            activeInputClose = document.getElementById('oneThsndVndClose');
+            if (activeInputClose) {
+                activeInputClose.focus(); // Set focus to the input
+            }
+        });
         $('#storeClosingModal').on('hidden.bs.modal', function () {
             $(this).remove();
         });
     });
 });
-//$(document).on('click', '#closeStore', function (e) {
-//    debugger;
-//    e.preventDefault();
-//    $('#storeClosingPopup').modal('show');
-//    //$('#storeClosingPopup1').modal('show');
-//});
-//$('#closeStore').click(function () {
-//    alert('Hi');
-//    $('#storeOpeningPopup').modal('show');
-//});
+// Attach focus event listener only once
+$(document).on('focus', 'input', function () {
+    activeInputClose = this; // Update the active input when focused
+});
 
+// Insert number into active input
+function insertNumberClose(number) {
+    if (activeInputClose) {
+        // If 'CE' is pressed, clear the input field
+        if (number === 'CE') {
+            activeInputClose.value = '0';
+        }
+        // If 'X' is pressed, remove the last character
+        else if (number === 'X') {
+            activeInputClose.value = activeInputClose.value.length === 1 ? '0' : activeInputClose.value.slice(0, -1);
+        }
+        // If the current value is '0', replace it with the new number
+        else {
+            if (activeInputClose.value === '0') {
+                activeInputClose.value = number;
+            } else {
+                activeInputClose.value += number;
+            }
+        }
+        // Update the total for the active input
+        updateTotalForActiveInputClose();
+        updateTotalForActiveInputCloseDollars();
+        updateTotalForActiveInputCloseYens();
+    }
+}
+
+// Update total for the active input
+function updateTotalForActiveInputClose() {
+    const denominationMap = {
+        'oneThsndVndClose': 1000,
+        'twoThsndVndClose': 2000,
+        'fiveThsndVndClose': 5000,
+        'tenThsndVndClose': 10000,
+        'twentyThsndVndClose': 20000,
+        'fiftyThsndVndClose': 50000,
+        'oneLacVndClose': 100000,
+        'twoLacVndClose': 200000,
+        'fiveLacVndClose': 500000
+    };
+
+    const inputId = activeInputClose.id; // Get the ID of the active input field
+    const denominationValue = denominationMap[inputId]; // Get the denomination value
+
+    if (denominationValue) {
+        const count = parseInt(activeInputClose.value) || 0;
+        const total = count * denominationValue;
+        document.getElementById(`total${inputId.charAt(0).toUpperCase() + inputId.slice(1)}`).value = total;
+        updateOverallTotalsClose();
+    }
+}
+//Dollars
+function updateTotalForActiveInputCloseDollars() {
+    const denominationMap = {
+        'oneDollarClose': 1,
+        'fiveDollarsClose': 5,
+        'tenDollarsClose': 10,
+        'twentyDollarsClose': 20,
+        'fiftyDollarsClose': 50,
+        'hundredDollarsClose': 100
+    };
+
+    const inputId = activeInputClose.id; // Get the ID of the active input field
+    const denominationValue = denominationMap[inputId]; // Get the denomination value
+
+    if (denominationValue) {
+        const count = parseInt(activeInputClose.value) || 0;
+        const total = count * denominationValue;
+        document.getElementById(`total${inputId.charAt(0).toUpperCase() + inputId.slice(1)}`).value = total;
+        updateOverallTotalsCloseDollars();
+    }
+}
+//Yens / JPY
+function updateTotalForActiveInputCloseYens() {
+    const denominationMap = {
+        'oneYenClose': 1,
+        'fiveYensClose': 5,
+        'tenYensClose': 10,
+        'fiftyYensClose': 50,
+        'hundredYensClose': 1000,
+        'fivehundredYensClose': 500,
+        'onethousandsYens': 1000,
+        'twothousandsYensClose': 2000,
+        'fivethousandsYensClose': 5000,
+        'tenthousandsYensClose': 10000,
+    };
+
+    const inputId = activeInputClose.id; // Get the ID of the active input field
+    const denominationValue = denominationMap[inputId]; // Get the denomination value
+
+    if (denominationValue) {
+        const count = parseInt(activeInputClose.value) || 0;
+        const total = count * denominationValue;
+        document.getElementById(`total${inputId.charAt(0).toUpperCase() + inputId.slice(1)}`).value = total;
+        updateOverallTotalsCloseYens();
+    }
+}
 $(document).on('click', '#closeShop', function () {
-    //if (confirm("You input 0, are you sure?")) {
     var totalAmountVndClose = document.getElementById('totalVndCountClose').value;
     if (totalAmountVndClose == '0') totalAmountVndClose = 0;
     if (confirm(`You input '${totalAmountVndClose}', are you sure?`)) {
         debugger;
-        // Select the element
-        //const element = document.querySelector('.storeids');
-        //// Get the value of data-storeid
-        //const storeId = element.getAttribute('data-storeid');
-        //alert(storeId);
         var formattedString = "";
         if (closeCurrencyDetalInVnd.length > 0) {
             debugger;
             formattedString = closeCurrencyDetalInVnd.map(item => {
-                // Set the fixed denomination value
                 let denominationValue = 0;
 
                 switch (item.denomination) {
@@ -87,8 +167,6 @@ $(document).on('click', '#closeShop', function () {
                     default:
                         denominationValue = 0;
                 }
-
-                // Use the fixed denomination value in the formatted string
                 return `${denominationValue}@${item.count}`;
             }).join(':');
         }
@@ -107,27 +185,21 @@ $(document).on('click', '#closeShop', function () {
             vndBalance = 0;
             dollarBalance = 0;
             jpyBalance = 0;
-            //alert('No balance available');
         }
 
         var storeViewModel = {
-            ClosingBalance: selectedBlance, // Assuming you have an input field with id="openingBalance"
+            ClosingBalance: selectedBlance, 
             ClosingCurrencyDetail: formattedString
         };
 
-        // Make the AJAX POST request to server-side
         $.ajax({
-            url: '/Stores/CloseShop',  // Replace 'ControllerName' with your actual controller name
+            url: '/Stores/CloseShop', 
             type: 'POST',
             data: JSON.stringify(storeViewModel),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
-            //headers: {
-            //    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() // For anti-forgery token
-            //},
             success: function (response) {
                 if (response.Success) {
-                    //alert(response.Message);
                     window.location.href = '/Stores/StoreDashboard';
                     localStorage.removeItem('storeId');
                 } else {
@@ -149,54 +221,112 @@ function calculateTotalClose(inputId, denominationValue, outputId) {
     const count = parseInt(document.getElementById(inputId).value) || 0;
     const total = count * denominationValue;
     document.getElementById(outputId).value = total;
-
-    // Update the overall totals
     updateOverallTotalsClose();
 }
+//Dollars
+function calculateTotalDollarsClose(inputId, denominationValue, outputId) {
+    debugger;
+    const count = parseInt(document.getElementById(inputId).value) || 0;
+    const total = count * denominationValue;
+    document.getElementById(outputId).value = total;
+    updateOverallTotalsCloseDollars();
+}
+//Yens/JPY
+function calculateTotalYensClose(inputId, denominationValue, outputId) {
+    debugger;
+    const count = parseInt(document.getElementById(inputId).value) || 0;
+    const total = count * denominationValue;
+    document.getElementById(outputId).value = total;
+    updateOverallTotalsCloseYens();
+}
+// Update overall totals
 var closeCurrencyDetalInVnd = [];
 function updateOverallTotalsClose() {
-    debugger;
     const inputIds = ['oneThsndVndClose', 'twoThsndVndClose', 'fiveThsndVndClose', 'tenThsndVndClose', 'twentyThsndVndClose', 'fiftyThsndVndClose', 'oneLacVndClose', 'twoLacVndClose', 'fiveLacVndClose'];
     const outputIds = ['totalOneThsndVndClose', 'totalTwoThsndVndClose', 'totalFiveThsndVndClose', 'totalTenThsndVndClose', 'totalTwentyThsndVndClose', 'totalFiftyThsndVndClose', 'totalOneLacVndClose', 'totalTwoLacVndClose', 'totalFiveLacVndClose'];
 
     let totalNotes = 0;
     let totalValue = 0;
     closeCurrencyDetalInVnd = [];
+
     inputIds.forEach((id, index) => {
         const count = parseInt(document.getElementById(id).value) || 0;
         totalNotes += count;
-
-        // Get the corresponding total value
         const value = parseInt(document.getElementById(outputIds[index]).value) || 0;
         totalValue += value;
 
-        // Push the note count and value to the array
         if (count > 0) {
             closeCurrencyDetalInVnd.push({
-                denomination: id,  // Identifier for the denomination (e.g., 'oneThsndVnd')
+                denomination: id,
                 count: count,
                 totalValue: value
             });
         }
     });
-    //inputIds.forEach((id, index) => {
-    //    const count = parseInt(document.getElementById(id).value) || 0;
-    //    totalNotes += count;
-    //});
-
-    //outputIds.forEach(id => {
-    //    const value = parseInt(document.getElementById(id).value) || 0;
-    //    totalValue += value;
-    //});
 
     document.getElementById('totalVndClose').value = totalNotes;
     document.getElementById('totalVndCountClose').value = totalValue;
 }
+// Update overall totals Dollars
+var closeCurrencyDetalInDollars = [];
+function updateOverallTotalsCloseDollars() {
+    const inputIds = ['oneDollarClose', 'fiveDollarsClose', 'tenDollarsClose', 'twentyDollarsClose', 'fiftyDollarsClose', 'hundredDollarsClose'];
+    const outputIds = ['totalOneDollarClose','totalFiveDollarsClose', 'totalTenDollarsClose', 'totalTwentyDollarsClose', 'totalFiftyDollarsClose', 'totalHundredDollarsClose'];
+
+    let totalNotes = 0;
+    let totalValue = 0;
+    closeCurrencyDetalInDollars = [];
+
+    inputIds.forEach((id, index) => {
+        const count = parseInt(document.getElementById(id).value) || 0;
+        totalNotes += count;
+        const value = parseInt(document.getElementById(outputIds[index]).value) || 0;
+        totalValue += value;
+
+        if (count > 0) {
+            closeCurrencyDetalInDollars.push({
+                denomination: id,
+                count: count,
+                totalValue: value
+            });
+        }
+    });
+
+    document.getElementById('totalDollarsClose').value = totalNotes;
+    document.getElementById('totalDollarsCountClose').value = totalValue;
+}
+
+// Update overall totals Yens / JPY
+var closeCurrencyDetalInYens = [];
+function updateOverallTotalsCloseYens() {
+    const inputIds = ['oneYenClose', 'fiveYensClose', 'tenYensClose', 'fiftyYensClose', 'hundredYensClose', 'fivehundredYensClose', 'onethousandsYensClose', 'twothousandsYensClose', 'fivethousandsYensClose', 'tenthousandsYensClose'];
+    const outputIds = ['totalOneYenClose', 'totalFiveYensClose', 'totalTenYensClose', 'totalFiftyYensClose', 'totalHundredYensClose', 'totalFivehundredYensClose', 'totalOnethousandsYensClose', 'totalTwothousandsYensClose', 'totalFivethousandsYensClose', 'totalTenthousandsYensClose'];
+
+    let totalNotes = 0;
+    let totalValue = 0;
+    closeCurrencyDetalInYens = [];
+
+    inputIds.forEach((id, index) => {
+        const count = parseInt(document.getElementById(id).value) || 0;
+        totalNotes += count;
+        const value = parseInt(document.getElementById(outputIds[index]).value) || 0;
+        totalValue += value;
+
+        if (count > 0) {
+            closeCurrencyDetalInYens.push({
+                denomination: id,
+                count: count,
+                totalValue: value
+            });
+        }
+    });
+
+    document.getElementById('totalYensClose').value = totalNotes;
+    document.getElementById('totalYensCountClose').value = totalValue;
+}
+
 function logout() {
     debugger
-    // Clear all items from localStorage
     localStorage.clear();
-
-    // Redirect to logout action on the server
     window.location.href = '/UserManagement/Logout';
 }
