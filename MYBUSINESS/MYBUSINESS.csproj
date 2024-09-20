@@ -16156,6 +16156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
+    <Folder Include="Resources\" />
     <Folder Include="Views\Report\" />
   </ItemGroup>
   <ItemGroup>
