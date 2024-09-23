@@ -1790,7 +1790,24 @@ $(document).ready(function () {
         }
     });
     $('#saveSales').click(function (event) {
-        //debugger
+        debugger
+        const customerId = $('#customerId1').val();
+        const customerName = $('#customer1').val();
+        const customerVat = $('#customerVat1').val();
+        const customerCompany = $('#vndCustomerCompany1').val();
+        const customerAddress = $('#vndCustomerAddress1').val();
+        const customerEmail = $('#vndCustomerEmail1').val();
+
+        // Set the hidden fields with the values
+        $('input[name="Customer.Id"]').val(customerId);
+        $('input[name="Customer.Vat"]').val(customerVat);
+        $('input[name="Customer.Name"]').val(customerName);
+        $('input[name="Customer.CompanyName"]').val(customerCompany);
+        $('input[name="Customer.Address"]').val(customerAddress);
+        $('input[name="Customer.Email"]').val(customerEmail);
+        // Log values to debug (optional)
+        console.log(customerId, customerName, customerVat);
+
         //Binding SaleOrder Form
         $('#cardvnd').val(cardVndBalance);
         $('#cashvnd').val(cashVndBalance);
@@ -2116,29 +2133,29 @@ $(document).ready(function () {
     //    $("#dialog-CreateCustomer").dialog("open");
     //});
 
-    $('#OpenNewCustForm').click(function () {
+    //$('#OpenNewCustForm').click(function () {
 
-        $("#dialog-CreateCustomer").dialog("open");
-    });
+    //    $("#dialog-CreateCustomer").dialog("open");
+    //});
 
-    $('#btnCreateNewCust').click(function () {
+    //$('#btnCreateNewCust').click(function () {
 
-        $("#dialog-CreateCustomer").dialog("close");
-        //$('#idnCustomer').val(CustomerId);
-        var contents = $("#NewCustomerId").val();
-        $("#idnCustomer").val(contents);
+    //    $("#dialog-CreateCustomer").dialog("close");
+    //    //$('#idnCustomer').val(CustomerId);
+    //    var contents = $("#NewCustomerId").val();
+    //    $("#idnCustomer").val(contents);
 
-        contents = $("#NewCustomerName").val();
+    //    contents = $("#NewCustomerName").val();
 
-        $("#customer").val(contents);
+    //    $("#customer").val(contents);
 
-        contents = $("#NewCustomerAddress").val();
-        $("#customerAddress").val(contents);
+    //    contents = $("#NewCustomerAddress").val();
+    //    $("#customerAddress").val(contents);
 
-        $("#PreviousBalance").val(0.00);
-        update_itemTotal();
-        //alert(contents);
-    });
+    //    $("#PreviousBalance").val(0.00);
+    //    update_itemTotal();
+    //    //alert(contents);
+    //});
 
     //$('[id^="saleType"]').change(function () {
     //    update_itemTotal();

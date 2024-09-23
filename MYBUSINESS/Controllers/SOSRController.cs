@@ -73,7 +73,8 @@ namespace MYBUSINESS.Controllers
             var getSoes = sOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();
             return View(getSoes);
         }
-        public ActionResult ClosePosPopup() {
+        public ActionResult ClosePosPopup()
+        {
             return PartialView("_StoreClosePopup");
         }
         public ActionResult IndexReturn()
@@ -825,9 +826,9 @@ namespace MYBUSINESS.Controllers
         //{
         //public ActionResult Create(
         public ActionResult Create(
-    [Bind(Prefix = "Customer", Include = "Id,Name,Address,Email,Vat,CompanyName")] Customer Customer,
     [Bind(Prefix = "SaleOrder", Include = "Id,BillAmount,Balance,PrevBalance,BillPaid,BillPaidByCash,Discount,CustomerId,Remarks,Remarks2,PaymentMethod,PaymentDetail,SaleReturn,BankAccountId,Date")] SO sO,
     [Bind(Prefix = "SaleOrderDetail", Include = "ProductId,SalePrice,PurchasePrice,Quantity,SaleType,PerPack,IsPack,Product.Name,Product")] List<SOD> sOD,
+    [Bind(Prefix = "Customer", Include = "Id,Name,Address,Email,Vat,CompanyName")] Customer Customer,
     FormCollection collection
     )
         {
