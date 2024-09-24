@@ -66,11 +66,11 @@
         padding: 0; /* Optional: remove padding */
     }
         /*.scrollable-div {
-        max-height: 400px;*/ /* Adjust as needed */
+            max-height: 400px;*/ /* Adjust as needed */
         /*overflow-y: auto;
-        padding: 0;*/ /* Remove padding to align items correctly */
+            padding: 0;*/ /* Remove padding to align items correctly */
         /*display: flex;
-        flex-wrap: wrap;*/ /* Allow wrapping of items */
+            flex-wrap: wrap;*/ /* Allow wrapping of items */
         /*}*/
 
         .scrollable-div .col-md-3 {
@@ -122,18 +122,18 @@
             outline: none; /* Remove the focus outline */
         }
     /*.table-wrapper2 {
-        margin: 30px auto;
-        background: #fff;
-        padding: 20px;
-        box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
-    }
+            margin: 30px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+        }
 
-    .scrollable-div {
-        max-height: 400px;
-        overflow-y: scroll;
-    }
+        .scrollable-div {
+            max-height: 400px;
+            overflow-y: scroll;
+        }
 
-    .scrollable-container {*/
+        .scrollable-container {*/
     /*max-height: 100px !important;*/ /* Set desired height */
     /*height: 100px !important;*/ /* Set desired height */
     /*overflow-y: auto;*/ /* Enable vertical scrolling */
@@ -144,20 +144,20 @@
     /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/ /* Optional: box shadow */
     /*}
 
-    .small-box {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100px;*/ /* Optional: set a fixed height for each box */
+        .small-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100px;*/ /* Optional: set a fixed height for each box */
     /*}
 
-    .inner {
-        flex: 1;*/ /* Ensure the content takes available space */
+        .inner {
+            flex: 1;*/ /* Ensure the content takes available space */
     /*}
 
-    .icon {
-        text-align: center;
-    }*/
+        .icon {
+            text-align: center;
+        }*/
     /* Default product name styling */
     .product-box .product-name {
         font-weight: normal;
@@ -174,6 +174,28 @@
     .product-box .product-name {
         transition: font-weight 0.2s ease, color 0.2s ease;
     }
+
+    .loader {
+        display: none; /* Hide by default */
+        width: 12px;
+        height: 12px;
+        border: 2px solid white;
+        border-top: 2px solid transparent;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 10px; /* Adjust to position relative to button text */
+        margin-top: -6px; /* Center the loader vertically */
+    }
+
+    /* Ensure button size remains the same */
+    /*#customerByTaxCode {
+    width: 100%;*/ /* Ensure full width */
+    /*height: 40px;*/ /* Fixed height to prevent resizing */
+    /*padding-left: 35px;*/ /* Add space for the spinner */
+    /*padding-right: 35px;*/ /* Optional if needed for alignment */
+    /*position: relative;*/ /* Ensure loader and text are positioned correctly */
+    /*}*/
 </style>
 @*<h2>Create</h2>*@
 
@@ -192,7 +214,15 @@
                     @*<div id="saleOrder" class="col-sm-offset-5"><h2>Sale <b>Order</b></h2></div>*@
                     @*<div id="saleReturn" class="col-sm-offset-5"><h2>Sale <b>Return</b></h2></div>*@
                 </div>
-
+                <!--hidden fields customer data-->
+                <input type="text" autocomplete="off" class="form-control" name="Customer.Id" id="customerId1" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" style="display:none;">
+                <input type="text" class="form-control" name="Customer.Name" id="vndCustomer1" placeholder="Customer" style="display:none;">
+                <input type="text" class="form-control" name="Customer.CompanyName" id="vndCustomerCompany1" placeholder="Customer company" style="display:none;">
+                <input type="text" class="form-control" name="Customer.Name" id="vndCustomerName1" placeholder="Customer name" style="display:none;">
+                <input type="text" class="form-control" name="Customer.Address" id="vndCustomerAddress1" placeholder="Customer address" style="display:none;">
+                <input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat1" placeholder="Customer Vat" style="display:none;">
+                <input type="text" class="form-control" name="Customer.Email" id="vndCustomerEmail1" placeholder="Customer email" style="display:none;">
+                <!--hidden fields customer data-->
                 <input type="hidden" name="SaleOrder.SaleReturn" id="saleReturn" value=@ViewBag.IsReturn />
 
                 <input type="hidden" name="SaleOrder.CustomerId" id="idnCustomer" value="" />
@@ -503,114 +533,7 @@
             </div>
         </div>
     </div>
-    <!-- Curomer Tex Modal -->
-    <div class="modal fade bd-tax-modal-lg" id="taxModal" tabindex="-1" role="dialog" aria-labelledby="taxModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="taxModalTitle" style="text-align:center;">Customer Tax</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="container mt-5">
-                        <div class="row justify-content-center">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="row"></div><div class="col-md-6"></div><div class="col-md-5">
-                                            <div class="d-flex justify-content-center justify-content-md-end">
-                                                <button type="button" class="card-title btn btn-primary" id="individualWithoutVAT">Individual without VAT number</button>
-                                            </div>
-                                        </div><div class="col-md-1"></div>
 
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-10">
-                                                <form>
-                                                    <div class="form-group">
-                                                        <input type="text" autocomplete="off" class="form-control" name="Customer.Id" id="customerId" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" style="display:none;">
-                                                        @*<input type="hidden" name="Customer.Id" id="customerId1" value="@Model.Customer.Id" />*@
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="dropdown">Customer</label>
-                                                        <input type="text" autocomplete="off" class="form-control" name="Customer.Name" id="customer" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" title="Type customer name">
-                                                        @*<input type="hidden" name="Customer.Name" id="customer1" value="@Model.Customer.Name" />*@
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="field4">VAT Number</label>
-                                                        @*<input type="text" class="form-control" name="vndCustomerVat" id="vndCustomerVat" placeholder="VAT Number">*@
-                                                        <input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat" placeholder="VAT Number">
-                                                        @*<input type="hidden" name="Customer.Vat" id="customerVat1" value="@Model.Customer.Vat" />*@
-                                                    </div>
-                                                    @*<div class="form-group">
-                                                            <label for="dropdown">Customer</label>
-                                                            <select class="form-control" id="dropdown">
-                                                                <option value="">Select customer</option>
-                                                                <option value="1">Option 1</option>
-                                                                <option value="2">Option 2</option>
-                                                                <option value="3">Option 3</option>
-                                                            </select>
-                                                        </div>*@
-                                                    <div class="form-group">
-                                                        <label for="field1">Customer Name</label>
-                                                        <input type="text" class="form-control" name="Customer.Name" id="vndCustomerName" placeholder="Cutomer name">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="field2">Customer Company</label>
-                                                        <input type="text" class="form-control" name="Customer.CompanyName" id="vndCustomerCompany" placeholder="Customer company">
-                                                        @*<input type="hidden" name="Customer.CompanyName" id="vndCustomerCompany1" value="@Model.Customer.CompanyName" />*@
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="field3">Address</label>
-                                                        <input type="text" class="form-control" name="Customer.Address" id="vndCustomerAddress" placeholder="Address">
-                                                        @*<input type="hidden" name="Customer.Address" id="vndCustomerAddress1" value="@Model.Customer.Address" />*@
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="field5">Email</label>
-                                                        <input type="text" class="form-control" name="Customer.Email" id="vndCustomerEmail" placeholder="Email">
-                                                        @*<input type="hidden" name="Customer.Email" id="vndCustomerEmail1" value="@Model.Customer.Email" />*@
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--<div class="modal-body">
-                <div class="container mt-5">
-                    <div class="row justify-content-center">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-header">
-                                        <h4 class="card-title">Total</h4>
-                                    </div>
-                                <div class="card-body">-->
-                @*<form>
-                        <div class="form-group">
-                            <label for="inputField">Order No</label>
-                            <input type="text" class="form-control" id="poslatestserial" placeholder="Enter something">
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block btnupdatestatus">Submit</button>
-                    </form>*@
-                <!--</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" name="saveSales" id="saveSales">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- Pay Modal -->
     <div class="modal fade bd-pay-modal-lg" id="payModal" tabindex="-1" role="dialog" aria-labelledby="payModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -691,6 +614,16 @@
                                                         <label for="inputField">Left to pay VND</label>
                                                         <input readonly type="text" autocomplete="off" class="form-control" name="SaleOrder.Balance" id="lefttopayvnd" value="0" tabindex="-1">
                                                     </div>
+                                                    <!--hidden fields payment data-->
+                                                    <input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaid" id="cardvnd1" value="0" style="display:none;">
+                                                    <input type="text" class="form-control" id="cashvnd1" placeholder="Cash Vnd" style="display:none;">
+                                                    <input type="text" autocomplete="off" class="form-control" name="cashUsd1" id="cashUsd1" value="0" style="display:none;">
+                                                    <input type="text" class="form-control" name="cashJpy1" id="cashJpy1" placeholder="Cash Vnd" value="0" style="display:none;">
+                                                    <input type="text" class="form-control" id="changeUsd1" value="" placeholder="Change USD" style="display:none;">
+                                                    <input type="text" class="form-control" id="changejpy1" value="" placeholder="Change JPY" style="display:none;">
+                                                    <input type="text" class="form-control classBorder0" name="SaleOrder.BillAmount" id="ItemsTotal1" value="0" tabindex="-1" style="display:none;">
+                                                    <input type="text" autocomplete="off" class="form-control" name="SaleOrder.Balance" id="lefttopayvnd1" value="0" tabindex="-1" style="display:none;">
+                                                    <!--hidden fields payment data-->
                                                 </form>
                                             </div>
                                             <div class="col-md-4">
@@ -760,7 +693,133 @@
         </div>
     </div>
 
+    <!-- Curomer Tex Modal -->
+    <div class="modal fade bd-tax-modal-lg" id="taxModal" tabindex="-1" role="dialog" aria-labelledby="taxModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="taxModalTitle" style="text-align:center;">Customer Tax</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container mt-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="row"></div><div class="col-md-6"></div><div class="col-md-5">
+                                            <div class="d-flex justify-content-center justify-content-md-end">
+                                                <button type="button" class="card-title btn btn-primary" id="individualWithoutVAT">Individual without VAT number</button>
+                                            </div>
+                                        </div><div class="col-md-1"></div>
 
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <input type="text" autocomplete="off" class="form-control" name="Customer.Id" id="customerId" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" style="display:none;">
+                                                        @*<input type="hidden" name="Customer.Id" id="customerId1" value="@Model.Customer.Id" />*@
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="vndCustomerVat" class="col-sm-3 col-form-label" style="margin-left:-13px">VAT Number</label><br />
+                                                        <div class="col-sm-10" style="margin-left:-13px">
+                                                            <input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat" placeholder="VAT Number">
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <button type="button" class="btn btn-primary btn-block position-relative" id="customerByTaxCode" style="margin-left: -19px; width: 94px;">
+                                                                <i class="fa fa-search"></i>
+                                                                <span class="loader" style="margin-left: 20px;"></span>
+                                                                <span class="loading-text" style="display:none;">.</span>
+                                                            </button>
+                                                        </div>
+                                                        @*<div class="col-sm-2">
+                                                                <button type="button" class="btn btn-primary btn-block" id="customerByTaxCode"><i class="fa fa-search"></i></button>
+                                                                <span class="loader" style="display: none;"></span>
+                                                            </div>*@
+                                                        <!--<label for="field4">VAT Number</label>-->
+                                                        @*<input type="text" class="form-control" name="vndCustomerVat" id="vndCustomerVat" placeholder="VAT Number">*@
+                                                        <!--<input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat" placeholder="VAT Number">-->
+                                                        @*<input type="hidden" name="Customer.Vat" id="customerVat1" value="@Model.Customer.Vat" />*@
+                                                        <!--<button type="button" class="btn btn-primary ml-2">Submit</button>-->
+                                                    </div>
+                                                    <br />
+
+                                                    <br />
+                                                    <div class="form-group">
+                                                        <label for="dropdown">Customer</label>
+                                                        <input type="text" autocomplete="off" class="form-control" name="Customer.Name" id="vndCustomer" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" title="Type customer name">
+                                                        @*<input type="hidden" name="Customer.Name" id="customer1" value="@Model.Customer.Name" />*@
+                                                    </div>
+                                                    @*<div class="form-group">
+                                                            <label for="dropdown">Customer</label>
+                                                            <select class="form-control" id="dropdown">
+                                                                <option value="">Select customer</option>
+                                                                <option value="1">Option 1</option>
+                                                                <option value="2">Option 2</option>
+                                                                <option value="3">Option 3</option>
+                                                            </select>
+                                                        </div>*@
+                                                    <div class="form-group">
+                                                        <label for="field1">Customer Name</label>
+                                                        <input type="text" class="form-control" name="Customer.Name" id="vndCustomerName" placeholder="Cutomer name">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="field2">Customer Company</label>
+                                                        <input type="text" class="form-control" name="Customer.CompanyName" id="vndCustomerCompany" placeholder="Customer company">
+                                                        @*<input type="hidden" name="Customer.CompanyName" id="vndCustomerCompany1" value="@Model.Customer.CompanyName" />*@
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="field3">Address</label>
+                                                        <input type="text" class="form-control" name="Customer.Address" id="vndCustomerAddress" placeholder="Address">
+                                                        @*<input type="hidden" name="Customer.Address" id="vndCustomerAddress1" value="@Model.Customer.Address" />*@
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="field5">Email</label>
+                                                        <input type="text" class="form-control" name="Customer.Email" id="vndCustomerEmail" placeholder="Email">
+                                                        @*<input type="hidden" name="Customer.Email" id="vndCustomerEmail1" value="@Model.Customer.Email" />*@
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="modal-body">
+                <div class="container mt-5">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                        <h4 class="card-title">Total</h4>
+                                    </div>
+                                <div class="card-body">-->
+                @*<form>
+                        <div class="form-group">
+                            <label for="inputField">Order No</label>
+                            <input type="text" class="form-control" id="poslatestserial" placeholder="Enter something">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block btnupdatestatus">Submit</button>
+                    </form>*@
+                <!--</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" name="saveSales" id="saveSales">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     @*<button type="button" class="btn btn-primary" name="addQuantityModal" id="addQuantityModal">Add Qauntity</button>*@

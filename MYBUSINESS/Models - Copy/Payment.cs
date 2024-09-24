@@ -12,10 +12,15 @@ namespace MYBUSINESS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class MetaDetaDescription
+    public partial class Payment
     {
-        public int Id { get; set; }
-        public string Symble { get; set; }
-        public string Description { get; set; }
+        public decimal Id { get; set; }
+        public string SOId { get; set; }
+        public string PaymentMethod { get; set; }
+        public decimal PaymentAmount { get; set; }
+        public System.DateTime ReceivedDate { get; set; }
+        public string Remarks { get; set; }
+    
+        public virtual SO SO { get; set; }
     }
 }

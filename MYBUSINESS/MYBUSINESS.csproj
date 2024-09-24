@@ -439,9 +439,6 @@
     <Compile Include="CustomClasses\MetaDataClasses\Product_Metadata.cs" />
     <Compile Include="Models\ExpenseViewModel.cs" />
     <Compile Include="Models\LoanViewModel.cs" />
-    <Compile Include="Models\MetaDetaDescription.cs">
-      <DependentUpon>BusinessDataModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\MyBusinessInfo.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
@@ -455,6 +452,9 @@
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Product.cs">
+      <DependentUpon>BusinessDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProductCategory.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductDetail.cs">
@@ -481,12 +481,6 @@
     <Compile Include="Models\ServiceDetail.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\StoreProduct.cs">
-      <DependentUpon>BusinessDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\StoreViewModel.cs" />
-    <Compile Include="Models\ServiceViewModel.cs" />
-    <Compile Include="Models\SaleOrderViewModel.cs" />
     <Compile Include="Models\SO.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
@@ -514,19 +508,22 @@
     <Compile Include="Models\spTest_Result.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Store.cs">
+      <DependentUpon>BusinessDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StoreProduct.cs">
+      <DependentUpon>BusinessDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StoreViewModel.cs" />
+    <Compile Include="Models\ServiceViewModel.cs" />
+    <Compile Include="Models\SaleOrderViewModel.cs" />
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_helpdiagrams_Result.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Store.cs">
-      <DependentUpon>BusinessDataModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Supplier.cs">
-      <DependentUpon>BusinessDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserAuthorization.cs">

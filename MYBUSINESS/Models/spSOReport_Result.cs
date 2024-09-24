@@ -35,6 +35,7 @@ namespace MYBUSINESS.Models
         public string SaleType { get; set; }
         public Nullable<decimal> SaleOrderAmount { get; set; }
         public decimal BillPaid { get; set; }
+        public Nullable<decimal> BillPaidByCash { get; set; }
         public Nullable<decimal> Discount { get; set; }
         public Nullable<decimal> Balance { get; set; }
         public Nullable<decimal> PrevBalance { get; set; }

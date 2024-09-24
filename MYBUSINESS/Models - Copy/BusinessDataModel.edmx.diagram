@@ -5,35 +5,35 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="a584e9a2f9434e69aac2e1c9ca294c92" Name="Diagram1" ZoomLevel="101">
-        <EntityTypeShape EntityType="Models.BankAccount" Width="1.5" PointX="11.25" PointY="18.875" />
+        <EntityTypeShape EntityType="Models.BankAccount" Width="1.5" PointX="5.25" PointY="46.625" />
         <EntityTypeShape EntityType="Models.BusinessInfo" Width="1.5" PointX="0.75" PointY="31.375" />
-        <EntityTypeShape EntityType="Models.Customer" Width="1.5" PointX="3" PointY="25.125" />
+        <EntityTypeShape EntityType="Models.Customer" Width="1.5" PointX="3" PointY="20.5" />
         <EntityTypeShape EntityType="Models.DailyBalanceVnd" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Models.Department" Width="1.5" PointX="3" PointY="32.25" />
-        <EntityTypeShape EntityType="Models.Employee" Width="1.5" PointX="5.25" PointY="30.25" />
-        <EntityTypeShape EntityType="Models.Expense" Width="1.5" PointX="13.5" PointY="21.125" />
-        <EntityTypeShape EntityType="Models.ExpenseDetail" Width="1.5" PointX="18.75" PointY="29.375" />
-        <EntityTypeShape EntityType="Models.Loan" Width="1.5" PointX="10.5" PointY="22.25" />
-        <EntityTypeShape EntityType="Models.LoanDetail" Width="1.5" PointX="12.75" PointY="38.875" />
-        <EntityTypeShape EntityType="Models.Location" Width="1.5" PointX="3" PointY="40" />
+        <EntityTypeShape EntityType="Models.Department" Width="1.5" PointX="3" PointY="40.375" />
+        <EntityTypeShape EntityType="Models.Employee" Width="1.5" PointX="5.25" PointY="38.25" />
+        <EntityTypeShape EntityType="Models.Expense" Width="1.5" PointX="13.5" PointY="25.75" />
+        <EntityTypeShape EntityType="Models.ExpenseDetail" Width="1.5" PointX="18.75" PointY="29.875" />
+        <EntityTypeShape EntityType="Models.Loan" Width="1.5" PointX="10.5" PointY="39.75" />
+        <EntityTypeShape EntityType="Models.LoanDetail" Width="1.5" PointX="15.75" PointY="38.75" />
+        <EntityTypeShape EntityType="Models.Location" Width="1.5" PointX="3" PointY="32.5" />
         <EntityTypeShape EntityType="Models.MyBusinessInfo" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Models.Payment" Width="1.5" PointX="15.75" PointY="29.875" />
-        <EntityTypeShape EntityType="Models.PO" Width="1.5" PointX="7.5" PointY="21.75" />
-        <EntityTypeShape EntityType="Models.POD" Width="1.5" PointX="15.75" PointY="24.625" />
-        <EntityTypeShape EntityType="Models.Product" Width="1.5" PointX="5.25" PointY="37.75" />
-        <EntityTypeShape EntityType="Models.ProductCategory" Width="1.5" PointX="7.5" PointY="40.5" />
-        <EntityTypeShape EntityType="Models.ProductDetail" Width="1.5" PointX="12.75" PointY="35.5" />
-        <EntityTypeShape EntityType="Models.ProductionOrder" Width="1.5" PointX="7.5" PointY="49.5" />
-        <EntityTypeShape EntityType="Models.ProductionOrderDetail" Width="1.5" PointX="9.75" PointY="44.625" />
-        <EntityTypeShape EntityType="Models.Rent" Width="1.5" PointX="10.5" PointY="28.25" />
-        <EntityTypeShape EntityType="Models.RentDetail" Width="1.5" PointX="15.75" PointY="34.75" />
-        <EntityTypeShape EntityType="Models.Service" Width="1.5" PointX="7.5" PointY="28.5" />
-        <EntityTypeShape EntityType="Models.ServiceDetail" Width="1.5" PointX="9.75" PointY="34.875" />
-        <EntityTypeShape EntityType="Models.SO" Width="1.5" PointX="13.5" PointY="28" />
-        <EntityTypeShape EntityType="Models.SOD" Width="1.5" PointX="18.75" PointY="34.625" />
-        <EntityTypeShape EntityType="Models.Store" Width="1.5" PointX="5.25" PointY="46.25" />
-        <EntityTypeShape EntityType="Models.StoreProduct" Width="1.5" PointX="7.5" PointY="37.375" />
-        <EntityTypeShape EntityType="Models.Supplier" Width="1.5" PointX="3" PointY="20.5" />
+        <EntityTypeShape EntityType="Models.Payment" Width="1.5" PointX="9.75" PointY="50.25" />
+        <EntityTypeShape EntityType="Models.PO" Width="1.5" PointX="13.5" PointY="32.25" />
+        <EntityTypeShape EntityType="Models.POD" Width="1.5" PointX="18.75" PointY="34.5" />
+        <EntityTypeShape EntityType="Models.Product" Width="1.5" PointX="5.25" PointY="30.25" />
+        <EntityTypeShape EntityType="Models.ProductCategory" Width="1.5" PointX="7.5" PointY="33" />
+        <EntityTypeShape EntityType="Models.ProductDetail" Width="1.5" PointX="15.75" PointY="30.625" />
+        <EntityTypeShape EntityType="Models.ProductionOrder" Width="1.5" PointX="7.5" PointY="57.5" />
+        <EntityTypeShape EntityType="Models.ProductionOrderDetail" Width="1.5" PointX="9.75" PointY="45.875" />
+        <EntityTypeShape EntityType="Models.Rent" Width="1.5" PointX="7.5" PointY="26" />
+        <EntityTypeShape EntityType="Models.RentDetail" Width="1.5" PointX="9.75" PointY="24.875" />
+        <EntityTypeShape EntityType="Models.Service" Width="1.5" PointX="10.5" PointY="30.25" />
+        <EntityTypeShape EntityType="Models.ServiceDetail" Width="1.5" PointX="15.75" PointY="33.875" />
+        <EntityTypeShape EntityType="Models.SO" Width="1.5" PointX="7.5" PointY="35.75" />
+        <EntityTypeShape EntityType="Models.SOD" Width="1.5" PointX="12.75" PointY="39.125" />
+        <EntityTypeShape EntityType="Models.Store" Width="1.5" PointX="8.25" PointY="42.75" />
+        <EntityTypeShape EntityType="Models.StoreProduct" Width="1.5" PointX="10.5" PointY="36.75" />
+        <EntityTypeShape EntityType="Models.Supplier" Width="1.5" PointX="3" PointY="25.5" />
         <EntityTypeShape EntityType="Models.UserAuthorization" Width="1.5" PointX="4.75" PointY="0.75" />
         <AssociationConnector Association="Models.FK_PO_Account" />
         <AssociationConnector Association="Models.FK_SO_Account" />
@@ -76,6 +76,7 @@
         <AssociationConnector Association="Models.FK_ServiceDetail_Service" />
         <AssociationConnector Association="Models.FK_SOD_SO" />
         <AssociationConnector Association="Models.FK_StoreProduct_Store" />
+        <EntityTypeShape EntityType="Models.sysdiagram" Width="1.5" PointX="0.75" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
