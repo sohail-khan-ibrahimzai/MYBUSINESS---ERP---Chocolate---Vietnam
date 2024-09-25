@@ -14,7 +14,18 @@
             </div>
         </div>
     </div>*@
-
+<style>
+    .calculator-container {
+        position: fixed;
+        top: 126px;
+        right: 45px;
+        width: 38%;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        padding: 10px;
+    }
+</style>
 <div class="modal fade bd-tax-modal-lg" id="storeClosingModal" tabindex="-1" role="dialog" aria-labelledby="storeClosingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
@@ -90,57 +101,59 @@
                                         </div>
                                         <div class="col-md-6">
                                             @*Calculator buttons*@
-                                            <div class="calculator">
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('7')">7</button>
+                                            <div class="calculator-container">
+                                                <div class="calculator">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('7')">7</button>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('8')">8</button>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('9')">9</button>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-4">
-                                                        <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('8')">8</button>
+                                                    <br />
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('4')">4</button>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('5')">5</button>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('6')">6</button>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-4">
-                                                        <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('9')">9</button>
+                                                    <br />
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('1')">1</button>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('2')">2</button>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('3')">3</button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <br />
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('4')">4</button>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('5')">5</button>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('6')">6</button>
-                                                    </div>
-                                                </div>
-                                                <br />
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('1')">1</button>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('2')">2</button>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('3')">3</button>
-                                                    </div>
-                                                </div>
-                                                <br />
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('CE')">CE</button>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <button class="btn btnbtn-secondary btn-block" type="button" onclick="insertNumberClose('0')">0</button>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <button class="btn btnbtn-secondary btn-block" type="button" onclick="insertNumberClose('X')">X</button>
+                                                    <br />
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="insertNumberClose('CE')">CE</button>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button class="btn btnbtn-secondary btn-block" type="button" onclick="insertNumberClose('0')">0</button>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button class="btn btnbtn-secondary btn-block" type="button" onclick="insertNumberClose('X')">X</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        </div>
 
                                     <hr />
 

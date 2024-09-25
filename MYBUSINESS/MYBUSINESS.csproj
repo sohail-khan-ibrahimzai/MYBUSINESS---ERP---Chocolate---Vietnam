@@ -334,6 +334,7 @@
     <Compile Include="Controllers\BankAccountsController.cs" />
     <Compile Include="Controllers\BankAccountLedgerController.cs" />
     <Compile Include="Controllers\CustomerLedgerController.cs" />
+    <Compile Include="Controllers\CurrenciesController.cs" />
     <Compile Include="Controllers\StoresController.cs" />
     <Compile Include="Controllers\PurchaseQuotationController.cs" />
     <Compile Include="Controllers\SaleQuotationController.cs" />
@@ -403,6 +404,9 @@
       <DependentUpon>BusinessDataModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\BusinessInfo.cs">
+      <DependentUpon>BusinessDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Currency.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Customer.cs">
@@ -16123,6 +16127,13 @@
     <Content Include="Views\PurchaseQuotation\CreatePOByCategory.cshtml" />
     <Content Include="Views\PurchaseQuotation\EditPOSByCategory.cshtml" />
     <Content Include="Views\SOSR\PopupView.cshtml" />
+    <Content Include="Views\Currencies\Create.cshtml" />
+    <Content Include="Views\Currencies\Create1.cshtml" />
+    <Content Include="Views\Currencies\Delete.cshtml" />
+    <Content Include="Views\Currencies\Details.cshtml" />
+    <Content Include="Views\Currencies\Edit.cshtml" />
+    <Content Include="Views\Currencies\Edit1.cshtml" />
+    <Content Include="Views\Currencies\Index.cshtml" />
     <None Include="Web.Debug.Config">
       <DependentUpon>Web.Config</DependentUpon>
     </None>

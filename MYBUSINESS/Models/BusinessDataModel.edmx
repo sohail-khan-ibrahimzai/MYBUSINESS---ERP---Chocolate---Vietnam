@@ -26,6 +26,21 @@
           <Property Name="Mobile" Type="nvarchar" MaxLength="500" />
           <Property Name="email" Type="nvarchar" MaxLength="500" />
         </EntityType>
+        <EntityType Name="Currency">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Symbol" Type="nvarchar" MaxLength="50" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="ExchangeRate" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="UpdatedAt" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedBy" Type="int" />
+        </EntityType>
         <EntityType Name="Customer">
           <Key>
             <PropertyRef Name="Id" />
@@ -1066,6 +1081,7 @@
         <EntityContainer Name="ModelsStoreContainer">
           <EntitySet Name="BankAccount" EntityType="Self.BankAccount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BusinessInfo" EntityType="Self.BusinessInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DailyBalanceVnd" EntityType="Self.DailyBalanceVnd" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
@@ -1489,26 +1505,27 @@
             <End Role="StoreProduct" EntitySet="StoreProducts" />
           </AssociationSet>
           <FunctionImport Name="spExpenseReport" ReturnType="Collection(Models.spExpenseReport_Result)">
-            <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
+          <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spLoanReport" ReturnType="Collection(Models.spLoanReport_Result)">
-            <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
+          <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spPOReport" ReturnType="Collection(Models.spPOReport_Result)">
-            <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
+          <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spRentReport" ReturnType="Collection(Models.spRentReport_Result)">
-            <Parameter Name="SaleOrderID" Mode="In" Type="String" />
+          <Parameter Name="SaleOrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spServiceReport" ReturnType="Collection(Models.spServiceReport_Result)">
-            <Parameter Name="SaleOrderID" Mode="In" Type="String" />
+          <Parameter Name="SaleOrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spSOReport" ReturnType="Collection(Models.spSOReport_Result)">
-            <Parameter Name="SaleOrderID" Mode="In" Type="String" />
+          <Parameter Name="SaleOrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spTest" ReturnType="Collection(Models.spTest_Result)">
-            <Parameter Name="Param1" Mode="In" Type="String" />
+          <Parameter Name="Param1" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="Currencies" EntityType="Models.Currency" />
           </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -2773,6 +2790,21 @@
           <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
           <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
         </ComplexType>
+        <EntityType Name="Currency">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Symbol" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ExchangeRate" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedBy" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3535,6 +3567,22 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Currencies">
+            <EntityTypeMapping TypeName="Models.Currency">
+              <MappingFragment StoreEntitySet="Currency">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

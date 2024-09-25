@@ -8,9 +8,12 @@ var customerColumns = [{ name: 'Code', minWidth: '100px' }, { name: 'CompanyName
 var customers = new Array();
 var productsBarcodes = new Array();
 var productsBarcodess = [];
-debugger;
-const usdToVndRate = 23600; // Exchange rate for USD to VND
-const jpyToVndRate = 179; // Exchange rate for JPY to VND
+var _usdToVndRate = 0;
+var _jpyToVndRate = 0;
+var usdToVndRate = 0; // Exchange rate for USD to VND
+var jpyToVndRate = 0; // Exchange rate for JPY to VND
+//const usdToVndRate = 23600; // Exchange rate for USD to VND
+//const jpyToVndRate = 179; // Exchange rate for JPY to VND
 console.log(productsBarcodes); // Check the contents of the array
 //var productsBarcodess = new Array();
 //var focusedBtnId = "";
@@ -28,6 +31,27 @@ var num = 0;
 //    document.getElementById('closeStore').style.display = 'block';
 //    document.getElementById("StorageItem").value = storeIds;
 //}
+var availableCurrencies = [];
+function getAll_AvailableCurrencies() {
+    $.ajax({
+        url: '/Currencies/GetAllAbvailableCurrencies',
+        type: 'GET',
+        success: function (response) {
+            if (response.Success) {
+                availableCurrencies = response.Data;
+                _usdToVndRate = availableCurrencies.find(currency => currency.Name === 'USD');
+                _jpyToVndRate = availableCurrencies.find(currency => currency.Name === 'JPY');
+                usdToVndRate = _usdToVndRate.ExchangeRate;
+                jpyToVndRate = _jpyToVndRate.ExchangeRate;
+            } else {
+                alert('Failed to set session: ' + response.Message);
+            }
+        },
+        error: function (xhr, status, error) {
+            alert('An error occurred while setting the session: ' + error);
+        }
+    });
+}
 function OnTypeCustomerName(param) {
     //debugger;
     $(param).mcautocomplete({
@@ -646,7 +670,7 @@ function addProduct(encodedProductJson) {
     $('#validateQuantity').off('click').on('click', function (e) {
         var quantityFromModal = parseInt($('#productQuantity').val(), 10) || 0; // Ensure it's a number and default to 0 if invalid
         $('#quantityAddpopup').modal('hide'); // Hide the modal
-
+        $('#productQuantity').val(1);
         // After getting the quantity, call the function to add the product
         handleProductAddition(encodedProductJson, quantityFromModal);
     });
@@ -1790,7 +1814,6 @@ $(document).ready(function () {
         }
     });
     $('#saveSales').click(function (event) {
-        debugger
         const customerId = $('#customerId').val();
         const vndCustomer = $('#vndCustomer').val();
         const customerName = $('#vndCustomerName').val();
@@ -1982,7 +2005,7 @@ $(document).ready(function () {
         //if ($('#ItemsTotal').val().trim() == "") {
         //    $('#ItemsTotal').val(0);
         //}
-        //debugger;
+        getAll_AvailableCurrencies();
         var storedTotal = totalVndBalanceHeader;
         if (!isNaN($('#total').val()) || !$('#total').val('0')) {
             //$('#lefttotalvnd').val(storedTotal);
@@ -2173,7 +2196,6 @@ $(document).ready(function () {
             data: { taxCode: customerTaxCode },
             success: function (response) {
                 try {
-                    debugger;
                     var data = response;
                     var aa = data.Response.Response;
                     var datas = JSON.parse(aa);
@@ -2371,9 +2393,7 @@ function barcodeEntered(value) {
 //}
 function TriggerBodyEvents() {
     //debugger;
-    debugger;
     OnTypeName('#name' + txtSerialNum);
-
     $('#name' + txtSerialNum).on("keyup", function (e) {
         //alert('#name' + txtSerialNum);
         //if (e.keyCode === 13)
@@ -2460,7 +2480,6 @@ function TriggerBodyEvents() {
     });
     //packing0
     $('#individualWithoutVAT').click(function () {
-        debugger;
         $('#vndCustomerName').val('Người mua không lấy hóa đơn');
     });
 
@@ -2889,7 +2908,7 @@ function calculateLeftToPay() {
 
     // Calculate total amount paid by the customer (Card + Cash VND + Cash USD in VND + Cash JPY in VND)
     //var totalBillPaid = cdVnd + cashVnd + cashUsdInVnd + cashJpyInVnd;
-     totalBillPaid = cdVnd + cashVnd + cashUsdInVnd + cashJpyInVnd;
+    totalBillPaid = cdVnd + cashVnd + cashUsdInVnd + cashJpyInVnd;
 
     // Calculate the remaining balance (Customer side payment minus total amount)
     //var leftVndBalance = totalPayment - totalBillPaid;

@@ -57,6 +57,7 @@ namespace MYBUSINESS.Models
         public virtual DbSet<StoreProduct> StoreProducts { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<UserAuthorization> UserAuthorizations { get; set; }
+        public virtual DbSet<Currency> Currencies { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

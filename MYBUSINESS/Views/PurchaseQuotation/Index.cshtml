@@ -150,7 +150,6 @@
     });
     //})
     $('.btnupdatestatus').click(function upadtePurhcaseOrder(event) {
-        debugger;
         /* var poserialnumber = $('#poslatestserial').val(); // Corrected selector to get data-poserial from input field*/
         event.preventDefault(); // Prevent the form from submitting immediately
         var poserialnumber = $('#poslatestserial').val().trim(); // Get and trim the input value
@@ -165,7 +164,6 @@
             type: 'POST',
             data: { poSerialNumber: poserialnumber },
             success: function (response) {
-                debugger;
                 // Accessing the properties of the response object
                 if (response.Success === true) {
                     alert("Success: " + response.Message);

@@ -815,6 +815,11 @@ namespace MYBUSINESS.Controllers
             //ViewBag.isReturn = isReturn1;
             ViewBag.SelectedProductListByCategory = groupedSelectedProducts;
             ViewBag.ReportId = TempData["ReportId"] as string;
+            TempData["_CustomerName"] = TempData["CustomerName"] as string;
+            TempData["_CustomerEmail"] = TempData["CustomerEmail"] as string;
+            TempData["_CustomerAddress"] = TempData["CustomerAddress"] as string;
+            TempData["_POSName"] = TempData["POSName"] as string;
+            TempData["_CustomerVatNumber"] = TempData["CustomerVatNumber"] as string;
             return View(saleOrderViewModel);
         }
 
@@ -838,6 +843,9 @@ namespace MYBUSINESS.Controllers
                 return RedirectToAction("StoreNotFound", "UserManagement");
             }
             var parseId = int.Parse(storeId);
+
+            var getStoreName = db.Stores.FirstOrDefault(x => x.Id == parseId);
+
             string SOId = string.Empty;
             //SO sO = new SO();
             //if (ModelState.IsValid)
@@ -1063,7 +1071,11 @@ namespace MYBUSINESS.Controllers
                     // Call the async method synchronously
 
                     var addWebServiceCustomerDetails = AddWebServiceCustomerDetails(authToken, Customer, sO, sOD); //Uncomment locally
-
+                    TempData["CustomerName"] = Customer.Name;
+                    TempData["CustomerEmail"] = Customer.Email;
+                    TempData["CustomerAddress"] = Customer.Address;
+                    TempData["POSName"] = getStoreName.Name;
+                    TempData["CustomerVatNumber"] = Customer.Vat;
                     //var addWebServiceCuromerDetails =  AddWebServiceCustomerDetails(authToken, cust,sO,sOD);
                     //try
                     //{
@@ -1092,6 +1104,8 @@ namespace MYBUSINESS.Controllers
             //SOId = string.Join("-", ASCIIEncoding.ASCII.GetBytes(Encryption.Encrypt(sO.Id, "BZNS"))); //Commented due to Id decrypted Id save in Db table SO
             //}
             return RedirectToAction("Create", new { IsReturn = "false" });
+           // return RedirectToAction("PrintSO3", new { id = sO.Id });
+            //return View();
         }
         // Function to login to the web service
         // Function to login to the web service synchronously
@@ -1857,8 +1871,14 @@ namespace MYBUSINESS.Controllers
             return File(renderBytes, mimeType);
 
         }
+        //public FileContentResult PrintSO3(string id, string customerName, string customerEmail, string customerAddress, string posName)
         public FileContentResult PrintSO3(string id)
         {
+            string _customerName = TempData["_CustomerName"] as string;
+            string _customerEmail = TempData["_CustomerEmail"] as string;
+            string _customerAddress = TempData["_CustomerAddress"] as string;
+            string _customerPosName = TempData["_POSName"] as string;
+            string _customerVatNumber = TempData["_CustomerVatNumber"] as string;
             //if (id.Length > 36)
             //{
             //    id = Decode(id);
@@ -1886,11 +1906,21 @@ namespace MYBUSINESS.Controllers
 
 
             ReportDataSource reportDataSource = new ReportDataSource();
-
+            viewer.LocalReport.EnableHyperlinks = true;
             reportDataSource.Name = "DataSet1";
             reportDataSource.Value = db.spSOReport(id).AsEnumerable();//db.spSOReceipt;// BusinessDataSetTableAdapters
             viewer.LocalReport.DataSources.Add(reportDataSource);
-            viewer.LocalReport.SetParameters(new ReportParameter("SaleOrderID", id));
+            //viewer.LocalReport.SetParameters(new ReportParameter("SaleOrderID", id));
+            // Set the report parameters for Customer Information
+            viewer.LocalReport.SetParameters(new ReportParameter[]
+            {
+        new ReportParameter("SaleOrderID", id),                 // Assuming you already have this parameter
+        new ReportParameter("CustomerName", _customerName ?? "N/A"),  // Pass Customer Name
+        new ReportParameter("CustomerEmail", _customerEmail ?? "N/A"), // Pass Customer Email
+        new ReportParameter("CustomerAddress", _customerAddress ?? "N/A"), // Pass Customer Address
+        new ReportParameter("POSName", _customerPosName ?? "N/A"),   // Pass POS Name
+        new ReportParameter("CustomerVatNumber", _customerVatNumber ?? "N/A"),   // Pass POS Name
+            });
             viewer.LocalReport.Refresh();
             //byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
             if (FileTempered(viewer.LocalReport.ReportPath) == true)

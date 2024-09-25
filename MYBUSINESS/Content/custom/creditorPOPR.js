@@ -15,7 +15,6 @@ var x, y;
 var _total = 0;
 var IsReturn = "false";
 function OnTypeSupplierName(param) {
-    debugger;
     $(param).mcautocomplete({
         showHeader: true,
         columns: supplierColumns,
@@ -37,7 +36,6 @@ function OnTypeSupplierName(param) {
 
 var productName = "";
 function OnTypeName(param) {
-    debugger;
     //alert(products);
     //alert(clickedTextboxId);
     //$('#name' + txtSerialNum).mcautocomplete({
@@ -55,7 +53,6 @@ function OnTypeName(param) {
         columns: productColumns,
         source: products,
         select: function (event, ui) {
-            debugger;
             this.value = (ui.item ? ui.item[1] : '');
             productName = this.value;
             //if ($('#isPack' + clickedIdNum).val() == "true") {//false=piece true=PerPack
@@ -272,7 +269,6 @@ $(document).ready(function () {
         }
 
         $('#selectedProducts > tbody  > tr').each(function () {
-            debugger;
             idx += 1;
             var price = $(this).find("[id^='purchasePrice']").val();
             InvalidproductName = $(this).find("[id^='name']").val();
@@ -481,7 +477,6 @@ $('td:first-child').each(function () {
 });
 
 function update_itemTotal() {
-    debugger;
     var ItemsTotal = 0;
     
     var orderQty = 0;
@@ -492,7 +487,6 @@ function update_itemTotal() {
     $("#OrderTotal").val('Order Total(' + parseInt(orderQty) + ')');
     
     $('#selectedProducts > tbody  > tr').each(function () {
-        debugger;
         //if (IsReturn == 'true') {//if (IsReturn == 'True') { c# model uses 'T'rue and java script user 't'rue
         if (IsReturn == 'false') {
             //$('#name').prop('selectedIndex', 0);

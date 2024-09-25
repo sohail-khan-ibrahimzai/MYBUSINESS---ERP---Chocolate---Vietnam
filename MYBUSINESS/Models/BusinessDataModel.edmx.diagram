@@ -76,7 +76,8 @@
         <AssociationConnector Association="Models.FK_ServiceDetail_Service" />
         <AssociationConnector Association="Models.FK_SOD_SO" />
         <AssociationConnector Association="Models.FK_StoreProduct_Store" />
-      </Diagram>
+        <EntityTypeShape EntityType="Models.Currency" Width="1.5" PointX="0.75" PointY="4.75" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

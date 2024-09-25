@@ -196,6 +196,25 @@
     /*padding-right: 35px;*/ /* Optional if needed for alignment */
     /*position: relative;*/ /* Ensure loader and text are positioned correctly */
     /*}*/
+    .calculator-container {
+        position: fixed;
+        top: 86px;
+        right: 14px;
+        width: 31%;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        padding: 10px;
+    }
+
+    .quantity-calculator-container {
+        right: 14px;
+        width: 100%;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        padding: 10px;
+    }
 </style>
 @*<h2>Create</h2>*@
 
@@ -628,52 +647,54 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <!-- Calculator buttons -->
-                                                <div class="calculator">
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(7)">7</button>
+                                                <div class="calculator-container">
+                                                    <div class="calculator">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(7)">7</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(8)">8</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(9)">9</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(8)">8</button>
+                                                        <br />
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(4)">4</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(5)">5</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(6)">6</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(9)">9</button>
+                                                        <br />
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(1)">1</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(2)">2</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(3)">3</button>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <br />
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(4)">4</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(5)">5</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(6)">6</button>
-                                                        </div>
-                                                    </div>
-                                                    <br />
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(1)">1</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(2)">2</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(3)">3</button>
-                                                        </div>
-                                                    </div>
-                                                    <br />
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="clearInput()">CE</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(0)">0</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="deleteLast()">X</button>
+                                                        <br />
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="clearInput()">CE</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(0)">0</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="deleteLast()">X</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -868,52 +889,54 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="calculator">
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(7)">7</button>
+                                                <div class="quantity-calculator-container">
+                                                    <div class="calculator">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(7)">7</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(8)">8</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(9)">9</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(8)">8</button>
+                                                        <br />
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(4)">4</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(5)">5</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(6)">6</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(9)">9</button>
+                                                        <br />
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(1)">1</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(2)">2</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(3)">3</button>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <br />
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(4)">4</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(5)">5</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(6)">6</button>
-                                                        </div>
-                                                    </div>
-                                                    <br />
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(1)">1</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(2)">2</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(3)">3</button>
-                                                        </div>
-                                                    </div>
-                                                    <br />
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="clearQuantityInput()">CE</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btnbtn-secondary btn-block" type="button" onclick="appendQuantityNumber(0)">0</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btnbtn-secondary btn-block" type="button" onclick="deleteQuantityLast()">X</button>
+                                                        <br />
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="clearQuantityInput()">CE</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btnbtn-secondary btn-block" type="button" onclick="appendQuantityNumber(0)">0</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btnbtn-secondary btn-block" type="button" onclick="deleteQuantityLast()">X</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1012,7 +1035,6 @@
 
 
 <script type="text/javascript">
-    debugger;
     //document.getElementById('barcodeInput').focus();
     //document.getElementById('barcodeInput').addEventListener('keyup', function (event) {
     //    if (event.key === 'Enter') {
@@ -1043,7 +1065,6 @@
     });
 
      function onBarcodeScans(barcode) {
-     debugger;
      var productList = productsBarcodesList;
      console.log(productList);
      var product = productList.find(p => p.BarCode === barcode);
@@ -1054,10 +1075,35 @@
          alert('Product not found');
      }
     }
-    debugger;
-    @if (ViewBag.ReportId != null && ViewBag.ReportId != "") {
-        @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
-    }
+      @if (ViewBag.ReportId != null && ViewBag.ReportId != "")
+      {
+          //string customerName = ViewBag.CustomerName ?? "N/A";
+          //string customerEmail = ViewBag.CustomerEmail ?? "N/A";
+          //string customerAddress = ViewBag.CustomerAddress ?? "N/A";
+          //string posName = ViewBag.POSName ?? "N/A";
+           @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
+          // Proper URL encoding for special characters
+          @*var reportUrl = Url.Action("PrintSO3", "SOSR", new
+          {
+              id = ViewBag.ReportId,
+              customerName = customerName.ToString(),
+              customerEmail = customerEmail.ToString(),
+              customerAddress = customerAddress.ToString(),
+              posName = posName.ToString()
+          });
+            @:window.open('@reportUrl', "_blank");*@
+      }
+@*@if (ViewBag.ReportId != null && ViewBag.ReportId != "") {
+            string customerName = ViewBag.CustomerName ?? "N/A";
+            string customerEmail = ViewBag.CustomerEmail ?? "N/A";
+            string customerAddress = ViewBag.CustomerAddress ?? "N/A";
+            string posName = ViewBag.POSName ?? "N/A";
+            var reportUrl = "PrintSO3/" + ViewBag.ReportId + "?customerName=" + Uri.EscapeDataString(customerName) + "&customerEmail=" + Uri.EscapeDataString(customerEmail) +
+                "&customerAddress=" + Uri.EscapeDataString(customerAddress) +
+                "&posName=" + Uri.EscapeDataString(posName);
+
+            @:window.open('@reportUrl', "_blank");
+    }*@
     var reportId = '@(ViewBag.ReportId)';
     //if (reportId != null && reportId != "") {
     //    var storedTotal = localStorage.getItem('totalItems');
@@ -1122,34 +1168,34 @@
 
 
         $.ajax({
-            url: "@Url.Action("ProductRentStatus","SOSR")",
+            url: "@Url.Action("ProductRentStatus", "SOSR")",
             data: { 'prodId': prodId, 'sellDate': sellDate},
             type: "GET",
             cache: false,
             success: function (data) {
-                //toastr.success('Hi! I am success message.');
-                //var abc = data;
-                //alert(data);
-                if (data.indexOf('12:00:00 AM') != -1) {
+            //toastr.success('Hi! I am success message.');
+            //var abc = data;
+            //alert(data);
+            if (data.indexOf('12:00:00 AM') != -1) {
 
-                    $("#NewData").html(data);
-                    $("#NewData").dialog("open");
-                //}
-                }
+            $("#NewData").html(data);
+            $("#NewData").dialog("open");
+            //}
+            }
 
 
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                //$('#lblCommentsNotification').text("Error encountered while saving the comments.");
-                alert('Data provided was not valid');
+            //$('#lblCommentsNotification').text("Error encountered while saving the comments.");
+            alert('Data provided was not valid');
             }
-        });
-    }
+            });
+            }
 
-    //alert(IsReturn);
+            //alert(IsReturn);
 </script>
 
-@*@section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }*@
+            @*@section Scripts {
+                    @Scripts.Render("~/bundles/jqueryval")
+                }*@
 
