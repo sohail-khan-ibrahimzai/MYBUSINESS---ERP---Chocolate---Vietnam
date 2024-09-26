@@ -1,64 +1,37 @@
-﻿var storeId = 0;
-var serDownError = "Server is down VAT Invoice cannot print at this time";
+﻿var serDownError = "Server is down VAT Invoice cannot print at this time";
+var storeId = 0;
 // Declare the active input variable
 let activeInputClose = null;
 if (storeId != null) {
-
+    alert(storeId);
 }
-var availableCurrenciesCloseStore = [];
+//var availableCurrenciesCloseStore = [];
 
-function getAllAvailableCurrenciesCloseStore() {
-    $.ajax({
-        url: '/Currencies/GetAllAbvailableCurrencies',
-        type: 'GET',
-        success: function (response) {
-            if (response.Success) {
-                availableCurrenciesCloseStore = response.Data;
-                var url = $('#closeStore').data('url'); // Get the URL here
-                showModalAndFocusInputClose(url); // Pass the URL to the function
-            } else {
-                alert('Failed to set session: ' + response.Message);
-            }
-        },
-        error: function (xhr, status, error) {
-            alert('An error occurred while setting the session: ' + error);
-        }
-    });
-}
+//function getAllAvailableCurrenciesCloseStore() {
+//    $.ajax({
+//        url: '/Currencies/GetAllAbvailableCurrencies',
+//        type: 'GET',
+//        success: function (response) {
+//            if (response.Success) {
+//                availableCurrenciesCloseStore = response.Data;
+//                var url = $('#closeStore').data('url'); // Get the URL here
+//                showModalAndFocusInputClose(url); // Pass the URL to the function
+//            } else {
+//                alert('Failed to set session: ' + response.Message);
+//            }
+//        },
+//        error: function (xhr, status, error) {
+//            alert('An error occurred while setting the session: ' + error);
+//        }
+//    });
+//}
 
-function showModalAndFocusInputClose(url) { // Accept URL as a parameter
-    $.get(url, function (data) {
-        $('body').append(data);
-        $('#storeClosingModal').modal('show');
-        $('#storeClosingModal').on('shown.bs.modal', function () {
-            var activeInputClose = document.getElementById('oneThsndVndClose');
-            if (activeInputClose) {
-                activeInputClose.focus(); // Set focus to the input
-            }
-        });
-        $('#storeClosingModal').on('hidden.bs.modal', function () {
-            $(this).remove();
-        });
-    });
-}
-
-// Use event delegation to ensure the event is captured
-$(document).on('click', '#closeStore', function () {
-    getAllAvailableCurrenciesCloseStore();
-});
-// Attach click handler to elements with the 'storeids' class
-
-//$(document).on('click', '#closeStore', function (e) {
-//    e.preventDefault();
-//    var url = $(this).data('url');
+//function showModalAndFocusInputClose(url) { // Accept URL as a parameter
 //    $.get(url, function (data) {
 //        $('body').append(data);
-//        // Show the modal
 //        $('#storeClosingModal').modal('show');
-//        // Set default active input
-//        // Set default active input after a brief delay
 //        $('#storeClosingModal').on('shown.bs.modal', function () {
-//            activeInputClose = document.getElementById('oneThsndVndClose');
+//            var activeInputClose = document.getElementById('oneThsndVndClose');
 //            if (activeInputClose) {
 //                activeInputClose.focus(); // Set focus to the input
 //            }
@@ -67,11 +40,38 @@ $(document).on('click', '#closeStore', function () {
 //            $(this).remove();
 //        });
 //    });
+//}
+
+//// Use event delegation to ensure the event is captured
+//$(document).on('click', '#closeStore', function () {
+//    getAllAvailableCurrenciesCloseStore();
 //});
-// Attach focus event listener only once
-//$(document).on('focus', 'input', function () {
-//    activeInputClose = this; // Update the active input when focused
-//});
+// Attach click handler to elements with the 'storeids' class
+
+$(document).on('click', '#closeStore', function (e) {
+    e.preventDefault();
+    var url = $(this).data('url');
+    $.get(url, function (data) {
+        $('body').append(data);
+        // Show the modal
+        $('#storeClosingModal').modal('show');
+        // Set default active input
+        // Set default active input after a brief delay
+        $('#storeClosingModal').on('shown.bs.modal', function () {
+            activeInputClose = document.getElementById('oneThsndVndClose');
+            if (activeInputClose) {
+                activeInputClose.focus(); // Set focus to the input
+            }
+        });
+        $('#storeClosingModal').on('hidden.bs.modal', function () {
+            $(this).remove();
+        });
+    });
+});
+ //Attach focus event listener only once
+$(document).on('focus', 'input', function () {
+    activeInputClose = this; // Update the active input when focused
+});
 
 // Insert number into active input
 function insertNumberClose(number) {

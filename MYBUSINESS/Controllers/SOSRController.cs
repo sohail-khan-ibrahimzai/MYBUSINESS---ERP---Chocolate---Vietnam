@@ -823,13 +823,13 @@ namespace MYBUSINESS.Controllers
             //ViewBag.isReturn = isReturn1;
             ViewBag.SelectedProductListByCategory = groupedSelectedProducts;
             ViewBag.ReportId = TempData["ReportId"] as string;
-            ViewBag.WebserviceDownError = TempData["WebserviceDownError"] as string;
-            TempData["_CustomerName"] = TempData["CustomerName"] as string;
-            TempData["_CustomerEmail"] = TempData["CustomerEmail"] as string;
-            TempData["_CustomerAddress"] = TempData["CustomerAddress"] as string;
-            TempData["_POSName"] = TempData["POSName"] as string;
-            TempData["_CustomerVatNumber"] = TempData["CustomerVatNumber"] as string;
-            TempData["_WebserviceDownError"] = TempData["WebserviceDownError"] as string;
+            //ViewBag.WebserviceDownError = TempData["WebserviceDownError"] as string;
+            //TempData["_CustomerName"] = TempData["CustomerName"] as string;
+            //TempData["_CustomerEmail"] = TempData["CustomerEmail"] as string;
+            //TempData["_CustomerAddress"] = TempData["CustomerAddress"] as string;
+            //TempData["_POSName"] = TempData["POSName"] as string;
+            //TempData["_CustomerVatNumber"] = TempData["CustomerVatNumber"] as string;
+            //TempData["_WebserviceDownError"] = TempData["WebserviceDownError"] as string;
             return View(saleOrderViewModel);
         }
 
@@ -854,7 +854,7 @@ namespace MYBUSINESS.Controllers
             }
             var parseId = int.Parse(storeId);
 
-            var getStoreName = db.Stores.FirstOrDefault(x => x.Id == parseId);
+            //var getStoreName = db.Stores.FirstOrDefault(x => x.Id == parseId);
 
             string SOId = string.Empty;
             //SO sO = new SO();
@@ -1081,11 +1081,13 @@ namespace MYBUSINESS.Controllers
                     // Call the async method synchronously
 
                     var addWebServiceCustomerDetails = AddWebServiceCustomerDetails(authToken, Customer, sO, sOD); //Uncomment locally
-                    TempData["CustomerName"] = Customer.Name;
-                    TempData["CustomerEmail"] = Customer.Email;
-                    TempData["CustomerAddress"] = Customer.Address;
-                    TempData["POSName"] = getStoreName.Name;
-                    TempData["CustomerVatNumber"] = Customer.Vat;
+
+                    //TempData["CustomerName"] = Customer.Name;
+                    //TempData["CustomerEmail"] = Customer.Email;
+                    //TempData["CustomerAddress"] = Customer.Address;
+                    //TempData["POSName"] = getStoreName.Name;
+                    //TempData["CustomerVatNumber"] = Customer.Vat;
+
                     //var addWebServiceCuromerDetails =  AddWebServiceCustomerDetails(authToken, cust,sO,sOD);
                     //try
                     //{
@@ -1449,7 +1451,7 @@ namespace MYBUSINESS.Controllers
                     else
                     {
                         string errorContent = await response.Content.ReadAsStringAsync();
-                        TempData["WebserviceDownError"] = "Sever is down VAT Invoice cannot print at this time";
+                        //TempData["WebserviceDownError"] = "Sever is down VAT Invoice cannot print at this time";
                         return Json(new { Success = false, Message = $"Failed to add customer details. Status code: {response.StatusCode}. Response: {errorContent}" });
                     }
                 }
@@ -1886,12 +1888,12 @@ namespace MYBUSINESS.Controllers
         //public FileContentResult PrintSO3(string id, string customerName, string customerEmail, string customerAddress, string posName)
         public FileContentResult PrintSO3(string id)
         {
-            string _customerName = TempData["_CustomerName"] as string;
-            string _customerEmail = TempData["_CustomerEmail"] as string;
-            string _customerAddress = TempData["_CustomerAddress"] as string;
-            string _customerPosName = TempData["_POSName"] as string;
-            string _customerVatNumber = TempData["_CustomerVatNumber"] as string;
-            string _webserviceDownError = TempData["_WebserviceDownError"] as string;
+            //string _customerName = TempData["_CustomerName"] as string;
+            //string _customerEmail = TempData["_CustomerEmail"] as string;
+            //string _customerAddress = TempData["_CustomerAddress"] as string;
+            //string _customerPosName = TempData["_POSName"] as string;
+            //string _customerVatNumber = TempData["_CustomerVatNumber"] as string;
+            //string _webserviceDownError = TempData["_WebserviceDownError"] as string;
 
             //if (id.Length > 36)
             //{
@@ -1929,11 +1931,17 @@ namespace MYBUSINESS.Controllers
             viewer.LocalReport.SetParameters(new ReportParameter[]
             {
         new ReportParameter("SaleOrderID", id),                 // Assuming you already have this parameter
-        new ReportParameter("CustomerName", _customerName ?? "N/A"),  // Pass Customer Name
-        new ReportParameter("CustomerEmail", _customerEmail ?? "N/A"), // Pass Customer Email
-        new ReportParameter("CustomerAddress", _customerAddress ?? "N/A"), // Pass Customer Address
-        new ReportParameter("POSName", _customerPosName ?? "N/A"),   // Pass POS Name
-        new ReportParameter("CustomerVatNumber", _customerVatNumber ?? "N/A"),   // Pass POS Name
+        new ReportParameter("CustomerName", "N/A"),  // Pass Customer Name
+        new ReportParameter("CustomerEmail","N/A"), // Pass Customer Email
+        new ReportParameter("CustomerAddress", "N/A"), // Pass Customer Address
+        new ReportParameter("POSName", "N/A"),   // Pass POS Name
+        new ReportParameter("CustomerVatNumber", "N/A"),   // Pass POS Name
+
+        //new ReportParameter("CustomerName", _customerName ?? "N/A"),  // Pass Customer Name
+        //new ReportParameter("CustomerEmail", _customerEmail ?? "N/A"), // Pass Customer Email
+        //new ReportParameter("CustomerAddress", _customerAddress ?? "N/A"), // Pass Customer Address
+        //new ReportParameter("POSName", _customerPosName ?? "N/A"),   // Pass POS Name
+        //new ReportParameter("CustomerVatNumber", _customerVatNumber ?? "N/A"),   // Pass POS Name
             });
             viewer.LocalReport.Refresh();
             //byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);

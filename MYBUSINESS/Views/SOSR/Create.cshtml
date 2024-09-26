@@ -1077,7 +1077,8 @@
     }
       @if (ViewBag.ReportId != null && ViewBag.ReportId != "")
       {
-          if(ViewBag.WebserviceDownError!= null) {
+           @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
+          @*if(ViewBag.WebserviceDownError!= null) {
           @:alert(serDownError);
           }
     else {
@@ -1086,7 +1087,8 @@
               //string customerAddress = ViewBag.CustomerAddress ?? "N/A";
               //string posName = ViewBag.POSName ?? "N/A";
            @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
-           }
+           }*@
+
           // Proper URL encoding for special characters
           @*var reportUrl = Url.Action("PrintSO3", "SOSR", new
           {

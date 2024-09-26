@@ -7,7 +7,6 @@ function getAllAvailableCurrencies() {
         success: function (response) {
             if (response.Success) {
                 availableCurrencies = response.Data;
-                showModalAndFocusInput();
             } else {
                 alert('Failed to set session: ' + response.Message);
             }
@@ -17,26 +16,8 @@ function getAllAvailableCurrencies() {
         }
     });
 }
-function showModalAndFocusInput() {
-    $('#storeOpeningPopup').modal('show');
-    $('#storeOpeningPopup').on('shown.bs.modal', function () {
-        var initialInput = document.getElementById('oneThsndVnd');
-        if (initialInput) {
-            activeInput = initialInput;
-            initialInput.focus();
-        }
-    });
-}
-// Attach click handler to elements with the 'storeids' class
-$('.storeids').click(function () {
-    // Fetch the currencies first, then show the modal and focus the input
-    getAllAvailableCurrencies();
-});
-
-//Workig Code
-//$('.storeids').click(function () {
+//function showModalAndFocusInput() {
 //    $('#storeOpeningPopup').modal('show');
-//    // Set the initial active input field and focus on it
 //    $('#storeOpeningPopup').on('shown.bs.modal', function () {
 //        var initialInput = document.getElementById('oneThsndVnd');
 //        if (initialInput) {
@@ -44,7 +25,25 @@ $('.storeids').click(function () {
 //            initialInput.focus();
 //        }
 //    });
+//}
+//// Attach click handler to elements with the 'storeids' class
+//$('.storeids').click(function () {
+//    // Fetch the currencies first, then show the modal and focus the input
+//    getAllAvailableCurrencies();
 //});
+
+//Workig Code
+$('.storeids').click(function () {
+    $('#storeOpeningPopup').modal('show');
+    // Set the initial active input field and focus on it
+    $('#storeOpeningPopup').on('shown.bs.modal', function () {
+        var initialInput = document.getElementById('oneThsndVnd');
+        if (initialInput) {
+            activeInput = initialInput;
+            initialInput.focus();
+        }
+    });
+});
 
 ////////////////
 var formattedString = "";
@@ -339,7 +338,7 @@ $('#openShop').click(function () {
         storeId = storeIds;
         if (storeIds != null || storeIds != undefined) {
             localStorage.setItem('storeId', storeId);
-            localStorage.setItem('storeName', storeName);
+            //localStorage.setItem('storeName', storeName);
             setSession(); // Call setSession function to make an AJAX request
         }
     } else {

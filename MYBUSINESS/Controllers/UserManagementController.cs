@@ -204,8 +204,7 @@ namespace MYBUSINESS.Controllers
             {
                 // Store the value in the session
                 Session["StoreId"] = storeId;
-                Session["StoreName"] = storeName;
-
+                //Session["StoreName"] = storeName;
                 // Optionally, redirect to another action or view
                 return Json(new { Success = true, Message = "" });
             }

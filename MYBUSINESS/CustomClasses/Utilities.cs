@@ -30,7 +30,5 @@ namespace MYBUSINESS.CustomClasses
             return PayableAmount - AmountPaid;
         }
 
-        
-
     }
 }
