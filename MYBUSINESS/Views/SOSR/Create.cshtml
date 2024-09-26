@@ -1077,11 +1077,16 @@
     }
       @if (ViewBag.ReportId != null && ViewBag.ReportId != "")
       {
-          //string customerName = ViewBag.CustomerName ?? "N/A";
-          //string customerEmail = ViewBag.CustomerEmail ?? "N/A";
-          //string customerAddress = ViewBag.CustomerAddress ?? "N/A";
-          //string posName = ViewBag.POSName ?? "N/A";
+          if(ViewBag.WebserviceDownError!= null) {
+          @:alert(serDownError);
+          }
+    else {
+              //string customerName = ViewBag.CustomerName ?? "N/A";
+              //string customerEmail = ViewBag.CustomerEmail ?? "N/A";
+              //string customerAddress = ViewBag.CustomerAddress ?? "N/A";
+              //string posName = ViewBag.POSName ?? "N/A";
            @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
+           }
           // Proper URL encoding for special characters
           @*var reportUrl = Url.Action("PrintSO3", "SOSR", new
           {
@@ -1195,7 +1200,7 @@
             //alert(IsReturn);
 </script>
 
-            @*@section Scripts {
-                    @Scripts.Render("~/bundles/jqueryval")
-                }*@
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
 

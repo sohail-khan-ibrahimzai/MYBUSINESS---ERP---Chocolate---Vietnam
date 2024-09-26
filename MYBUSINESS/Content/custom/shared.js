@@ -1,4 +1,5 @@
 ﻿var storeId = 0;
+var serDownError = "Server is down VAT Invoice cannot print at this time";
 // Declare the active input variable
 let activeInputClose = null;
 if (storeId != null) {

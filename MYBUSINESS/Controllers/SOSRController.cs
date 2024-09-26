@@ -54,11 +54,18 @@ namespace MYBUSINESS.Controllers
             int thisSerial = 0;
             foreach (SO itm in sOes)
             {
-                thisSerial = (int)itm.Customer.SOes.Max(x => x.SOSerial);
+                //thisSerial = (int)itm?.Customer.SOes.Max(x => x?.SOSerial);
+                thisSerial = (itm?.Customer?.SOes != null && itm.Customer.SOes.Any())
+                  ? (int)(itm.Customer.SOes.Max(x => (decimal?)x?.SOSerial ?? 0))
+                  : 0;
 
-                if (!LstMaxSerialNo.ContainsKey((int)itm.CustomerId))
+                //if (!LstMaxSerialNo.ContainsKey((int)itm.CustomerId))
+                //{
+                //    LstMaxSerialNo.Add(itm.Customer.Id, thisSerial);
+                //}
+                if (!LstMaxSerialNo.ContainsKey(itm.CustomerId ?? 0)) // Default to 0 if CustomerId is null
                 {
-                    LstMaxSerialNo.Add(itm.Customer.Id, thisSerial);
+                    LstMaxSerialNo.Add(itm.Customer?.Id ?? 0, thisSerial); // Default to 0 if Customer.Id is null
                 }
 
 
@@ -715,7 +722,8 @@ namespace MYBUSINESS.Controllers
             {
                 Customer cust = db.Customers.Where(x => x.Id == itm.CustomerId).FirstOrDefault();
 
-                TotalBalance += (decimal)cust.Balance;
+                //TotalBalance += (decimal)cust.Balance;
+                TotalBalance += cust?.Balance ?? 0;
 
             }
             ViewBag.TotalBalance = TotalBalance;
@@ -815,11 +823,13 @@ namespace MYBUSINESS.Controllers
             //ViewBag.isReturn = isReturn1;
             ViewBag.SelectedProductListByCategory = groupedSelectedProducts;
             ViewBag.ReportId = TempData["ReportId"] as string;
+            ViewBag.WebserviceDownError = TempData["WebserviceDownError"] as string;
             TempData["_CustomerName"] = TempData["CustomerName"] as string;
             TempData["_CustomerEmail"] = TempData["CustomerEmail"] as string;
             TempData["_CustomerAddress"] = TempData["CustomerAddress"] as string;
             TempData["_POSName"] = TempData["POSName"] as string;
             TempData["_CustomerVatNumber"] = TempData["CustomerVatNumber"] as string;
+            TempData["_WebserviceDownError"] = TempData["WebserviceDownError"] as string;
             return View(saleOrderViewModel);
         }
 
@@ -1104,7 +1114,7 @@ namespace MYBUSINESS.Controllers
             //SOId = string.Join("-", ASCIIEncoding.ASCII.GetBytes(Encryption.Encrypt(sO.Id, "BZNS"))); //Commented due to Id decrypted Id save in Db table SO
             //}
             return RedirectToAction("Create", new { IsReturn = "false" });
-           // return RedirectToAction("PrintSO3", new { id = sO.Id });
+            // return RedirectToAction("PrintSO3", new { id = sO.Id });
             //return View();
         }
         // Function to login to the web service
@@ -1320,7 +1330,8 @@ namespace MYBUSINESS.Controllers
 
             try
             {
-                string url = "https://0106026495-998.minvoice.pro/api/InvoiceApi78/Save";
+                string url = "https://0106026495-998.minvoice.pro/api/InvoiceApi78/Save"; //Real url working test env 
+                //string url = "https://0106026495-998.minvoice.pro/api/InvoiceApi780/Save"; //To check if webservice down / do not respond
 
                 using (var client = new HttpClient())
                 {
@@ -1376,7 +1387,7 @@ namespace MYBUSINESS.Controllers
                     var invoice = new Invoice
                     {
                         //inv_invoiceSeries = saleOrder.InvoiceSeries ?? "1C24MPE", // Default value if InvoiceSeries is null
-                        inv_invoiceSeries = $"1C{lastTwoDigitsString}MPE",//"1C24MPE", // Default value if InvoiceSeries is null
+                        inv_invoiceSeries = $"1C{lastTwoDigitsString}MPE",//"1C24MPE", // Default value if InvoiceSeries is null Invoice symobol fo receipt
                         inv_invoiceIssuedDate = DateTime.Now.AddDays(0).ToString("yyyy-MM-dd HH:mm:ss"),//saleOrder.InvoiceIssuedDate?.ToString("yyyy-MM-dd") ?? DateTime.Now.AddDays(13).ToString("yyyy-MM-dd"),
                         inv_currencyCode = "VND",//saleOrder.CurrencyCode ?? "VND",
                         inv_exchangeRate = 1,//saleOrder.ExchangeRate ?? 1,
@@ -1438,6 +1449,7 @@ namespace MYBUSINESS.Controllers
                     else
                     {
                         string errorContent = await response.Content.ReadAsStringAsync();
+                        TempData["WebserviceDownError"] = "Sever is down VAT Invoice cannot print at this time";
                         return Json(new { Success = false, Message = $"Failed to add customer details. Status code: {response.StatusCode}. Response: {errorContent}" });
                     }
                 }
@@ -1879,6 +1891,8 @@ namespace MYBUSINESS.Controllers
             string _customerAddress = TempData["_CustomerAddress"] as string;
             string _customerPosName = TempData["_POSName"] as string;
             string _customerVatNumber = TempData["_CustomerVatNumber"] as string;
+            string _webserviceDownError = TempData["_WebserviceDownError"] as string;
+
             //if (id.Length > 36)
             //{
             //    id = Decode(id);

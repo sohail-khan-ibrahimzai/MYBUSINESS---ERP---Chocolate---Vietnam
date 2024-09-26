@@ -103,10 +103,13 @@
                                                 @Html.DisplayFor(modelItem => item.SOSerial)
                                             </td>
 
-                                            <td class="CustomerNameForSearch">
+                                            @*<td class="CustomerNameForSearch">
                                                 @item.Customer.Name
 
-                                            </td>
+                                            </td>*@
+                                        <td class="CustomerNameForSearch">
+                                            @(item.Customer?.Name ?? "Unknown Customer")
+                                        </td>
                                             <td>
                                                 @(item.SaleReturn ? "Return" : "Sale")
 
