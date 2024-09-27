@@ -368,7 +368,6 @@
     <Compile Include="CustomClasses\MetaDataClasses\PurchaseOrder_Metadata.cs" />
     <Compile Include="CustomClasses\MetaDataClasses\SaleOrder_Metadata.cs" />
     <Compile Include="CustomClasses\NoCache.cs" />
-    <Compile Include="CustomClasses\Shared.cs" />
     <Compile Include="CustomClasses\Utilities.cs" />
     <Compile Include="DataSets\spPOReport_DataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -459,9 +458,6 @@
     <Compile Include="Models\Product.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ProductCategory.cs">
-      <DependentUpon>BusinessDataModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\ProductDetail.cs">
       <DependentUpon>BusinessDataModel.tt</DependentUpon>
     </Compile>
@@ -543,14 +539,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\bmsAlHindi.mdf" />
-    <Content Include="App_Data\bmsAlHindi_log.ldf">
-      <DependentUpon>bmsAlHindi.mdf</DependentUpon>
-    </Content>
-    <Content Include="App_Data\bmsFresh.mdf" />
-    <Content Include="App_Data\bmsFresh_log.ldf">
-      <DependentUpon>bmsFresh.mdf</DependentUpon>
-    </Content>
+    <Content Include="App_Data\bmsAlHindi.mdf.mdf" />
     <Content Include="bower_components\bootstrap-slider\.bower.json" />
     <Content Include="bower_components\bootstrap-slider\bootstrap-slider.js" />
     <Content Include="bower_components\bootstrap-slider\bower.json" />

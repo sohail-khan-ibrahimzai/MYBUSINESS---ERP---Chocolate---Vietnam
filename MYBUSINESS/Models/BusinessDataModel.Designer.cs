@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\CURRENT PROJECTS\ERP_Latest\BMS Zahra Rubab New - hans - Upgraded (current)\MYBUSINESS\Models\BusinessDataModel.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\New folder (7)\MYBUSINESS\Models\BusinessDataModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

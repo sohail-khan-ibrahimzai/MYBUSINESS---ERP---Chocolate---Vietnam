@@ -31,27 +31,28 @@ var num = 0;
 //    document.getElementById('closeStore').style.display = 'block';
 //    document.getElementById("StorageItem").value = storeIds;
 //}
-var availableCurrencies = [];
-function getAll_AvailableCurrencies() {
-    $.ajax({
-        url: '/Currencies/GetAllAbvailableCurrencies',
-        type: 'GET',
-        success: function (response) {
-            if (response.Success) {
-                availableCurrencies = response.Data;
-                _usdToVndRate = availableCurrencies.find(currency => currency.Name === 'USD');
-                _jpyToVndRate = availableCurrencies.find(currency => currency.Name === 'JPY');
-                usdToVndRate = _usdToVndRate.ExchangeRate;
-                jpyToVndRate = _jpyToVndRate.ExchangeRate;
-            } else {
-                alert('Failed to set session: ' + response.Message);
-            }
-        },
-        error: function (xhr, status, error) {
-            alert('An error occurred while setting the session: ' + error);
-        }
-    });
-}
+
+//var availableCurrencies = [];
+//function getAll_AvailableCurrencies() {
+//    $.ajax({
+//        url: '/Currencies/GetAllAbvailableCurrencies',
+//        type: 'GET',
+//        success: function (response) {
+//            if (response.Success) {
+//                availableCurrencies = response.Data;
+//                _usdToVndRate = availableCurrencies.find(currency => currency.Name === 'USD');
+//                _jpyToVndRate = availableCurrencies.find(currency => currency.Name === 'JPY');
+//                usdToVndRate = _usdToVndRate.ExchangeRate;
+//                jpyToVndRate = _jpyToVndRate.ExchangeRate;
+//            } else {
+//                alert('Failed to set session: ' + response.Message);
+//            }
+//        },
+//        error: function (xhr, status, error) {
+//            alert('An error occurred while setting the session: ' + error);
+//        }
+//    });
+//}
 function OnTypeCustomerName(param) {
     //debugger;
     $(param).mcautocomplete({
@@ -2005,7 +2006,8 @@ $(document).ready(function () {
         //if ($('#ItemsTotal').val().trim() == "") {
         //    $('#ItemsTotal').val(0);
         //}
-        getAll_AvailableCurrencies();
+        //
+        //getAll_AvailableCurrencies();
         var storedTotal = totalVndBalanceHeader;
         if (!isNaN($('#total').val()) || !$('#total').val('0')) {
             //$('#lefttotalvnd').val(storedTotal);

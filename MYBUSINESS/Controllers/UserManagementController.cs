@@ -200,7 +200,8 @@ namespace MYBUSINESS.Controllers
         [HttpPost]
         public ActionResult StoreValue(string storeId, string storeName)
         {
-            if (!string.IsNullOrEmpty(storeId) && !string.IsNullOrEmpty(storeName))
+            //if (!string.IsNullOrEmpty(storeId) && !string.IsNullOrEmpty(storeName))
+            if (!string.IsNullOrEmpty(storeId))
             {
                 // Store the value in the session
                 Session["StoreId"] = storeId;

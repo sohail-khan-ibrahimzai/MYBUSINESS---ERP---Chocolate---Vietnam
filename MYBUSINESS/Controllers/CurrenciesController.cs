@@ -156,13 +156,13 @@ namespace MYBUSINESS.Controllers
         }
         public JsonResult GetAllAbvailableCurrencies()
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return Json(new { Success = false, RedirectUrl = Url.Action("StoreNotFound", "UserManagement") }, JsonRequestBehavior.AllowGet);
-            }
+            //var storeId = Session["StoreId"] as string;
+            //if (storeId == null)
+            //{
+            //    return Json(new { Success = false, RedirectUrl = Url.Action("StoreNotFound", "UserManagement") }, JsonRequestBehavior.AllowGet);
+            //}
             var currencies = db.Currencies.ToList();
-            if (currencies == null)
+            if (currencies == null || !currencies.Any())
             {
                 return Json(null, JsonRequestBehavior.AllowGet);
             }

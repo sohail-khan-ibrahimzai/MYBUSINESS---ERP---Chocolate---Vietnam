@@ -2,10 +2,14 @@
 var storeId = 0;
 // Declare the active input variable
 let activeInputClose = null;
-if (storeId != null) {
-    alert(storeId);
-}
 //var availableCurrenciesCloseStore = [];
+if (storeId != null) {
+    //alert(storeId);
+}
+//$(document).ready(function () {
+//    getAllAvailableCurrenciesCloseStore();
+//});
+
 
 //function getAllAvailableCurrenciesCloseStore() {
 //    $.ajax({
@@ -14,8 +18,25 @@ if (storeId != null) {
 //        success: function (response) {
 //            if (response.Success) {
 //                availableCurrenciesCloseStore = response.Data;
-//                var url = $('#closeStore').data('url'); // Get the URL here
-//                showModalAndFocusInputClose(url); // Pass the URL to the function
+//            } else {
+//                alert('Failed to set session: ' + response.Message);
+//            }
+//        },
+//        error: function (xhr, status, error) {
+//            alert('An error occurred while setting the session: ' + error);
+//        }
+//    });
+//}
+
+//function getAllAvailableCurrenciesCloseStore() {
+//    $.ajax({
+//        url: '/Currencies/GetAllAbvailableCurrencies',
+//        type: 'GET',
+//        success: function (response) {
+//            if (response.Success) {
+//                availableCurrenciesCloseStore = response.Data;
+//                /*var url = $('#closeStore').data('url');*/ // Get the URL here
+//                /*showModalAndFocusInputClose*/(url); // Pass the URL to the function
 //            } else {
 //                alert('Failed to set session: ' + response.Message);
 //            }
@@ -50,11 +71,13 @@ if (storeId != null) {
 
 $(document).on('click', '#closeStore', function (e) {
     e.preventDefault();
+    $(this).attr('disabled', true); // Disable the link
     var url = $(this).data('url');
     $.get(url, function (data) {
         $('body').append(data);
         // Show the modal
         $('#storeClosingModal').modal('show');
+        $('#closeStore').attr('disabled', false); // Re-enable the link if needed
         // Set default active input
         // Set default active input after a brief delay
         $('#storeClosingModal').on('shown.bs.modal', function () {
@@ -330,8 +353,10 @@ function updateOverallTotalsCloseDollars() {
             });
         }
         //Convert the total dollar value to VND
-        const usdToVnd = availableCurrenciesCloseStore.find(currency => currency.Name === 'USD');
-        const usdToVndExchangeRate = usdToVnd.ExchangeRate;
+        //const usdToVnd = availableCurrenciesCloseStore.find(currency => currency.Name === 'USD');
+        const usdToVnd = 'USD';
+        //const usdToVndExchangeRate = usdToVnd.ExchangeRate;
+        const usdToVndExchangeRate = 4300;
         const totalValueInVnd = totalValue * usdToVndExchangeRate;
         document.getElementById('totalDollarsClose').value = totalNotes;
         document.getElementById('totalDollarsCountClose').value = totalValue;
@@ -362,8 +387,10 @@ function updateOverallTotalsCloseYens() {
                 totalValue: value
             });
         }
-        const yenToVnd = availableCurrenciesCloseStore.find(currency => currency.Name === 'JPY');
-        const yenToVndExchangeRate = yenToVnd.ExchangeRate;
+        //const yenToVnd = availableCurrenciesCloseStore.find(currency => currency.Name === 'JPY');
+        const yenToVnd = 'JPY';
+        //const yenToVndExchangeRate = yenToVnd.ExchangeRate;
+        const yenToVndExchangeRate = 179;
         const totalValueInVnd = totalValue * yenToVndExchangeRate;
         document.getElementById('totalYensClose').value = totalNotes;
         document.getElementById('totalYensCountClose').value = totalValue;

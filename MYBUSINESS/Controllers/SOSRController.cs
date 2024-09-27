@@ -82,6 +82,11 @@ namespace MYBUSINESS.Controllers
         }
         public ActionResult ClosePosPopup()
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             return PartialView("_StoreClosePopup");
         }
         public ActionResult IndexReturn()
@@ -1864,6 +1869,13 @@ namespace MYBUSINESS.Controllers
 
         public FileContentResult PrintSO2(string id)
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                // Return an error PDF if the store is not found
+                string errorMessage = "Store not found.";
+                return null;
+            }
             id = Decode(id);
             LocalReport localreport = new LocalReport();
             localreport.ReportPath = Server.MapPath("~/Reports/Report3.rdlc");
@@ -1888,6 +1900,13 @@ namespace MYBUSINESS.Controllers
         //public FileContentResult PrintSO3(string id, string customerName, string customerEmail, string customerAddress, string posName)
         public FileContentResult PrintSO3(string id)
         {
+            var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                // Return an error PDF if the store is not found
+                string errorMessage = "Store not found.";
+                return null;
+            }
             //string _customerName = TempData["_CustomerName"] as string;
             //string _customerEmail = TempData["_CustomerEmail"] as string;
             //string _customerAddress = TempData["_CustomerAddress"] as string;
@@ -1930,13 +1949,7 @@ namespace MYBUSINESS.Controllers
             // Set the report parameters for Customer Information
             viewer.LocalReport.SetParameters(new ReportParameter[]
             {
-        new ReportParameter("SaleOrderID", id),                 // Assuming you already have this parameter
-        new ReportParameter("CustomerName", "N/A"),  // Pass Customer Name
-        new ReportParameter("CustomerEmail","N/A"), // Pass Customer Email
-        new ReportParameter("CustomerAddress", "N/A"), // Pass Customer Address
-        new ReportParameter("POSName", "N/A"),   // Pass POS Name
-        new ReportParameter("CustomerVatNumber", "N/A"),   // Pass POS Name
-
+            new ReportParameter("SaleOrderID", id),                 // Assuming you already have this parameter
         //new ReportParameter("CustomerName", _customerName ?? "N/A"),  // Pass Customer Name
         //new ReportParameter("CustomerEmail", _customerEmail ?? "N/A"), // Pass Customer Email
         //new ReportParameter("CustomerAddress", _customerAddress ?? "N/A"), // Pass Customer Address
