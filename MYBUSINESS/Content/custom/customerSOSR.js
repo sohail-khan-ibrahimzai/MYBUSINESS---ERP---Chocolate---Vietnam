@@ -10,11 +10,13 @@ var productsBarcodes = new Array();
 var productsBarcodess = [];
 var _usdToVndRate = 0;
 var _jpyToVndRate = 0;
-var usdToVndRate = 0; // Exchange rate for USD to VND
-var jpyToVndRate = 0; // Exchange rate for JPY to VND
+var usdToVndRate = 6240; // Exchange rate for USD to VND
+var jpyToVndRate = 179; // Exchange rate for JPY to VND
+//var usdToVndRate = 0; // Exchange rate for USD to VND
+//var jpyToVndRate = 0; // Exchange rate for JPY to VND
 //const usdToVndRate = 23600; // Exchange rate for USD to VND
 //const jpyToVndRate = 179; // Exchange rate for JPY to VND
-console.log(productsBarcodes); // Check the contents of the array
+//console.log(productsBarcodes); // Check the contents of the array
 //var productsBarcodess = new Array();
 //var focusedBtnId = "";
 //var focusedBtnSno = "";
@@ -31,27 +33,27 @@ var num = 0;
 //    document.getElementById('closeStore').style.display = 'block';
 //    document.getElementById("StorageItem").value = storeIds;
 //}
-var availableCurrencies = [];
-function getAll_AvailableCurrencies() {
-    $.ajax({
-        url: '/Currencies/GetAllAbvailableCurrencies',
-        type: 'GET',
-        success: function (response) {
-            if (response.Success) {
-                availableCurrencies = response.Data;
-                _usdToVndRate = availableCurrencies.find(currency => currency.Name === 'USD');
-                _jpyToVndRate = availableCurrencies.find(currency => currency.Name === 'JPY');
-                usdToVndRate = _usdToVndRate.ExchangeRate;
-                jpyToVndRate = _jpyToVndRate.ExchangeRate;
-            } else {
-                alert('Failed to set session: ' + response.Message);
-            }
-        },
-        error: function (xhr, status, error) {
-            alert('An error occurred while setting the session: ' + error);
-        }
-    });
-}
+//var availableCurrencies = [];
+//function getAll_AvailableCurrencies() {
+//    $.ajax({
+//        url: '/Currencies/GetAllAbvailableCurrencies',
+//        type: 'GET',
+//        success: function (response) {
+//            if (response.Success) {
+//                availableCurrencies = response.Data;
+//                _usdToVndRate = availableCurrencies.find(currency => currency.Name === 'USD');
+//                _jpyToVndRate = availableCurrencies.find(currency => currency.Name === 'JPY');
+//                usdToVndRate = _usdToVndRate.ExchangeRate;
+//                jpyToVndRate = _jpyToVndRate.ExchangeRate;
+//            } else {
+//                alert('Failed to set session: ' + response.Message);
+//            }
+//        },
+//        error: function (xhr, status, error) {
+//            alert('An error occurred while setting the session: ' + error);
+//        }
+//    });
+//}
 function OnTypeCustomerName(param) {
     //debugger;
     $(param).mcautocomplete({
@@ -1809,11 +1811,13 @@ $(document).ready(function () {
         //$('#payallbycard').text('Pay all by card');
     });
     $('#CreateSO').keydown(function (event) {
+        debugger;
         if (event.keyCode == 13) {
             $('#CreateSO').trigger('click');
         }
     });
     $('#saveSales').click(function (event) {
+        debugger;
         const customerId = $('#customerId').val();
         const vndCustomer = $('#vndCustomer').val();
         const customerName = $('#vndCustomerName').val();
@@ -1838,7 +1842,7 @@ $(document).ready(function () {
         //$('input[name="Customer.Address"]').val(customerAddress);
         //$('input[name="Customer.Email"]').val(customerEmail);
         // Log values to debug (optional)
-        console.log(customerId, customerName, customerVat);
+        //console.log(customerId, customerName, customerVat);
 
         //Binding SaleOrder Form
         $('#cardvnd').val(cardVndBalance);
@@ -1878,11 +1882,11 @@ $(document).ready(function () {
     });
 
     $('#CreateSO').click(function () {
-        //debugger;
+        debugger;
         $('#ItemsTotal').val(totalPayableBill);
         //$('#ItemsTotal1').val(totalPayableBill);
-        console.log('BillAmount:', $('#ItemsTotal').val());
-        console.log('Discount:', $('#discount').val());
+        //console.log('BillAmount:', $('#ItemsTotal').val());
+        //console.log('Discount:', $('#discount').val());
         //if ($('#idnCustomer').val() == "") {
         //    alert('Customer not found. Please select customer from list or add new');
         //    return false;
@@ -2005,7 +2009,7 @@ $(document).ready(function () {
         //if ($('#ItemsTotal').val().trim() == "") {
         //    $('#ItemsTotal').val(0);
         //}
-        getAll_AvailableCurrencies();
+        //getAll_AvailableCurrencies();
         var storedTotal = totalVndBalanceHeader;
         if (!isNaN($('#total').val()) || !$('#total').val('0')) {
             //$('#lefttotalvnd').val(storedTotal);
@@ -2026,6 +2030,7 @@ $(document).ready(function () {
 
     });
     $('.cancelPaymentButton').on('click', function (e) {
+        debugger;
         $('#lefttopayvnd').val('0');
         $('#cashvnd').val('0');
         $('#cardvnd').val('0');
@@ -2042,6 +2047,7 @@ $(document).ready(function () {
     $('#payallbycard').click(function () {
         //debugger;
         if (totalAmountForSelectedProduct != 0) {
+            debugger;
             $('#lefttopayvnd').val('0');
             $('#cashvnd').val('0');
             $('#cardvnd').val(totalAmountForSelectedProduct);
@@ -2099,6 +2105,7 @@ $(document).ready(function () {
         //$('#lefttotalvnd').val('');
     });
     $('#validatepyment').click(function () {
+        debugger;
         // Make the GET request Working Code
         //$.ajax({
         //    url: '/SOSR/USRLWB', // Ensure this matches your route
@@ -2163,6 +2170,7 @@ $(document).ready(function () {
     });
     // Function to rotate the loader
     function rotateLoader($loader) {
+        debugger;
         let rotation = 0;
         const interval = setInterval(function () {
             rotation += 10; // Increment rotation by 10 degrees each time
@@ -2174,10 +2182,10 @@ $(document).ready(function () {
         // Return the interval ID so we can stop the rotation later
         return interval;
     }
-
+    debugger;
     $('#customerByTaxCode').on('click', function () {
         var customerTaxCode = $('#vndCustomerVat').val();
-
+        debugger;
         // Disable the button and show the loader
         var $button = $(this);
         $button.prop('disabled', true).find('i').hide(); // Hide the search icon

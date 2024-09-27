@@ -200,7 +200,8 @@ namespace MYBUSINESS.Controllers
         [HttpPost]
         public ActionResult StoreValue(string storeId, string storeName)
         {
-            if (!string.IsNullOrEmpty(storeId) && !string.IsNullOrEmpty(storeName))
+            //if (!string.IsNullOrEmpty(storeId) && !string.IsNullOrEmpty(storeName))
+            if (!string.IsNullOrEmpty(storeId))
             {
                 // Store the value in the session
                 Session["StoreId"] = storeId;
@@ -208,7 +209,6 @@ namespace MYBUSINESS.Controllers
                 // Optionally, redirect to another action or view
                 return Json(new { Success = true, Message = "" });
             }
-
             // Handle the case where no storeId is provided
             return RedirectToAction("Stores/StoresDashboard");
         }

@@ -23,12 +23,12 @@ namespace MYBUSINESS.Controllers
         // GET: POes
         public ActionResult Index()
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
 
             DateTime PKDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
             var dtStartDate = new DateTime(PKDate.Year, PKDate.Month, 1);
@@ -57,7 +57,8 @@ namespace MYBUSINESS.Controllers
             ViewBag.Suppliers = DAL.dbSuppliers;
             ViewBag.StartDate = dtStartDate.ToString("dd-MMM-yyyy");
             ViewBag.EndDate = dtEndtDate.ToString("dd-MMM-yyyy");
-            var poess = pOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();
+            //var poess = pOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();//commented due to session issue
+            var poess = pOes.OrderByDescending(i => i.Date).ToList();
             return View(poess);
         }
         //public ActionResult SearchData(string custName, DateTime startDate, DateTime endDate)
@@ -280,11 +281,11 @@ namespace MYBUSINESS.Controllers
         // GET: POes/Create
         public ActionResult Create(string IsReturn)
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
             //var parseId = int.Parse(storeId);
             //ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name");
             //ViewBag.Products = db.Products;
@@ -318,12 +319,12 @@ namespace MYBUSINESS.Controllers
             //PO pO = new PO();
             if (ModelState.IsValid)
             {
-                var storeId = Session["StoreId"] as string;
-                if (storeId == null)
-                {
-                    return RedirectToAction("StoreNotFound", "UserManagement");
-                }
-                var parseId = int.Parse(storeId);
+                //var storeId = Session["StoreId"] as string; //commented due to session issue
+                //if (storeId == null)
+                //{
+                //    return RedirectToAction("StoreNotFound", "UserManagement");
+                //}
+                //var parseId = int.Parse(storeId);
                 Supplier supp = db.Suppliers.FirstOrDefault(x => x.Id == pO.SupplierId);
                 if (supp == null)
                 {//its means new customer
@@ -333,14 +334,16 @@ namespace MYBUSINESS.Controllers
                     maxId += 1;
                     Supplier.Id = maxId;
                     Supplier.Balance = pO.Balance;
-                    Supplier.StoreId = parseId;
+                    //Supplier.StoreId = parseId; //commented due to session issue
+                    Supplier.StoreId = 1;
                     db.Suppliers.Add(Supplier);
                     //db.SaveChanges();
                 }
                 else
                 {//its means old customer. old customer balance should be updated.
                     //Supplier.Id = (int)pO.SupplierId;
-                    supp.StoreId = parseId;
+                    //supp.StoreId = parseId; //commented due to session issue
+                    supp.StoreId = 1;
                     supp.Balance = pO.Balance;
                     db.Entry(supp).State = EntityState.Modified;
                     //db.SaveChanges();
@@ -373,7 +376,8 @@ namespace MYBUSINESS.Controllers
                 pO.PurchaseOrderAmount = 0;
 
                 pO.PurchaseOrderQty = 0;
-                pO.StoreId = parseId;
+                //pO.StoreId = parseId; //commented due to session issue
+                pO.StoreId = 1;
                 Employee emp = (Employee)Session["CurrentUser"];
                 pO.EmployeeId = emp.Id;
                 db.POes.Add(pO);
@@ -640,12 +644,12 @@ namespace MYBUSINESS.Controllers
             List<POD> newPODs = purchaseOrderViewModel1.PurchaseOrderDetail;
             if (ModelState.IsValid)
             {
-                var storeId = Session["StoreId"] as string;
-                if (storeId == null)
-                {
-                    return RedirectToAction("StoreNotFound", "UserManagement");
-                }
-                var parseId = int.Parse(storeId);
+                //var storeId = Session["StoreId"] as string; //commented due to session issue
+                //if (storeId == null)
+                //{
+                //    return RedirectToAction("StoreNotFound", "UserManagement");
+                //}
+                //var parseId = int.Parse(storeId);
                 newPO.Id = Encryption.Decrypt(purchaseOrderViewModel1.PurchaseOrder.Id, "BZNS");//
                 PO PO = db.POes.Where(x => x.Id == newPO.Id).FirstOrDefault();
                 //PO.Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));//
@@ -661,7 +665,8 @@ namespace MYBUSINESS.Controllers
                 PO.FundingSourceId = newPO.FundingSourceId;
                 PO.BankAccountId = newPO.BankAccountId;
                 PO.Date = newPO.Date;
-                PO.StoreId = parseId;
+                //PO.StoreId = parseId; //commented due to session issue
+                PO.StoreId = 1;
                 //PO.POSerial = newPO.POSerial;//should be unchanged
 
                 ///////////////////////////////////////////

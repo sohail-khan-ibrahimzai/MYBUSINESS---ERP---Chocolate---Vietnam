@@ -27,12 +27,12 @@ namespace MYBUSINESS.Controllers
         // GET: SOes
         public ActionResult Index()
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
 
             //EnterProfit();
             DateTime PKDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
@@ -64,7 +64,8 @@ namespace MYBUSINESS.Controllers
             ViewBag.Customers = DAL.dbCustomers;
             ViewBag.StartDate = dtStartDate.ToString("dd-MMM-yyyy");
             ViewBag.EndDate = dtEndtDate.ToString("dd-MMM-yyyy");
-            var salesOrderQuotation = sOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();
+            //var salesOrderQuotation = sOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList(); //commented due to session issue
+            var salesOrderQuotation = sOes.Where(x => x.StoreId == 1).OrderByDescending(i => i.Date).ToList();
             return View(salesOrderQuotation);
         }
         public ActionResult IndexReturn()
@@ -766,12 +767,13 @@ namespace MYBUSINESS.Controllers
             //SO sO = new SO();
             if (ModelState.IsValid)
             {
-                var storeId = Session["StoreId"] as string;
-                if (storeId == null)
-                {
-                    return RedirectToAction("StoreNotFound", "UserManagement");
-                }
-                var parseId = int.Parse(storeId);
+                //var storeId = Session["StoreId"] as string; //commented due to session issue
+                //if (storeId == null)
+                //{
+                //    return RedirectToAction("StoreNotFound", "UserManagement");
+                //}
+                //var parseId = int.Parse(storeId);
+
                 Customer cust = db.Customers.FirstOrDefault(x => x.Id == sO.CustomerId);
 
                 if (cust == null)
@@ -782,7 +784,8 @@ namespace MYBUSINESS.Controllers
                     maxId += 1;
                     Customer.Id = maxId;
                     Customer.Balance += sO.Balance;
-                    Customer.StoreId = parseId;
+                    //Customer.StoreId = parseId;
+                    Customer.StoreId = 1;
                     db.Customers.Add(Customer);
                     //db.SaveChanges();
                 }
@@ -798,7 +801,8 @@ namespace MYBUSINESS.Controllers
                     {
                         cust.Balance -= sO.Balance;
                     }
-                    cust.StoreId = parseId;
+                    //cust.StoreId = parseId; //commented due to session issue
+                    cust.StoreId = 1;
                     db.Entry(cust).State = EntityState.Modified;
                     //db.SaveChanges();
 
@@ -837,7 +841,8 @@ namespace MYBUSINESS.Controllers
                 sO.SaleOrderQty = 0;
 
                 sO.Profit = 0;
-                sO.StoreId = parseId;
+                //sO.StoreId = parseId; //commented due to session issue
+                sO.StoreId = 1;
                 Employee emp = (Employee)Session["CurrentUser"];
                 sO.EmployeeId = emp.Id;
 
@@ -1220,12 +1225,12 @@ namespace MYBUSINESS.Controllers
             List<SOD> newSODs = saleOrderViewModel1.SaleOrderDetail;
             if (ModelState.IsValid)
             {
-                var storeId = Session["StoreId"] as string;
-                if (storeId == null)
-                {
-                    return RedirectToAction("StoreNotFound", "UserManagement");
-                }
-                var parseId = int.Parse(storeId);
+                //var storeId = Session["StoreId"] as string; //commented due to session issue
+                //if (storeId == null)
+                //{
+                //    return RedirectToAction("StoreNotFound", "UserManagement");
+                //}
+                //var parseId = int.Parse(storeId);
                 newSO.Id = Encryption.Decrypt(saleOrderViewModel1.SaleOrder.Id, "BZNS");//
                 SO sO = db.SOes.Where(x => x.Id == newSO.Id).FirstOrDefault();
                 //sO.Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));//
@@ -1241,7 +1246,8 @@ namespace MYBUSINESS.Controllers
                 sO.PaymentMethod = newSO.PaymentMethod;
                 sO.PaymentDetail = newSO.PaymentDetail;
                 sO.BankAccountId = newSO.BankAccountId;
-                sO.StoreId = parseId;
+                //sO.StoreId = parseId; //commented due to session issue
+                sO.StoreId = 1;
                 //sO.SOSerial = newSO.SOSerial;//should be unchanged
 
                 ///////////////////////////////////////////
@@ -1257,13 +1263,15 @@ namespace MYBUSINESS.Controllers
                     maxId += 1;
 
                     customer.Id = maxId;
-                    customer.StoreId = parseId;
+                    //customer.StoreId = parseId; //commented due to session issue
+                    customer.StoreId = 1;
                     //customer.Balance = newSO.Balance;
                     db.Customers.Add(customer);
                 }
                 else
                 {
-                    customer.StoreId = parseId;
+                    //customer.StoreId = parseId; //commented due to session issue
+                    customer.StoreId = 1;
                     db.Entry(customer).State = EntityState.Modified;
                 }
 

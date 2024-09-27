@@ -1029,11 +1029,6 @@
 </div>
 
 
-
-
-
-
-
 <script type="text/javascript">
     //document.getElementById('barcodeInput').focus();
     //document.getElementById('barcodeInput').addEventListener('keyup', function (event) {
@@ -1055,7 +1050,7 @@
         if (event.key === 'Enter') {
             if (barcode) {
                 barcode = barcode.trim(); // Remove any leading/trailing spaces
-                console.log('Barcode entered:', barcode);
+                //console.log('Barcode entered:', barcode);
                 onBarcodeScans(barcode);
                 barcode = ''; // Clear the barcode after processing
             }
@@ -1066,7 +1061,7 @@
 
      function onBarcodeScans(barcode) {
      var productList = productsBarcodesList;
-     console.log(productList);
+     //console.log(productList);
      var product = productList.find(p => p.BarCode === barcode);
      var encodedProductJson = JSON.stringify(product);
      if (product) {
@@ -1075,9 +1070,11 @@
          alert('Product not found');
      }
     }
-      @if (ViewBag.ReportId != null && ViewBag.ReportId != "")
+      @*@if (ViewBag.ReportId != null && ViewBag.ReportId != "")*@
+      @if (ViewBag.ReportId != null)
       {
            @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
+      }
           @*if(ViewBag.WebserviceDownError!= null) {
           @:alert(serDownError);
           }
@@ -1099,7 +1096,7 @@
               posName = posName.ToString()
           });
             @:window.open('@reportUrl', "_blank");*@
-      }
+     /* }*/
 @*@if (ViewBag.ReportId != null && ViewBag.ReportId != "") {
             string customerName = ViewBag.CustomerName ?? "N/A";
             string customerEmail = ViewBag.CustomerEmail ?? "N/A";

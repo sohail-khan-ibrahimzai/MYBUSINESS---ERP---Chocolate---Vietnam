@@ -17,12 +17,12 @@ namespace MYBUSINESS.Controllers
         //[NoCache]
         public ActionResult Summary()
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
 
             DateTime PKDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
             var dtStartDate = new DateTime(PKDate.Year, PKDate.Month, 1);
@@ -96,7 +96,8 @@ namespace MYBUSINESS.Controllers
 
             }
 
-            dbVM.Products = FilteredProducts.Where(x=>x.StoreId== parseId).OrderBy(x => x.Name).AsQueryable();
+            //dbVM.Products = FilteredProducts.Where(x=>x.StoreId== parseId).OrderBy(x => x.Name).AsQueryable(); //commented due to session issue
+            dbVM.Products = FilteredProducts.Where(x=>x.StoreId== 1).OrderBy(x => x.Name).AsQueryable();
 
 
 

@@ -1,21 +1,22 @@
 ﻿
-var availableCurrencies = [];
-function getAllAvailableCurrencies() {
-    $.ajax({
-        url: '/Currencies/GetAllAbvailableCurrencies',
-        type: 'GET',
-        success: function (response) {
-            if (response.Success) {
-                availableCurrencies = response.Data;
-            } else {
-                alert('Failed to set session: ' + response.Message);
-            }
-        },
-        error: function (xhr, status, error) {
-            alert('An error occurred while setting the session: ' + error);
-        }
-    });
-}
+//var availableCurrencies = [];
+//function getAllAvailableCurrencies() {
+//    $.ajax({
+//        url: '/Currencies/GetAllAbvailableCurrencies',
+//        type: 'GET',
+//        success: function (response) {
+//            if (response.Success) {
+//                availableCurrencies = response.Data;
+//            } else {
+//                alert('Failed to set session: ' + response.Message);
+//            }
+//        },
+//        error: function (xhr, status, error) {
+//            alert('An error occurred while setting the session: ' + error);
+//        }
+//    });
+//}
+
 //function showModalAndFocusInput() {
 //    $('#storeOpeningPopup').modal('show');
 //    $('#storeOpeningPopup').on('shown.bs.modal', function () {
@@ -517,9 +518,11 @@ function updateOverallDollarsTotal() {
     let totalNotes = 0;
     let totalValue = 0;
     openingCurrencyDetalInDollar = [];
-    const usdToVnd = availableCurrencies.find(currency => currency.Name === 'USD');
+    //const usdToVnd = availableCurrencies.find(currency => currency.Name === 'USD');
+    const usdToVnd = availableCurrencies='USD';
     if (usdToVnd) {
-        const usdToVndExchangeRate = usdToVnd.ExchangeRate;  // Get the exchange rate for USD to VND
+        //const usdToVndExchangeRate = usdToVnd.ExchangeRate;  // Get the exchange rate for USD to VND
+        const usdToVndExchangeRate = 240;  // Get the exchange rate for USD to VND
 
         // Now use the exchange rate to calculate total notes and dollar value
         inputIds.forEach((id, index) => {
@@ -625,9 +628,11 @@ function updateOverallYensTotal() {
     let totalNotes = 0;
     let totalValue = 0;
     openingCurrencyDetalInYens = [];
-    const yensToVnd = availableCurrencies.find(currency => currency.Name === 'JPY');
+    //const yensToVnd = availableCurrencies.find(currency => currency.Name === 'JPY');
+    const yensToVnd = 'JPY';
     if (yensToVnd) {
-        const yenToVndExchangeRate = yensToVnd.ExchangeRate;  // Get the exchange rate for USD to VND
+        //const yenToVndExchangeRate = yensToVnd.ExchangeRate;  // Get the exchange rate for USD to VND
+        const yenToVndExchangeRate = 179;  // Get the exchange rate for USD to VND
 
         // Now use the exchange rate to calculate total notes and dollar value
         inputIds.forEach((id, index) => {

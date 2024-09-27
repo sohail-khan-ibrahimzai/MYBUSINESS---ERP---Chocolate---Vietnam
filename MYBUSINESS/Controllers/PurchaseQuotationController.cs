@@ -23,12 +23,12 @@ namespace MYBUSINESS.Controllers
         // GET: POes
         public ActionResult Index()
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string;
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
 
             DateTime PKDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
             var dtStartDate = new DateTime(PKDate.Year, PKDate.Month, 1);
@@ -58,7 +58,8 @@ namespace MYBUSINESS.Controllers
             ViewBag.StartDate = dtStartDate.ToString("dd-MMM-yyyy");
             ViewBag.EndDate = dtEndtDate.ToString("dd-MMM-yyyy");
             ViewBag.POSerial = thisSerial;
-            var purchaseOrderQuotation = pOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();
+            //var purchaseOrderQuotation = pOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList(); ///Commented due to Session issue
+            var purchaseOrderQuotation = pOes.OrderByDescending(i => i.Date).ToList();
             return View(purchaseOrderQuotation);
         }
         //public ActionResult SearchData(string custName, DateTime startDate, DateTime endDate)
@@ -317,11 +318,11 @@ namespace MYBUSINESS.Controllers
         // GET: POes/Create
         public ActionResult Create(string IsReturn)
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
+            //var storeId = Session["StoreId"] as string;
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
             //ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name");
             //ViewBag.Products = db.Products;
 
@@ -348,11 +349,11 @@ namespace MYBUSINESS.Controllers
         // GET: POes/CreatePOByCategory
         public ActionResult CreatePOByCategory(string IsReturn)
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
+            //var storeId = Session["StoreId"] as string;
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
             //ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name");
             //ViewBag.Products = db.Products;
 
@@ -437,12 +438,13 @@ namespace MYBUSINESS.Controllers
             //PO pO = new PO();
             if (ModelState.IsValid)
             {
-                var storeId = Session["StoreId"] as string;
-                if (storeId == null)
-                {
-                    return RedirectToAction("StoreNotFound", "UserManagement");
-                }
-                var parseId = int.Parse(storeId);
+                //var storeId = Session["StoreId"] as string;  //commented due to session issue
+                //if (storeId == null)
+                //{
+                //    return RedirectToAction("StoreNotFound", "UserManagement");
+                //}
+                //var parseId = int.Parse(storeId);
+
                 Supplier supp = db.Suppliers.FirstOrDefault(x => x.Id == pO.SupplierId);
                 if (supp == null)
                 {//its means new customer
@@ -452,7 +454,8 @@ namespace MYBUSINESS.Controllers
                     maxId += 1;
                     Supplier.Id = maxId;
                     Supplier.Balance = pO.Balance;
-                    Supplier.StoreId = parseId;
+                    //Supplier.StoreId = parseId; //commented due to session issue
+                    Supplier.StoreId = 1;
                     db.Suppliers.Add(Supplier);
                     //db.SaveChanges();
                 }
@@ -460,7 +463,8 @@ namespace MYBUSINESS.Controllers
                 {//its means old customer. old customer balance should be updated.
                     //Supplier.Id = (int)pO.SupplierId;
                     supp.Balance = pO.Balance;
-                    supp.StoreId = parseId;
+                    //supp.StoreId = parseId; //commented due to session issue
+                    supp.StoreId = 1;
                     db.Entry(supp).State = EntityState.Modified;
                     //db.SaveChanges();
 
@@ -483,7 +487,8 @@ namespace MYBUSINESS.Controllers
                 maxId1 += 1;
                 pO.POSerial = maxId1;
                 pO.Quotation = true;
-                pO.StoreId = parseId;
+                //pO.StoreId = parseId; //commented due to session issue
+                pO.StoreId = 1;
                 //pO.Date = DateTime.Now;
                 if (string.IsNullOrEmpty(Convert.ToString(pO.Date)))
                 {
@@ -511,7 +516,8 @@ namespace MYBUSINESS.Controllers
                         pod.POId = pO.Id;
 
                         Product product = db.Products.FirstOrDefault(x => x.Id == pod.ProductId);
-                        StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == pod.ProductId && x.StoreId == parseId);
+                        //StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == pod.ProductId && x.StoreId == parseId);  //commented due to session issue
+                        StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == pod.ProductId);
 
                         //dont do this. when user made a bill and chnage sale price. it does not reflect in bill and calculations geting wrong
                         //pod.PurchasePrice = product.PurchasePrice;
@@ -615,12 +621,13 @@ namespace MYBUSINESS.Controllers
             //PO pO = new PO();
             if (ModelState.IsValid)
             {
-                var storeId = Session["StoreId"] as string;
-                if (storeId == null)
-                {
-                    return RedirectToAction("StoreNotFound", "UserManagement");
-                }
-                var parseId = int.Parse(storeId);
+                //var storeId = Session["StoreId"] as string;  //commented due to session issue
+                //if (storeId == null)
+                //{
+                //    return RedirectToAction("StoreNotFound", "UserManagement");
+                //}
+                //var parseId = int.Parse(storeId);
+
                 Supplier supp = db.Suppliers.FirstOrDefault(x => x.Id == pO.SupplierId);
                 if (supp == null)
                 {//its means new customer
@@ -630,7 +637,8 @@ namespace MYBUSINESS.Controllers
                     maxId += 1;
                     Supplier.Id = maxId;
                     Supplier.Balance = pO.Balance;
-                    Supplier.StoreId = parseId;
+                    //Supplier.StoreId = parseId;  //commented due to session issue
+                    Supplier.StoreId = 1;
                     db.Suppliers.Add(Supplier);
                     //db.SaveChanges();
                 }
@@ -638,7 +646,8 @@ namespace MYBUSINESS.Controllers
                 {//its means old customer. old customer balance should be updated.
                     //Supplier.Id = (int)pO.SupplierId;
                     supp.Balance = pO.Balance;
-                    supp.StoreId = parseId;
+                    //supp.StoreId = parseId;  //commented due to session issue
+                    supp.StoreId = 1;
                     db.Entry(supp).State = EntityState.Modified;
                     //db.SaveChanges();
 
@@ -661,7 +670,8 @@ namespace MYBUSINESS.Controllers
                 maxId1 += 1;
                 pO.POSerial = maxId1;
                 pO.Quotation = true;
-                pO.StoreId = parseId;
+                //pO.StoreId = parseId; //commented due to session issue
+                pO.StoreId = 1;
                 //pO.Date = DateTime.Now;
                 if (string.IsNullOrEmpty(Convert.ToString(pO.Date)))
                 {
@@ -689,7 +699,8 @@ namespace MYBUSINESS.Controllers
                         pod.POId = pO.Id;
 
                         Product product = db.Products.FirstOrDefault(x => x.Id == pod.ProductId);
-                        StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == pod.ProductId && x.StoreId == parseId);
+                        //StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == pod.ProductId && x.StoreId == parseId); //commented due to session issue
+                        StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == pod.ProductId);
 
                         //dont do this. when user made a bill and chnage sale price. it does not reflect in bill and calculations geting wrong
                         //pod.PurchasePrice = product.PurchasePrice;
@@ -908,12 +919,12 @@ namespace MYBUSINESS.Controllers
             List<POD> newPODs = purchaseOrderViewModel1.PurchaseOrderDetail;
             if (ModelState.IsValid)
             {
-                var storeId = Session["StoreId"] as string;
-                if (storeId == null)
-                {
-                    return RedirectToAction("StoreNotFound", "UserManagement");
-                }
-                var parseId = int.Parse(storeId);
+                //var storeId = Session["StoreId"] as string; //commented due to session issue
+                //if (storeId == null)
+                //{
+                //    return RedirectToAction("StoreNotFound", "UserManagement");
+                //}
+                //var parseId = int.Parse(storeId);
                 newPO.Id = Encryption.Decrypt(purchaseOrderViewModel1.PurchaseOrder.Id, "BZNS");//
                 PO PO = db.POes.Where(x => x.Id == newPO.Id).FirstOrDefault();
                 //PO.Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));//
@@ -930,7 +941,8 @@ namespace MYBUSINESS.Controllers
                 PO.BankAccountId = newPO.BankAccountId;
                 PO.Date = newPO.Date;
                 PO.Quotation = true;
-                PO.StoreId = parseId;
+                //PO.StoreId = parseId; //commented due to session issue
+                PO.StoreId = 1;
                 //PO.POSerial = newPO.POSerial;//should be unchanged
 
                 ///////////////////////////////////////////
@@ -1118,12 +1130,12 @@ namespace MYBUSINESS.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult UpadtePurhcaseOrder(decimal? poSerialNumber)
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
             var poSerialNumbers = db.POes.FirstOrDefault(x => x.POSerial == poSerialNumber);
             if (poSerialNumbers == null)
             {
@@ -1139,7 +1151,8 @@ namespace MYBUSINESS.Controllers
                     sno += 1;
 
                     Product product = db.Products.FirstOrDefault(x => x.Id == pod.ProductId);
-                    StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == pod.ProductId && x.StoreId == parseId);
+                    //StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == pod.ProductId && x.StoreId == parseId); //commented due to session issue
+                    StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == pod.ProductId);
 
                     //dont do this. when user made a bill and chnage sale price. it does not reflect in bill and calculations geting wrong
                     //pod.PurchasePrice = product.PurchasePrice;
@@ -1445,12 +1458,13 @@ namespace MYBUSINESS.Controllers
             List<POD> newPODs = purchaseOrderViewModel1.PurchaseOrderDetail;
             if (ModelState.IsValid)
             {
-                var storeId = Session["StoreId"] as string;
-                if (storeId == null)
-                {
-                    return RedirectToAction("StoreNotFound", "UserManagement");
-                }
-                var parseId = int.Parse(storeId);
+                //var storeId = Session["StoreId"] as string; //commented due to session issue
+                //if (storeId == null)
+                //{
+                //    return RedirectToAction("StoreNotFound", "UserManagement");
+                //}
+                //var parseId = int.Parse(storeId);
+
                 newPO.Id = Encryption.Decrypt(purchaseOrderViewModel1.PurchaseOrder.Id, "BZNS");//
                 PO PO = db.POes.Where(x => x.Id == newPO.Id).FirstOrDefault();
                 //PO.Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));//
@@ -1467,7 +1481,8 @@ namespace MYBUSINESS.Controllers
                 PO.BankAccountId = newPO.BankAccountId;
                 PO.Date = newPO.Date;
                 PO.Quotation = true;
-                PO.StoreId = parseId;
+                //PO.StoreId = parseId; //commented due to session issue
+                PO.StoreId = 1;
                 //PO.POSerial = newPO.POSerial;//should be unchanged
 
                 ///////////////////////////////////////////

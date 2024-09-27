@@ -262,14 +262,18 @@ namespace MYBUSINESS.Controllers
         // GET: Products
         public ActionResult Index()
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string; 
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
+            //ViewBag.Suppliers = DAL.dbSuppliers;
+            //return View(DAL.dbProducts.Include(x => x.StoreProducts).Where(x => x.StoreId == parseId).ToList()); //commented due to session issue
+
+
             ViewBag.Suppliers = DAL.dbSuppliers;
-            return View(DAL.dbProducts.Include(x => x.StoreProducts).Where(x => x.StoreId == parseId).ToList());
+            return View(DAL.dbProducts.Include(x => x.StoreProducts).ToList());
         }
 
         public ActionResult SearchData(string suppId)
@@ -295,11 +299,11 @@ namespace MYBUSINESS.Controllers
 
         public ActionResult Create()
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
             //int maxId = db.Products.Max(p => p.Id);
             decimal maxId = db.Products.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
             maxId += 1;
@@ -322,12 +326,12 @@ namespace MYBUSINESS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,PurchasePrice,SalePrice,WholeSalePrice,Stock,Saleable,PerPack,IsService,ShowIn,BarCode,Remarks,StoreId,Category")] Product product)
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string;  //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
             if (product.Stock == null)
             {
                 product.Stock = 0;
@@ -347,7 +351,8 @@ namespace MYBUSINESS.Controllers
             //{
             product.Stock = product.Stock * product.PerPack;
             //}
-            product.StoreId = parseId;
+            //product.StoreId = parseId; //commented due to session issue
+            product.StoreId = 1;
 
             if (ModelState.IsValid)
             {
@@ -366,7 +371,8 @@ namespace MYBUSINESS.Controllers
                     POD pOD = new POD { POId = pO.Id, PODId = 1, ProductId = product.Id, OpeningStock = 0, Quantity = (int)product.Stock, PurchasePrice = 0, PerPack = 1, IsPack = true, SaleType = false };
                     db.PODs.Add(pOD);
 
-                    StoreProduct storeProduct = new StoreProduct { ProductId = product.Id, StoreId = parseId, Stock = (int)product.Stock, };
+                    //StoreProduct storeProduct = new StoreProduct { ProductId = product.Id, StoreId = parseId, Stock = (int)product.Stock, };  //commented due to session issue
+                    StoreProduct storeProduct = new StoreProduct { ProductId = product.Id, StoreId = 1, Stock = (int)product.Stock, };
                     db.StoreProducts.Add(storeProduct);
                 }
                 db.SaveChanges();
@@ -387,12 +393,12 @@ namespace MYBUSINESS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string;  //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
             Product product = db.Products.Find(id);
             StoreProduct storeProdcut = db.StoreProducts.FirstOrDefault(x => x.ProductId == id);
             if (storeProdcut == null)
@@ -401,7 +407,8 @@ namespace MYBUSINESS.Controllers
                 storeProdcut = new StoreProduct
                 {
                     ProductId = product.Id,
-                    StoreId = parseId,
+                    //StoreId = parseId,
+                    StoreId = 1,
                     Stock = 0,
                 };
             }
@@ -434,12 +441,12 @@ namespace MYBUSINESS.Controllers
         {
             //Product prd = db.Products.Where(x => x.Id == product.Id).FirstOrDefault();
             //product.SuppId = prd.SuppId;
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string;  //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
             if (product.Stock == null)
             {
                 product.Stock = 0;
@@ -451,7 +458,8 @@ namespace MYBUSINESS.Controllers
             }
 
             product.Stock = product.Stock * product.PerPack;
-            product.StoreId = parseId;
+            //product.StoreId = parseId;
+            product.StoreId = 1;
             //decimal StockInDB = (decimal)db.Products.AsNoTracking().FirstOrDefault(x => x.Id == product.Id).Stock;
             //decimal StockInDB = (decimal)db.StoreProducts.AsNoTracking().FirstOrDefault(x => x.ProductId == product.Id)?.Stock;
             decimal StockInDB = db.StoreProducts

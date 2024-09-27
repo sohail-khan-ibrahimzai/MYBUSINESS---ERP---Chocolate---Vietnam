@@ -17,14 +17,17 @@ namespace MYBUSINESS.Controllers
         // GET: Departments
         public ActionResult Index()
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
-            var departments = db.Departments.Where(x => x.StoreId == parseId).ToList();
-            return View(departments);
+            //var storeId = Session["StoreId"] as string;
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
+            //var departments = db.Departments.Where(x => x.StoreId == parseId).ToList();
+            //return View(departments);
+
+            var departments = db.Departments;
+            return View(departments.ToList());
         }
 
         // GET: Departments/Details/5
@@ -57,13 +60,13 @@ namespace MYBUSINESS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var storeId = Session["StoreId"] as string;
-                if (storeId == null)
-                {
-                    return RedirectToAction("StoreNotFound", "UserManagement");
-                }
-                var parseId = int.Parse(storeId);
-                department.StoreId = parseId;
+                //var storeId = Session["StoreId"] as string;
+                //if (storeId == null)
+                //{
+                //    return RedirectToAction("StoreNotFound", "UserManagement");
+                //}
+                //var parseId = int.Parse(storeId);
+                //department.StoreId = parseId;
                 db.Departments.Add(department);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -96,13 +99,13 @@ namespace MYBUSINESS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var storeId = Session["StoreId"] as string;
-                if (storeId == null)
-                {
-                    return RedirectToAction("StoreNotFound", "UserManagement");
-                }
-                var parseId = int.Parse(storeId);
-                department.StoreId = parseId;
+                //var storeId = Session["StoreId"] as string;
+                //if (storeId == null)
+                //{
+                //    return RedirectToAction("StoreNotFound", "UserManagement");
+                //}
+                //var parseId = int.Parse(storeId);
+                //department.StoreId = parseId;
                 db.Entry(department).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

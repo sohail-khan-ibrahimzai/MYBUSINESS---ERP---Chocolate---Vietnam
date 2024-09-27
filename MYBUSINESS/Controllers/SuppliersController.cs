@@ -18,38 +18,40 @@ namespace MYBUSINESS.Controllers
         // GET: Suppliers
         public ActionResult Index(string id)
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
 
-            var suppliers = DAL.dbSuppliers.Where(x => x.IsCreditor == false && x.Id > 0 && x.StoreId == parseId).ToList();
+            //var suppliers = DAL.dbSuppliers.Where(x => x.IsCreditor == false && x.Id > 0 && x.StoreId == parseId).ToList();
+            var suppliers = DAL.dbSuppliers.Where(x => x.IsCreditor == false && x.Id > 0 && x.StoreId == 1).ToList();
             return View(suppliers);
         }
 
         public ActionResult IndexCreditor(string id)
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
 
-            var indexCreditors = DAL.dbSuppliers.Where(x => x.IsCreditor == true && x.StoreId == parseId).ToList();
+            //var indexCreditors = DAL.dbSuppliers.Where(x => x.IsCreditor == true && x.StoreId == parseId).ToList();
+            var indexCreditors = DAL.dbSuppliers.Where(x => x.IsCreditor == true && x.StoreId == 1).ToList();
             return View();
         }
 
         // GET: Suppliers/Create
         public ActionResult Create()
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
             decimal maxId = db.Suppliers.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
             maxId += 1;
             ViewBag.SuggestedNewSuppId = maxId;
@@ -57,11 +59,11 @@ namespace MYBUSINESS.Controllers
         }
         public ActionResult CreateCreditor()
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
             decimal maxId = db.Suppliers.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
             maxId += 1;
             ViewBag.SuggestedNewSuppId = maxId;

@@ -34,12 +34,12 @@ namespace MYBUSINESS.Controllers
         // GET: SOes
         public ActionResult Index()
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
             //EnterProfit();
             DateTime PKDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
             var dtStartDate = new DateTime(PKDate.Year, PKDate.Month, 1);
@@ -77,7 +77,8 @@ namespace MYBUSINESS.Controllers
             ViewBag.Customers = DAL.dbCustomers;
             ViewBag.StartDate = dtStartDate.ToString("dd-MMM-yyyy");
             ViewBag.EndDate = dtEndtDate.ToString("dd-MMM-yyyy");
-            var getSoes = sOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();
+            //var getSoes = sOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();//commented due to session issue
+            var getSoes = sOes.OrderByDescending(i => i.Date).ToList();
             return View(getSoes);
         }
         public ActionResult ClosePosPopup()
@@ -87,12 +88,12 @@ namespace MYBUSINESS.Controllers
         public ActionResult IndexReturn()
         {
             //EnterProfit();
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
             DateTime PKDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
             var dtStartDate = new DateTime(PKDate.Year, PKDate.Month, 1);
             var dtEndtDate = dtStartDate.AddMonths(1).AddSeconds(-1);
@@ -122,7 +123,8 @@ namespace MYBUSINESS.Controllers
             ViewBag.Customers = DAL.dbCustomers;
             ViewBag.StartDate = dtStartDate.ToString("dd-MMM-yyyy");
             ViewBag.EndDate = dtEndtDate.ToString("dd-MMM-yyyy");
-            var indexReturn = sOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();
+            //var indexReturn = sOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList(); //commented due to session issue
+            var indexReturn = sOes.OrderByDescending(i => i.Date).ToList(); //commented due to session issue
             return View(indexReturn);
         }
         public ActionResult ProductRentStatus(string prodId, string sellDate)
@@ -756,11 +758,11 @@ namespace MYBUSINESS.Controllers
 
         public ActionResult Create(string IsReturn)
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
+            //var storeId = Session["StoreId"] as string;
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
             //ViewBag.CustomerId = new SelectList(db.Customers, "Id", "Name");
             //ViewBag.Products = db.Products;
 
@@ -847,12 +849,12 @@ namespace MYBUSINESS.Controllers
     FormCollection collection
     )
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string;
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
 
             //var getStoreName = db.Stores.FirstOrDefault(x => x.Id == parseId);
 
@@ -937,8 +939,8 @@ namespace MYBUSINESS.Controllers
                 sO.Profit = 0;
                 Employee emp = (Employee)Session["CurrentUser"];
                 sO.EmployeeId = emp.Id;
-                //StoreId
-                sO.StoreId = parseId;
+                //StoreId 
+                //sO.StoreId = parseId; commented due to session issue
 
                 db.SOes.Add(sO);
                 //db.SaveChanges();
@@ -955,13 +957,15 @@ namespace MYBUSINESS.Controllers
                         //StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == sod.ProductId && x.StoreId == parseId);
                         //if (storeProduct == null)
                         //    storeProduct.Stock = 0;
-                        StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == sod.ProductId && x.StoreId == parseId);
+                        //StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == sod.ProductId && x.StoreId == parseId); commented due to session issue
+                        StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == sod.ProductId);
                         if (storeProduct == null)
                         {
                             storeProduct = new StoreProduct
                             {
                                 ProductId = dbProd.Id,
-                                StoreId = parseId,
+                                //StoreId = parseId, commented due to session issue
+                                StoreId = 1,
                                 Stock = 0,
                             };
                         }
@@ -985,12 +989,14 @@ namespace MYBUSINESS.Controllers
                                 Saleable = true,
                                 PerPack = 1,
                                 ShowIn = "S",
-                                StoreId = parseId,
+                                //StoreId = parseId,commented due to session issue
+                                StoreId = 1,
                             };
                             // Create and initialize StoreProduct instances
                             var storeProducts = new StoreProduct
                             {
-                                StoreId = parseId, // Associate with the store
+                                //StoreId = parseId, // commented due to session issue
+                                StoreId = 1, // Associate with the store
                                 ProductId = newProd.Id, // Associate with the product
                                 Stock = 0 // Set initial stock value
                             };
@@ -1116,7 +1122,7 @@ namespace MYBUSINESS.Controllers
             //SOId = string.Join("-", ASCIIEncoding.ASCII.GetBytes(Encryption.Encrypt(sO.Id, "BZNS"))); //Commented due to Id decrypted Id save in Db table SO
             //}
             return RedirectToAction("Create", new { IsReturn = "false" });
-            // return RedirectToAction("PrintSO3", new { id = sO.Id });
+            //return RedirectToAction("PrintSO3", new { id = sO.Id });
             //return View();
         }
         // Function to login to the web service
@@ -1864,6 +1870,19 @@ namespace MYBUSINESS.Controllers
 
         public FileContentResult PrintSO2(string id)
         {
+            var storeId = Session["StoreId"] as string;
+            //if (storeId == null)
+            //{
+            //    // Set an appropriate error message
+            //    string errorMessage = "Store ID is not found in the session.";
+
+            //    // Return a simple text file with the error message
+            //    byte[] fileContents = System.Text.Encoding.UTF8.GetBytes(errorMessage);
+            //    return new FileContentResult(fileContents, "text/plain")
+            //    {
+            //        FileDownloadName = "Error.txt"
+            //    };
+            //}
             id = Decode(id);
             LocalReport localreport = new LocalReport();
             localreport.ReportPath = Server.MapPath("~/Reports/Report3.rdlc");
@@ -1888,6 +1907,19 @@ namespace MYBUSINESS.Controllers
         //public FileContentResult PrintSO3(string id, string customerName, string customerEmail, string customerAddress, string posName)
         public FileContentResult PrintSO3(string id)
         {
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    // Set an appropriate error message
+            //    string errorMessage = "Store ID is not found in the session.";
+
+            //    // Return a simple text file with the error message
+            //    byte[] fileContents = System.Text.Encoding.UTF8.GetBytes(errorMessage);
+            //    return new FileContentResult(fileContents, "text/plain")
+            //    {
+            //        FileDownloadName = "Error.txt"
+            //    };
+            //} 
             //string _customerName = TempData["_CustomerName"] as string;
             //string _customerEmail = TempData["_CustomerEmail"] as string;
             //string _customerAddress = TempData["_CustomerAddress"] as string;
@@ -1931,11 +1963,11 @@ namespace MYBUSINESS.Controllers
             viewer.LocalReport.SetParameters(new ReportParameter[]
             {
         new ReportParameter("SaleOrderID", id),                 // Assuming you already have this parameter
-        new ReportParameter("CustomerName", "N/A"),  // Pass Customer Name
-        new ReportParameter("CustomerEmail","N/A"), // Pass Customer Email
-        new ReportParameter("CustomerAddress", "N/A"), // Pass Customer Address
-        new ReportParameter("POSName", "N/A"),   // Pass POS Name
-        new ReportParameter("CustomerVatNumber", "N/A"),   // Pass POS Name
+        new ReportParameter("CustomerName", "XYZ"),  // Pass Customer Name
+        new ReportParameter("CustomerEmail","XYZ"), // Pass Customer Email
+        new ReportParameter("CustomerAddress", "XYZ"), // Pass Customer Address
+        new ReportParameter("POSName", "XYZ"),   // Pass POS Name
+        new ReportParameter("CustomerVatNumber", "XYZ"),   // Pass POS Name
 
         //new ReportParameter("CustomerName", _customerName ?? "N/A"),  // Pass Customer Name
         //new ReportParameter("CustomerEmail", _customerEmail ?? "N/A"), // Pass Customer Email

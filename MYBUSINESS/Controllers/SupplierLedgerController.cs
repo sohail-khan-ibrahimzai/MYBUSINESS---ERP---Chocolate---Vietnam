@@ -24,12 +24,12 @@ namespace MYBUSINESS.Controllers
         public ActionResult Index(int SuppId)
         {
             //EnterProfit();
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string; //commented due to session issue
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
 
             IQueryable<PO> pOes = db.POes.Include(s => s.Supplier).Where(x => x.SupplierId == SuppId);
 
@@ -54,7 +54,8 @@ namespace MYBUSINESS.Controllers
             ViewBag.ThisSupplier = db.Suppliers.Where(x => x.Id == SuppId).FirstOrDefault();
 
             ViewBag.Suppliers = DAL.dbSuppliers;
-            var purchaseOrders = pOes.Where(x => x.StoreId == parseId).OrderBy(i => i.Date).ToList();
+            //var purchaseOrders = pOes.Where(x => x.StoreId == parseId).OrderBy(i => i.Date).ToList(); //commented due to session issue
+            var purchaseOrders = pOes.Where(x => x.StoreId == 1).OrderBy(i => i.Date).ToList();
             return View(purchaseOrders);
         }
 
