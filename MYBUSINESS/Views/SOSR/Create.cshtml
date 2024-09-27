@@ -66,11 +66,11 @@
         padding: 0; /* Optional: remove padding */
     }
         /*.scrollable-div {
-        max-height: 400px;*/ /* Adjust as needed */
+            max-height: 400px;*/ /* Adjust as needed */
         /*overflow-y: auto;
-        padding: 0;*/ /* Remove padding to align items correctly */
+            padding: 0;*/ /* Remove padding to align items correctly */
         /*display: flex;
-        flex-wrap: wrap;*/ /* Allow wrapping of items */
+            flex-wrap: wrap;*/ /* Allow wrapping of items */
         /*}*/
 
         .scrollable-div .col-md-3 {
@@ -122,18 +122,18 @@
             outline: none; /* Remove the focus outline */
         }
     /*.table-wrapper2 {
-        margin: 30px auto;
-        background: #fff;
-        padding: 20px;
-        box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
-    }
+            margin: 30px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+        }
 
-    .scrollable-div {
-        max-height: 400px;
-        overflow-y: scroll;
-    }
+        .scrollable-div {
+            max-height: 400px;
+            overflow-y: scroll;
+        }
 
-    .scrollable-container {*/
+        .scrollable-container {*/
     /*max-height: 100px !important;*/ /* Set desired height */
     /*height: 100px !important;*/ /* Set desired height */
     /*overflow-y: auto;*/ /* Enable vertical scrolling */
@@ -144,20 +144,20 @@
     /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/ /* Optional: box shadow */
     /*}
 
-    .small-box {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100px;*/ /* Optional: set a fixed height for each box */
+        .small-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100px;*/ /* Optional: set a fixed height for each box */
     /*}
 
-    .inner {
-        flex: 1;*/ /* Ensure the content takes available space */
+        .inner {
+            flex: 1;*/ /* Ensure the content takes available space */
     /*}
 
-    .icon {
-        text-align: center;
-    }*/
+        .icon {
+            text-align: center;
+        }*/
     /* Default product name styling */
     .product-box .product-name {
         font-weight: normal;
@@ -174,6 +174,47 @@
     .product-box .product-name {
         transition: font-weight 0.2s ease, color 0.2s ease;
     }
+
+    .loader {
+        display: none; /* Hide by default */
+        width: 12px;
+        height: 12px;
+        border: 2px solid white;
+        border-top: 2px solid transparent;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 10px; /* Adjust to position relative to button text */
+        margin-top: -6px; /* Center the loader vertically */
+    }
+
+    /* Ensure button size remains the same */
+    /*#customerByTaxCode {
+    width: 100%;*/ /* Ensure full width */
+    /*height: 40px;*/ /* Fixed height to prevent resizing */
+    /*padding-left: 35px;*/ /* Add space for the spinner */
+    /*padding-right: 35px;*/ /* Optional if needed for alignment */
+    /*position: relative;*/ /* Ensure loader and text are positioned correctly */
+    /*}*/
+    .calculator-container {
+        position: fixed;
+        top: 86px;
+        right: 14px;
+        width: 31%;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        padding: 10px;
+    }
+
+    .quantity-calculator-container {
+        right: 14px;
+        width: 100%;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        padding: 10px;
+    }
 </style>
 @*<h2>Create</h2>*@
 
@@ -184,6 +225,7 @@
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+    @*<input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat1" value="abcd" placeholder="VAT Number">*@
     <div class="container" id="container">
         <div class="table-wrapper2">
             <div class="table-title">
@@ -191,7 +233,15 @@
                     @*<div id="saleOrder" class="col-sm-offset-5"><h2>Sale <b>Order</b></h2></div>*@
                     @*<div id="saleReturn" class="col-sm-offset-5"><h2>Sale <b>Return</b></h2></div>*@
                 </div>
-
+                <!--hidden fields customer data-->
+                <input type="text" autocomplete="off" class="form-control" name="Customer.Id" id="customerId1" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" style="display:none;">
+                <input type="text" class="form-control" name="Customer.Name" id="vndCustomer1" placeholder="Customer" style="display:none;">
+                <input type="text" class="form-control" name="Customer.CompanyName" id="vndCustomerCompany1" placeholder="Customer company" style="display:none;">
+                <input type="text" class="form-control" name="Customer.Name" id="vndCustomerName1" placeholder="Customer name" style="display:none;">
+                <input type="text" class="form-control" name="Customer.Address" id="vndCustomerAddress1" placeholder="Customer address" style="display:none;">
+                <input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat1" placeholder="Customer Vat" style="display:none;">
+                <input type="text" class="form-control" name="Customer.Email" id="vndCustomerEmail1" placeholder="Customer email" style="display:none;">
+                <!--hidden fields customer data-->
                 <input type="hidden" name="SaleOrder.SaleReturn" id="saleReturn" value=@ViewBag.IsReturn />
 
                 <input type="hidden" name="SaleOrder.CustomerId" id="idnCustomer" value="" />
@@ -556,7 +606,7 @@
                                                     <div class="form-group">
                                                         <label for="inputField">Cash VND(₫)</label>
                                                         <input type="text" class="form-control" id="cashvnd" placeholder="Cash Vnd">
-                                                    </div> 
+                                                    </div>
                                                     <div class="form-group">
                                                         <label for="inputField">Cash USD($)</label>
                                                         <input type="text" autocomplete="off" class="form-control" name="cashUsd" id="cashUsd" value="0">
@@ -583,6 +633,16 @@
                                                         <label for="inputField">Left to pay VND</label>
                                                         <input readonly type="text" autocomplete="off" class="form-control" name="SaleOrder.Balance" id="lefttopayvnd" value="0" tabindex="-1">
                                                     </div>
+                                                    <!--hidden fields payment data-->
+                                                    <input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaid" id="cardvnd1" value="0" style="display:none;">
+                                                    <input type="text" class="form-control" id="cashvnd1" placeholder="Cash Vnd" style="display:none;">
+                                                    <input type="text" autocomplete="off" class="form-control" name="cashUsd1" id="cashUsd1" value="0" style="display:none;">
+                                                    <input type="text" class="form-control" name="cashJpy1" id="cashJpy1" placeholder="Cash Vnd" value="0" style="display:none;">
+                                                    <input type="text" class="form-control" id="changeUsd1" value="" placeholder="Change USD" style="display:none;">
+                                                    <input type="text" class="form-control" id="changejpy1" value="" placeholder="Change JPY" style="display:none;">
+                                                    <input type="text" class="form-control classBorder0" name="SaleOrder.BillAmount" id="ItemsTotal1" value="0" tabindex="-1" style="display:none;">
+                                                    <input type="text" autocomplete="off" class="form-control" name="SaleOrder.Balance" id="lefttopayvnd1" value="0" tabindex="-1" style="display:none;">
+                                                    <!--hidden fields payment data-->
                                                 </form>
                                             </div>
                                             <div class="col-md-4">
@@ -654,7 +714,6 @@
         </div>
     </div>
 
-
     <!-- Curomer Tex Modal -->
     <div class="modal fade bd-tax-modal-lg" id="taxModal" tabindex="-1" role="dialog" aria-labelledby="taxModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -684,15 +743,37 @@
                                                 <form>
                                                     <div class="form-group">
                                                         <input type="text" autocomplete="off" class="form-control" name="Customer.Id" id="customerId" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" style="display:none;">
+                                                        @*<input type="hidden" name="Customer.Id" id="customerId1" value="@Model.Customer.Id" />*@
                                                     </div>
+                                                    <div class="form-group">
+                                                        <label for="vndCustomerVat" class="col-sm-3 col-form-label" style="margin-left:-13px">VAT Number</label><br />
+                                                        <div class="col-sm-10" style="margin-left:-13px">
+                                                            <input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat" placeholder="VAT Number">
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <button type="button" class="btn btn-primary btn-block position-relative" id="customerByTaxCode" style="margin-left: -19px; width: 94px;">
+                                                                <i class="fa fa-search"></i>
+                                                                <span class="loader" style="margin-left: 20px;"></span>
+                                                                <span class="loading-text" style="display:none;">.</span>
+                                                            </button>
+                                                        </div>
+                                                        @*<div class="col-sm-2">
+                                                                <button type="button" class="btn btn-primary btn-block" id="customerByTaxCode"><i class="fa fa-search"></i></button>
+                                                                <span class="loader" style="display: none;"></span>
+                                                            </div>*@
+                                                        <!--<label for="field4">VAT Number</label>-->
+                                                        @*<input type="text" class="form-control" name="vndCustomerVat" id="vndCustomerVat" placeholder="VAT Number">*@
+                                                        <!--<input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat" placeholder="VAT Number">-->
+                                                        @*<input type="hidden" name="Customer.Vat" id="customerVat1" value="@Model.Customer.Vat" />*@
+                                                        <!--<button type="button" class="btn btn-primary ml-2">Submit</button>-->
+                                                    </div>
+                                                    <br />
+
+                                                    <br />
                                                     <div class="form-group">
                                                         <label for="dropdown">Customer</label>
-                                                        <input type="text" autocomplete="off" class="form-control" name="Customer.Name" id="customer" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" title="Type customer name">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="field4">VAT Number</label>
-                                                        @*<input type="text" class="form-control" name="vndCustomerVat" id="vndCustomerVat" placeholder="VAT Number">*@
-                                                        <input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat" placeholder="VAT Number">
+                                                        <input type="text" autocomplete="off" class="form-control" name="Customer.Name" id="vndCustomer" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" title="Type customer name">
+                                                        @*<input type="hidden" name="Customer.Name" id="customer1" value="@Model.Customer.Name" />*@
                                                     </div>
                                                     @*<div class="form-group">
                                                             <label for="dropdown">Customer</label>
@@ -710,14 +791,17 @@
                                                     <div class="form-group">
                                                         <label for="field2">Customer Company</label>
                                                         <input type="text" class="form-control" name="Customer.CompanyName" id="vndCustomerCompany" placeholder="Customer company">
+                                                        @*<input type="hidden" name="Customer.CompanyName" id="vndCustomerCompany1" value="@Model.Customer.CompanyName" />*@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="field3">Address</label>
                                                         <input type="text" class="form-control" name="Customer.Address" id="vndCustomerAddress" placeholder="Address">
+                                                        @*<input type="hidden" name="Customer.Address" id="vndCustomerAddress1" value="@Model.Customer.Address" />*@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="field5">Email</label>
                                                         <input type="text" class="form-control" name="Customer.Email" id="vndCustomerEmail" placeholder="Email">
+                                                        @*<input type="hidden" name="Customer.Email" id="vndCustomerEmail1" value="@Model.Customer.Email" />*@
                                                     </div>
                                                 </form>
                                             </div>
@@ -757,6 +841,7 @@
             </div>
         </div>
     </div>
+
 
     @*<button type="button" class="btn btn-primary" name="addQuantityModal" id="addQuantityModal">Add Qauntity</button>*@
 
@@ -804,52 +889,54 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="calculator">
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(7)">7</button>
+                                                <div class="quantity-calculator-container">
+                                                    <div class="calculator">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(7)">7</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(8)">8</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(9)">9</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(8)">8</button>
+                                                        <br />
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(4)">4</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(5)">5</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(6)">6</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(9)">9</button>
+                                                        <br />
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(1)">1</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(2)">2</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(3)">3</button>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <br />
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(4)">4</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(5)">5</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(6)">6</button>
-                                                        </div>
-                                                    </div>
-                                                    <br />
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(1)">1</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(2)">2</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(3)">3</button>
-                                                        </div>
-                                                    </div>
-                                                    <br />
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="clearQuantityInput()">CE</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btnbtn-secondary btn-block" type="button" onclick="appendQuantityNumber(0)">0</button>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <button class="btn btnbtn-secondary btn-block" type="button" onclick="deleteQuantityLast()">X</button>
+                                                        <br />
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="clearQuantityInput()">CE</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btnbtn-secondary btn-block" type="button" onclick="appendQuantityNumber(0)">0</button>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button class="btn btnbtn-secondary btn-block" type="button" onclick="deleteQuantityLast()">X</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -871,7 +958,6 @@
 
 
 }
-
 <script>
 
     $(document).ready(function () {
@@ -936,66 +1022,7 @@
 </script>
 
 
-<div id="dialog-CreateCustomer" title="Create customer dialog">
-    @*@using (Html.BeginForm())*@
-    @*@using (Html.BeginForm("Create", "Customers", FormMethod.Post, new { name = "SOSRCreateNewCustomer", id = "SOSRCreateNewCustomer" }))*@
-    @*{*@
-    @*@Html.AntiForgeryToken()*@
-    @*ViewBag.Controller = "SOSR";
-        ViewBag.Action = "Create";
-        TempData["Controller"] = "SOSR";
-        TempData["Action"] = "Create";*@
-    @*<input type="hidden" name="CustomerId" value="@ViewBag.Data1" />
-        <input type="hidden" name="CustomerId" value="@ViewBag.Data1" />*@
-    <div class="form-horizontal">
-        @*Add styling display none to Customer Form by Sohail*@
 
-        <h4>Add New Customer</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Customer.Id, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @*@Html.EditorFor(model => model.Customer.Id, new { htmlAttributes = new { @class = "form-control", @name = "Customer.Id", @id ="NewCustomerId", @Value = ViewBag.SuggestedNewCustId, @readonly = "readonly" } })*@
-                <input type="text" autocomplete="off" class="form-control" id="NewCustomerId" value=@ViewBag.SuggestedNewCustId readonly="readonly" />
-                @*@Html.ValidationMessageFor(model => model.Customer.Id, "", new { @class = "text-danger" })*@
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Customer.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @*@Html.EditorFor(model => model.Customer.Name, new { htmlAttributes = new { @class = "form-control", @name = "Customer.Name", @id = "NewCustomerName"} })*@
-                <input type="text" autocomplete="off" class="form-control" id="NewCustomerName" value="" />
-                @*<input type="hidden" name="SaleOrder.CustomerId" id="idnCustomer" value="10" />*@
-                @*@Html.ValidationMessageFor(model => model.Customer.Name, "", new { @class = "text-danger" })*@
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Customer.Address, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @*@Html.EditorFor(model => model.Customer.Name, new { htmlAttributes = new { @class = "form-control", @name = "Customer.Name", @id = "NewCustomerName"} })*@
-                <input type="text" autocomplete="off" class="form-control" id="NewCustomerAddress" value="" />
-                @*<input type="hidden" name="SaleOrder.CustomerId" id="idnCustomer" value="10" />*@
-                @*@Html.ValidationMessageFor(model => model.Customer.Name, "", new { @class = "text-danger" })*@
-            </div>
-        </div>
-
-
-        <div class="table-title">
-            <div class="row">
-                @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
-                <div class="col-sm-8">
-                    @*<button type="submit" id="CreateSO" class="btn btn-info add-new"><i class="fa fa-plus"></i>Save & Print</button>*@
-                    <input type="button" value="Add" id="btnCreateNewCust" class="btn btn-danger" />
-                </div>
-            </div>
-        </div>
-
-    </div>
-    @*}*@
-</div>
 @{Html.RenderPartial("_ProductDetail", new List<MYBUSINESS.Models.ProductDetail>()); }
 <div class="text-center">
     @Html.ActionLink("Back to List", "Index")
@@ -1008,7 +1035,6 @@
 
 
 <script type="text/javascript">
-    debugger;
     //document.getElementById('barcodeInput').focus();
     //document.getElementById('barcodeInput').addEventListener('keyup', function (event) {
     //    if (event.key === 'Enter') {
@@ -1039,7 +1065,6 @@
     });
 
      function onBarcodeScans(barcode) {
-     debugger;
      var productList = productsBarcodesList;
      console.log(productList);
      var product = productList.find(p => p.BarCode === barcode);
@@ -1050,10 +1075,42 @@
          alert('Product not found');
      }
     }
-    debugger;
-    @if (ViewBag.ReportId != null && ViewBag.ReportId != "") {
-        @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
-    }
+      @if (ViewBag.ReportId != null && ViewBag.ReportId != "")
+      {
+           @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
+          @*if(ViewBag.WebserviceDownError!= null) {
+          @:alert(serDownError);
+          }
+    else {
+              //string customerName = ViewBag.CustomerName ?? "N/A";
+              //string customerEmail = ViewBag.CustomerEmail ?? "N/A";
+              //string customerAddress = ViewBag.CustomerAddress ?? "N/A";
+              //string posName = ViewBag.POSName ?? "N/A";
+           @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
+           }*@
+
+          // Proper URL encoding for special characters
+          @*var reportUrl = Url.Action("PrintSO3", "SOSR", new
+          {
+              id = ViewBag.ReportId,
+              customerName = customerName.ToString(),
+              customerEmail = customerEmail.ToString(),
+              customerAddress = customerAddress.ToString(),
+              posName = posName.ToString()
+          });
+            @:window.open('@reportUrl', "_blank");*@
+      }
+@*@if (ViewBag.ReportId != null && ViewBag.ReportId != "") {
+            string customerName = ViewBag.CustomerName ?? "N/A";
+            string customerEmail = ViewBag.CustomerEmail ?? "N/A";
+            string customerAddress = ViewBag.CustomerAddress ?? "N/A";
+            string posName = ViewBag.POSName ?? "N/A";
+            var reportUrl = "PrintSO3/" + ViewBag.ReportId + "?customerName=" + Uri.EscapeDataString(customerName) + "&customerEmail=" + Uri.EscapeDataString(customerEmail) +
+                "&customerAddress=" + Uri.EscapeDataString(customerAddress) +
+                "&posName=" + Uri.EscapeDataString(posName);
+
+            @:window.open('@reportUrl', "_blank");
+    }*@
     var reportId = '@(ViewBag.ReportId)';
     //if (reportId != null && reportId != "") {
     //    var storedTotal = localStorage.getItem('totalItems');
@@ -1118,31 +1175,31 @@
 
 
         $.ajax({
-            url: "@Url.Action("ProductRentStatus","SOSR")",
+            url: "@Url.Action("ProductRentStatus", "SOSR")",
             data: { 'prodId': prodId, 'sellDate': sellDate},
             type: "GET",
             cache: false,
             success: function (data) {
-                //toastr.success('Hi! I am success message.');
-                //var abc = data;
-                //alert(data);
-                if (data.indexOf('12:00:00 AM') != -1) {
+            //toastr.success('Hi! I am success message.');
+            //var abc = data;
+            //alert(data);
+            if (data.indexOf('12:00:00 AM') != -1) {
 
-                    $("#NewData").html(data);
-                    $("#NewData").dialog("open");
-                //}
-                }
+            $("#NewData").html(data);
+            $("#NewData").dialog("open");
+            //}
+            }
 
 
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                //$('#lblCommentsNotification').text("Error encountered while saving the comments.");
-                alert('Data provided was not valid');
+            //$('#lblCommentsNotification').text("Error encountered while saving the comments.");
+            alert('Data provided was not valid');
             }
-        });
-    }
+            });
+            }
 
-    //alert(IsReturn);
+            //alert(IsReturn);
 </script>
 
 @*@section Scripts {

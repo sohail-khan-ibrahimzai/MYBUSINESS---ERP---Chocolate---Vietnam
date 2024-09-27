@@ -25,8 +25,15 @@ namespace MYBUSINESS.CustomClasses
         private IQueryable<Customer> customers;
         public IQueryable<Customer> dbCustomers
         {
-            get{return db.Customers.Where(x => x.Status != "D");}
+            get { return db.Customers.Where(x => x.Status != "D"); }
             set { customers = value; }
+        }
+
+        private IQueryable<Currency> currencies;
+        public IQueryable<Currency> dbCurrencies
+        {
+            get { return db.Currencies.Where(x => x.IsActive != false); }
+            set { currencies = value; }
         }
 
         //private List<Product> products;
@@ -41,7 +48,7 @@ namespace MYBUSINESS.CustomClasses
         {
             get { return db.Stores.Where(x => x.Status != "D"); }
             //set { products = value; }
-        } 
+        }
         public IQueryable<DailyBalanceVnd> dbVndBalance
         {
             //get { return db.DailyBalanceVnds.Where(x => x.Status != "D"); }

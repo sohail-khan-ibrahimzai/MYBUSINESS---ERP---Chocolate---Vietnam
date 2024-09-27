@@ -23,6 +23,27 @@
         .flex-row input {
             flex: 1; /* Allow input to take up remaining space */
         }
+
+    .calculator-container {
+        position: fixed;
+        top: 126px;
+        right: 45px;
+        width: 38%;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        padding: 10px;
+    }
+    /*.calculator-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: white;*/ /* Change as needed */
+    /*box-shadow: 0 -2px 5px rgba(0,0,0,0.2);*/ /* Optional shadow for better visibility */
+    /*z-index: 1000;*/ /* Ensure it’s on top of other elements */
+    /*padding: 10px 0;*/ /* Add padding for aesthetics */
+    /*}*/
 </style>
 <center><h2>Stores</h2></center>
 @{
@@ -146,6 +167,7 @@
                                         <div class="col-md-6">
                                             <!-- Content for the third column (4 columns wide) -->
                                             <!-- Calculator buttons -->
+                                            <div class="calculator-container">
                                             <div class="calculator">
                                                 <div class="row">
                                                     <div class="col-md-4">
@@ -194,6 +216,7 @@
                                                         <button class="btn btnbtn-secondary btn-block" type="button" onclick="insertNumber('X')">X</button>
                                                     </div>
                                                 </div>
+                                            </div>
                                             </div>
                                         </div>
                                     </div>

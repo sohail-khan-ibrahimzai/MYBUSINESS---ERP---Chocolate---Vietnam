@@ -16,7 +16,6 @@ var x, y;
 var _total = 0;
 var IsReturn = "false";
 function OnTypeSupplierName(param) {
-    debugger;
     $(param).mcautocomplete({
         showHeader: true,
         columns: supplierColumns,

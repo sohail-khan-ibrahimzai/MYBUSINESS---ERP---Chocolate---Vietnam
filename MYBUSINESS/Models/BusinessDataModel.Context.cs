@@ -43,6 +43,7 @@ namespace MYBUSINESS.Models
         public virtual DbSet<PO> POes { get; set; }
         public virtual DbSet<POD> PODs { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductCategory> ProductCategories { get; set; }
         public virtual DbSet<ProductDetail> ProductDetails { get; set; }
         public virtual DbSet<ProductionOrder> ProductionOrders { get; set; }
         public virtual DbSet<ProductionOrderDetail> ProductionOrderDetails { get; set; }
@@ -53,65 +54,10 @@ namespace MYBUSINESS.Models
         public virtual DbSet<SO> SOes { get; set; }
         public virtual DbSet<SOD> SODs { get; set; }
         public virtual DbSet<Store> Stores { get; set; }
+        public virtual DbSet<StoreProduct> StoreProducts { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<UserAuthorization> UserAuthorizations { get; set; }
-        public virtual DbSet<MetaDetaDescription> MetaDetaDescriptions { get; set; }
-        public virtual DbSet<StoreProduct> StoreProducts { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-    
-        public virtual ObjectResult<spExpenseReport_Result> spExpenseReport(string purchaseOrderID)
-        {
-            var purchaseOrderIDParameter = purchaseOrderID != null ?
-                new ObjectParameter("PurchaseOrderID", purchaseOrderID) :
-                new ObjectParameter("PurchaseOrderID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spExpenseReport_Result>("spExpenseReport", purchaseOrderIDParameter);
-        }
-    
-        public virtual ObjectResult<spLoanReport_Result> spLoanReport(string purchaseOrderID)
-        {
-            var purchaseOrderIDParameter = purchaseOrderID != null ?
-                new ObjectParameter("PurchaseOrderID", purchaseOrderID) :
-                new ObjectParameter("PurchaseOrderID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spLoanReport_Result>("spLoanReport", purchaseOrderIDParameter);
-        }
-    
-        public virtual ObjectResult<spPOReport_Result> spPOReport(string purchaseOrderID)
-        {
-            var purchaseOrderIDParameter = purchaseOrderID != null ?
-                new ObjectParameter("PurchaseOrderID", purchaseOrderID) :
-                new ObjectParameter("PurchaseOrderID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spPOReport_Result>("spPOReport", purchaseOrderIDParameter);
-        }
-    
-        public virtual ObjectResult<spRentReport_Result> spRentReport(string saleOrderID)
-        {
-            var saleOrderIDParameter = saleOrderID != null ?
-                new ObjectParameter("SaleOrderID", saleOrderID) :
-                new ObjectParameter("SaleOrderID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spRentReport_Result>("spRentReport", saleOrderIDParameter);
-        }
-    
-        public virtual ObjectResult<spServiceReport_Result> spServiceReport(string saleOrderID)
-        {
-            var saleOrderIDParameter = saleOrderID != null ?
-                new ObjectParameter("SaleOrderID", saleOrderID) :
-                new ObjectParameter("SaleOrderID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spServiceReport_Result>("spServiceReport", saleOrderIDParameter);
-        }
-    
-        public virtual ObjectResult<spSOReport_Result> spSOReport(string saleOrderID)
-        {
-            var saleOrderIDParameter = saleOrderID != null ?
-                new ObjectParameter("SaleOrderID", saleOrderID) :
-                new ObjectParameter("SaleOrderID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spSOReport_Result>("spSOReport", saleOrderIDParameter);
-        }
+        public virtual DbSet<Currency> Currencies { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
@@ -214,6 +160,60 @@ namespace MYBUSINESS.Models
         public virtual int sp_upgraddiagrams()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
+        }
+    
+        public virtual ObjectResult<spExpenseReport_Result> spExpenseReport(string purchaseOrderID)
+        {
+            var purchaseOrderIDParameter = purchaseOrderID != null ?
+                new ObjectParameter("PurchaseOrderID", purchaseOrderID) :
+                new ObjectParameter("PurchaseOrderID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spExpenseReport_Result>("spExpenseReport", purchaseOrderIDParameter);
+        }
+    
+        public virtual ObjectResult<spLoanReport_Result> spLoanReport(string purchaseOrderID)
+        {
+            var purchaseOrderIDParameter = purchaseOrderID != null ?
+                new ObjectParameter("PurchaseOrderID", purchaseOrderID) :
+                new ObjectParameter("PurchaseOrderID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spLoanReport_Result>("spLoanReport", purchaseOrderIDParameter);
+        }
+    
+        public virtual ObjectResult<spPOReport_Result> spPOReport(string purchaseOrderID)
+        {
+            var purchaseOrderIDParameter = purchaseOrderID != null ?
+                new ObjectParameter("PurchaseOrderID", purchaseOrderID) :
+                new ObjectParameter("PurchaseOrderID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spPOReport_Result>("spPOReport", purchaseOrderIDParameter);
+        }
+    
+        public virtual ObjectResult<spRentReport_Result> spRentReport(string saleOrderID)
+        {
+            var saleOrderIDParameter = saleOrderID != null ?
+                new ObjectParameter("SaleOrderID", saleOrderID) :
+                new ObjectParameter("SaleOrderID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spRentReport_Result>("spRentReport", saleOrderIDParameter);
+        }
+    
+        public virtual ObjectResult<spServiceReport_Result> spServiceReport(string saleOrderID)
+        {
+            var saleOrderIDParameter = saleOrderID != null ?
+                new ObjectParameter("SaleOrderID", saleOrderID) :
+                new ObjectParameter("SaleOrderID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spServiceReport_Result>("spServiceReport", saleOrderIDParameter);
+        }
+    
+        public virtual ObjectResult<spSOReport_Result> spSOReport(string saleOrderID)
+        {
+            var saleOrderIDParameter = saleOrderID != null ?
+                new ObjectParameter("SaleOrderID", saleOrderID) :
+                new ObjectParameter("SaleOrderID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spSOReport_Result>("spSOReport", saleOrderIDParameter);
         }
     
         public virtual ObjectResult<spTest_Result> spTest(string param1)

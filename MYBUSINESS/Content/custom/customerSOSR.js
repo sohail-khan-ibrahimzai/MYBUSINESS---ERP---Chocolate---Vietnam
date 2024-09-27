@@ -8,9 +8,12 @@ var customerColumns = [{ name: 'Code', minWidth: '100px' }, { name: 'CompanyName
 var customers = new Array();
 var productsBarcodes = new Array();
 var productsBarcodess = [];
-debugger;
-const usdToVndRate = 23600; // Exchange rate for USD to VND
-const jpyToVndRate = 179; // Exchange rate for JPY to VND
+var _usdToVndRate = 0;
+var _jpyToVndRate = 0;
+var usdToVndRate = 0; // Exchange rate for USD to VND
+var jpyToVndRate = 0; // Exchange rate for JPY to VND
+//const usdToVndRate = 23600; // Exchange rate for USD to VND
+//const jpyToVndRate = 179; // Exchange rate for JPY to VND
 console.log(productsBarcodes); // Check the contents of the array
 //var productsBarcodess = new Array();
 //var focusedBtnId = "";
@@ -28,6 +31,27 @@ var num = 0;
 //    document.getElementById('closeStore').style.display = 'block';
 //    document.getElementById("StorageItem").value = storeIds;
 //}
+var availableCurrencies = [];
+function getAll_AvailableCurrencies() {
+    $.ajax({
+        url: '/Currencies/GetAllAbvailableCurrencies',
+        type: 'GET',
+        success: function (response) {
+            if (response.Success) {
+                availableCurrencies = response.Data;
+                _usdToVndRate = availableCurrencies.find(currency => currency.Name === 'USD');
+                _jpyToVndRate = availableCurrencies.find(currency => currency.Name === 'JPY');
+                usdToVndRate = _usdToVndRate.ExchangeRate;
+                jpyToVndRate = _jpyToVndRate.ExchangeRate;
+            } else {
+                alert('Failed to set session: ' + response.Message);
+            }
+        },
+        error: function (xhr, status, error) {
+            alert('An error occurred while setting the session: ' + error);
+        }
+    });
+}
 function OnTypeCustomerName(param) {
     //debugger;
     $(param).mcautocomplete({
@@ -646,7 +670,7 @@ function addProduct(encodedProductJson) {
     $('#validateQuantity').off('click').on('click', function (e) {
         var quantityFromModal = parseInt($('#productQuantity').val(), 10) || 0; // Ensure it's a number and default to 0 if invalid
         $('#quantityAddpopup').modal('hide'); // Hide the modal
-
+        $('#productQuantity').val(1);
         // After getting the quantity, call the function to add the product
         handleProductAddition(encodedProductJson, quantityFromModal);
     });
@@ -1661,7 +1685,7 @@ $(document).ready(function () {
     //$(this).closest('form').find("input[type=text], textarea").val("");
 
     //alert('iam ready');
-    document.getElementById('customer').focus();
+    document.getElementById('vndCustomer').focus();
 
     //$('#name').tooltip('show')
 
@@ -1790,21 +1814,61 @@ $(document).ready(function () {
         }
     });
     $('#saveSales').click(function (event) {
-        //debugger
+        const customerId = $('#customerId').val();
+        const vndCustomer = $('#vndCustomer').val();
+        const customerName = $('#vndCustomerName').val();
+        const customerVat = $('#vndCustomerVat').val();
+        const customerCompany = $('#vndCustomerCompany').val();
+        const customerAddress = $('#vndCustomerAddress').val();
+        const customerEmail = $('#vndCustomerEmail').val();
+
+        // Set the hidden fields with the values
+        $('#customerId1').val(customerId);
+        $('#vndCustomer1').val(customerName);
+        $('#vndCustomerCompany1').val(customerCompany);
+        $('#vndCustomerName1').val(customerName);
+        $('#vndCustomerVat1').val(customerVat);
+        $('#vndCustomerAddress1').val(customerAddress);
+        $('#vndCustomerEmail1').val(customerEmail);
+
+        //$('input[name="Customer.Id"]').val(customerId);
+        //$('input[name="Customer.Vat"]').val(customerVat);
+        //$('input[name="Customer.Name"]').val(customerName);
+        //$('input[name="Customer.CompanyName"]').val(customerCompany);
+        //$('input[name="Customer.Address"]').val(customerAddress);
+        //$('input[name="Customer.Email"]').val(customerEmail);
+        // Log values to debug (optional)
+        console.log(customerId, customerName, customerVat);
+
         //Binding SaleOrder Form
         $('#cardvnd').val(cardVndBalance);
         $('#cashvnd').val(cashVndBalance);
-
-        ///
         $('#ItemsTotal').val(totalPayableBill);
-        //$('#paid').val(totalBillPaid);
         $('#paid').val(cardVndBalance);
         $('#paidByCash').val(cashVndBalance);
 
+        //const cardVnd = $('#cardvnd').val(cardVndBalance);
+        //const cashvnd = $('#cashvnd').val(cashVndBalance);
+        //const itemsTotal = $('#ItemsTotal').val(totalPayableBill);
+        //const paid = $('#paid').val(cardVndBalance);
+        //const paidByCash = $('#paidByCash').val(cashVndBalance);
+
+        //$('#cardvnd1').val(cardVnd1);
+        //$('#cashvnd1').val(cashvnd1);
+        //$('#paidByCash1').val(paidByCash1);
+        //$('#ItemsTotal').val(itemsTotal1);
+        //$('#paid1').val(paid1);
+        ///
+
+        //$('#paid').val(totalBillPaid);
+
+
         if (leftVndBalance === null || leftVndBalance === undefined || leftVndBalance === "") {
             $('#balance').val('0.00');
+            $('#balance1').val('0.00');
         } else {
             $('#balance').val(leftVndBalance);
+            $('#balance1').val(leftVndBalance);
         }
         event.preventDefault(); // Prevent the default action (if any)
         //var totalpaymentText = $('#CreateSO').text();
@@ -1816,6 +1880,7 @@ $(document).ready(function () {
     $('#CreateSO').click(function () {
         //debugger;
         $('#ItemsTotal').val(totalPayableBill);
+        //$('#ItemsTotal1').val(totalPayableBill);
         console.log('BillAmount:', $('#ItemsTotal').val());
         console.log('Discount:', $('#discount').val());
         //if ($('#idnCustomer').val() == "") {
@@ -1940,7 +2005,7 @@ $(document).ready(function () {
         //if ($('#ItemsTotal').val().trim() == "") {
         //    $('#ItemsTotal').val(0);
         //}
-        //debugger;
+        getAll_AvailableCurrencies();
         var storedTotal = totalVndBalanceHeader;
         if (!isNaN($('#total').val()) || !$('#total').val('0')) {
             //$('#lefttotalvnd').val(storedTotal);
@@ -2034,27 +2099,29 @@ $(document).ready(function () {
         //$('#lefttotalvnd').val('');
     });
     $('#validatepyment').click(function () {
-        // Make the GET request
-        $.ajax({
-            url: '/SOSR/USRLWB', // Ensure this matches your route
-            type: 'GET',
-            success: function (response) {
-                try {
-                    debugger;
-                    // If response is already an object, you can access it directly
-                    var data = response;
-                    var aa = data.Response.Response;
-                    var datas = JSON.parse(aa);
-                    $('#vndCustomerCompany').val(datas.ten_cty);
-                    $('#vndCustomerAddress').val(datas.dia_chi);
-                    $('#taxModal').modal('show');
+        // Make the GET request Working Code
+        //$.ajax({
+        //    url: '/SOSR/USRLWB', // Ensure this matches your route
+        //    type: 'GET',
+        //    success: function (response) {
+        //        try {
+        //            debugger;
+        //            // If response is already an object, you can access it directly
+        //            var data = response;
+        //            var aa = data.Response.Response;
+        //            var datas = JSON.parse(aa);
+        //            $('#vndCustomerCompany').val(datas.ten_cty);
+        //            $('#vndCustomerAddress').val(datas.dia_chi);
+        //            $('#taxModal').modal('show');
 
-                } catch (error) {
-                    // Handle errors if property access fails
-                    console.error('Error accessing data:', error);
-                }
-            }
-        });
+        //        } catch (error) {
+        //            // Handle errors if property access fails
+        //            console.error('Error accessing data:', error);
+        //        }
+        //    }
+        //});
+
+
         //$.ajax({
         //    url: '/SOSR/USRLWB',
         //    type: 'GET',
@@ -2092,8 +2159,101 @@ $(document).ready(function () {
         //    }
         //});
 
-
+        $('#taxModal').modal('show');
     });
+    // Function to rotate the loader
+    function rotateLoader($loader) {
+        let rotation = 0;
+        const interval = setInterval(function () {
+            rotation += 10; // Increment rotation by 10 degrees each time
+            $loader.css({
+                'transform': 'rotate(' + rotation + 'deg)'
+            });
+        }, 100); // Adjust speed (100ms for smoother rotation)
+
+        // Return the interval ID so we can stop the rotation later
+        return interval;
+    }
+
+    $('#customerByTaxCode').on('click', function () {
+        var customerTaxCode = $('#vndCustomerVat').val();
+
+        // Disable the button and show the loader
+        var $button = $(this);
+        $button.prop('disabled', true).find('i').hide(); // Hide the search icon
+        var $loader = $button.find('.loader');
+        $loader.show(); // Show the loader
+
+        var rotationInterval = rotateLoader($loader); // Start rotating the loader
+
+        // Show the loading text
+        $button.find('.loading-text').show();
+
+        // Make the GET request
+        $.ajax({
+            url: '/SOSR/USRLWB', // Ensure this matches your route
+            type: 'GET',
+            data: { taxCode: customerTaxCode },
+            success: function (response) {
+                try {
+                    var data = response;
+                    var aa = data.Response.Response;
+                    var datas = JSON.parse(aa);
+                    if (datas.error != undefined) {
+                        alert(datas.error);
+                        $('#vndCustomerCompany').val('');
+                        $('#vndCustomerAddress').val('');
+                    }
+                    else {
+                        $('#vndCustomerCompany').val(datas.ten_cty);
+                        $('#vndCustomerAddress').val(datas.dia_chi);
+                        $('#taxModal').modal('show');
+                    }
+                } catch (error) {
+                    console.error('Error accessing data:', error);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX request failed:', status, error);
+            },
+            complete: function () {
+                // Stop the loader rotation
+                clearInterval(rotationInterval);
+
+                // Re-enable the button and restore its original state
+                $button.prop('disabled', false);
+                $button.find('i').show(); // Show the search icon again
+                $loader.hide(); // Hide the loader
+                $button.find('.loading-text').hide(); // Hide the loading text
+            }
+        });
+    });
+    //$('#customerByTaxCode').on('click', function () {
+    //    var customerTaxCode = $('#vndCustomerVat').val();
+    //    // Make the GET request Working Code
+    //    $.ajax({
+    //        url: '/SOSR/USRLWB', // Ensure this matches your route
+    //        type: 'GET',
+    //        data: { taxCode: customerTaxCode },
+    //        success: function (response) {
+    //            try {
+    //                debugger;
+    //                // If response is already an object, you can access it directly
+    //                var data = response;
+    //                var aa = data.Response.Response;
+    //                var datas = JSON.parse(aa);
+    //                $('#vndCustomerCompany').val(datas.ten_cty);
+    //                $('#vndCustomerAddress').val(datas.dia_chi);
+    //                $('#taxModal').modal('show');
+
+    //            } catch (error) {
+    //                // Handle errors if property access fails
+    //                console.error('Error accessing data:', error);
+    //            }
+    //        }
+    //    });
+
+    //});
     //$('#addQuantityModal').click(function (event) { debugger; $('#quantityAddpopup').modal('show'); });
     jQuery.fn.preventDoubleSubmission = function () {
         $(this).on('submit', function (e) {
@@ -2116,29 +2276,29 @@ $(document).ready(function () {
     //    $("#dialog-CreateCustomer").dialog("open");
     //});
 
-    $('#OpenNewCustForm').click(function () {
+    //$('#OpenNewCustForm').click(function () {
 
-        $("#dialog-CreateCustomer").dialog("open");
-    });
+    //    $("#dialog-CreateCustomer").dialog("open");
+    //});
 
-    $('#btnCreateNewCust').click(function () {
+    //$('#btnCreateNewCust').click(function () {
 
-        $("#dialog-CreateCustomer").dialog("close");
-        //$('#idnCustomer').val(CustomerId);
-        var contents = $("#NewCustomerId").val();
-        $("#idnCustomer").val(contents);
+    //    $("#dialog-CreateCustomer").dialog("close");
+    //    //$('#idnCustomer').val(CustomerId);
+    //    var contents = $("#NewCustomerId").val();
+    //    $("#idnCustomer").val(contents);
 
-        contents = $("#NewCustomerName").val();
+    //    contents = $("#NewCustomerName").val();
 
-        $("#customer").val(contents);
+    //    $("#customer").val(contents);
 
-        contents = $("#NewCustomerAddress").val();
-        $("#customerAddress").val(contents);
+    //    contents = $("#NewCustomerAddress").val();
+    //    $("#customerAddress").val(contents);
 
-        $("#PreviousBalance").val(0.00);
-        update_itemTotal();
-        //alert(contents);
-    });
+    //    $("#PreviousBalance").val(0.00);
+    //    update_itemTotal();
+    //    //alert(contents);
+    //});
 
     //$('[id^="saleType"]').change(function () {
     //    update_itemTotal();
@@ -2233,9 +2393,7 @@ function barcodeEntered(value) {
 //}
 function TriggerBodyEvents() {
     //debugger;
-    debugger;
     OnTypeName('#name' + txtSerialNum);
-
     $('#name' + txtSerialNum).on("keyup", function (e) {
         //alert('#name' + txtSerialNum);
         //if (e.keyCode === 13)
@@ -2506,7 +2664,7 @@ function TriggerFooterEvents() {
     //        $('#lefttopayvnd').text('');
     //    }
     //});
-    
+
     //$('#cashUsd').on('input', function () {
     //    // Remove any non-numeric characters (except for the period which is used for thousands separator)
     //    // Fetch the total amount to pay (if it's dynamically updated elsewhere, you should get it freshly)
@@ -2671,7 +2829,7 @@ function showHiddenInputs() {
     var hiddenInputs = document.querySelectorAll('.hiddenCurrencyInputs');
 
     // Toggle display based on checkbox state
-    hiddenInputs.forEach(function (input) { 
+    hiddenInputs.forEach(function (input) {
         input.style.display = checkbox.checked ? 'block' : 'none';
     });
 }
@@ -2724,7 +2882,8 @@ function calculateLeftToPay() {
     // Get VND values for card and cash payments from the customer (remove dots and convert to numbers)
     var cdVnd = parseFloat($('#cardvnd').val().replace(/\./g, '')) || 0;
     var cashVnd = parseFloat($('#cashvnd').val().replace(/\./g, '')) || 0;
-
+    cardVndBalance = cdVnd;
+    cashVndBalance = cashVnd;
     // Get the USD payment entered by the customer
     var cashUsd = parseFloat($('#cashUsd').val()) || 0;
     var cashUsdInVnd = cashUsd * usdToVndRate; // Convert USD to VND
@@ -2748,10 +2907,12 @@ function calculateLeftToPay() {
     var totalPayment = parseFloat(totalPaymentText) || 0;
 
     // Calculate total amount paid by the customer (Card + Cash VND + Cash USD in VND + Cash JPY in VND)
-    var totalBillPaid = cdVnd + cashVnd + cashUsdInVnd + cashJpyInVnd;
+    //var totalBillPaid = cdVnd + cashVnd + cashUsdInVnd + cashJpyInVnd;
+    totalBillPaid = cdVnd + cashVnd + cashUsdInVnd + cashJpyInVnd;
 
     // Calculate the remaining balance (Customer side payment minus total amount)
-    var leftVndBalance = totalPayment - totalBillPaid;
+    //var leftVndBalance = totalPayment - totalBillPaid;
+    leftVndBalance = totalPayment - totalBillPaid;
 
     // Now apply the seller's ChangeUsd and ChangeJpy to adjust the remaining balance (if negative)
     leftVndBalance += changeUsdInVnd + changeJpyInVnd; // Add seller's contribution in both USD and JPY

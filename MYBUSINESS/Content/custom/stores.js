@@ -1,5 +1,39 @@
-﻿$('.storeids').click(function () {
-    //alert('Hi');
+﻿
+var availableCurrencies = [];
+function getAllAvailableCurrencies() {
+    $.ajax({
+        url: '/Currencies/GetAllAbvailableCurrencies',
+        type: 'GET',
+        success: function (response) {
+            if (response.Success) {
+                availableCurrencies = response.Data;
+            } else {
+                alert('Failed to set session: ' + response.Message);
+            }
+        },
+        error: function (xhr, status, error) {
+            alert('An error occurred while setting the session: ' + error);
+        }
+    });
+}
+//function showModalAndFocusInput() {
+//    $('#storeOpeningPopup').modal('show');
+//    $('#storeOpeningPopup').on('shown.bs.modal', function () {
+//        var initialInput = document.getElementById('oneThsndVnd');
+//        if (initialInput) {
+//            activeInput = initialInput;
+//            initialInput.focus();
+//        }
+//    });
+//}
+//// Attach click handler to elements with the 'storeids' class
+//$('.storeids').click(function () {
+//    // Fetch the currencies first, then show the modal and focus the input
+//    getAllAvailableCurrencies();
+//});
+
+//Workig Code
+$('.storeids').click(function () {
     $('#storeOpeningPopup').modal('show');
     // Set the initial active input field and focus on it
     $('#storeOpeningPopup').on('shown.bs.modal', function () {
@@ -19,7 +53,6 @@ var storeName = "";
 let activeInput = null;
 document.querySelectorAll('.storeids').forEach(function (element) {
     element.addEventListener('click', function () {
-        debugger;
         // Get the value of data-storeid from the clicked element
         const storeIds = this.getAttribute('data-storeid');
         storeName = this.getAttribute('data-storename');
@@ -27,7 +60,6 @@ document.querySelectorAll('.storeids').forEach(function (element) {
         $('#openShop').data('storeid', storeIds);
     });
 });
-debugger;
 //Bind input values from Calculator after selecting
 document.querySelectorAll('input').forEach(input => {
     input.addEventListener('focus', function () {
@@ -175,7 +207,6 @@ document.querySelectorAll('label[id^="lbl"]').forEach(label => {
 });
 //
 $('#openShop').click(function () {
-    debugger;
     const storeIds = $(this).data('storeid');
     if (!storeIds) {
         alert('No store selected. Please select a store first.');
@@ -184,14 +215,12 @@ $('#openShop').click(function () {
     var totalAmountVnd = document.getElementById('totalVndCount').value;
     if (totalAmountVnd == '0') totalAmountVnd = 0;
     if (confirm(`You input '${totalAmountVnd}', are you sure?`)) {
-        debugger;
         // Select the element
         //const element = document.querySelector('.storeids');
         //// Get the value of data-storeid
         //const storeIds = element.getAttribute('data-storeid');
 
         if (openingCurrencyDetalInVnd.length > 0) {
-            debugger;
             formattedString = openingCurrencyDetalInVnd.map(item => {
                 // Set the fixed denomination value
                 let denominationValue = 0;
@@ -233,7 +262,6 @@ $('#openShop').click(function () {
             }).join(':');
         }
         if (openingCurrencyDetalInDollar.length > 0) {
-            debugger;
             formattedStringDollars = openingCurrencyDetalInDollar.map(item => {
                 // Set the fixed denomination value
                 let denominationValue = 0;
@@ -263,7 +291,6 @@ $('#openShop').click(function () {
             }).join(':');
         }
         if (openingCurrencyDetalInYens.length > 0) {
-            debugger;
             formattedStringYens = openingCurrencyDetalInYens.map(item => {
                 // Set the fixed denomination value
                 let denominationValue = 0;
@@ -311,7 +338,7 @@ $('#openShop').click(function () {
         storeId = storeIds;
         if (storeIds != null || storeIds != undefined) {
             localStorage.setItem('storeId', storeId);
-            localStorage.setItem('storeName', storeName);
+            //localStorage.setItem('storeName', storeName);
             setSession(); // Call setSession function to make an AJAX request
         }
     } else {
@@ -428,7 +455,6 @@ $('#openShop').click(function () {
 
 //VND
 function calculateTotal(inputId, denominationValue, outputId) {
-    debugger;
     const count = parseInt(document.getElementById(inputId).value) || 0;
     const total = count * denominationValue;
     document.getElementById(outputId).value = total;
@@ -438,7 +464,6 @@ function calculateTotal(inputId, denominationValue, outputId) {
 }
 //Dollars
 function calculateTotalDollars(inputId, denominationValue, outputId) {
-    debugger;
     const count = parseInt(document.getElementById(inputId).value) || 0;
     const total = count * denominationValue;
     document.getElementById(outputId).value = total;
@@ -448,7 +473,6 @@ function calculateTotalDollars(inputId, denominationValue, outputId) {
 }
 //Yens
 function calculateTotalYens(inputId, denominationValue, outputId) {
-    debugger;
     const count = parseInt(document.getElementById(inputId).value) || 0;
     const total = count * denominationValue;
     document.getElementById(outputId).value = total;
@@ -459,7 +483,6 @@ function calculateTotalYens(inputId, denominationValue, outputId) {
 //Vnd Total
 var openingCurrencyDetalInVnd = [];
 function updateOverallTotals() {
-    debugger;
     const inputIds = ['oneThsndVnd', 'twoThsndVnd', 'fiveThsndVnd', 'tenThsndVnd', 'twentyThsndVnd', 'fiftyThsndVnd', 'oneLacVnd', 'twoLacVnd', 'fiveLacVnd'];
     const outputIds = ['totalOneThsndVnd', 'totalTwoThsndVnd', 'totalFiveThsndVnd', 'totalTenThsndVnd', 'totalTwentyThsndVnd', 'totalFiftyThsndVnd', 'totalOneLacVnd', 'totalTwoLacVnd', 'totalFiveLacVnd'];
 
@@ -489,40 +512,33 @@ function updateOverallTotals() {
 //Dollars Total
 var openingCurrencyDetalInDollar = [];
 function updateOverallDollarsTotal() {
-    debugger;
     const inputIds = ['oneDollar', 'fiveDollars', 'tenDollars', 'twentyDollars', 'fiftyDollars', 'hundredDollars'];
     const outputIds = ['totalOneDollar', 'totalFiveDollars', 'totalTenDollars', 'totalTwentyDollars', 'totalFiftyDollars', 'totalHundredDollars'];
     let totalNotes = 0;
     let totalValue = 0;
     openingCurrencyDetalInDollar = [];
-    const exchangeRateApiUrl = 'https://v6.exchangerate-api.com/v6/93f26f8cc2c57462af9ec3be/latest/USD';
-    // Fetch the exchange rate using .then() instead of async/await
-    fetch(exchangeRateApiUrl)
-        .then(response => response.json())  // Convert the response to JSON
-        .then(data => {
-            // Get the USD to VND exchange rate
-            const usdToVndExchangeRate = data.conversion_rates.VND;
+    const usdToVnd = availableCurrencies.find(currency => currency.Name === 'USD');
+    if (usdToVnd) {
+        const usdToVndExchangeRate = usdToVnd.ExchangeRate;  // Get the exchange rate for USD to VND
 
-            // Calculate total notes and dollar value
-            inputIds.forEach((id, index) => {
-                const count = parseInt(document.getElementById(id).value) || 0;
-                totalNotes += count;
+        // Now use the exchange rate to calculate total notes and dollar value
+        inputIds.forEach((id, index) => {
+            const count = parseInt(document.getElementById(id).value) || 0;
+            totalNotes += count;
 
-                // Get the corresponding total value for each denomination
-                const value = parseInt(document.getElementById(outputIds[index]).value) || 0;
-                totalValue += value;
+            // Get the corresponding total value for each denomination
+            const value = parseInt(document.getElementById(outputIds[index]).value) || 0;
+            totalValue += value;
 
-                // Push the note count and value to the array
-                if (count > 0) {
-                    openingCurrencyDetalInDollar.push({
-                        denomination: id,  // Identifier for the denomination (e.g., 'oneDollar')
-                        count: count,
-                        totalValue: value
-                    });
-                }
-            });
-
-            // Convert the total dollar value to VND
+            // Push the note count and value to the array
+            if (count > 0) {
+                openingCurrencyDetalInDollar.push({
+                    denomination: id,  // Identifier for the denomination (e.g., 'oneDollar')
+                    count: count,
+                    totalValue: value
+                });
+            }
+            //Convert the total dollar value to VND
             const totalValueInVnd = totalValue * usdToVndExchangeRate;
 
             // Update the DOM elements with the totals
@@ -531,12 +547,56 @@ function updateOverallDollarsTotal() {
 
             // Set the converted total value in VND with two decimal places
             document.getElementById('totalDollarsToVnd').textContent = totalValueInVnd.toLocaleString('en-US', { minimumFractionDigits: 2 });
-
-        })
-        .catch(error => {
-            console.error("Error fetching exchange rate: ", error);
-            document.getElementById('totalDollarsToVnd').textContent = "Error fetching exchange rate";
         });
+
+        console.log('USD to VND Exchange Rate:', usdToVndExchangeRate);
+        // You can perform additional operations with the exchange rate here
+    } else {
+        alert('USD currency data not found.');
+    }
+    // Fetch the exchange rate using .then() instead of async/await
+    //const exchangeRateApiUrl = 'https://v6.exchangerate-api.com/v6/93f26f8cc2c57462af9ec3be/latest/USD';
+    //fetch(exchangeRateApiUrl)
+    //    .then(response => response.json())  // Convert the response to JSON
+    //    .then(data => {
+    //        // Get the USD to VND exchange rate
+    //        const usdToVndExchangeRate = data.conversion_rates.VND;
+
+    //        // Calculate total notes and dollar value
+    //        inputIds.forEach((id, index) => {
+    //            const count = parseInt(document.getElementById(id).value) || 0;
+    //            totalNotes += count;
+
+    //            // Get the corresponding total value for each denomination
+    //            const value = parseInt(document.getElementById(outputIds[index]).value) || 0;
+    //            totalValue += value;
+
+    //            // Push the note count and value to the array
+    //            if (count > 0) {
+    //                openingCurrencyDetalInDollar.push({
+    //                    denomination: id,  // Identifier for the denomination (e.g., 'oneDollar')
+    //                    count: count,
+    //                    totalValue: value
+    //                });
+    //            }
+    //        });
+
+    //        // Convert the total dollar value to VND
+    //        const totalValueInVnd = totalValue * usdToVndExchangeRate;
+
+    //        // Update the DOM elements with the totals
+    //        document.getElementById('totalDollars').value = totalNotes;
+    //        document.getElementById('totalDollarsCount').value = totalValue;
+
+    //        // Set the converted total value in VND with two decimal places
+    //        document.getElementById('totalDollarsToVnd').textContent = totalValueInVnd.toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+    //    })
+    //    .catch(error => {
+    //        console.error("Error fetching exchange rate: ", error);
+    //        document.getElementById('totalDollarsToVnd').textContent = "Error fetching exchange rate";
+    //    });
+
     //inputIds.forEach((id, index) => {
     //    const count = parseInt(document.getElementById(id).value) || 0;
     //    totalNotes += count;
@@ -560,39 +620,32 @@ function updateOverallDollarsTotal() {
 //Yen Total
 var openingCurrencyDetalInYens = [];
 function updateOverallYensTotal() {
-    debugger;
     const inputIds = ['oneYen', 'fiveYens', 'tenYens', 'fiftyYens', 'hundredYens', 'fivehundredYens', 'onethousandsYens', 'twothousandsYens', 'fivethousandsYens', 'tenthousandsYens'];
     const outputIds = ['totalOneYen', 'totalFiveYens', 'totalTenYens', 'totalFiftyYens', 'totalHundredYens', 'totalFivehundredYens', 'totalOnethousandsYens', 'totalTwothousandsYens', 'totalFivethousandsYens', 'totalTenthousandsYens'];
     let totalNotes = 0;
     let totalValue = 0;
     openingCurrencyDetalInYens = [];
-    const exchangeRateApiUrl = 'https://v6.exchangerate-api.com/v6/93f26f8cc2c57462af9ec3be/latest/JPY';
-    // Fetch the exchange rate using .then() instead of async/await
-    fetch(exchangeRateApiUrl)
-        .then(response => response.json())  // Convert the response to JSON
-        .then(data => {
-            // Get the USD to VND exchange rate
-            const yenToVndExchangeRate = data.conversion_rates.VND;
+    const yensToVnd = availableCurrencies.find(currency => currency.Name === 'JPY');
+    if (yensToVnd) {
+        const yenToVndExchangeRate = yensToVnd.ExchangeRate;  // Get the exchange rate for USD to VND
 
-            // Calculate total notes and dollar value
-            inputIds.forEach((id, index) => {
-                const count = parseInt(document.getElementById(id).value) || 0;
-                totalNotes += count;
+        // Now use the exchange rate to calculate total notes and dollar value
+        inputIds.forEach((id, index) => {
+            const count = parseInt(document.getElementById(id).value) || 0;
+            totalNotes += count;
 
-                // Get the corresponding total value for each denomination
-                const value = parseInt(document.getElementById(outputIds[index]).value) || 0;
-                totalValue += value;
+            // Get the corresponding total value for each denomination
+            const value = parseInt(document.getElementById(outputIds[index]).value) || 0;
+            totalValue += value;
 
-                // Push the note count and value to the array
-                if (count > 0) {
-                    openingCurrencyDetalInYens.push({
-                        denomination: id,  // Identifier for the denomination (e.g., 'oneDollar')
-                        count: count,
-                        totalValue: value
-                    });
-                }
-            });
-
+            // Push the note count and value to the array
+            if (count > 0) {
+                openingCurrencyDetalInDollar.push({
+                    denomination: id,  // Identifier for the denomination (e.g., 'oneDollar')
+                    count: count,
+                    totalValue: value
+                });
+            }
             // Convert the total dollar value to VND
             const totalValueInVnd = totalValue * yenToVndExchangeRate;
 
@@ -602,12 +655,60 @@ function updateOverallYensTotal() {
 
             // Set the converted total value in VND with two decimal places
             document.getElementById('totalYensToVnd').textContent = totalValueInVnd.toLocaleString('en-US', { minimumFractionDigits: 2 });
-
-        })
-        .catch(error => {
-            console.error("Error fetching exchange rate: ", error);
-            document.getElementById('totalYensToVnd').textContent = "Error fetching exchange rate";
         });
+
+        console.log('JPY to VND Exchange Rate:', usdToVndExchangeRate);
+        // You can perform additional operations with the exchange rate here
+    } else {
+        alert('JPY currency data not found.');
+    }
+
+
+    //const exchangeRateApiUrl = 'https://v6.exchangerate-api.com/v6/93f26f8cc2c57462af9ec3be/latest/JPY';
+    //// Fetch the exchange rate using .then() instead of async/await
+    //fetch(exchangeRateApiUrl)
+    //    .then(response => response.json())  // Convert the response to JSON
+    //    .then(data => {
+    //        // Get the USD to VND exchange rate
+    //        const yenToVndExchangeRate = data.conversion_rates.VND;
+
+    //        // Calculate total notes and dollar value
+    //        inputIds.forEach((id, index) => {
+    //            const count = parseInt(document.getElementById(id).value) || 0;
+    //            totalNotes += count;
+
+    //            // Get the corresponding total value for each denomination
+    //            const value = parseInt(document.getElementById(outputIds[index]).value) || 0;
+    //            totalValue += value;
+
+    //            // Push the note count and value to the array
+    //            if (count > 0) {
+    //                openingCurrencyDetalInYens.push({
+    //                    denomination: id,  // Identifier for the denomination (e.g., 'oneDollar')
+    //                    count: count,
+    //                    totalValue: value
+    //                });
+    //            }
+    //        });
+
+    //        // Convert the total dollar value to VND
+    //        const totalValueInVnd = totalValue * yenToVndExchangeRate;
+
+    //        // Update the DOM elements with the totals
+    //        document.getElementById('totalYens').value = totalNotes;
+    //        document.getElementById('totalYensCount').value = totalValue;
+
+    //        // Set the converted total value in VND with two decimal places
+    //        document.getElementById('totalYensToVnd').textContent = totalValueInVnd.toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+    //    })
+    //    .catch(error => {
+    //        console.error("Error fetching exchange rate: ", error);
+    //        document.getElementById('totalYensToVnd').textContent = "Error fetching exchange rate";
+    //    });
+
+
+
     //inputIds.forEach((id, index) => {
     //    const count = parseInt(document.getElementById(id).value) || 0;
     //    totalNotes += count;
@@ -935,8 +1036,6 @@ function setSession() {
     }
 }
 function openShop() {
-    debugger;
-
     //var selectedBlance = 0;
     //var selectedBlanceDollars = 0;
     //var selectedBlanceYens = 0;
@@ -976,7 +1075,6 @@ function openShop() {
         selectedBlance = vndBalance;
     }
     if (!isNaN(dollarBalance) && dollarBalance !== 0) {
-        debugger;
         selectedBlanceDollars = dollarBalance;
     }
     if (!isNaN(jpyBalance) && jpyBalance !== 0) {
@@ -1008,7 +1106,6 @@ function openShop() {
         dataType: 'json',
         success: function (response) {
             if (response.Success) {
-                debugger;
                 window.location.href = '/SOSR/Create?IsReturn=false';
                 $('#storeOpeningPopup').modal('hide');
             } else {

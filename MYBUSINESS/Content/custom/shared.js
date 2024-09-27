@@ -1,9 +1,53 @@
-﻿var storeId = 0;
+﻿var serDownError = "Server is down VAT Invoice cannot print at this time";
+var storeId = 0;
 // Declare the active input variable
 let activeInputClose = null;
 if (storeId != null) {
-
+    alert(storeId);
 }
+//var availableCurrenciesCloseStore = [];
+
+//function getAllAvailableCurrenciesCloseStore() {
+//    $.ajax({
+//        url: '/Currencies/GetAllAbvailableCurrencies',
+//        type: 'GET',
+//        success: function (response) {
+//            if (response.Success) {
+//                availableCurrenciesCloseStore = response.Data;
+//                var url = $('#closeStore').data('url'); // Get the URL here
+//                showModalAndFocusInputClose(url); // Pass the URL to the function
+//            } else {
+//                alert('Failed to set session: ' + response.Message);
+//            }
+//        },
+//        error: function (xhr, status, error) {
+//            alert('An error occurred while setting the session: ' + error);
+//        }
+//    });
+//}
+
+//function showModalAndFocusInputClose(url) { // Accept URL as a parameter
+//    $.get(url, function (data) {
+//        $('body').append(data);
+//        $('#storeClosingModal').modal('show');
+//        $('#storeClosingModal').on('shown.bs.modal', function () {
+//            var activeInputClose = document.getElementById('oneThsndVndClose');
+//            if (activeInputClose) {
+//                activeInputClose.focus(); // Set focus to the input
+//            }
+//        });
+//        $('#storeClosingModal').on('hidden.bs.modal', function () {
+//            $(this).remove();
+//        });
+//    });
+//}
+
+//// Use event delegation to ensure the event is captured
+//$(document).on('click', '#closeStore', function () {
+//    getAllAvailableCurrenciesCloseStore();
+//});
+// Attach click handler to elements with the 'storeids' class
+
 $(document).on('click', '#closeStore', function (e) {
     e.preventDefault();
     var url = $(this).data('url');
@@ -24,7 +68,7 @@ $(document).on('click', '#closeStore', function (e) {
         });
     });
 });
-// Attach focus event listener only once
+ //Attach focus event listener only once
 $(document).on('focus', 'input', function () {
     activeInputClose = this; // Update the active input when focused
 });
@@ -129,10 +173,8 @@ $(document).on('click', '#closeShop', function () {
     var totalAmountVndClose = document.getElementById('totalVndCountClose').value;
     if (totalAmountVndClose == '0') totalAmountVndClose = 0;
     if (confirm(`You input '${totalAmountVndClose}', are you sure?`)) {
-        debugger;
         var formattedString = "";
         if (closeCurrencyDetalInVnd.length > 0) {
-            debugger;
             formattedString = closeCurrencyDetalInVnd.map(item => {
                 let denominationValue = 0;
 
@@ -217,7 +259,6 @@ $(document).on('click', '#closeShop', function () {
     }
 });
 function calculateTotalClose(inputId, denominationValue, outputId) {
-    debugger;
     const count = parseInt(document.getElementById(inputId).value) || 0;
     const total = count * denominationValue;
     document.getElementById(outputId).value = total;
@@ -225,7 +266,6 @@ function calculateTotalClose(inputId, denominationValue, outputId) {
 }
 //Dollars
 function calculateTotalDollarsClose(inputId, denominationValue, outputId) {
-    debugger;
     const count = parseInt(document.getElementById(inputId).value) || 0;
     const total = count * denominationValue;
     document.getElementById(outputId).value = total;
@@ -233,7 +273,6 @@ function calculateTotalDollarsClose(inputId, denominationValue, outputId) {
 }
 //Yens/JPY
 function calculateTotalYensClose(inputId, denominationValue, outputId) {
-    debugger;
     const count = parseInt(document.getElementById(inputId).value) || 0;
     const total = count * denominationValue;
     document.getElementById(outputId).value = total;
@@ -290,10 +329,14 @@ function updateOverallTotalsCloseDollars() {
                 totalValue: value
             });
         }
+        //Convert the total dollar value to VND
+        const usdToVnd = availableCurrenciesCloseStore.find(currency => currency.Name === 'USD');
+        const usdToVndExchangeRate = usdToVnd.ExchangeRate;
+        const totalValueInVnd = totalValue * usdToVndExchangeRate;
+        document.getElementById('totalDollarsClose').value = totalNotes;
+        document.getElementById('totalDollarsCountClose').value = totalValue;
+        document.getElementById('totalDollarsToVndClose').textContent = totalValueInVnd.toLocaleString('en-US', { minimumFractionDigits: 2 });
     });
-
-    document.getElementById('totalDollarsClose').value = totalNotes;
-    document.getElementById('totalDollarsCountClose').value = totalValue;
 }
 
 // Update overall totals Yens / JPY
@@ -319,14 +362,18 @@ function updateOverallTotalsCloseYens() {
                 totalValue: value
             });
         }
+        const yenToVnd = availableCurrenciesCloseStore.find(currency => currency.Name === 'JPY');
+        const yenToVndExchangeRate = yenToVnd.ExchangeRate;
+        const totalValueInVnd = totalValue * yenToVndExchangeRate;
+        document.getElementById('totalYensClose').value = totalNotes;
+        document.getElementById('totalYensCountClose').value = totalValue;
+        document.getElementById('totalYensToVndClose').textContent = totalValueInVnd.toLocaleString('en-US', { minimumFractionDigits: 2 });
     });
 
-    document.getElementById('totalYensClose').value = totalNotes;
-    document.getElementById('totalYensCountClose').value = totalValue;
+   
 }
 
 function logout() {
-    debugger
     localStorage.clear();
     window.location.href = '/UserManagement/Logout';
 }
