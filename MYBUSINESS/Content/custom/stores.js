@@ -1,8 +1,5 @@
 ﻿
 //var availableCurrencies = [];
-//$(document).ready(function () {
-//    getAllAvailableCurrencies();
-//});
 //function getAllAvailableCurrencies() {
 //    $.ajax({
 //        url: '/Currencies/GetAllAbvailableCurrencies',
@@ -15,8 +12,7 @@
 //            }
 //        },
 //        error: function (xhr, status, error) {
-//            //alert('An error occurred while setting the session: ' + error);
-//            console.log('An error occurred while setting the session: ' + error);
+//            alert('An error occurred while setting the session: ' + error);
 //        }
 //    });
 //}
@@ -522,11 +518,9 @@ function updateOverallDollarsTotal() {
     let totalNotes = 0;
     let totalValue = 0;
     openingCurrencyDetalInDollar = [];
-    //const usdToVnd = availableCurrencies.find(currency => currency.Name === 'USD');
-    const usdToVnd = 'USD';
+    const usdToVnd = availableCurrencies.find(currency => currency.Name === 'USD');
     if (usdToVnd) {
-        //const usdToVndExchangeRate = usdToVnd.ExchangeRate;  // Get the exchange rate for USD to VND
-        const usdToVndExchangeRate = 6230;  // Get the exchange rate for USD to VND
+        const usdToVndExchangeRate = usdToVnd.ExchangeRate;  // Get the exchange rate for USD to VND
 
         // Now use the exchange rate to calculate total notes and dollar value
         inputIds.forEach((id, index) => {

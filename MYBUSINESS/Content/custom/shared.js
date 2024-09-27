@@ -356,7 +356,7 @@ function updateOverallTotalsCloseDollars() {
         //const usdToVnd = availableCurrenciesCloseStore.find(currency => currency.Name === 'USD');
         const usdToVnd = 'USD';
         //const usdToVndExchangeRate = usdToVnd.ExchangeRate;
-        const usdToVndExchangeRate = 4300;
+        const usdToVndExchangeRate = 6240;
         const totalValueInVnd = totalValue * usdToVndExchangeRate;
         document.getElementById('totalDollarsClose').value = totalNotes;
         document.getElementById('totalDollarsCountClose').value = totalValue;

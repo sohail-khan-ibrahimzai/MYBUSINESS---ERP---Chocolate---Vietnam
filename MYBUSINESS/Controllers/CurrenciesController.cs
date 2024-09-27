@@ -24,12 +24,12 @@ namespace MYBUSINESS.Controllers
 
         public ActionResult Index(string id)
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
-            var parseId = int.Parse(storeId);
+            //var storeId = Session["StoreId"] as string;
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
+            //var parseId = int.Parse(storeId);
             var currencies = DAL.dbCurrencies;
             return View(currencies);
         }
@@ -52,11 +52,11 @@ namespace MYBUSINESS.Controllers
         // GET: Customers/Create
         public ActionResult Create()
         {
-            var storeId = Session["StoreId"] as string;
-            if (storeId == null)
-            {
-                return RedirectToAction("StoreNotFound", "UserManagement");
-            }
+            //var storeId = Session["StoreId"] as string;
+            //if (storeId == null)
+            //{
+            //    return RedirectToAction("StoreNotFound", "UserManagement");
+            //}
             //int maxId = db.Currencies.Max(p => p.Id);
             //decimal maxId = db.Currencies.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
             //maxId += 1;
@@ -73,12 +73,12 @@ namespace MYBUSINESS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var storeId = Session["StoreId"] as string;
-                if (storeId == null)
-                {
-                    return RedirectToAction("StoreNotFound", "UserManagement");
-                }
-                var parseId = int.Parse(storeId);
+                //var storeId = Session["StoreId"] as string;
+                //if (storeId == null)
+                //{
+                //    return RedirectToAction("StoreNotFound", "UserManagement");
+                //}
+                //var parseId = int.Parse(storeId);
                 db.Currencies.Add(currency);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -110,12 +110,12 @@ namespace MYBUSINESS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var storeId = Session["StoreId"] as string;
-                if (storeId == null)
-                {
-                    return RedirectToAction("StoreNotFound", "UserManagement");
-                }
-                var parseId = int.Parse(storeId);
+                //var storeId = Session["StoreId"] as string;
+                //if (storeId == null)
+                //{
+                //    return RedirectToAction("StoreNotFound", "UserManagement");
+                //}
+                //var parseId = int.Parse(storeId);
                 db.Entry(currency).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

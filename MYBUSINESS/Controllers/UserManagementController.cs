@@ -209,7 +209,6 @@ namespace MYBUSINESS.Controllers
                 // Optionally, redirect to another action or view
                 return Json(new { Success = true, Message = "" });
             }
-
             // Handle the case where no storeId is provided
             return RedirectToAction("Stores/StoresDashboard");
         }
