@@ -53,10 +53,13 @@ var formattedStringYens = "";
 var storeName = "";
 let activeInput = null;
 document.querySelectorAll('.storeids').forEach(function (element) {
+    debugger;
     element.addEventListener('click', function () {
+        debugger;
         // Get the value of data-storeid from the clicked element
         const storeIds = this.getAttribute('data-storeid');
-        storeName = this.getAttribute('data-storename');
+        console.log(storeIds);
+        //storeName = this.getAttribute('data-storename');
         // Set this storeId on the openShop button's data attribute for later use
         $('#openShop').data('storeid', storeIds);
     });
@@ -1016,12 +1019,13 @@ function updateOverallYensTotal() {
 function setSession() {
     var storeIds = localStorage.getItem('storeId');
     var storesName = localStorage.getItem('storeName');
-
-    if (storeIds !== null && storeIds !== undefined) {
+    alert(storeIds);
+    if (storeIds !== null && storeIds !== undefined && storeIds!=="") {
         // Perform an AJAX call to set the session value on the server
         $.ajax({
             url: '/UserManagement/StoreValue',  // Replace with your actual controller/action path
-            type: 'POST',
+            //type: 'POST',
+            type: 'GET',
             data: { storeId: storeIds, storeName: storesName },
             success: function (response) {
                 if (response.Success) {
@@ -1107,6 +1111,7 @@ function openShop() {
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         success: function (response) {
+            debugger;
             if (response.Success) {
                 window.location.href = '/SOSR/Create?IsReturn=false';
                 $('#storeOpeningPopup').modal('hide');
