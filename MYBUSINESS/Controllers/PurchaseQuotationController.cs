@@ -23,6 +23,12 @@ namespace MYBUSINESS.Controllers
         // GET: POes
         public ActionResult Index()
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string;
             //if (storeId == null)
             //{
@@ -318,6 +324,12 @@ namespace MYBUSINESS.Controllers
         // GET: POes/Create
         public ActionResult Create(string IsReturn)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string;
             //if (storeId == null)
             //{
@@ -349,6 +361,12 @@ namespace MYBUSINESS.Controllers
         // GET: POes/CreatePOByCategory
         public ActionResult CreatePOByCategory(string IsReturn)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string;
             //if (storeId == null)
             //{
@@ -438,6 +456,12 @@ namespace MYBUSINESS.Controllers
             //PO pO = new PO();
             if (ModelState.IsValid)
             {
+                int? storeId = Session["StoreId"] as int?;
+                //var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
                 //var storeId = Session["StoreId"] as string;  //commented due to session issue
                 //if (storeId == null)
                 //{

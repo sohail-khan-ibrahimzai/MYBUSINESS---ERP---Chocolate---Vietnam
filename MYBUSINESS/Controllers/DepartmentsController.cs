@@ -17,6 +17,12 @@ namespace MYBUSINESS.Controllers
         // GET: Departments
         public ActionResult Index()
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string;
             //if (storeId == null)
             //{
@@ -60,6 +66,12 @@ namespace MYBUSINESS.Controllers
         {
             if (ModelState.IsValid)
             {
+                int? storeId = Session["StoreId"] as int?;
+                //var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
                 //var storeId = Session["StoreId"] as string;
                 //if (storeId == null)
                 //{
@@ -78,6 +90,12 @@ namespace MYBUSINESS.Controllers
         // GET: Departments/Edit/5
         public ActionResult Edit(int? id)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -99,6 +117,12 @@ namespace MYBUSINESS.Controllers
         {
             if (ModelState.IsValid)
             {
+                int? storeId = Session["StoreId"] as int?;
+                //var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
                 //var storeId = Session["StoreId"] as string;
                 //if (storeId == null)
                 //{

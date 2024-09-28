@@ -1,21 +1,24 @@
 ﻿
-//var availableCurrencies = [];
-//function getAllAvailableCurrencies() {
-//    $.ajax({
-//        url: '/Currencies/GetAllAbvailableCurrencies',
-//        type: 'GET',
-//        success: function (response) {
-//            if (response.Success) {
-//                availableCurrencies = response.Data;
-//            } else {
-//                alert('Failed to set session: ' + response.Message);
-//            }
-//        },
-//        error: function (xhr, status, error) {
-//            alert('An error occurred while setting the session: ' + error);
-//        }
-//    });
-//}
+var availableCurrencies = [];
+$(document).ready(function () {
+    getAllAvailableCurrencies();
+});
+function getAllAvailableCurrencies() {
+    $.ajax({
+        url: '/Currencies/GetAllAbvailableCurrencies',
+        type: 'GET',
+        success: function (response) {
+            if (response.Success) {
+                availableCurrencies = response.Data;
+            } else {
+                alert('Failed to set session: ' + response.Message);
+            }
+        },
+        error: function (xhr, status, error) {
+            alert('An error occurred while setting the session: ' + error);
+        }
+    });
+}
 
 //function showModalAndFocusInput() {
 //    $('#storeOpeningPopup').modal('show');
@@ -341,10 +344,13 @@ $('#openShop').click(function () {
         // Set storeId in localStorage and session
         //storeId = storeIds;
         if (storeIds != null || storeIds != undefined) {
-            alert("Open Shop" + storeIds)
+            //alert("Open Shop" + storeIds)
             localStorage.setItem('storeIds', storeIds);
+            openShop();
             //localStorage.setItem('storeName', storeName);
-            setSession(); // Call setSession function to make an AJAX request
+
+            //Working old
+            //setSession(); // Call setSession function to make an AJAX request
         }
     } else {
         alert("Operation cancelled.");
@@ -523,6 +529,7 @@ function updateOverallDollarsTotal() {
     let totalValue = 0;
     openingCurrencyDetalInDollar = [];
     const usdToVnd = availableCurrencies.find(currency => currency.Name === 'USD');
+    debugger;
     if (usdToVnd) {
         const usdToVndExchangeRate = usdToVnd.ExchangeRate;  // Get the exchange rate for USD to VND
 
@@ -630,11 +637,11 @@ function updateOverallYensTotal() {
     let totalNotes = 0;
     let totalValue = 0;
     openingCurrencyDetalInYens = [];
-    //const yensToVnd = availableCurrencies.find(currency => currency.Name === 'JPY');
-    const yensToVnd = 'JPY';
+    const yensToVnd = availableCurrencies.find(currency => currency.Name === 'JPY');
+    //const yensToVnd = 'JPY';
     if (yensToVnd) {
-        //const yenToVndExchangeRate = yensToVnd.ExchangeRate;  // Get the exchange rate for USD to VND
-        const yenToVndExchangeRate = 179;  // Get the exchange rate for USD to VND
+        const yenToVndExchangeRate = yensToVnd.ExchangeRate;  // Get the exchange rate for USD to VND
+        //const yenToVndExchangeRate = 179;  // Get the exchange rate for USD to VND
 
         // Now use the exchange rate to calculate total notes and dollar value
         inputIds.forEach((id, index) => {
@@ -1126,36 +1133,39 @@ function updateOverallYensTotal() {
 //        }
 //    });
 //}
-function setSession() {
-    var storeId = localStorage.getItem('storeIds');
-    //var storeName = localStorage.getItem('storeName');
-    alert("Set Session 1" + storeId);
-    if (storeId !== null && storeId !== undefined && storeId !== "") {
-        alert("Set Session 2" + storeId);
-        $.ajax({
-            url: '/UserManagement/StoreValue',
-            type: 'POST', // Assuming you want to use POST for updating server session
-            //data: { storeId: storeId, storeName: storeName },
-            data: { storeId: storeId },
-            success: function (response) {
-                if (response.Success) {
-                    openShop();
-                } else {
-                    alert('Failed to set session: ' + response.Message);
-                }
-            },
-            error: function (xhr, status, error) {
-                alert('An error occurred while setting the session: ' + error);
-            }
-        });
-    }
-}
+
+//function setSession() {
+//    var storeId = localStorage.getItem('storeIds');
+//    //var storeName = localStorage.getItem('storeName');
+//    alert("Set Session 1" + storeId);
+//    if (storeId !== null && storeId !== undefined && storeId !== "") {
+//        alert("Set Session 2" + storeId);
+//        $.ajax({
+//            url: '/UserManagement/StoreValue',
+//            type: 'POST', // Assuming you want to use POST for updating server session
+//            //data: { storeId: storeId, storeName: storeName },
+//            data: { storeId: storeId },
+//            success: function (response) {
+//                if (response.Success) {
+//                    openShop();
+//                } else {
+//                    alert('Failed to set session: ' + response.Message);
+//                }
+//            },
+//            error: function (xhr, status, error) {
+//                alert('An error occurred while setting the session: ' + error);
+//            }
+//        });
+//    }
+//}
 
 // Function to open the shop after setting session
 function openShop() {
     var vndBalance = parseFloat($('#totalVndCount').val()) || 0;
     var dollarBalance = parseFloat($('#totalDollarsCount').val()) || 0;
     var jpyBalance = parseFloat($('#totalYensCount').val()) || 0;
+    var _storeId = localStorage.getItem('storeIds');
+    var storeId = parseInt(_storeId, 10);
 
     var storeViewModel = {
         OpeningBalance: vndBalance,
@@ -1163,7 +1173,8 @@ function openShop() {
         OpeningBalanceYens: jpyBalance,
         OpeningCurrencyDetail: formattedString || "",
         OpeningCurrencyDetailDollars: formattedStringDollars || "",
-        OpeningCurrencyDetailYens: formattedStringYens || ""
+        OpeningCurrencyDetailYens: formattedStringYens || "",
+        StoreId: storeId || 0
     };
 
     $.ajax({

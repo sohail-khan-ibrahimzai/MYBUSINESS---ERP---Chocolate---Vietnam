@@ -262,6 +262,12 @@ namespace MYBUSINESS.Controllers
         // GET: Products
         public ActionResult Index()
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string; 
             //if (storeId == null)
             //{
@@ -299,6 +305,12 @@ namespace MYBUSINESS.Controllers
 
         public ActionResult Create()
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string; //commented due to session issue
             //if (storeId == null)
             //{
@@ -326,6 +338,12 @@ namespace MYBUSINESS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,PurchasePrice,SalePrice,WholeSalePrice,Stock,Saleable,PerPack,IsService,ShowIn,BarCode,Remarks,StoreId,Category")] Product product)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string;  //commented due to session issue
             //if (storeId == null)
             //{
@@ -389,6 +407,12 @@ namespace MYBUSINESS.Controllers
         // GET: Products/Edit/5
         public ActionResult Edit(decimal id)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -439,6 +463,12 @@ namespace MYBUSINESS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,PurchasePrice,SalePrice,WholeSalePrice,Stock,Saleable,PerPack,IsService,ShowIn,BarCode,Remarks,Category")] Product product)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //Product prd = db.Products.Where(x => x.Id == product.Id).FirstOrDefault();
             //product.SuppId = prd.SuppId;
             //var storeId = Session["StoreId"] as string;  //commented due to session issue

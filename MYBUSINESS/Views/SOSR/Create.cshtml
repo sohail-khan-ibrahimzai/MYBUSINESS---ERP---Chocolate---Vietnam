@@ -662,7 +662,7 @@
                                                     <br />
                                                     <div class="row">
                                                         <div class="col-md-4">
-                                                        @*button class="btn btn-secondary btn-block calBtn" type="button">4</button>*@
+                                                            @*button class="btn btn-secondary btn-block calBtn" type="button">4</button>*@
 
                                                             <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(4)">4</button>
                                                         </div>
@@ -1069,11 +1069,19 @@
      } else {
          alert('Product not found');
      }
-    }
+    }   
       @*@if (ViewBag.ReportId != null && ViewBag.ReportId != "")*@
       @if (ViewBag.ReportId != null)
       {
+          if (ViewBag.WebserviceDownError != null) {
+          @:alert("Server is down VAT Invoice cannot print at this time");
+          }
+          else {
            @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
+      }
+      }
+else {
+          @:console.log("Report can not be null");
       }
           @*if(ViewBag.WebserviceDownError!= null) {
           @:alert(serDownError);

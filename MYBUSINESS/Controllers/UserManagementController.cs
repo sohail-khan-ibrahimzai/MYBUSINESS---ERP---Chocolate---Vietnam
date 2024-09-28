@@ -186,54 +186,54 @@ namespace MYBUSINESS.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        [HttpPost]
         //public ActionResult StoreValue(string storeId, string storeName)
-        public ActionResult StoreValue(string storeId)
-        {
-            try
-            {
-                // Check if storeId is provided
-                if (!string.IsNullOrEmpty(storeId))
-                {
-                    // Store the value in the session
-                    Session["StoreId"] = storeId;
-                    return Json(new { Success = true, Message = "" });
-                    // Optionally store the storeName as well
-                    // Session["StoreName"] = storeName;
+        //[HttpPost]
+        //public ActionResult StoreValue(string storeId)
+        //{
+        //    try
+        //    {
+        //        // Check if storeId is provided
+        //        if (!string.IsNullOrEmpty(storeId))
+        //        {
+        //            // Store the value in the session
+        //            Session["StoreId"] = storeId;
+        //            return Json(new { Success = true, Message = "" });
+        //            // Optionally store the storeName as well
+        //            // Session["StoreName"] = storeName;
 
-                    // Redirect to the StoresDashboard action
-                    //return RedirectToAction("StoresDashboard", "Stores");
-                }
-                else
-                {
-                    return Json(new { Success = false, Message = "Store ID cannot be null or empty." });
-                }
-            }
-            catch (Exception e)
-            {
-                // Log the exception if necessary
-                return Json(new { Success = false, Message = e.Message });
-            }
-            //if (!string.IsNullOrEmpty(storeId) && !string.IsNullOrEmpty(storeName))
-            //try
-            //{
-            //    if (!string.IsNullOrEmpty(storeId))
-            //    {
-            //        // Store the value in the session
-            //        Session["StoreId"] = storeId;
-            //        //Session["StoreName"] = storeName;
-            //        // Optionally, redirect to another action or view
-            //        return RedirectToAction("Stores/StoresDashboard");
-            //        //return Json(new { Success = true, Message = "" });
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    return Json(new { Success = false, Message = e.Message });
-            //}
-            //return null;
-            // Handle the case where no storeId is provided
-        }
+        //            // Redirect to the StoresDashboard action
+        //            //return RedirectToAction("StoresDashboard", "Stores");
+        //        }
+        //        else
+        //        {
+        //            return Json(new { Success = false, Message = "Store ID cannot be null or empty." });
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        // Log the exception if necessary
+        //        return Json(new { Success = false, Message = e.Message });
+        //    }
+        //    //if (!string.IsNullOrEmpty(storeId) && !string.IsNullOrEmpty(storeName))
+        //    //try
+        //    //{
+        //    //    if (!string.IsNullOrEmpty(storeId))
+        //    //    {
+        //    //        // Store the value in the session
+        //    //        Session["StoreId"] = storeId;
+        //    //        //Session["StoreName"] = storeName;
+        //    //        // Optionally, redirect to another action or view
+        //    //        return RedirectToAction("Stores/StoresDashboard");
+        //    //        //return Json(new { Success = true, Message = "" });
+        //    //    }
+        //    //}
+        //    //catch (Exception e)
+        //    //{
+        //    //    return Json(new { Success = false, Message = e.Message });
+        //    //}
+        //    //return null;
+        //    // Handle the case where no storeId is provided
+        //}
         public ActionResult StoreNotFound()
         {
             return View();

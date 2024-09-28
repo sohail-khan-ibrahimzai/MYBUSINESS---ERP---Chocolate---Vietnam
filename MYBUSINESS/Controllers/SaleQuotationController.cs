@@ -27,6 +27,12 @@ namespace MYBUSINESS.Controllers
         // GET: SOes
         public ActionResult Index()
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string; //commented due to session issue
             //if (storeId == null)
             //{
@@ -767,6 +773,12 @@ namespace MYBUSINESS.Controllers
             //SO sO = new SO();
             if (ModelState.IsValid)
             {
+                int? storeId = Session["StoreId"] as int?;
+                //var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
                 //var storeId = Session["StoreId"] as string; //commented due to session issue
                 //if (storeId == null)
                 //{
@@ -1225,6 +1237,12 @@ namespace MYBUSINESS.Controllers
             List<SOD> newSODs = saleOrderViewModel1.SaleOrderDetail;
             if (ModelState.IsValid)
             {
+                int? storeId = Session["StoreId"] as int?;
+                //var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
                 //var storeId = Session["StoreId"] as string; //commented due to session issue
                 //if (storeId == null)
                 //{

@@ -542,7 +542,22 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\bmsAlHindi.mdf.mdf" />
+    <Content Include="App_Data\bmsAlHindi.mdf" />
+    <Content Include="App_Data\bmsAlHindi_log.ldf">
+      <DependentUpon>bmsAlHindi.mdf</DependentUpon>
+    </Content>
+    <Content Include="App_Data\bmsFresh.mdf" />
+    <Content Include="App_Data\bmsFresh_log.ldf">
+      <DependentUpon>bmsFresh.mdf</DependentUpon>
+    </Content>
+    <Content Include="App_Data\bmsZR.mdf" />
+    <Content Include="App_Data\bmsZR_log.ldf">
+      <DependentUpon>bmsZR.mdf</DependentUpon>
+    </Content>
+    <Content Include="App_Data\db\bmsZR.mdf" />
+    <Content Include="App_Data\db\bmsZR_log.ldf">
+      <DependentUpon>bmsZR.mdf</DependentUpon>
+    </Content>
     <Content Include="bower_components\bootstrap-slider\.bower.json" />
     <Content Include="bower_components\bootstrap-slider\bootstrap-slider.js" />
     <Content Include="bower_components\bootstrap-slider\bower.json" />
@@ -3300,6 +3315,7 @@
     <Content Include="bower_components\font-awesome\webfonts\fa-thin-100.woff2" />
     <Content Include="bower_components\font-awesome\.icons-cache.json" />
     <Content Include="bower_components\font-awesome\.shims-cache.json" />
+    <Content Include="App_Data\db.zip" />
     <None Include="DataSets\spPOReport_DataSet.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -3599,13 +3615,19 @@
     <TypeScriptCompile Include="Scripts\index.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\Sale_Receipt.rdlc" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Reports\Quotation_Receipt.rdlc" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\Sale_Receipt - Copy.rdlc" />
+    <Content Include="Reports\Sale_Receipt-Latest.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\Sale_Receipt - Copy %282%29.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\Sale_Receipt-Copy001.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\Sale_Receipt.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

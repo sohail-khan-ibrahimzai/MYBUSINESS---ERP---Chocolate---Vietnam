@@ -16,6 +16,7 @@ namespace MYBUSINESS.Models
         public string OpeningCurrencyDetailYens { get; set; }
         public decimal ClosingBalance { get; set; }
         public string ClosingCurrencyDetail { get; set; }
+        public int StoreId { get; set; }
 
     }
 

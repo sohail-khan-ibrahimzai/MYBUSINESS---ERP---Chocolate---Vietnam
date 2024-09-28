@@ -28,6 +28,12 @@ namespace MYBUSINESS.Controllers
         }
         public ActionResult GetStoreVndBalance(string id)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string;
             //if (storeId == null)
             //{
@@ -122,6 +128,12 @@ namespace MYBUSINESS.Controllers
         }
         public ActionResult EditStoreBalance(int id)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string; //commented due to session issue
             //if (storeId == null)
             //{
@@ -142,6 +154,12 @@ namespace MYBUSINESS.Controllers
         [HttpPost]
         public ActionResult UpdateDailyBalance([Bind(Include = "Id,Name,OpeningBalance,ClosingBalance,OpeningCurrencyDetail,ClosingCurrencyDetail")] DailyBalanceVnd dailyBalanceVnd)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string; //commented due to session issue
             //if (storeId == null)
             //{
@@ -286,6 +304,7 @@ namespace MYBUSINESS.Controllers
                     //StoreId = parseId //commented due to session issue
                     StoreId = 1
                 };
+                Session["StoreId"] = storeDto.StoreId;
                 db.DailyBalanceVnds.Add(store);
                 db.SaveChanges();
             }

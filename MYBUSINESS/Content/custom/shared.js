@@ -1,8 +1,8 @@
-﻿var serDownError = "Server is down VAT Invoice cannot print at this time";
+﻿var serverDownError = "Server is down VAT Invoice cannot print at this time";
 //var storeId = 0;
 // Declare the active input variable
 let activeInputClose = null;
-//var availableCurrenciesCloseStore = [];
+var availableCurrenciesCloseStore = [];
 
 //if (storeId != null) {
 //    alert("Null" + storeId);
@@ -11,27 +11,27 @@ let activeInputClose = null;
 //    alert("Exists" + storeId);
 //}
 
-//$(document).ready(function () {
-//    getAllAvailableCurrenciesCloseStore();
-//});
+$(document).ready(function () {
+    getAllAvailableCurrenciesCloseStore();
+});
 
 
-//function getAllAvailableCurrenciesCloseStore() {
-//    $.ajax({
-//        url: '/Currencies/GetAllAbvailableCurrencies',
-//        type: 'GET',
-//        success: function (response) {
-//            if (response.Success) {
-//                availableCurrenciesCloseStore = response.Data;
-//            } else {
-//                alert('Failed to set session: ' + response.Message);
-//            }
-//        },
-//        error: function (xhr, status, error) {
-//            alert('An error occurred while setting the session: ' + error);
-//        }
-//    });
-//}
+function getAllAvailableCurrenciesCloseStore() {
+    $.ajax({
+        url: '/Currencies/GetAllAbvailableCurrencies',
+        type: 'GET',
+        success: function (response) {
+            if (response.Success) {
+                availableCurrenciesCloseStore = response.Data;
+            } else {
+                alert('Failed to set session: ' + response.Message);
+            }
+        },
+        error: function (xhr, status, error) {
+            alert('An error occurred while setting the session: ' + error);
+        }
+    });
+}
 
 //function getAllAvailableCurrenciesCloseStore() {
 //    $.ajax({
@@ -358,10 +358,10 @@ function updateOverallTotalsCloseDollars() {
             });
         }
         //Convert the total dollar value to VND
-        //const usdToVnd = availableCurrenciesCloseStore.find(currency => currency.Name === 'USD');
-        const usdToVnd = 'USD';
-        //const usdToVndExchangeRate = usdToVnd.ExchangeRate;
-        const usdToVndExchangeRate = 6240;
+        const usdToVnd = availableCurrenciesCloseStore.find(currency => currency.Name === 'USD');
+        //const usdToVnd = 'USD';
+        const usdToVndExchangeRate = usdToVnd.ExchangeRate;
+        //const usdToVndExchangeRate = 6240;
         const totalValueInVnd = totalValue * usdToVndExchangeRate;
         document.getElementById('totalDollarsClose').value = totalNotes;
         document.getElementById('totalDollarsCountClose').value = totalValue;
@@ -392,10 +392,10 @@ function updateOverallTotalsCloseYens() {
                 totalValue: value
             });
         }
-        //const yenToVnd = availableCurrenciesCloseStore.find(currency => currency.Name === 'JPY');
-        const yenToVnd = 'JPY';
-        //const yenToVndExchangeRate = yenToVnd.ExchangeRate;
-        const yenToVndExchangeRate = 179;
+        const yenToVnd = availableCurrenciesCloseStore.find(currency => currency.Name === 'JPY');
+        //const yenToVnd = 'JPY';
+        const yenToVndExchangeRate = yenToVnd.ExchangeRate;
+        //const yenToVndExchangeRate = 179;
         const totalValueInVnd = totalValue * yenToVndExchangeRate;
         document.getElementById('totalYensClose').value = totalNotes;
         document.getElementById('totalYensCountClose').value = totalValue;

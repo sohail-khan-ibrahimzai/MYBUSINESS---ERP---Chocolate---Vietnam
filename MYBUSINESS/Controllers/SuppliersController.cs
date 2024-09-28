@@ -18,6 +18,12 @@ namespace MYBUSINESS.Controllers
         // GET: Suppliers
         public ActionResult Index(string id)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string; //commented due to session issue
             //if (storeId == null)
             //{
@@ -32,6 +38,12 @@ namespace MYBUSINESS.Controllers
 
         public ActionResult IndexCreditor(string id)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string; //commented due to session issue
             //if (storeId == null)
             //{
@@ -47,6 +59,12 @@ namespace MYBUSINESS.Controllers
         // GET: Suppliers/Create
         public ActionResult Create()
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string; //commented due to session issue
             //if (storeId == null)
             //{
@@ -59,6 +77,12 @@ namespace MYBUSINESS.Controllers
         }
         public ActionResult CreateCreditor()
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string; //commented due to session issue
             //if (storeId == null)
             //{

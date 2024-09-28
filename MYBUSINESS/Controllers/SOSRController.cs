@@ -34,6 +34,12 @@ namespace MYBUSINESS.Controllers
         // GET: SOes
         public ActionResult Index()
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var storeId = Session["StoreId"] as string; //commented due to session issue
             //if (storeId == null)
             //{
@@ -83,7 +89,7 @@ namespace MYBUSINESS.Controllers
         }
         public ActionResult ClosePosPopup()
         {
-            var storeId = Session["StoreId"] as string;
+            var storeId = Session["StoreId"] as int?;
             if (storeId == null)
             {
                 return RedirectToAction("StoreNotFound", "UserManagement");
@@ -92,6 +98,12 @@ namespace MYBUSINESS.Controllers
         }
         public ActionResult IndexReturn()
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //EnterProfit();
             //var storeId = Session["StoreId"] as string; //commented due to session issue
             //if (storeId == null)
@@ -763,11 +775,13 @@ namespace MYBUSINESS.Controllers
 
         public ActionResult Create(string IsReturn)
         {
+            int? storeId = Session["StoreId"] as int?;
             //var storeId = Session["StoreId"] as string;
-            //if (storeId == null)
-            //{
-            //    return RedirectToAction("StoreNotFound", "UserManagement");
-            //}
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
+
             //ViewBag.CustomerId = new SelectList(db.Customers, "Id", "Name");
             //ViewBag.Products = db.Products;
 
@@ -830,13 +844,15 @@ namespace MYBUSINESS.Controllers
             //ViewBag.isReturn = isReturn1;
             ViewBag.SelectedProductListByCategory = groupedSelectedProducts;
             ViewBag.ReportId = TempData["ReportId"] as string;
-            //ViewBag.WebserviceDownError = TempData["WebserviceDownError"] as string;
-            //TempData["_CustomerName"] = TempData["CustomerName"] as string;
-            //TempData["_CustomerEmail"] = TempData["CustomerEmail"] as string;
-            //TempData["_CustomerAddress"] = TempData["CustomerAddress"] as string;
-            //TempData["_POSName"] = TempData["POSName"] as string;
-            //TempData["_CustomerVatNumber"] = TempData["CustomerVatNumber"] as string;
-            //TempData["_WebserviceDownError"] = TempData["WebserviceDownError"] as string;
+
+            ViewBag.WebserviceDownError = TempData["WebserviceDownError"] as string;
+            TempData["_CustomerName"] = TempData["CustomerName"] as string;
+            TempData["_CustomerEmail"] = TempData["CustomerEmail"] as string;
+            TempData["_CustomerAddress"] = TempData["CustomerAddress"] as string;
+            TempData["_POSName"] = TempData["POSName"] as string;
+            TempData["_CustomerVatNumber"] = TempData["CustomerVatNumber"] as string;
+            TempData["_WebserviceDownError"] = TempData["WebserviceDownError"] as string;
+
             return View(saleOrderViewModel);
         }
 
@@ -854,14 +870,15 @@ namespace MYBUSINESS.Controllers
     FormCollection collection
     )
         {
+            int? storeId = Session["StoreId"] as int?;
             //var storeId = Session["StoreId"] as string;
-            //if (storeId == null)
-            //{
-            //    return RedirectToAction("StoreNotFound", "UserManagement");
-            //}
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             //var parseId = int.Parse(storeId);
 
-            //var getStoreName = db.Stores.FirstOrDefault(x => x.Id == parseId);
+            var getStoreName = db.Stores.FirstOrDefault(x => x.Id == storeId);
 
             string SOId = string.Empty;
             //SO sO = new SO();
@@ -1084,20 +1101,20 @@ namespace MYBUSINESS.Controllers
 
                     // Call the web service login function
                     // Call the web service login function synchronously
+
                     var loginToWebService = LoginToWebService();
                     dynamic jsonResponse = JsonConvert.DeserializeObject(loginToWebService.ContentType);
                     string authToken = jsonResponse.token;
                     if (loginToWebService == null)
                         return Json(new { Success = false, Messsag = "Invalid Login attempt to web service,please use correct credentials" });
-                    // Call the async method synchronously
+                    var addWebServiceCustomerDetails = AddWebServiceCustomerDetails(authToken, Customer, sO, sOD);
+                    ///////////////////////
 
-                    var addWebServiceCustomerDetails = AddWebServiceCustomerDetails(authToken, Customer, sO, sOD); //Uncomment locally
-
-                    //TempData["CustomerName"] = Customer.Name;
-                    //TempData["CustomerEmail"] = Customer.Email;
-                    //TempData["CustomerAddress"] = Customer.Address;
-                    //TempData["POSName"] = getStoreName.Name;
-                    //TempData["CustomerVatNumber"] = Customer.Vat;
+                    TempData["CustomerName"] = Customer.Name;
+                    TempData["CustomerEmail"] = Customer.Email;
+                    TempData["CustomerAddress"] = Customer.Address;
+                    TempData["POSName"] = getStoreName.Name;
+                    TempData["CustomerVatNumber"] = Customer.Vat;
 
                     //var addWebServiceCuromerDetails =  AddWebServiceCustomerDetails(authToken, cust,sO,sOD);
                     //try
@@ -1462,7 +1479,7 @@ namespace MYBUSINESS.Controllers
                     else
                     {
                         string errorContent = await response.Content.ReadAsStringAsync();
-                        //TempData["WebserviceDownError"] = "Sever is down VAT Invoice cannot print at this time";
+                        TempData["WebserviceDownError"] = "Sever is down VAT Invoice cannot print at this time";
                         return Json(new { Success = false, Message = $"Failed to add customer details. Status code: {response.StatusCode}. Response: {errorContent}" });
                     }
                 }
@@ -1875,7 +1892,7 @@ namespace MYBUSINESS.Controllers
 
         public FileContentResult PrintSO2(string id)
         {
-            var storeId = Session["StoreId"] as string;
+            //var storeId = Session["StoreId"] as string;
             //if (storeId == null)
             //{
             //    // Set an appropriate error message
@@ -1912,24 +1929,11 @@ namespace MYBUSINESS.Controllers
         //public FileContentResult PrintSO3(string id, string customerName, string customerEmail, string customerAddress, string posName)
         public FileContentResult PrintSO3(string id)
         {
-            //var storeId = Session["StoreId"] as string; //commented due to session issue
-            //if (storeId == null)
-            //{
-            //    // Set an appropriate error message
-            //    string errorMessage = "Store ID is not found in the session.";
-
-            //    // Return a simple text file with the error message
-            //    byte[] fileContents = System.Text.Encoding.UTF8.GetBytes(errorMessage);
-            //    return new FileContentResult(fileContents, "text/plain")
-            //    {
-            //        FileDownloadName = "Error.txt"
-            //    };
-            //} 
-            //string _customerName = TempData["_CustomerName"] as string;
-            //string _customerEmail = TempData["_CustomerEmail"] as string;
-            //string _customerAddress = TempData["_CustomerAddress"] as string;
-            //string _customerPosName = TempData["_POSName"] as string;
-            //string _customerVatNumber = TempData["_CustomerVatNumber"] as string;
+            string _customerName = TempData["_CustomerName"] as string;
+            string _customerEmail = TempData["_CustomerEmail"] as string;
+            string _customerAddress = TempData["_CustomerAddress"] as string;
+            string _customerPosName = TempData["_POSName"] as string;
+            string _customerVatNumber = TempData["_CustomerVatNumber"] as string;
             //string _webserviceDownError = TempData["_WebserviceDownError"] as string;
 
             //if (id.Length > 36)
@@ -1967,18 +1971,18 @@ namespace MYBUSINESS.Controllers
             // Set the report parameters for Customer Information
             viewer.LocalReport.SetParameters(new ReportParameter[]
             {
-        new ReportParameter("SaleOrderID", id),                 // Assuming you already have this parameter
-        new ReportParameter("CustomerName", "XYZ"),  // Pass Customer Name
-        new ReportParameter("CustomerEmail","XYZ"), // Pass Customer Email
-        new ReportParameter("CustomerAddress", "XYZ"), // Pass Customer Address
-        new ReportParameter("POSName", "XYZ"),   // Pass POS Name
-        new ReportParameter("CustomerVatNumber", "XYZ"),   // Pass POS Name
-
-        //new ReportParameter("CustomerName", _customerName ?? "N/A"),  // Pass Customer Name
-        //new ReportParameter("CustomerEmail", _customerEmail ?? "N/A"), // Pass Customer Email
-        //new ReportParameter("CustomerAddress", _customerAddress ?? "N/A"), // Pass Customer Address
-        //new ReportParameter("POSName", _customerPosName ?? "N/A"),   // Pass POS Name
-        //new ReportParameter("CustomerVatNumber", _customerVatNumber ?? "N/A"),   // Pass POS Name
+        //new ReportParameter("SaleOrderID", id),                 // Assuming you already have this parameter
+        //new ReportParameter("CustomerName", "N/A"),  // Pass Customer Name
+        //new ReportParameter("CustomerEmail","N/A"), // Pass Customer Email
+        //new ReportParameter("CustomerAddress", "N/A"), // Pass Customer Address
+        //new ReportParameter("POSName",  "N/A"),   // Pass POS Name
+        //new ReportParameter("CustomerVatNumber", "N/A")   // Pass POS Name 
+        new ReportParameter("SaleOrderID", id),
+        new ReportParameter("CustomerName", _customerName ?? "N/A"),  //// Pass Customer Name
+        new ReportParameter("CustomerEmail", _customerEmail ?? "N/A"), //// Pass Customer Email
+        new ReportParameter("CustomerAddress", _customerAddress ?? "N/A"), //// Pass Customer Address
+        new ReportParameter("POSName", _customerPosName ?? "N/A"),   // Pass POS Name
+        new ReportParameter("CustomerVatNumber", _customerVatNumber ?? "N/A"),  // Pass POS Name
             });
             viewer.LocalReport.Refresh();
             //byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
@@ -2400,6 +2404,7 @@ namespace MYBUSINESS.Controllers
             id = Encryption.Decrypt(id, "BZNS");
             return id;
         }
+        //Commentted due to logout issue
         public async Task<ActionResult> USRLWB(string taxCode)
         {
             try
@@ -2502,6 +2507,16 @@ namespace MYBUSINESS.Controllers
                 return new { Success = false, Message = "An error occurred.", Details = ex.Message };
             }
         }
+
+
+
+
+
+
+
+
+
+
         //public async Task<JsonResult> USRLWB()
         //{
         //    var loginToWebService = LoginToWebService();
