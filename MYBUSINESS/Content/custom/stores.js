@@ -339,9 +339,10 @@ $('#openShop').click(function () {
             }).join(':');
         }
         // Set storeId in localStorage and session
-        storeId = storeIds;
+        //storeId = storeIds;
         if (storeIds != null || storeIds != undefined) {
-            localStorage.setItem('storeId', storeId);
+            alert("Open Shop" + storeIds)
+            localStorage.setItem('storeIds', storeIds);
             //localStorage.setItem('storeName', storeName);
             setSession(); // Call setSession function to make an AJAX request
         }
@@ -1126,14 +1127,16 @@ function updateOverallYensTotal() {
 //    });
 //}
 function setSession() {
-    var storeId = localStorage.getItem('storeId');
-    var storeName = localStorage.getItem('storeName');
-
+    var storeId = localStorage.getItem('storeIds');
+    //var storeName = localStorage.getItem('storeName');
+    alert("Set Session 1" + storeId);
     if (storeId !== null && storeId !== undefined && storeId !== "") {
+        alert("Set Session 2" + storeId);
         $.ajax({
             url: '/UserManagement/StoreValue',
             type: 'POST', // Assuming you want to use POST for updating server session
-            data: { storeId: storeId, storeName: storeName },
+            //data: { storeId: storeId, storeName: storeName },
+            data: { storeId: storeId },
             success: function (response) {
                 if (response.Success) {
                     openShop();

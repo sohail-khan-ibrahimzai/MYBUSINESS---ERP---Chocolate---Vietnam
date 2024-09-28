@@ -1,11 +1,16 @@
 ﻿var serDownError = "Server is down VAT Invoice cannot print at this time";
-var storeId = 0;
+//var storeId = 0;
 // Declare the active input variable
 let activeInputClose = null;
 //var availableCurrenciesCloseStore = [];
-if (storeId != null) {
-    //alert(storeId);
-}
+
+//if (storeId != null) {
+//    alert("Null" + storeId);
+//}
+//else {
+//    alert("Exists" + storeId);
+//}
+
 //$(document).ready(function () {
 //    getAllAvailableCurrenciesCloseStore();
 //});
@@ -91,7 +96,7 @@ $(document).on('click', '#closeStore', function (e) {
         });
     });
 });
- //Attach focus event listener only once
+//Attach focus event listener only once
 $(document).on('focus', 'input', function () {
     activeInputClose = this; // Update the active input when focused
 });
@@ -253,12 +258,12 @@ $(document).on('click', '#closeShop', function () {
         }
 
         var storeViewModel = {
-            ClosingBalance: selectedBlance, 
+            ClosingBalance: selectedBlance,
             ClosingCurrencyDetail: formattedString
         };
 
         $.ajax({
-            url: '/Stores/CloseShop', 
+            url: '/Stores/CloseShop',
             type: 'POST',
             data: JSON.stringify(storeViewModel),
             contentType: 'application/json; charset=utf-8',
@@ -266,7 +271,7 @@ $(document).on('click', '#closeShop', function () {
             success: function (response) {
                 if (response.Success) {
                     window.location.href = '/Stores/StoreDashboard';
-                    localStorage.removeItem('storeId');
+                    localStorage.removeItem('storeIds');
                 } else {
                     alert('Error: ' + response.Message);
                 }
@@ -333,7 +338,7 @@ function updateOverallTotalsClose() {
 var closeCurrencyDetalInDollars = [];
 function updateOverallTotalsCloseDollars() {
     const inputIds = ['oneDollarClose', 'fiveDollarsClose', 'tenDollarsClose', 'twentyDollarsClose', 'fiftyDollarsClose', 'hundredDollarsClose'];
-    const outputIds = ['totalOneDollarClose','totalFiveDollarsClose', 'totalTenDollarsClose', 'totalTwentyDollarsClose', 'totalFiftyDollarsClose', 'totalHundredDollarsClose'];
+    const outputIds = ['totalOneDollarClose', 'totalFiveDollarsClose', 'totalTenDollarsClose', 'totalTwentyDollarsClose', 'totalFiftyDollarsClose', 'totalHundredDollarsClose'];
 
     let totalNotes = 0;
     let totalValue = 0;
@@ -397,7 +402,7 @@ function updateOverallTotalsCloseYens() {
         document.getElementById('totalYensToVndClose').textContent = totalValueInVnd.toLocaleString('en-US', { minimumFractionDigits: 2 });
     });
 
-   
+
 }
 
 function logout() {

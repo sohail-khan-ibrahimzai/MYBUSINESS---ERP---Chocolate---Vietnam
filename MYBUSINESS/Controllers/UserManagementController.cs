@@ -187,7 +187,8 @@ namespace MYBUSINESS.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public ActionResult StoreValue(string storeId, string storeName)
+        //public ActionResult StoreValue(string storeId, string storeName)
+        public ActionResult StoreValue(string storeId)
         {
             try
             {
