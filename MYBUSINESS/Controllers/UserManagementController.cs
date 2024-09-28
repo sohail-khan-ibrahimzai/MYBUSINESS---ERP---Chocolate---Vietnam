@@ -186,7 +186,7 @@ namespace MYBUSINESS.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        //[HttpPost]
+        [HttpPost]
         public ActionResult StoreValue(string storeId, string storeName)
         {
             try
@@ -196,12 +196,12 @@ namespace MYBUSINESS.Controllers
                 {
                     // Store the value in the session
                     Session["StoreId"] = storeId;
-
+                    return Json(new { Success = true, Message = "" });
                     // Optionally store the storeName as well
                     // Session["StoreName"] = storeName;
 
                     // Redirect to the StoresDashboard action
-                    return RedirectToAction("StoresDashboard", "Stores");
+                    //return RedirectToAction("StoresDashboard", "Stores");
                 }
                 else
                 {

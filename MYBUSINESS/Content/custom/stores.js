@@ -1016,20 +1016,126 @@ function updateOverallYensTotal() {
 //            document.getElementById('hiddenForm').submit();
 //        }
 //}
+//function setSession() {
+//    var storeIds = localStorage.getItem('storeId');
+//    var storesName = localStorage.getItem('storeName');
+//    alert(storeIds);
+//    if (storeIds !== null && storeIds !== undefined && storeIds!=="") {
+//        // Perform an AJAX call to set the session value on the server
+//        $.ajax({
+//            url: '/UserManagement/StoreValue',  // Replace with your actual controller/action path
+//            type: 'POST',
+//            //type: 'GET',
+//            data: { storeId: storeIds, storeName: storesName },
+//            success: function (response) {
+//                if (response.Success) {
+//                    // Proceed to open the shop after successfully setting the session
+//                    openShop();
+//                } else {
+//                    alert('Failed to set session: ' + response.Message);
+//                }
+//            },
+//            error: function (xhr, status, error) {
+//                alert('An error occurred while setting the session: ' + error);
+//            }
+//        });
+//    }
+//}
+//function openShop() {
+//    //var selectedBlance = 0;
+//    //var selectedBlanceDollars = 0;
+//    //var selectedBlanceYens = 0;
+//    //var vndBalance = parseFloat($('#totalVndCount').val());
+//    //var dollarBalance = parseFloat($('#totalDollarsCount').val());
+//    //var jpyBalance = parseFloat($('#totalYensCount').val());
+//    //debugger;
+//    //if (!isNaN(vndBalance) && vndBalance !== 0) {
+//    //    selectedBlance = vndBalance;
+//    //} else if (!isNaN(dollarBalance) && dollarBalance !== 0) {
+//    //    debugger;
+//    //    selectedBlanceDollars = dollarBalance;
+//    //} else if (!isNaN(jpyBalance) && jpyBalance !== 0) {
+//    //    selectedBlanceYens = jpyBalance;
+//    //} else {
+//    //    vndBalance = 0;
+//    //    dollarBalance = 0;
+//    //    jpyBalance = 0;
+//    //    //alert('No balance available');
+//    //    //return;
+//    //}
+
+//    //var storeViewModel = {
+//    //    OpeningBalance: selectedBlance,
+//    //    OpeningBalanceDollars: selectedBlanceDollars,
+//    //    OpeningCurrencyDetail: formattedString,
+//    //    OpeningCurrencyDetailDollars: formattedStringDollars
+//    //};
+//    var selectedBlance = 0;        // VND balance
+//    var selectedBlanceDollars = 0; // Dollar balance
+//    var selectedBlanceYens = 0;    // JPY balance
+//    var vndBalance = parseFloat($('#totalVndCount').val()) || 0;
+//    var dollarBalance = parseFloat($('#totalDollarsCount').val()) || 0;
+//    var jpyBalance = parseFloat($('#totalYensCount').val()) || 0;
+//    // Check balances
+//    if (!isNaN(vndBalance) && vndBalance !== 0) {
+//        selectedBlance = vndBalance;
+//    }
+//    if (!isNaN(dollarBalance) && dollarBalance !== 0) {
+//        selectedBlanceDollars = dollarBalance;
+//    }
+//    if (!isNaN(jpyBalance) && jpyBalance !== 0) {
+//        selectedBlanceYens = jpyBalance;
+//    }
+//    else {
+//        // If none of the balances are valid, set everything to 0
+//        vndBalance = 0;
+//        dollarBalance = 0;
+//        jpyBalance = 0;
+//    }
+
+//    // Prepare the ViewModel with proper values
+//    var storeViewModel = {
+//        OpeningBalance: selectedBlance || 0,                    // Ensure it's not undefined
+//        OpeningBalanceDollars: selectedBlanceDollars || 0,      // Ensure it's not undefined
+//        OpeningBalanceYens: selectedBlanceYens || 0,      // Ensure it's not undefined
+//        OpeningCurrencyDetail: formattedString || "",           // Ensure string is initialized
+//        OpeningCurrencyDetailDollars: formattedStringDollars || "", // Ensure string is initialized
+//        OpeningCurrencyDetailYens: formattedStringYens || "" // Ensure string is initialized
+//    };
+
+//    // Make the AJAX POST request to server-side
+//    $.ajax({
+//        url: '/Stores/OpenShop',
+//        type: 'POST',
+//        data: JSON.stringify(storeViewModel),
+//        contentType: 'application/json; charset=utf-8',
+//        dataType: 'json',
+//        success: function (response) {
+//            debugger;
+//            if (response.Success) {
+//                debugger;
+//                window.location.href = '/SOSR/Create?IsReturn=false';
+//                $('#storeOpeningPopup').modal('hide');
+//            } else {
+//                alert('Error: ' + response.Message);
+//            }
+//        },
+//        error: function (xhr, status, error) {
+//            alert('An error occurred: ' + error);
+//        }
+//    });
+//}
 function setSession() {
-    var storeIds = localStorage.getItem('storeId');
-    var storesName = localStorage.getItem('storeName');
-    alert(storeIds);
-    if (storeIds !== null && storeIds !== undefined && storeIds!=="") {
-        // Perform an AJAX call to set the session value on the server
+    var storeId = localStorage.getItem('storeId');
+    var storeName = localStorage.getItem('storeName');
+
+    if (storeId !== null && storeId !== undefined && storeId !== "") {
         $.ajax({
-            url: '/UserManagement/StoreValue',  // Replace with your actual controller/action path
-            //type: 'POST',
-            type: 'GET',
-            data: { storeId: storeIds, storeName: storesName },
+            url: '/UserManagement/StoreValue',
+            type: 'POST', // Assuming you want to use POST for updating server session
+            data: { storeId: storeId, storeName: storeName },
             success: function (response) {
                 if (response.Success) {
-                    // Proceed to open the shop after successfully setting the session
                     openShop();
                 } else {
                     alert('Failed to set session: ' + response.Message);
@@ -1041,69 +1147,22 @@ function setSession() {
         });
     }
 }
-function openShop() {
-    //var selectedBlance = 0;
-    //var selectedBlanceDollars = 0;
-    //var selectedBlanceYens = 0;
-    //var vndBalance = parseFloat($('#totalVndCount').val());
-    //var dollarBalance = parseFloat($('#totalDollarsCount').val());
-    //var jpyBalance = parseFloat($('#totalYensCount').val());
-    //debugger;
-    //if (!isNaN(vndBalance) && vndBalance !== 0) {
-    //    selectedBlance = vndBalance;
-    //} else if (!isNaN(dollarBalance) && dollarBalance !== 0) {
-    //    debugger;
-    //    selectedBlanceDollars = dollarBalance;
-    //} else if (!isNaN(jpyBalance) && jpyBalance !== 0) {
-    //    selectedBlanceYens = jpyBalance;
-    //} else {
-    //    vndBalance = 0;
-    //    dollarBalance = 0;
-    //    jpyBalance = 0;
-    //    //alert('No balance available');
-    //    //return;
-    //}
 
-    //var storeViewModel = {
-    //    OpeningBalance: selectedBlance,
-    //    OpeningBalanceDollars: selectedBlanceDollars,
-    //    OpeningCurrencyDetail: formattedString,
-    //    OpeningCurrencyDetailDollars: formattedStringDollars
-    //};
-    var selectedBlance = 0;        // VND balance
-    var selectedBlanceDollars = 0; // Dollar balance
-    var selectedBlanceYens = 0;    // JPY balance
+// Function to open the shop after setting session
+function openShop() {
     var vndBalance = parseFloat($('#totalVndCount').val()) || 0;
     var dollarBalance = parseFloat($('#totalDollarsCount').val()) || 0;
     var jpyBalance = parseFloat($('#totalYensCount').val()) || 0;
-    // Check balances
-    if (!isNaN(vndBalance) && vndBalance !== 0) {
-        selectedBlance = vndBalance;
-    }
-    if (!isNaN(dollarBalance) && dollarBalance !== 0) {
-        selectedBlanceDollars = dollarBalance;
-    }
-    if (!isNaN(jpyBalance) && jpyBalance !== 0) {
-        selectedBlanceYens = jpyBalance;
-    }
-    else {
-        // If none of the balances are valid, set everything to 0
-        vndBalance = 0;
-        dollarBalance = 0;
-        jpyBalance = 0;
-    }
 
-    // Prepare the ViewModel with proper values
     var storeViewModel = {
-        OpeningBalance: selectedBlance || 0,                    // Ensure it's not undefined
-        OpeningBalanceDollars: selectedBlanceDollars || 0,      // Ensure it's not undefined
-        OpeningBalanceYens: selectedBlanceYens || 0,      // Ensure it's not undefined
-        OpeningCurrencyDetail: formattedString || "",           // Ensure string is initialized
-        OpeningCurrencyDetailDollars: formattedStringDollars || "", // Ensure string is initialized
-        OpeningCurrencyDetailYens: formattedStringYens || "" // Ensure string is initialized
+        OpeningBalance: vndBalance,
+        OpeningBalanceDollars: dollarBalance,
+        OpeningBalanceYens: jpyBalance,
+        OpeningCurrencyDetail: formattedString || "",
+        OpeningCurrencyDetailDollars: formattedStringDollars || "",
+        OpeningCurrencyDetailYens: formattedStringYens || ""
     };
 
-    // Make the AJAX POST request to server-side
     $.ajax({
         url: '/Stores/OpenShop',
         type: 'POST',
@@ -1111,7 +1170,6 @@ function openShop() {
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         success: function (response) {
-            debugger;
             if (response.Success) {
                 window.location.href = '/SOSR/Create?IsReturn=false';
                 $('#storeOpeningPopup').modal('hide');

@@ -2009,7 +2009,7 @@ $(document).ready(function () {
         //if ($('#ItemsTotal').val().trim() == "") {
         //    $('#ItemsTotal').val(0);
         //}
-        getAll_AvailableCurrencies();
+        //getAll_AvailableCurrencies();
         var storedTotal = totalVndBalanceHeader;
         if (!isNaN($('#total').val()) || !$('#total').val('0')) {
             //$('#lefttotalvnd').val(storedTotal);
