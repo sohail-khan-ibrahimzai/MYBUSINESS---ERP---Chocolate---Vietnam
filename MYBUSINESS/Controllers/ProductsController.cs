@@ -274,12 +274,15 @@ namespace MYBUSINESS.Controllers
             //    return RedirectToAction("StoreNotFound", "UserManagement");
             //}
             //var parseId = int.Parse(storeId);
+            ViewBag.Suppliers = DAL.dbSuppliers;
+            return View(DAL.dbProducts.Include(x => x.StoreProducts).Where(x => x.StoreId == storeId).ToList());
+
             //ViewBag.Suppliers = DAL.dbSuppliers;
             //return View(DAL.dbProducts.Include(x => x.StoreProducts).Where(x => x.StoreId == parseId).ToList()); //commented due to session issue
 
 
-            ViewBag.Suppliers = DAL.dbSuppliers;
-            return View(DAL.dbProducts.Include(x => x.StoreProducts).ToList());
+            //ViewBag.Suppliers = DAL.dbSuppliers;
+            //return View(DAL.dbProducts.Include(x => x.StoreProducts).ToList());
         }
 
         public ActionResult SearchData(string suppId)
@@ -369,8 +372,8 @@ namespace MYBUSINESS.Controllers
             //{
             product.Stock = product.Stock * product.PerPack;
             //}
+            product.StoreId = storeId;
             //product.StoreId = parseId; //commented due to session issue
-            product.StoreId = 1;
 
             if (ModelState.IsValid)
             {
@@ -389,8 +392,8 @@ namespace MYBUSINESS.Controllers
                     POD pOD = new POD { POId = pO.Id, PODId = 1, ProductId = product.Id, OpeningStock = 0, Quantity = (int)product.Stock, PurchasePrice = 0, PerPack = 1, IsPack = true, SaleType = false };
                     db.PODs.Add(pOD);
 
+                     StoreProduct storeProduct = new StoreProduct { ProductId = product.Id, StoreId = storeId, Stock = (int)product.Stock, };  //commented due to session issue
                     //StoreProduct storeProduct = new StoreProduct { ProductId = product.Id, StoreId = parseId, Stock = (int)product.Stock, };  //commented due to session issue
-                    StoreProduct storeProduct = new StoreProduct { ProductId = product.Id, StoreId = 1, Stock = (int)product.Stock, };
                     db.StoreProducts.Add(storeProduct);
                 }
                 db.SaveChanges();
@@ -431,8 +434,8 @@ namespace MYBUSINESS.Controllers
                 storeProdcut = new StoreProduct
                 {
                     ProductId = product.Id,
+                    StoreId = storeId,
                     //StoreId = parseId,
-                    StoreId = 1,
                     Stock = 0,
                 };
             }
@@ -488,8 +491,8 @@ namespace MYBUSINESS.Controllers
             }
 
             product.Stock = product.Stock * product.PerPack;
+            product.StoreId = storeId;
             //product.StoreId = parseId;
-            product.StoreId = 1;
             //decimal StockInDB = (decimal)db.Products.AsNoTracking().FirstOrDefault(x => x.Id == product.Id).Stock;
             //decimal StockInDB = (decimal)db.StoreProducts.AsNoTracking().FirstOrDefault(x => x.ProductId == product.Id)?.Stock;
             decimal StockInDB = db.StoreProducts

@@ -35,11 +35,11 @@ namespace MYBUSINESS.Controllers
             //    return RedirectToAction("StoreNotFound", "UserManagement");
             //}
             //var parseId = int.Parse(storeId);
-            //var customers = DAL.dbCustomers.Where(x => x.StoreId == parseId);
-            //return View(customers);
+            var customers = DAL.dbCustomers.Where(x => x.StoreId == storeId);
+            return View(customers);
 
-            var customers = DAL.dbCustomers;
-            return View(customers.ToList());
+            //var customers = DAL.dbCustomers;
+            //return View(customers.ToList());
         }
 
         // GET: Customers/Details/5
@@ -101,6 +101,7 @@ namespace MYBUSINESS.Controllers
                 //}
                 //var parseId = int.Parse(storeId);
                 //customer.StoreId = parseId;
+                customer.StoreId = storeId;
 
                 if (customer.Balance == null)
                 {
@@ -127,6 +128,12 @@ namespace MYBUSINESS.Controllers
         // GET: Customers/Edit/5
         public ActionResult Edit(decimal id)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -161,6 +168,7 @@ namespace MYBUSINESS.Controllers
                 //}
                 //var parseId = int.Parse(storeId);
                 //customer.StoreId = parseId;
+                customer.StoreId = storeId;
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -170,6 +178,12 @@ namespace MYBUSINESS.Controllers
         // GET: Products/Delete/5
         public ActionResult Delete(decimal id)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -186,6 +200,12 @@ namespace MYBUSINESS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(decimal id)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             Customer customer = db.Customers.Find(id);
             bool isPresent = false;
             if (db.SOes.FirstOrDefault(x => x.CustomerId == id) != null)

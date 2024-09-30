@@ -63,8 +63,9 @@ namespace MYBUSINESS.Controllers
             ViewBag.Suppliers = DAL.dbSuppliers;
             ViewBag.StartDate = dtStartDate.ToString("dd-MMM-yyyy");
             ViewBag.EndDate = dtEndtDate.ToString("dd-MMM-yyyy");
+            var poess = pOes.Where(x => x.StoreId == storeId).OrderByDescending(i => i.Date).ToList();
             //var poess = pOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();//commented due to session issue
-            var poess = pOes.OrderByDescending(i => i.Date).ToList();
+            //var poess = pOes.OrderByDescending(i => i.Date).ToList();
             return View(poess);
         }
         //public ActionResult SearchData(string custName, DateTime startDate, DateTime endDate)
@@ -352,8 +353,8 @@ namespace MYBUSINESS.Controllers
                     maxId += 1;
                     Supplier.Id = maxId;
                     Supplier.Balance = pO.Balance;
+                    Supplier.StoreId = storeId; 
                     //Supplier.StoreId = parseId; //commented due to session issue
-                    Supplier.StoreId = 1;
                     db.Suppliers.Add(Supplier);
                     //db.SaveChanges();
                 }
@@ -361,7 +362,7 @@ namespace MYBUSINESS.Controllers
                 {//its means old customer. old customer balance should be updated.
                     //Supplier.Id = (int)pO.SupplierId;
                     //supp.StoreId = parseId; //commented due to session issue
-                    supp.StoreId = 1;
+                    supp.StoreId = storeId;
                     supp.Balance = pO.Balance;
                     db.Entry(supp).State = EntityState.Modified;
                     //db.SaveChanges();
@@ -394,6 +395,7 @@ namespace MYBUSINESS.Controllers
                 pO.PurchaseOrderAmount = 0;
 
                 pO.PurchaseOrderQty = 0;
+                pO.StoreId = storeId;
                 //pO.StoreId = parseId; //commented due to session issue
                 pO.StoreId = 1;
                 Employee emp = (Employee)Session["CurrentUser"];
@@ -682,8 +684,9 @@ namespace MYBUSINESS.Controllers
                 PO.FundingSourceId = newPO.FundingSourceId;
                 PO.BankAccountId = newPO.BankAccountId;
                 PO.Date = newPO.Date;
+                PO.StoreId = storeId;
                 //PO.StoreId = parseId; //commented due to session issue
-                PO.StoreId = 1;
+                //PO.StoreId = 1;
                 //PO.POSerial = newPO.POSerial;//should be unchanged
 
                 ///////////////////////////////////////////

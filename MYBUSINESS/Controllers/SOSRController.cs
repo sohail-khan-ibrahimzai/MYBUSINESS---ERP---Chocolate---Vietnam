@@ -20,6 +20,11 @@ using MYBUSINESS.Models;
 using Newtonsoft.Json;
 using Microsoft.Ajax.Utilities;
 using log4net;
+using MYBUSINESS.CustomClasses.MetaDataClasses;
+using Microsoft.AspNetCore.Mvc;
+using System.Web.Helpers;
+using Newtonsoft.Json.Linq;
+using System.Data.Entity.Core.Metadata.Edm;
 
 namespace MYBUSINESS.Controllers
 {
@@ -30,6 +35,7 @@ namespace MYBUSINESS.Controllers
     {
         private BusinessContext db = new BusinessContext();
         private DAL DAL = new DAL();
+        //public dynamic _jsonResponseWebservice = null;
         //private static readonly ILog log = LogManager.GetLogger(typeof(SOSRController));
         // GET: SOes
         public ActionResult Index()
@@ -83,13 +89,14 @@ namespace MYBUSINESS.Controllers
             ViewBag.Customers = DAL.dbCustomers;
             ViewBag.StartDate = dtStartDate.ToString("dd-MMM-yyyy");
             ViewBag.EndDate = dtEndtDate.ToString("dd-MMM-yyyy");
+            var getSoes = sOes.Where(x => x.StoreId == storeId).OrderByDescending(i => i.Date).ToList();//commented due to session issue
             //var getSoes = sOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList();//commented due to session issue
-            var getSoes = sOes.OrderByDescending(i => i.Date).ToList();
+            //var getSoes = sOes.OrderByDescending(i => i.Date).ToList();
             return View(getSoes);
         }
         public ActionResult ClosePosPopup()
         {
-            var storeId = Session["StoreId"] as int?;
+            int? storeId = Session["StoreId"] as int?;
             if (storeId == null)
             {
                 return RedirectToAction("StoreNotFound", "UserManagement");
@@ -140,8 +147,9 @@ namespace MYBUSINESS.Controllers
             ViewBag.Customers = DAL.dbCustomers;
             ViewBag.StartDate = dtStartDate.ToString("dd-MMM-yyyy");
             ViewBag.EndDate = dtEndtDate.ToString("dd-MMM-yyyy");
+            var indexReturn = sOes.Where(x => x.StoreId == storeId).OrderByDescending(i => i.Date).ToList(); //commented due to session issue
             //var indexReturn = sOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList(); //commented due to session issue
-            var indexReturn = sOes.OrderByDescending(i => i.Date).ToList(); //commented due to session issue
+            //var indexReturn = sOes.OrderByDescending(i => i.Date).ToList(); //commented due to session issue
             return View(indexReturn);
         }
         public ActionResult ProductRentStatus(string prodId, string sellDate)
@@ -773,7 +781,8 @@ namespace MYBUSINESS.Controllers
 
         // GET: SOes/Create
 
-        public ActionResult Create(string IsReturn)
+        //public ActionResult Create(string IsReturn)
+        public async Task<ActionResult> Create(string IsReturn)
         {
             int? storeId = Session["StoreId"] as int?;
             //var storeId = Session["StoreId"] as string;
@@ -851,8 +860,16 @@ namespace MYBUSINESS.Controllers
             TempData["_CustomerAddress"] = TempData["CustomerAddress"] as string;
             TempData["_POSName"] = TempData["POSName"] as string;
             TempData["_CustomerVatNumber"] = TempData["CustomerVatNumber"] as string;
-            TempData["_WebserviceDownError"] = TempData["WebserviceDownError"] as string;
+            TempData["_InvoiceSeries"] = TempData["InvoiceSeries"] as string;
+            TempData["_InvoiceNumber"] = TempData["InvoiceNumber"] as string;
+            TempData["_Macqt"] = TempData["Macqt"] as string;
+            TempData["_Sobaomat"] = TempData["Sobaomat"] as string;
 
+
+            //var jsonResponseWebservicess1 = TempData["JsonResponseWebservice"] as string;
+            //TempData["_JsonResponseWebservice"] = "TestTempData"; //TempData["JsonResponseWebservice"] as string;
+            //string jsonResponseWebservicess2 = TempData["_JsonResponseWebservice"] as string;
+            //TempData["_WebserviceDownError"] = TempData["WebserviceDownError"] as string;
             return View(saleOrderViewModel);
         }
 
@@ -863,7 +880,7 @@ namespace MYBUSINESS.Controllers
         //public ActionResult Create([Bind(Prefix = "Customer", Include = "Name,Address,Email,Vat,CompanyName")] Customer Customer, [Bind(Prefix = "SaleOrder", Include = "BillAmount,Balance,PrevBalance,BillPaid,Discount,CustomerId,Remarks,Remarks2,PaymentMethod,PaymentDetail,SaleReturn,BankAccountId,Date")] SO sO, [Bind(Prefix = "SaleOrderDetail", Include = "ProductId,SalePrice,PurchasePrice,Quantity,SaleType,PerPack,IsPack,Product")] List<SOD> sOD, FormCollection collection)
         //{
         //public ActionResult Create(
-        public ActionResult Create(
+        public async Task<ActionResult> Create(
     [Bind(Prefix = "SaleOrder", Include = "Id,BillAmount,Balance,PrevBalance,BillPaid,BillPaidByCash,Discount,CustomerId,Remarks,Remarks2,PaymentMethod,PaymentDetail,SaleReturn,BankAccountId,Date")] SO sO,
     [Bind(Prefix = "SaleOrderDetail", Include = "ProductId,SalePrice,PurchasePrice,Quantity,SaleType,PerPack,IsPack,Product.Name,Product")] List<SOD> sOD,
     [Bind(Prefix = "Customer", Include = "Id,Name,Address,Email,Vat,CompanyName")] Customer Customer,
@@ -980,7 +997,8 @@ namespace MYBUSINESS.Controllers
                         //if (storeProduct == null)
                         //    storeProduct.Stock = 0;
                         //StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == sod.ProductId && x.StoreId == parseId); commented due to session issue
-                        StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == sod.ProductId);
+                        StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == sod.ProductId && x.StoreId == storeId); //commented due to session issue
+                        //StoreProduct storeProduct = db.StoreProducts.FirstOrDefault(x => x.ProductId == sod.ProductId);
                         if (storeProduct == null)
                         {
                             storeProduct = new StoreProduct
@@ -1011,14 +1029,14 @@ namespace MYBUSINESS.Controllers
                                 Saleable = true,
                                 PerPack = 1,
                                 ShowIn = "S",
-                                //StoreId = parseId,commented due to session issue
-                                StoreId = 1,
+                                StoreId = storeId,//commented due to session issue
+                                //StoreId = parseId,//commented due to session issue
                             };
                             // Create and initialize StoreProduct instances
                             var storeProducts = new StoreProduct
                             {
                                 //StoreId = parseId, // commented due to session issue
-                                StoreId = 1, // Associate with the store
+                                StoreId = storeId,
                                 ProductId = newProd.Id, // Associate with the product
                                 Stock = 0 // Set initial stock value
                             };
@@ -1105,9 +1123,44 @@ namespace MYBUSINESS.Controllers
                     var loginToWebService = LoginToWebService();
                     dynamic jsonResponse = JsonConvert.DeserializeObject(loginToWebService.ContentType);
                     string authToken = jsonResponse.token;
+
                     if (loginToWebService == null)
                         return Json(new { Success = false, Messsag = "Invalid Login attempt to web service,please use correct credentials" });
-                    var addWebServiceCustomerDetails = AddWebServiceCustomerDetails(authToken, Customer, sO, sOD);
+                    var webServiceResponse = await AddWebServiceCustomerDetails(authToken, Customer, sO, sOD);
+                    var dataType = webServiceResponse.Data.GetType();
+                    if (dataType == typeof(JObject))
+                    {
+                        JObject dataObject = (JObject)webServiceResponse.Data;
+                        string code = dataObject["code"]?.ToString();
+                        string nestedDataObjects = dataObject["data"].ToString();
+                        Console.WriteLine($"Code: {code}");
+                        JObject nestedDataObject = dataObject["data"] as JObject;
+                        if (nestedDataObject != null)
+                        {
+                            // Example of accessing a value within the nested 'data'
+                            string invoiceSeries = nestedDataObject["inv_invoiceSeries"]?.ToString();
+                            string invoiceNumber = nestedDataObject["inv_invoiceNumber"]?.ToString();
+                            string macqt = nestedDataObject["macqt"]?.ToString();
+                            string sobaomat = nestedDataObject["sobaomat"]?.ToString();
+                            TempData["InvoiceSeries"] = invoiceSeries;
+                            TempData["InvoiceNumber"] = invoiceNumber;
+                            TempData["Macqt"] = macqt;
+                            TempData["Sobaomat"] = sobaomat;
+                        }
+                    }
+                    if (webServiceResponse.Success)
+                    {
+                        // Use the response data as needed
+                        TempData["WebServiceMessage"] = webServiceResponse.Message;
+                        // Proceed with further logic
+                    }
+                    else
+                    {
+                        // Handle the error case
+                        ViewBag.ErrorMessage = webServiceResponse.Message;
+                        return View("Error"); // or any error handling view
+                    }
+                    //var addWebServiceCustomerDetails = await AddWebServiceCustomerDetails(authToken, Customer, sO, sOD);
                     ///////////////////////
 
                     TempData["CustomerName"] = Customer.Name;
@@ -1115,6 +1168,7 @@ namespace MYBUSINESS.Controllers
                     TempData["CustomerAddress"] = Customer.Address;
                     TempData["POSName"] = getStoreName.Name;
                     TempData["CustomerVatNumber"] = Customer.Vat;
+                    string aa = TempData["JsonResponseWebservicess"] as string;
 
                     //var addWebServiceCuromerDetails =  AddWebServiceCustomerDetails(authToken, cust,sO,sOD);
                     //try
@@ -1335,27 +1389,32 @@ namespace MYBUSINESS.Controllers
             }
             return Json(new { Success = true, Token = Session["AuthToken"] });
         }
-        public async Task<JsonResult> AddWebServiceCustomerDetails(string authToken, Customer cust, SO saleOrder, List<SOD> saleOrderDetails)
+        //public async Task<JsonResult> AddWebServiceCustomerDetails(string authToken, Customer cust, SO saleOrder, List<SOD> saleOrderDetails)
+        public async Task<WebServiceResponse> AddWebServiceCustomerDetails(string authToken, Customer cust, SO saleOrder, List<SOD> saleOrderDetails)
         {
             if (string.IsNullOrEmpty(authToken))
             {
-                return Json(new { Success = false, Message = "Invalid token" });
+                return new WebServiceResponse { Success = false, Message = "An error occurred: " };
+                //return Json(new { Success = false, Message = "Invalid token" });
             }
 
             // Check for null references in the input parameters
             if (cust == null)
             {
-                return Json(new { Success = false, Message = "Customer information is missing." });
+                return new WebServiceResponse { Success = false, Message = "An error occurred: " };
+                //return Json(new { Success = false, Message = "Customer information is missing." });
             }
 
             if (saleOrder == null)
             {
-                return Json(new { Success = false, Message = "Sale order information is missing." });
+                return new WebServiceResponse { Success = false, Message = "An error occurred: " };
+                //return Json(new { Success = false, Message = "Sale order information is missing." });
             }
 
             if (saleOrderDetails == null || saleOrderDetails.Count == 0)
             {
-                return Json(new { Success = false, Message = "Sale order details are missing." });
+                return new WebServiceResponse { Success = false, Message = "An error occurred: " };
+                //return Json(new { Success = false, Message = "Sale order details are missing." });
             }
 
             try
@@ -1457,36 +1516,115 @@ namespace MYBUSINESS.Controllers
                             {
                                 dynamic jsonResponse = JsonConvert.DeserializeObject(responseBody);
 
-                                if (jsonResponse.code == "00")
+                                // Check if deserialization failed
+                                if (jsonResponse == null)
                                 {
-                                    return Json(new { Success = true, Message = jsonResponse.message, Data = jsonResponse.data });
+                                    return new WebServiceResponse { Success = false, Message = "An error occurred: " };
+                                    //return Json(new { Success = false, Message = "Failed to parse the response." });
+                                }
+                                //StaticDto.Data = jsonResponse;
+                                // Check if 'code' property exists and is not null
+                                if (jsonResponse?.code != null && jsonResponse.code == "00")
+                                {
+                                    return new WebServiceResponse
+                                    {
+                                        Success = true,
+                                        Message = jsonResponse.message,
+                                        Data = jsonResponse
+                                    };
                                 }
                                 else
                                 {
-                                    return Json(new { Success = false, Message = "Unexpected response code.", Response = jsonResponse });
+                                    return new WebServiceResponse
+                                    {
+                                        Success = false,
+                                        Message = "Unexpected response code.",
+                                        Data = jsonResponse
+                                    };
                                 }
+                                //if (jsonResponse?.code != null && jsonResponse.code == "00")
+                                //{
+                                //    // Store the serialized JSON string in TempData
+                                //    string jsonResponseString = JsonConvert.SerializeObject(jsonResponse);
+                                //    //Session["JsonResponseWebservice"] = jsonResponseString;
+                                //    TempData["JsonResponseWebservicess"] = jsonResponseString;
+                                //    //ViewBag.LLLL = TempData["JsonResponseWebservicess"];
+
+                                //    // Retrieve the TempData value as a dynamic object
+                                //    dynamic tempDataResponse = JsonConvert.DeserializeObject(TempData["JsonResponseWebservicess"].ToString());
+                                //    //StaticDto.Data = tempDataResponse;
+                                //    //_jsonResponseWebservice = JsonConvert.DeserializeObject(responseBody);
+
+                                //    // Now you can use tempDataResponse
+                                //    return Json(new { Success = true, Message = jsonResponse.message, Data = tempDataResponse });
+                                //}
+                                //else
+                                //{
+                                //    return Json(new { Success = false, Message = "Unexpected response code.", Response = jsonResponse });
+                                //}
+                                //dynamic jsonResponse = JsonConvert.DeserializeObject(responseBody);
+                                //// Check if deserialization failed
+                                //if (jsonResponse == null)
+                                //{
+                                //    return Json(new { Success = false, Message = "Failed to parse the response." });
+                                //}
+
+                                //// Check if 'code' property exists and is not null
+                                //if (jsonResponse?.code != null && jsonResponse.code == "00")
+                                //{
+                                //    string jsonResponseString = JsonConvert.SerializeObject(jsonResponse);
+                                //    // Store the serialized JSON string in TempData
+                                //    TempData["JsonResponseWebservice"] = jsonResponseString;
+                                //    // Optional: If you want to retrieve it as a dynamic object later
+                                //    dynamic tempDataResponse = JsonConvert.DeserializeObject(TempData["JsonResponseWebservice"].ToString());
+                                //    //string jsonResponseString = JsonConvert.SerializeObject(jsonResponse);
+                                //    //TempData["JsonResponseWebservice"] = jsonResponse;
+                                //    //string abc =(string) TempData["JsonResponseWebservice"];
+                                //    //TempData["_JsonResponseWebservice"] = TempData["JsonResponseWebservice"];
+                                //    return Json(new { Success = true, Message = jsonResponse.message, Data = jsonResponse });
+                                //    //return Json(new { Success = true, Message = jsonResponse.message, Data = jsonResponse.data });
+                                //}
+                                //else
+                                //{
+                                //    return Json(new { Success = false, Message = "Unexpected response code.", Response = jsonResponse });
+                                //}
+
+                                //if (jsonResponse.code == "00")
+                                //{
+                                //    // Store jsonResponse in TempData
+                                //    Session["JsonResponse"] = jsonResponse;
+                                //    return Json(new { Success = true, Message = jsonResponse.message, Data = jsonResponse.data });
+                                //}
+                                //else
+                                //{
+                                //    return Json(new { Success = false, Message = "Unexpected response code.", Response = jsonResponse });
+                                //}
                             }
                             catch (JsonException jsonEx)
                             {
-                                return Json(new { Success = false, Message = "Error parsing JSON response.", Error = jsonEx.Message });
+                                return new WebServiceResponse { Success = false, Message = "Request failed with status code: " + response.StatusCode };
+                                // return Json(new { Success = false, Message = "Error parsing JSON response.", Error = jsonEx.Message });
                             }
                         }
                         else
                         {
-                            return Json(new { Success = false, Message = "Received non-JSON response.", Response = responseBody });
+                            return new WebServiceResponse { Success = false, Message = "An error occurred: " };
+                            //return Json(new { Success = false, Message = "Received non-JSON response.", Response = responseBody });
                         }
                     }
                     else
                     {
                         string errorContent = await response.Content.ReadAsStringAsync();
                         TempData["WebserviceDownError"] = "Sever is down VAT Invoice cannot print at this time";
-                        return Json(new { Success = false, Message = $"Failed to add customer details. Status code: {response.StatusCode}. Response: {errorContent}" });
+                        return new WebServiceResponse { Success = false, Message = "An error occurred: " };
+                        //return Json(new { Success = false, Message = $"Failed to add customer details. Status code: {response.StatusCode}. Response: {errorContent}" });
                     }
                 }
             }
             catch (Exception ex)
             {
-                return Json(new { Success = false, Message = $"An error occurred: {ex.Message}" });
+                return new WebServiceResponse { Success = false, Message = "An error occurred: " + ex.Message };
+                //return Json(new { Success = false, Message = $"An error occurred: {ex.Message}" });
             }
 
 
@@ -1597,15 +1735,6 @@ namespace MYBUSINESS.Controllers
             //    // Log the exception or handle it as needed
             //    return Json(new { Success = false, Message = $"An error occurred: {ex.Message}" });
             //}
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1929,11 +2058,60 @@ namespace MYBUSINESS.Controllers
         //public FileContentResult PrintSO3(string id, string customerName, string customerEmail, string customerAddress, string posName)
         public FileContentResult PrintSO3(string id)
         {
+            //string codes = StaticDto.Data.code;
+            dynamic StaticDtoss = StaticDto.Data;
+            //string jsonResponseStrings = ViewBag.LLLL as string;
+            //dynamic aaa = _jsonResponseWebservice;
+            //var jsonResponseWebservicess = TempData["JsonResponseWebservice"] as string;
+            //if (!string.IsNullOrEmpty(jsonResponseWebservicess))
+            //{
+            //    Console.WriteLine("Data = " + jsonResponseWebservicess);
+            //}
+            //if (TempData["JsonResponseWebservice"] != null)
+            //{
+            //    dynamic jsonResponseWebservice = JsonConvert.DeserializeObject(TempData["JsonResponseWebservice"].ToString());
+            //}
+            // Retrieve the JSON response stored in TempData
+            //string jsonResponseString = TempData["JsonResponseWebservice"] as string;
+
+            //// Initialize a dynamic variable to hold the deserialized response
+            //dynamic jsonResponseWebservice = null;
+
+            //// Check if TempData has the response and deserialize it
+            //if (!string.IsNullOrEmpty(jsonResponseString))
+            //{
+            //    jsonResponseWebservice = JsonConvert.DeserializeObject(jsonResponseString);
+            //}
+
+            //// Example usage of jsonResponseWebservice
+            //if (jsonResponseWebservice != null)
+            //{
+            //    Console.WriteLine("Data = " + jsonResponseWebservice);
+            //    // You can access properties here, e.g.:
+            //    string message = jsonResponseWebservice.message;
+            //    string buyerDisplayName = jsonResponseWebservice.data.inv_buyerDisplayName;
+            //    // Continue processing as needed...
+            //}
+            //else
+            //{
+            //    Console.WriteLine("No valid JSON response found in TempData.");
+            //}
+
             string _customerName = TempData["_CustomerName"] as string;
             string _customerEmail = TempData["_CustomerEmail"] as string;
             string _customerAddress = TempData["_CustomerAddress"] as string;
             string _customerPosName = TempData["_POSName"] as string;
             string _customerVatNumber = TempData["_CustomerVatNumber"] as string;
+
+            string _invoiceSeries = TempData["_InvoiceSeries"]  as string;
+            string _invoiceNumber = TempData["_InvoiceNumber"] as string;
+            string _macqt = TempData["_Macqt"] as string;
+            string _sobmaomat = TempData["_Sobaomat"] as string;
+            //dynamic tempDataResponse1 = JsonConvert.DeserializeObject(TempData["JsonResponseWebservice"].ToString());
+
+            //string _jsonResponseWebservice = TempData["_JsonResponseWebservice"] as string;
+
+            //var jsonResponseWebservice = Session["JsonResponse"];
             //string _webserviceDownError = TempData["_WebserviceDownError"] as string;
 
             //if (id.Length > 36)
@@ -1983,6 +2161,11 @@ namespace MYBUSINESS.Controllers
         new ReportParameter("CustomerAddress", _customerAddress ?? "N/A"), //// Pass Customer Address
         new ReportParameter("POSName", _customerPosName ?? "N/A"),   // Pass POS Name
         new ReportParameter("CustomerVatNumber", _customerVatNumber ?? "N/A"),  // Pass POS Name
+
+        new ReportParameter("InvoiceSeries", _invoiceSeries ?? "N/A"),  // Pass POS Name
+        new ReportParameter("InvoiceNumber", _invoiceNumber ?? "N/A"),  // Pass POS Name
+        new ReportParameter("Macqt", _macqt ?? "N/A"),  // Pass POS Name
+        new ReportParameter("Sobaomat", _sobmaomat ?? "N/A"),  // Pass POS Name
             });
             viewer.LocalReport.Refresh();
             //byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
@@ -2037,8 +2220,6 @@ namespace MYBUSINESS.Controllers
                 {
                     SRAmount += (decimal)itm.SaleOrderAmount;
                 }
-
-
 
             }
 

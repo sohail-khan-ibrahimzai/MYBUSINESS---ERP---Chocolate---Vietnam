@@ -79,6 +79,7 @@ namespace MYBUSINESS.Controllers
                 //}
                 //var parseId = int.Parse(storeId);
                 //department.StoreId = parseId;
+                department.StoreId = storeId;
                 db.Departments.Add(department);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -130,6 +131,7 @@ namespace MYBUSINESS.Controllers
                 //}
                 //var parseId = int.Parse(storeId);
                 //department.StoreId = parseId;
+                department.StoreId = storeId;
                 db.Entry(department).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -140,6 +142,12 @@ namespace MYBUSINESS.Controllers
         // GET: Departments/Delete/5
         public ActionResult Delete(int? id)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -157,6 +165,12 @@ namespace MYBUSINESS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            int? storeId = Session["StoreId"] as int?;
+            //var storeId = Session["StoreId"] as string;
+            if (storeId == null)
+            {
+                return RedirectToAction("StoreNotFound", "UserManagement");
+            }
             Department department = db.Departments.Find(id);
             db.Departments.Remove(department);
             db.SaveChanges();

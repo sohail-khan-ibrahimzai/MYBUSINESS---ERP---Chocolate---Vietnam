@@ -64,8 +64,9 @@ namespace MYBUSINESS.Controllers
             ViewBag.StartDate = dtStartDate.ToString("dd-MMM-yyyy");
             ViewBag.EndDate = dtEndtDate.ToString("dd-MMM-yyyy");
             ViewBag.POSerial = thisSerial;
+            var purchaseOrderQuotation = pOes.Where(x => x.StoreId == storeId).OrderByDescending(i => i.Date).ToList(); 
             //var purchaseOrderQuotation = pOes.Where(x => x.StoreId == parseId).OrderByDescending(i => i.Date).ToList(); ///Commented due to Session issue
-            var purchaseOrderQuotation = pOes.OrderByDescending(i => i.Date).ToList();
+            //var purchaseOrderQuotation = pOes.OrderByDescending(i => i.Date).ToList();
             return View(purchaseOrderQuotation);
         }
         //public ActionResult SearchData(string custName, DateTime startDate, DateTime endDate)
@@ -187,10 +188,7 @@ namespace MYBUSINESS.Controllers
             }
 
             return PartialView("_SelectedPOPR", selectedPOes.OrderByDescending(i => i.Date).ToList());
-
             //return View("Some thing went wrong");
-
-
         }
         public ActionResult PerMonthPurchase(int productId)
         {
@@ -233,15 +231,12 @@ namespace MYBUSINESS.Controllers
 
 
             }
-
             pOes = lstSlectedPO.ToList().AsQueryable();
-
             //sOes.ForEachAsync(m => m.Id = Encryption.Encrypt(m.Id, "BZNS"));
             //var sOes = db.SOes.Where(s => s.SaleReturn == false);
             GetTotalBalance(ref pOes);
             foreach (PO itm in pOes)
             {
-
                 //itm.Id = Encryption.Encrypt(itm.Id, "BZNS");
                 itm.Id = string.Join("-", ASCIIEncoding.ASCII.GetBytes(Encryption.Encrypt(itm.Id, "BZNS")));
             }
@@ -479,7 +474,7 @@ namespace MYBUSINESS.Controllers
                     Supplier.Id = maxId;
                     Supplier.Balance = pO.Balance;
                     //Supplier.StoreId = parseId; //commented due to session issue
-                    Supplier.StoreId = 1;
+                    Supplier.StoreId = storeId;
                     db.Suppliers.Add(Supplier);
                     //db.SaveChanges();
                 }
@@ -511,8 +506,8 @@ namespace MYBUSINESS.Controllers
                 maxId1 += 1;
                 pO.POSerial = maxId1;
                 pO.Quotation = true;
+                pO.StoreId = storeId;
                 //pO.StoreId = parseId; //commented due to session issue
-                pO.StoreId = 1;
                 //pO.Date = DateTime.Now;
                 if (string.IsNullOrEmpty(Convert.ToString(pO.Date)))
                 {
@@ -521,9 +516,7 @@ namespace MYBUSINESS.Controllers
                 //pO.SaleReturn = false;
                 pO.Id = System.Guid.NewGuid().ToString().ToUpper();
                 pO.PurchaseOrderAmount = 0;
-
                 pO.PurchaseOrderQty = 0;
-
                 Employee emp = (Employee)Session["CurrentUser"];
                 pO.EmployeeId = emp.Id;
                 db.POes.Add(pO);
@@ -551,7 +544,6 @@ namespace MYBUSINESS.Controllers
                         pod.PerPack = 1;
                         if (pod.SaleType == false)//purchase
                         {
-
                             if (pod.IsPack == false)
                             {//piece
                                 pO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice);
@@ -559,14 +551,12 @@ namespace MYBUSINESS.Controllers
                                 decimal qty = (decimal)pod.Quantity;// / (decimal)product.PerPack;
                                 //storeProduct.Stock += qty;  //--due to qutation
                                 pO.PurchaseOrderQty += qty;//(int)sod.Quantity;
-
                             }
                             else
                             {//pack
 
                                 pO.PurchaseOrderAmount += (decimal)(pod.Quantity * pod.PurchasePrice * pod.PerPack);
                                 //storeProduct.Stock += (int)pod.Quantity * pod.PerPack;  //--due to qutation
-
                                 pO.PurchaseOrderQty += (int)pod.Quantity * pod.PerPack;
 
                             }
@@ -645,6 +635,12 @@ namespace MYBUSINESS.Controllers
             //PO pO = new PO();
             if (ModelState.IsValid)
             {
+                int? storeId = Session["StoreId"] as int?;
+                //var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
                 //var storeId = Session["StoreId"] as string;  //commented due to session issue
                 //if (storeId == null)
                 //{
@@ -661,8 +657,8 @@ namespace MYBUSINESS.Controllers
                     maxId += 1;
                     Supplier.Id = maxId;
                     Supplier.Balance = pO.Balance;
+                    Supplier.StoreId = storeId;
                     //Supplier.StoreId = parseId;  //commented due to session issue
-                    Supplier.StoreId = 1;
                     db.Suppliers.Add(Supplier);
                     //db.SaveChanges();
                 }
@@ -670,8 +666,8 @@ namespace MYBUSINESS.Controllers
                 {//its means old customer. old customer balance should be updated.
                     //Supplier.Id = (int)pO.SupplierId;
                     supp.Balance = pO.Balance;
+                    supp.StoreId = storeId;
                     //supp.StoreId = parseId;  //commented due to session issue
-                    supp.StoreId = 1;
                     db.Entry(supp).State = EntityState.Modified;
                     //db.SaveChanges();
 
@@ -694,8 +690,8 @@ namespace MYBUSINESS.Controllers
                 maxId1 += 1;
                 pO.POSerial = maxId1;
                 pO.Quotation = true;
+                pO.StoreId = storeId; 
                 //pO.StoreId = parseId; //commented due to session issue
-                pO.StoreId = 1;
                 //pO.Date = DateTime.Now;
                 if (string.IsNullOrEmpty(Convert.ToString(pO.Date)))
                 {
@@ -943,6 +939,12 @@ namespace MYBUSINESS.Controllers
             List<POD> newPODs = purchaseOrderViewModel1.PurchaseOrderDetail;
             if (ModelState.IsValid)
             {
+                int? storeId = Session["StoreId"] as int?;
+                //var storeId = Session["StoreId"] as string;
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
                 //var storeId = Session["StoreId"] as string; //commented due to session issue
                 //if (storeId == null)
                 //{
@@ -965,8 +967,8 @@ namespace MYBUSINESS.Controllers
                 PO.BankAccountId = newPO.BankAccountId;
                 PO.Date = newPO.Date;
                 PO.Quotation = true;
+                PO.StoreId = storeId;
                 //PO.StoreId = parseId; //commented due to session issue
-                PO.StoreId = 1;
                 //PO.POSerial = newPO.POSerial;//should be unchanged
 
                 ///////////////////////////////////////////
@@ -1011,6 +1013,7 @@ namespace MYBUSINESS.Controllers
 
 
                 List<POD> oldPODs = db.PODs.Where(x => x.POId == newPO.Id).ToList();
+                //List<POD> oldPODs = db.PODs.Where(x => x.POId == newPO.Id).ToList();
 
                 //handling old prodcts quantity. add old quantites back to the stock, then in next loop product quantity will be minus. this is simple and stateforward.
                 //due to quotation
@@ -1482,6 +1485,11 @@ namespace MYBUSINESS.Controllers
             List<POD> newPODs = purchaseOrderViewModel1.PurchaseOrderDetail;
             if (ModelState.IsValid)
             {
+                int? storeId = Session["StoreId"] as int?; //commented due to session issue
+                if (storeId == null)
+                {
+                    return RedirectToAction("StoreNotFound", "UserManagement");
+                }
                 //var storeId = Session["StoreId"] as string; //commented due to session issue
                 //if (storeId == null)
                 //{
@@ -1505,8 +1513,9 @@ namespace MYBUSINESS.Controllers
                 PO.BankAccountId = newPO.BankAccountId;
                 PO.Date = newPO.Date;
                 PO.Quotation = true;
+                PO.StoreId = storeId;
+                
                 //PO.StoreId = parseId; //commented due to session issue
-                PO.StoreId = 1;
                 //PO.POSerial = newPO.POSerial;//should be unchanged
 
                 ///////////////////////////////////////////
