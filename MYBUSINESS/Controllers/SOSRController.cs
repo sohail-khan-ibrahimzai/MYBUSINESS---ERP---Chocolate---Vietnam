@@ -1120,13 +1120,29 @@ namespace MYBUSINESS.Controllers
                     // Call the web service login function
                     // Call the web service login function synchronously
 
-                    var loginToWebService = LoginToWebService();
-                    dynamic jsonResponse = JsonConvert.DeserializeObject(loginToWebService.ContentType);
-                    string authToken = jsonResponse.token;
-
-                    if (loginToWebService == null)
+                    //var loginToWebService = LoginToWebService();
+                    var loginToWebService = await LoginToWebServiceAsync();
+                    if (loginToWebService == null || loginToWebService.Data == null)
+                    {
                         return Json(new { Success = false, Messsag = "Invalid Login attempt to web service,please use correct credentials" });
+                    }
+                    // Convert Data property to JSON string
+                    string dataString = JsonConvert.SerializeObject(loginToWebService.Data);
+                    // Deserialize the JSON string to get the token
+                    dynamic jsonResponse = JsonConvert.DeserializeObject(dataString);
+                    string authToken = jsonResponse?.Token;  // Make sure the key name matches exactly with the response
+
+                    //dynamic jsonResponse = JsonConvert.DeserializeObject(loginToWebService.ContentType);
+                    //string authToken = jsonResponse.token;
+
+                    //if (loginToWebService == null)
+                    //    return Json(new { Success = false, Messsag = "Invalid Login attempt to web service,please use correct credentials" });
+
                     var webServiceResponse = await AddWebServiceCustomerDetails(authToken, Customer, sO, sOD);
+                    if (webServiceResponse == null || !webServiceResponse.Success)
+                    {
+                        return Json(new { Success = false, Messsag = "Web service not responding" });
+                    }
                     var dataType = webServiceResponse.Data.GetType();
                     if (dataType == typeof(JObject))
                     {
@@ -1209,106 +1225,19 @@ namespace MYBUSINESS.Controllers
         {
             return PartialView("_StoreClosePopup1");
         }
-        public JsonResult LoginToWebService()
+        public async Task<JsonResult> LoginToWebServiceAsync()
         {
-            //try
-            //{
-            //    // Enforce TLS 1.2 or TLS 1.3
-            //    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
-
-            //    using (var client = new HttpClient())
-            //    {
-            //        // Define the login endpoint URL (replace with the actual API endpoint)
-            //        //string url = "https://hddt.minvoice.com.vn/api/login"; // Replace with the actual endpoint
-            //        string url = "https://0106026495-998.minvoice.pro/api/Account/Login"; // Replace with the actual endpoint
-
-            //        //        // Create the request body with the necessary parameters
-            //        //        //var requestBody = new
-            //        //        //{
-            //        //        //    taxCode = "0106026495-998",
-            //        //        //    username = "PHEVA",
-            //        //        //    password = "2BM@g0J%5sguJ@"
-            //        //        //};
-            //        var requestBody = new
-            //        {
-            //            username = "PHEVA",
-            //            password = "2BM@g0J%5sguJ@",
-            //            ma_dvcs = "VP"
-            //        };
-
-            //        // Convert the request body to JSON format
-            //        string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
-
-            //        // Set up the HttpClient and request headers
-            //        client.DefaultRequestHeaders.Accept.Clear();
-            //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            //        client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
-
-            //        // Send a POST request with the JSON request body
-            //        HttpResponseMessage response = client.PostAsync(url, new StringContent(jsonRequestBody, System.Text.Encoding.UTF8, "application/json")).Result;
-
-            //        // Check the response status code
-            //        if (response.IsSuccessStatusCode)
-            //        {
-            //            string responseBody = response.Content.ReadAsStringAsync().Result;
-
-            //            // Check if the response is in JSON format
-            //            if (response.Content.Headers.ContentType.MediaType == "application/json")
-            //            {
-            //                // Parse the response JSON to extract the token
-            //                dynamic jsonResponse = JsonConvert.DeserializeObject(responseBody);
-            //                string token = jsonResponse.token;
-
-            //                // Store the token (e.g., in session or other storage)
-            //                Session["AuthToken"] = token;
-
-            //                // Success message or subsequent requests
-            //                ViewBag.SuccessMessage = "Login successful!";
-            //                return View("Success");
-            //            }
-            //            else
-            //            {
-            //                // Handle HTML or unexpected response
-            //                ViewBag.ErrorMessage = $"Unexpected response format. Content-Type: {response.Content.Headers.ContentType.MediaType}. Response: {responseBody}";
-            //                return View("Error");
-            //            }
-            //        }
-            //        else
-            //        {
-            //            // Handle error responses
-            //            string errorContent = response.Content.ReadAsStringAsync().Result;
-            //            ViewBag.ErrorMessage = $"Failed to log in. Status code: {response.StatusCode}. Response: {errorContent}";
-            //            return View("Error");
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    // Log the exception or handle it as needed
-            //    System.Diagnostics.Debug.WriteLine("Exception occurred in LoginToWebService: " + ex.Message);
-            //    ViewBag.ErrorMessage = $"An error occurred: {ex.Message}";
-            //    return View("Error");
-            //}
-
             try
             {
-                Session["AuthToken"] = "";
                 // Enforce TLS 1.2 or TLS 1.3
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
 
                 using (var client = new HttpClient())
                 {
                     // Define the login endpoint URL (replace with the actual API endpoint)
-                    //string url = "https://hddt.minvoice.com.vn/api/login"; // Replace with the actual endpoint
                     string url = "https://0106026495-998.minvoice.pro/api/Account/Login"; // Replace with the actual endpoint
 
                     // Create the request body with the necessary parameters
-                    //var requestBody = new
-                    //{
-                    //    taxCode = "0106026495-998",
-                    //    username = "PHEVA",
-                    //    password = "2BM@g0J%5sguJ@"
-                    //};
                     var requestBody = new
                     {
                         username = "PHEVA",
@@ -1325,58 +1254,45 @@ namespace MYBUSINESS.Controllers
                     client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
 
                     // Send a POST request with the JSON request body to get the token
-                    HttpResponseMessage response = client.PostAsync(url, new StringContent(jsonRequestBody, System.Text.Encoding.UTF8, "application/json")).Result;
+                    HttpResponseMessage response = await client.PostAsync(url, new StringContent(jsonRequestBody, System.Text.Encoding.UTF8, "application/json"));
 
                     if (response.IsSuccessStatusCode)
                     {
                         // Read the response body as a string
-                        string responseBody = response.Content.ReadAsStringAsync().Result;
+                        string responseBody = await response.Content.ReadAsStringAsync();
 
                         // Check if the response is in JSON format
-                        if (response.Content.Headers.ContentType.MediaType == "application/json")
+                        if (response.Content.Headers.ContentType?.MediaType == "application/json")
                         {
                             // Parse the response JSON to extract the token
                             dynamic jsonResponse = JsonConvert.DeserializeObject(responseBody);
                             string token = jsonResponse.token;
-                            if (token != "" || token != null)
+
+                            if (!string.IsNullOrEmpty(token))
                             {
-                                ViewBag.SuccessMessage = "Request successful!";
-                                return Json("Success", responseBody);
+                                // Store the token (e.g., in session or other storage)
+                                Session["AuthToken"] = token;
+
+                                // Success message or subsequent requests
+                                return Json(new { Success = true, Token = token });
                             }
-                            // Store the token (e.g., in session or other storage)
-                            Session["AuthToken"] = token;
-
-                            // Use this token in subsequent requests
-                            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-                            // Example of making a subsequent API request
-                            //string anotherApiUrl = "https://hddt.minvoice.com.vn/api/anotherEndpoint";
-                            //HttpResponseMessage anotherResponse = client.GetAsync(anotherApiUrl).Result;
-
-                            //if (anotherResponse.IsSuccessStatusCode)
-                            //{
-                            //    // Process the response as needed
-                            //    string anotherResponseBody = anotherResponse.Content.ReadAsStringAsync().Result;
-                            //    ViewBag.SuccessMessage = "Request successful!";
-                            //    return View("Success", anotherResponseBody);
-                            //}
-                            //else
-                            //{
-                            //    ViewBag.ErrorMessage = "Failed to make the authenticated request.";
-                            //    return View("Error");
-                            //}
+                            else
+                            {
+                                // Handle case where token is null or empty
+                                return Json(new { Success = false, Message = "Token is null or empty" });
+                            }
                         }
                         else
                         {
                             // Log or handle non-JSON response
-                            ViewBag.ErrorMessage = "Unexpected response format: " + responseBody;
-                            return Json("Error");
+                            return Json(new { Success = false, Message = "Unexpected response format: " + responseBody });
                         }
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "Failed to log in to the external service.";
-                        return Json("Error");
+                        // Handle error responses
+                        string errorContent = await response.Content.ReadAsStringAsync();
+                        return Json(new { Success = false, Message = $"Failed to log in. Status code: {response.StatusCode}. Response: {errorContent}" });
                     }
                 }
             }
@@ -1384,11 +1300,189 @@ namespace MYBUSINESS.Controllers
             {
                 // Log the exception or handle it as needed
                 System.Diagnostics.Debug.WriteLine("Exception occurred in LoginToWebService: " + ex.Message);
-                ViewBag.ErrorMessage = $"An error occurred: {ex.Message}";
-                return Json("Error");
+                return Json(new { Success = false, Message = $"An error occurred: {ex.Message}" });
             }
-            return Json(new { Success = true, Token = Session["AuthToken"] });
         }
+        //public JsonResult LoginToWebService()
+        //{
+        //    //try
+        //    //{
+        //    //    // Enforce TLS 1.2 or TLS 1.3
+        //    //    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
+
+        //    //    using (var client = new HttpClient())
+        //    //    {
+        //    //        // Define the login endpoint URL (replace with the actual API endpoint)
+        //    //        //string url = "https://hddt.minvoice.com.vn/api/login"; // Replace with the actual endpoint
+        //    //        string url = "https://0106026495-998.minvoice.pro/api/Account/Login"; // Replace with the actual endpoint
+
+        //    //        //        // Create the request body with the necessary parameters
+        //    //        //        //var requestBody = new
+        //    //        //        //{
+        //    //        //        //    taxCode = "0106026495-998",
+        //    //        //        //    username = "PHEVA",
+        //    //        //        //    password = "2BM@g0J%5sguJ@"
+        //    //        //        //};
+        //    //        var requestBody = new
+        //    //        {
+        //    //            username = "PHEVA",
+        //    //            password = "2BM@g0J%5sguJ@",
+        //    //            ma_dvcs = "VP"
+        //    //        };
+
+        //    //        // Convert the request body to JSON format
+        //    //        string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
+
+        //    //        // Set up the HttpClient and request headers
+        //    //        client.DefaultRequestHeaders.Accept.Clear();
+        //    //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        //    //        client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
+
+        //    //        // Send a POST request with the JSON request body
+        //    //        HttpResponseMessage response = client.PostAsync(url, new StringContent(jsonRequestBody, System.Text.Encoding.UTF8, "application/json")).Result;
+
+        //    //        // Check the response status code
+        //    //        if (response.IsSuccessStatusCode)
+        //    //        {
+        //    //            string responseBody = response.Content.ReadAsStringAsync().Result;
+
+        //    //            // Check if the response is in JSON format
+        //    //            if (response.Content.Headers.ContentType.MediaType == "application/json")
+        //    //            {
+        //    //                // Parse the response JSON to extract the token
+        //    //                dynamic jsonResponse = JsonConvert.DeserializeObject(responseBody);
+        //    //                string token = jsonResponse.token;
+
+        //    //                // Store the token (e.g., in session or other storage)
+        //    //                Session["AuthToken"] = token;
+
+        //    //                // Success message or subsequent requests
+        //    //                ViewBag.SuccessMessage = "Login successful!";
+        //    //                return View("Success");
+        //    //            }
+        //    //            else
+        //    //            {
+        //    //                // Handle HTML or unexpected response
+        //    //                ViewBag.ErrorMessage = $"Unexpected response format. Content-Type: {response.Content.Headers.ContentType.MediaType}. Response: {responseBody}";
+        //    //                return View("Error");
+        //    //            }
+        //    //        }
+        //    //        else
+        //    //        {
+        //    //            // Handle error responses
+        //    //            string errorContent = response.Content.ReadAsStringAsync().Result;
+        //    //            ViewBag.ErrorMessage = $"Failed to log in. Status code: {response.StatusCode}. Response: {errorContent}";
+        //    //            return View("Error");
+        //    //        }
+        //    //    }
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    // Log the exception or handle it as needed
+        //    //    System.Diagnostics.Debug.WriteLine("Exception occurred in LoginToWebService: " + ex.Message);
+        //    //    ViewBag.ErrorMessage = $"An error occurred: {ex.Message}";
+        //    //    return View("Error");
+        //    //}
+
+        //    try
+        //    {
+        //        Session["AuthToken"] = "";
+        //        // Enforce TLS 1.2 or TLS 1.3
+        //        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
+
+        //        using (var client = new HttpClient())
+        //        {
+        //            // Define the login endpoint URL (replace with the actual API endpoint)
+        //            //string url = "https://hddt.minvoice.com.vn/api/login"; // Replace with the actual endpoint
+        //            string url = "https://0106026495-998.minvoice.pro/api/Account/Login"; // Replace with the actual endpoint
+
+        //            // Create the request body with the necessary parameters
+        //            //var requestBody = new
+        //            //{
+        //            //    taxCode = "0106026495-998",
+        //            //    username = "PHEVA",
+        //            //    password = "2BM@g0J%5sguJ@"
+        //            //};
+        //            var requestBody = new
+        //            {
+        //                username = "PHEVA",
+        //                password = "2BM@g0J%5sguJ@",
+        //                ma_dvcs = "VP"
+        //            };
+
+        //            // Convert the request body to JSON format
+        //            string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
+
+        //            // Set up the HttpClient and request headers
+        //            client.DefaultRequestHeaders.Accept.Clear();
+        //            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        //            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
+
+        //            // Send a POST request with the JSON request body to get the token
+        //            HttpResponseMessage response = client.PostAsync(url, new StringContent(jsonRequestBody, System.Text.Encoding.UTF8, "application/json")).Result;
+
+        //            if (response.IsSuccessStatusCode)
+        //            {
+        //                // Read the response body as a string
+        //                string responseBody = response.Content.ReadAsStringAsync().Result;
+
+        //                // Check if the response is in JSON format
+        //                if (response.Content.Headers.ContentType.MediaType == "application/json")
+        //                {
+        //                    // Parse the response JSON to extract the token
+        //                    dynamic jsonResponse = JsonConvert.DeserializeObject(responseBody);
+        //                    string token = jsonResponse.token;
+        //                    if (token != "" || token != null)
+        //                    {
+        //                        ViewBag.SuccessMessage = "Request successful!";
+        //                        return Json("Success", responseBody);
+        //                    }
+        //                    // Store the token (e.g., in session or other storage)
+        //                    Session["AuthToken"] = token;
+
+        //                    // Use this token in subsequent requests
+        //                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        //                    // Example of making a subsequent API request
+        //                    //string anotherApiUrl = "https://hddt.minvoice.com.vn/api/anotherEndpoint";
+        //                    //HttpResponseMessage anotherResponse = client.GetAsync(anotherApiUrl).Result;
+
+        //                    //if (anotherResponse.IsSuccessStatusCode)
+        //                    //{
+        //                    //    // Process the response as needed
+        //                    //    string anotherResponseBody = anotherResponse.Content.ReadAsStringAsync().Result;
+        //                    //    ViewBag.SuccessMessage = "Request successful!";
+        //                    //    return View("Success", anotherResponseBody);
+        //                    //}
+        //                    //else
+        //                    //{
+        //                    //    ViewBag.ErrorMessage = "Failed to make the authenticated request.";
+        //                    //    return View("Error");
+        //                    //}
+        //                }
+        //                else
+        //                {
+        //                    // Log or handle non-JSON response
+        //                    ViewBag.ErrorMessage = "Unexpected response format: " + responseBody;
+        //                    return Json("Error");
+        //                }
+        //            }
+        //            else
+        //            {
+        //                ViewBag.ErrorMessage = "Failed to log in to the external service.";
+        //                return Json("Error");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log the exception or handle it as needed
+        //        System.Diagnostics.Debug.WriteLine("Exception occurred in LoginToWebService: " + ex.Message);
+        //        ViewBag.ErrorMessage = $"An error occurred: {ex.Message}";
+        //        return Json("Error");
+        //    }
+        //    return Json(new { Success = true, Token = Session["AuthToken"] });
+        //}
         //public async Task<JsonResult> AddWebServiceCustomerDetails(string authToken, Customer cust, SO saleOrder, List<SOD> saleOrderDetails)
         public async Task<WebServiceResponse> AddWebServiceCustomerDetails(string authToken, Customer cust, SO saleOrder, List<SOD> saleOrderDetails)
         {
@@ -1485,7 +1579,8 @@ namespace MYBUSINESS.Controllers
                         inv_buyerLegalName = cust.Name ?? "Unknown Buyer",
                         inv_buyerTaxCode = saleOrder.SOSerial.ToString(),//"0401485182",//cust.TaxCode ?? "0401485182",
                         inv_buyerAddressLine = cust.Address ?? "Unknown Address",
-                        inv_buyerEmail = cust.Email ?? "unknown@example.com",
+                        //inv_buyerEmail = cust.Email ?? "unknown@example.com",
+                        inv_buyerEmail = cust.Email ?? "",
                         inv_paymentMethodName = saleOrder.PaymentMethod ?? "TM/CK",
                         inv_discountAmount = saleOrder.Discount ?? 0,
                         inv_TotalAmountWithoutVat = saleOrder.BillAmount,//saleOrder.TotalAmountWithoutVat ?? 0,
@@ -2156,16 +2251,30 @@ namespace MYBUSINESS.Controllers
         //new ReportParameter("POSName",  "N/A"),   // Pass POS Name
         //new ReportParameter("CustomerVatNumber", "N/A")   // Pass POS Name 
         new ReportParameter("SaleOrderID", id),
-        new ReportParameter("CustomerName", _customerName ?? "N/A"),  //// Pass Customer Name
-        new ReportParameter("CustomerEmail", _customerEmail ?? "N/A"), //// Pass Customer Email
-        new ReportParameter("CustomerAddress", _customerAddress ?? "N/A"), //// Pass Customer Address
-        new ReportParameter("POSName", _customerPosName ?? "N/A"),   // Pass POS Name
-        new ReportParameter("CustomerVatNumber", _customerVatNumber ?? "N/A"),  // Pass POS Name
+        new ReportParameter("CustomerName", _customerName ?? "-"),  //// Pass Customer Name
+        //new ReportParameter("CustomerEmail", _customerEmail ?? "N/A"), //// Pass Customer Email
+        new ReportParameter("CustomerEmail", _customerEmail ?? "-"), //// Pass Customer Email
+        new ReportParameter("CustomerAddress", _customerAddress ?? "-"), //// Pass Customer Address
+        new ReportParameter("POSName", _customerPosName ?? "-"),   // Pass POS Name
+        new ReportParameter("CustomerVatNumber", _customerVatNumber ?? "-"),  // Pass POS Name
 
-        new ReportParameter("InvoiceSeries", _invoiceSeries ?? "N/A"),  // Pass POS Name
-        new ReportParameter("InvoiceNumber", _invoiceNumber ?? "N/A"),  // Pass POS Name
-        new ReportParameter("Macqt", _macqt ?? "N/A"),  // Pass POS Name
-        new ReportParameter("Sobaomat", _sobmaomat ?? "N/A"),  // Pass POS Name
+        new ReportParameter("InvoiceSeries", _invoiceSeries ?? "-"),  // Pass POS Name
+        new ReportParameter("InvoiceNumber", _invoiceNumber ?? "-"),  // Pass POS Name
+        new ReportParameter("Macqt", _macqt ?? "-"),  // Pass POS Name
+        new ReportParameter("Sobaomat", _sobmaomat ?? "-"),  // Pass POS Name
+       
+        //new ReportParameter("SaleOrderID", id),
+        //new ReportParameter("CustomerName", _customerName ?? "N/A"),  //// Pass Customer Name
+        ////new ReportParameter("CustomerEmail", _customerEmail ?? "N/A"), //// Pass Customer Email
+        //new ReportParameter("CustomerEmail", _customerEmail ?? "-"), //// Pass Customer Email
+        //new ReportParameter("CustomerAddress", _customerAddress ?? "N/A"), //// Pass Customer Address
+        //new ReportParameter("POSName", _customerPosName ?? "N/A"),   // Pass POS Name
+        //new ReportParameter("CustomerVatNumber", _customerVatNumber ?? "N/A"),  // Pass POS Name
+
+        //new ReportParameter("InvoiceSeries", _invoiceSeries ?? "N/A"),  // Pass POS Name
+        //new ReportParameter("InvoiceNumber", _invoiceNumber ?? "N/A"),  // Pass POS Name
+        //new ReportParameter("Macqt", _macqt ?? "N/A"),  // Pass POS Name
+        //new ReportParameter("Sobaomat", _sobmaomat ?? "N/A"),  // Pass POS Name
             });
             viewer.LocalReport.Refresh();
             //byte[] bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out extension, out streamIds, out warnings);
@@ -2593,7 +2702,8 @@ namespace MYBUSINESS.Controllers
                 // Log entry to the method
                 System.Diagnostics.Debug.WriteLine("USRLWB action method hit.");
 
-                var loginToWebService = LoginToWebService();  // Make this asynchronous
+                //var loginToWebService = LoginToWebService();  // Make this asynchronous
+                var loginToWebService = await LoginToWebServiceAsync();  // Make this asynchronous
 
                 //    if (loginToWebService == null)
                 //        return new ContentResult { Content = JsonConvert.SerializeObject(new { Success = false, Message = "Invalid login attempt to web service, please use correct credentials" }), ContentType = "application/json" };
@@ -2613,18 +2723,46 @@ namespace MYBUSINESS.Controllers
 
                 //    return new ContentResult { Content = JsonConvert.SerializeObject(new { Success = true, Response = getServiceCustomerDetails }), ContentType = "application/json" };
                 //}
-                if (loginToWebService == null || string.IsNullOrEmpty(loginToWebService.ContentType))
+                //if (loginToWebService == null || string.IsNullOrEmpty(loginToWebService.ContentType))
+                //{
+                //    return new ContentResult
+                //    {
+                //        Content = JsonConvert.SerializeObject(new { Success = false, Message = "Invalid login attempt to web service, please use correct credentials" }),
+                //        ContentType = "application/json"
+                //    };
+                //}
+
+                if (loginToWebService == null || loginToWebService.Data == null)
                 {
                     return new ContentResult
                     {
-                        Content = JsonConvert.SerializeObject(new { Success = false, Message = "Invalid login attempt to web service, please use correct credentials" }),
+                        Content = JsonConvert.SerializeObject(new
+                        {
+                            Success = false,
+                            Message = "Invalid login attempt to web service, please use correct credentials"
+                        }),
                         ContentType = "application/json"
                     };
                 }
 
-                // Deserialize the content of the login response
-                dynamic jsonResponse = JsonConvert.DeserializeObject(loginToWebService.ContentType);
-                string authToken = jsonResponse?.token;
+                // Convert Data property to JSON string
+                string dataString = JsonConvert.SerializeObject(loginToWebService.Data);
+
+                // Deserialize the JSON string to get the token
+                dynamic jsonResponse = JsonConvert.DeserializeObject(dataString);
+                string authToken = jsonResponse?.Token;  // Make sure the key name matches exactly with the response
+
+                //dynamic jsonResponse = JsonConvert.DeserializeObject(loginToWebService.ContentType);
+                //string authToken = jsonResponse?.token;
+
+                ////if (string.IsNullOrEmpty(authToken))
+                ////{
+                ////    return new ContentResult
+                ////    {
+                ////        Content = JsonConvert.SerializeObject(new { Success = false, Message = "Authentication token is missing" }),
+                ////        ContentType = "application/json"
+                ////    };
+                ////}
 
                 if (string.IsNullOrEmpty(authToken))
                 {

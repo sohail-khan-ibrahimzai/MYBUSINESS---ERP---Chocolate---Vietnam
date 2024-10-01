@@ -645,8 +645,10 @@ function formatNumberWithDots(number) {
 //    updatePayButton();
 //}
 function validateQuantityInput(event) {
+    debugger;
     // Allow only numeric values
     const value = event.target.value;
+
     // Remove non-numeric characters
     if (!/^\d*$/.test(value)) {
         event.target.value = value.replace(/\D/g, '');
@@ -658,8 +660,11 @@ function validateQuantityInput(event) {
     }
     // Ensure the value is not equal to 0 or empty
     if (event.target.value === '0' || event.target.value === '') {
-        event.target.value = '1';  // Default to 1 if 0 or empty is entered
+        event.target.value = '';  // Default to 1 if 0 or empty is entered
     }
+    //if (event.target.value === '0' || event.target.value === '') {
+    //    event.target.value = '1';  // Default to 1 if 0 or empty is entered
+    //}
 }
 function addProduct(encodedProductJson) {
     //debugger;
@@ -670,9 +675,14 @@ function addProduct(encodedProductJson) {
         $('#productQuantity').focus();
     });
     $('#validateQuantity').off('click').on('click', function (e) {
+        debugger;
         var quantityFromModal = parseInt($('#productQuantity').val(), 10) || 0; // Ensure it's a number and default to 0 if invalid
+        if (quantityFromModal == 0) {
+            return;
+        }
         $('#quantityAddpopup').modal('hide'); // Hide the modal
-        $('#productQuantity').val(1);
+        //$('#productQuantity').val(1);
+        $('#productQuantity').val('');
         // After getting the quantity, call the function to add the product
         handleProductAddition(encodedProductJson, quantityFromModal);
     });
@@ -2042,7 +2052,8 @@ $(document).ready(function () {
         $('#validatepyment').prop('disabled', true);
     });
     $('.cancelQuantitButton').on('click', function (e) {
-        $('#productQuantity').val('1');
+        //$('#productQuantity').val('1');
+        $('#productQuantity').val('');
     });
     $('#payallbycard').click(function () {
         //debugger;
