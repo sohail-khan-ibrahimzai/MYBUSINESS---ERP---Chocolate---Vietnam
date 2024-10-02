@@ -86,7 +86,7 @@ namespace MYBUSINESS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description")] Store store)
+        public ActionResult Create([Bind(Include = "Id,Name,Description,Address,PhoneNumber")] Store store)
         {
             if (ModelState.IsValid)
             {
@@ -198,7 +198,7 @@ namespace MYBUSINESS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Address,Description")] Store store)
+        public ActionResult Edit([Bind(Include = "Id,Name,Address,Description,Address,PhoneNumber")] Store store)
         {
             if (ModelState.IsValid)
             {

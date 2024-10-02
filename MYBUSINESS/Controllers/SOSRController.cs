@@ -859,6 +859,8 @@ namespace MYBUSINESS.Controllers
             TempData["_CustomerEmail"] = TempData["CustomerEmail"] as string;
             TempData["_CustomerAddress"] = TempData["CustomerAddress"] as string;
             TempData["_POSName"] = TempData["POSName"] as string;
+            TempData["_POSAddress"] = TempData["POSAddress"] as string;
+            TempData["_POSPhoneNumber"] = TempData["POSPhoneNumber"] as string;
             TempData["_CustomerVatNumber"] = TempData["CustomerVatNumber"] as string;
             TempData["_InvoiceSeries"] = TempData["InvoiceSeries"] as string;
             TempData["_InvoiceNumber"] = TempData["InvoiceNumber"] as string;
@@ -1183,6 +1185,8 @@ namespace MYBUSINESS.Controllers
                     TempData["CustomerEmail"] = Customer.Email;
                     TempData["CustomerAddress"] = Customer.Address;
                     TempData["POSName"] = getStoreName.Name;
+                    TempData["POSAddress"] = getStoreName.Address;
+                    TempData["POSPhoneNumber"] = getStoreName.PhoneNumber;
                     TempData["CustomerVatNumber"] = Customer.Vat;
                     string aa = TempData["JsonResponseWebservicess"] as string;
 
@@ -2196,6 +2200,8 @@ namespace MYBUSINESS.Controllers
             string _customerEmail = TempData["_CustomerEmail"] as string;
             string _customerAddress = TempData["_CustomerAddress"] as string;
             string _customerPosName = TempData["_POSName"] as string;
+            string _customerPosAddress = TempData["_POSAddress"] as string;
+            string _customerPosPhoneNumber = TempData["_POSPhoneNumber"] as string;
             string _customerVatNumber = TempData["_CustomerVatNumber"] as string;
 
             string _invoiceSeries = TempData["_InvoiceSeries"]  as string;
@@ -2256,6 +2262,8 @@ namespace MYBUSINESS.Controllers
         new ReportParameter("CustomerEmail", _customerEmail ?? "-"), //// Pass Customer Email
         new ReportParameter("CustomerAddress", _customerAddress ?? "-"), //// Pass Customer Address
         new ReportParameter("POSName", _customerPosName ?? "-"),   // Pass POS Name
+        new ReportParameter("POSAddress", _customerPosAddress ?? "-"),   // Pass POS Name
+        new ReportParameter("POSPhoneNumber", _customerPosPhoneNumber ?? "-"),   // Pass POS Name
         new ReportParameter("CustomerVatNumber", _customerVatNumber ?? "-"),  // Pass POS Name
 
         new ReportParameter("InvoiceSeries", _invoiceSeries ?? "-"),  // Pass POS Name

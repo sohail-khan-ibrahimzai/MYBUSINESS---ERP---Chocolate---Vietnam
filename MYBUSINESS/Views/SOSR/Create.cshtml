@@ -215,6 +215,9 @@
         z-index: 1000;
         padding: 10px;
     }
+    .highlight {
+        background-color: yellow;
+    }
 </style>
 @*<h2>Create</h2>*@
 
@@ -288,34 +291,34 @@
 
             @* input type for Barcode *@
             @*<div>
-            <input type="text" id="barcodeInput" placeholder="Scan or type the barcode here" />
-        </div>*@
+                    <input type="text" id="barcodeInput" placeholder="Scan or type the barcode here" />
+                </div>*@
 
 
             <div class="row">
                 <div class="col-md-6 scrollable-div">
                     @*@foreach (var product in Model.ProductList)
-                {
-                    var settings = new Newtonsoft.Json.JsonSerializerSettings
-                    {
-                        ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                    };
-                    var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
-                    var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
+                        {
+                            var settings = new Newtonsoft.Json.JsonSerializerSettings
+                            {
+                                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                            };
+                            var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
+                            var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
 
-                    string formattedPrice = FormatNumberWithDots(product.SalePrice);
-                    <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
-                        <div class="small-box bg-info text-black p-3 scrollable-box">
-                            <div class="inner">
-                                <h4 class="product-name">@product.Name</h4>
-                                <p class="product-name">₫ @formattedPrice</p>
+                            string formattedPrice = FormatNumberWithDots(product.SalePrice);
+                            <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
+                                <div class="small-box bg-info text-black p-3 scrollable-box">
+                                    <div class="inner">
+                                        <h4 class="product-name">@product.Name</h4>
+                                        <p class="product-name">₫ @formattedPrice</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-bag"></i>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="ion ion-bag"></i>
-                            </div>
-                        </div>
-                    </div>
-                }*@
+                        }*@
                     @if (groupedProductLists != null)
                     {
                         foreach (var group in groupedProductLists)
@@ -357,39 +360,39 @@
 
                     @*Old working code to bind Products*@
                     @*@foreach (var product in Model.ProductList)
-                {
-                    var settings = new Newtonsoft.Json.JsonSerializerSettings
-                    {
-                        ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                    };
-                    var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
-                    var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
-                    var productLists = @Html.Raw(encodedProductJson);
-                    // Retrieve the color for the product's category directly
-                    var categoryColor = categoryColors.ContainsKey(product.Category)
-                            ? categoryColors[product.Category]
-                            : "#ffffff"; // Default color if the category is not found
+                        {
+                            var settings = new Newtonsoft.Json.JsonSerializerSettings
+                            {
+                                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                            };
+                            var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
+                            var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
+                            var productLists = @Html.Raw(encodedProductJson);
+                            // Retrieve the color for the product's category directly
+                            var categoryColor = categoryColors.ContainsKey(product.Category)
+                                    ? categoryColors[product.Category]
+                                    : "#ffffff"; // Default color if the category is not found
 
-                    string formattedPrice = FormatNumberWithDots(product.SalePrice);
-                    <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
-                        <div class="small-box" style="background-color: @categoryColor; color: black; padding: 15px;">
-                            <div class="inner">
-                                <h4 class="product-name">@product.Name</h4>
-                                <p class="product-name">₫ @formattedPrice</p>
+                            string formattedPrice = FormatNumberWithDots(product.SalePrice);
+                            <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
+                                <div class="small-box" style="background-color: @categoryColor; color: black; padding: 15px;">
+                                    <div class="inner">
+                                        <h4 class="product-name">@product.Name</h4>
+                                        <p class="product-name">₫ @formattedPrice</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-bag"></i>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="ion ion-bag"></i>
-                            </div>
-                        </div>
-                    </div>
-                }*@
+                        }*@
                 </div>
 
                 <div class="col-md-6">
                     <!-- Hidden input field for SuggestedNewProductId -->
                     <input type="hidden" id="suggestedNewProductId" value="@ViewBag.SuggestedNewProductId" />
                     @*<div style="display:flex; margin-top: -31px;">*@
-                    <div style="display: flex; margin-top: -26px;">
+                    <div style="display: flex; margin-top: 0px;">
                         <label style="width: 127px;">Bill Number:</label>
                         @*<label name="SaleOrder.Id">@ViewBag.SuggestedNewProductIds</label>*@
                         <input type="text" name="SaleOrder.Id" class="form-control label-like-input" value="@ViewBag.SuggestedNewProductIds" />
@@ -426,27 +429,27 @@
                 </div>
             </div>
             @*<div class="table-title">
-            <div class="row">
-                <div class="col-sm-2">
-                    <button type="button" id="addNewRow" class="btn btn-primary add-new" style="background-color: #2bbdb9;"><i class="fa fa-plus"></i> New Row</button>
-                </div>
-            </div>
-        </div>*@
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <button type="button" id="addNewRow" class="btn btn-primary add-new" style="background-color: #2bbdb9;"><i class="fa fa-plus"></i> New Row</button>
+                        </div>
+                    </div>
+                </div>*@
 
             <div style="display:inline" id="dvCalculations">
                 <div class="row" style="margin-top:30px;">
                     <div class="col-md-6">
                         @Html.DropDownList("SaleOrder.BankAccountId", (IEnumerable<SelectListItem>)ViewBag.BankAccounts, null, new { @class = "form-control", @style = "display:none" })
                         @*<select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method">
-                        <option value="Cash" selected>Cash</option>
-                        <option value="Online">Online</option>
-                        <option value="Cheque">Cheque</option>
-                        <option value="Other">Other</option>
-                    </select>*@
+                                <option value="Cash" selected>Cash</option>
+                                <option value="Online">Online</option>
+                                <option value="Cheque">Cheque</option>
+                                <option value="Other">Other</option>
+                            </select>*@
                         @*<input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
-                    <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
-                    <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea>
-                    <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea>*@
+                            <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
+                            <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea>
+                            <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea>*@
 
                         <select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method" style="display:none;">
                             <option value="Cash" selected>Cash</option>
@@ -470,9 +473,9 @@
                                     <td><input type="text" readonly class="form-control classBorder0" name="SaleOrder.BillAmount" id="ItemsTotal" value="0" tabindex="-1"></td>
                                 </tr>
                                 @*<tr>
-                                <td><input type="text" readonly class="form-control classBorder0" name="ReturnTotal" id="ReturnTotal" value="Return Total" tabindex="-1"></td>
-                                <td><input type="text" readonly class="form-control classBorder0" name="ReturnItemsTotal" id="ReturnItemsTotal" value="0" tabindex="-1"></td>
-                            </tr>*@
+                                        <td><input type="text" readonly class="form-control classBorder0" name="ReturnTotal" id="ReturnTotal" value="Return Total" tabindex="-1"></td>
+                                        <td><input type="text" readonly class="form-control classBorder0" name="ReturnItemsTotal" id="ReturnItemsTotal" value="0" tabindex="-1"></td>
+                                    </tr>*@
                                 <tr style="display:none;">
                                     <td><input type="text" readonly class="form-control classBorder0" name="dc3" id="dc3" value="Order Discount" tabindex="-1"></td>
                                     <td><input type="text" autocomplete="off" class="form-control" name="SaleOrder.Discount" id="discount" value="0"></td>
@@ -572,16 +575,25 @@
                                             <div class="col-md-3">
                                                 <h4 class="card-title">VND(₫)</h4>
                                                 <div id="inputFields">
-                                                    <input type="text" class="form-control styled-input" value="1000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="2000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="2000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="5000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="10 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="20 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="50 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="100 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="200 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input" value="500 000 ₫" readonly><br />
+                                                    <button type="button" class="form-control styled-input quickAmountAdd" value="1000" readonly>1000 ₫</button><br />
+                                                    <button type="button" class="form-control styled-input quickAmountAdd" value="2000" readonly>2000 ₫</button><br />
+                                                    <button type="button" class="form-control styled-input quickAmountAdd" value="3000" readonly>4000 ₫</button><br />
+                                                    <button type="button" class="form-control styled-input quickAmountAdd" value="5000" readonly>5000 ₫</button><br />
+                                                    <button type="button" class="form-control styled-input quickAmountAdd" value="10000" readonly>10 000 ₫</button><br />
+                                                    <button type="button" class="form-control styled-input quickAmountAdd" value="20000" readonly>20 000 ₫</button><br />
+                                                    <button type="button" class="form-control styled-input quickAmountAdd" value="50000" readonly>50 000 ₫</button><br />
+                                                    <button type="button" class="form-control styled-input quickAmountAdd" value="100000" readonly>100 000 ₫</button><br />
+                                                    <button type="button" class="form-control styled-input quickAmountAdd" value="200000" readonly>200 000 ₫</button><br />
+                                                    <button type="button" class="form-control styled-input quickAmountAdd" value="500000" readonly>500 000 ₫</button><br />
+                                                    @*<input type="text" class="form-control styled-input quickAmountAdd" value="2000 ₫" readonly><br />
+                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="3000 ₫" readonly><br />
+                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="5000 ₫" readonly><br />
+                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="10 000 ₫" readonly><br />
+                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="20 000 ₫" readonly><br />
+                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="50 000 ₫" readonly><br />
+                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="100 000 ₫" readonly><br />
+                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="200 000 ₫" readonly><br />
+                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="500 000 ₫" readonly><br />*@
                                                 </div>
                                             </div>
                                             <div class="col-md-5">
@@ -599,31 +611,32 @@
                                                 <form>
                                                     <div class="form-group">
                                                         <label for="inputField">Card VND(₫)</label>
-                                                        <input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaid" id="cardvnd" value="0">
+                                                        <input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaid" id="cardvnd" value="">
+                                                        @*<input type="text" autocomplete="off" class="form-control" placeholder="Card Vnd" name="SaleOrder.BillPaid" id="cardvnd" value="0">*@
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label for="inputField">Cash VND(₫)</label>
-                                                        <input type="text" class="form-control" id="cashvnd" placeholder="Cash Vnd">
+                                                        <input type="text" class="form-control" id="cashvnd" value="">
                                                     </div>
-                                                    <div class="form-group">
+                                                    <div class="form-group hiddenCurrencyInputs" style="display:none;">
                                                         <label for="inputField">Cash USD($)</label>
-                                                        <input type="text" autocomplete="off" class="form-control" name="cashUsd" id="cashUsd" value="0">
+                                                        <input type="text" autocomplete="off" class="form-control" name="cashUsd" id="cashUsd"  value="">
                                                         <b><span id="totalDollarsToVnd"></span>(₫)</b>
                                                     </div>
 
-                                                    <div class="form-group">
+                                                    <div class="form-group hiddenCurrencyInputs" style="display:none;">
                                                         <label for="inputField">Cash JPY(¥)</label>
-                                                        <input type="text" class="form-control" name="cashJpy" id="cashJpy" placeholder="Cash Vnd" value="0">
+                                                        <input type="text" class="form-control" name="cashJpy" id="cashJpy" value="">
                                                         <b><span id="totalYensToVnd"></span>(₫)</b>
                                                     </div>
 
-                                                    <div class="form-group hiddenCurrencyInputs" style="display:none;">
+                                                    <div class="form-group">
                                                         <label for="inputField">Change (USD)</label>
                                                         <input type="text" class="form-control" id="changeUsd" value="" placeholder="Change USD">
                                                     </div>
 
-                                                    <div class="form-group hiddenCurrencyInputs" style="display:none;">
+                                                    <div class="form-group">
                                                         <label for="inputField">Change (JPY)</label>
                                                         <input type="text" class="form-control" id="changejpy" value="" placeholder="Change JPY">
                                                     </div>
@@ -649,13 +662,13 @@
                                                 <div class="calculator">
                                                     <div class="row">
                                                         <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(7)">7</button>
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(1)">1</button>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(8)">8</button>
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(2)">2</button>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(9)">9</button>
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(3)">3</button>
                                                         </div>
                                                     </div>
                                                     <br />
@@ -675,14 +688,15 @@
                                                     <br />
                                                     <div class="row">
                                                         <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(1)">1</button>
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(7)">7</button>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(2)">2</button>
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(8)">8</button>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(3)">3</button>
+                                                            <button class="btn btn-secondary btn-block" type="button" onclick="appendNumber(9)">9</button>
                                                         </div>
+
                                                     </div>
                                                     <br />
                                                     <div class="row">
@@ -874,14 +888,14 @@
                                                                class="form-control"
                                                                name="productQuantity"
                                                                id="productQuantity"
-                                                               value=""
+                                                               value="1"
                                                                @*value="1"*@
                                                                placeholder="Type quantity"
                                                                data-toggle="tooltip"
                                                                data-placement="top"
                                                                title="Type quantity"
                                                                maxlength="10"
-                                                               oninput="validateQuantityInput(event)" />
+                                                               oninput="validateQuantityInput(event)"/>
                                                         @*<input type="number" autocomplete="off" class="form-control" name="productQuantity" id="productQuantity" value="1" placeholder="Type quantity" data-toggle="tooltip" data-placement="top" title="Type quantity" maxlength="10">*@
                                                     </div>
                                                 </form>
@@ -893,39 +907,37 @@
                                                     <div class="calculator">
                                                         <div class="row">
                                                             <div class="col-md-4">
-                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(3)">3</button>
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(1)">1</button>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(2)">2</button>
                                                             </div>
-
                                                             <div class="col-md-4">
-                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(1)">1</button>
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(3)">3</button>
                                                             </div>
                                                         </div>
                                                         <br />
                                                         <div class="row">
                                                             <div class="col-md-4">
-                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(6)">6</button>
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(4)">4</button>
                                                             </div>
-
                                                             <div class="col-md-4">
                                                                 <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(5)">5</button>
                                                             </div>
                                                             <div class="col-md-4">
-                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(4)">4</button>
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(6)">6</button>
                                                             </div>
                                                         </div>
                                                         <br />
                                                         <div class="row">
                                                             <div class="col-md-4">
-                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(9)">9</button>
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(7)">7</button>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(8)">8</button>
                                                             </div>
                                                             <div class="col-md-4">
-                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(7)">7</button>
+                                                                <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(9)">9</button>
                                                             </div>
                                                         </div>
                                                         <br />
@@ -990,7 +1002,8 @@
         @:customers.push(["@d.Id","@d.CompanyName","@d.Vat"]);
     }
 
-    OnTypeCustomerName('#customer');
+    //OnTypeCustomerName('#customer');
+    OnTypeCustomerName('#vndCustomer');
     //OpenDialogue('#name0');
         var getPrevBalanceUrl = '@Url.Action("GetPreviousBalance", "SOSR")';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     //OpenDialogue('#name0');
 
@@ -1067,7 +1080,7 @@
      var product = productList.find(p => p.BarCode === barcode);
      var encodedProductJson = JSON.stringify(product);
      if (product) {
-         handleProductAddition(encodedProductJson, 1);
+         handleProductAddition(encodedProductJson, 1,false);
      } else {
          alert('Product not found');
      }

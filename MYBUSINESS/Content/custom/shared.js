@@ -13,6 +13,9 @@ var availableCurrenciesCloseStore = [];
 
 $(document).ready(function () {
     getAllAvailableCurrenciesCloseStore();
+    $('#menuToggle').on('click', function () {
+        console.log("Menu Toggle Clicked");
+    });
 });
 
 

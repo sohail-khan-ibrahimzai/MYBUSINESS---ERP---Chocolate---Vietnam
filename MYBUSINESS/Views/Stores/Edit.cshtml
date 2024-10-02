@@ -44,13 +44,24 @@
                                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
 
                                 </div>
+                                <div class="form-group">
+                                    <label>Store Address</label>
+                                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+
+                                </div>
                                 @*<div class="form-group">
-                                    @Html.LabelFor(model => model.Balance, htmlAttributes: new { @class = "control-label" }) (Customer has to pay)
+                                        @Html.LabelFor(model => model.Balance, htmlAttributes: new { @class = "control-label" }) (Customer has to pay)
 
-                                    @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })
+                                        @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })
 
-                                </div>*@
+                                    </div>*@
 
                             </div>
                             <div class="box-footer">
@@ -65,6 +76,6 @@
         </div>
     </section>
 </div>
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

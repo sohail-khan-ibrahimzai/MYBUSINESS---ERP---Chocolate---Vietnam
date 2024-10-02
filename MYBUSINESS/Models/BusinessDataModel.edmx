@@ -32,8 +32,14 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Symbol" Type="nvarchar" MaxLength="50" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
           <Property Name="ExchangeRate" Type="decimal" Precision="18" Scale="2" />
           <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="UpdatedAt" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedBy" Type="int" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -49,9 +55,11 @@
           <Property Name="bizId" Type="varchar" MaxLength="50" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
           <Property Name="StoreId" Type="int" />
-          <Property Name="Vat" Type="nvarchar" MaxLength="200" />
-          <Property Name="Email" Type="nvarchar" MaxLength="200" />
-          <Property Name="CompanyName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Vat" Type="nvarchar" MaxLength="500" />
+          <Property Name="Email" Type="nvarchar" MaxLength="500" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="500" />
+          <Property Name="CompanyAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="CustomerCode" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="DailyBalanceVnd">
           <Key>
@@ -208,6 +216,10 @@
           <Property Name="Email" Type="nvarchar" MaxLength="500" />
           <Property Name="Website" Type="nvarchar" MaxLength="500" />
           <Property Name="Tagline" Type="nvarchar" MaxLength="500" />
+          <Property Name="VatNumber" Type="nvarchar" MaxLength="500" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="500" />
+          <Property Name="CompanyAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="CompanyTaxNumber" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -451,6 +463,8 @@
           <Property Name="Quotation" Type="bit" />
           <Property Name="StoreId" Type="int" />
           <Property Name="BillPaidByCash" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="VatNumber" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="SOD">
           <Key>
@@ -480,6 +494,8 @@
           <Property Name="DateCreated" Type="datetime" />
           <Property Name="DateModified" Type="datetime" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="200" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="StoreProduct">
           <Key>
@@ -1701,6 +1717,12 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ExchangeRate" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Symbol" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedBy" Type="Int32" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -1716,13 +1738,15 @@
           <Property Name="bizId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="StoreId" Type="Int32" />
-          <Property Name="Vat" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="CompanyName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Vat" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="BusinessInfo" Relationship="Models.FK_Customer_Business" FromRole="Customer" ToRole="BusinessInfo" />
           <NavigationProperty Name="Rents" Relationship="Models.FK_Rent_Customer" FromRole="Customer" ToRole="Rent" />
           <NavigationProperty Name="Services" Relationship="Models.FK_Service_Customer" FromRole="Customer" ToRole="Service" />
           <NavigationProperty Name="SOes" Relationship="Models.FK_SO_Customer" FromRole="Customer" ToRole="SO" />
+          <Property Name="CompanyAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerCode" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DailyBalanceVnd">
           <Key>
@@ -1901,6 +1925,10 @@
           <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Website" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Tagline" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="VatNumber" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyTaxNumber" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -2183,6 +2211,8 @@
           <NavigationProperty Name="Employee" Relationship="Models.FK_SO_Employee" FromRole="SO" ToRole="Employee" />
           <NavigationProperty Name="Payments" Relationship="Models.FK_Payment_SO" FromRole="SO" ToRole="Payment" />
           <NavigationProperty Name="SODs" Relationship="Models.FK_SOD_SO" FromRole="SO" ToRole="SOD" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="VatNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SOD">
           <Key>
@@ -2215,6 +2245,8 @@
           <Property Name="DateModified" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="StoreProducts" Relationship="Models.FK_StoreProduct_Store" FromRole="Store" ToRole="StoreProduct" />
+          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="StoreProduct">
           <Key>
@@ -2989,6 +3021,12 @@
           <EntitySetMapping Name="Currencies">
             <EntityTypeMapping TypeName="Models.Currency">
               <MappingFragment StoreEntitySet="Currency">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -2999,6 +3037,8 @@
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="Models.Customer">
               <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="CompanyAddress" ColumnName="CompanyAddress" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Vat" ColumnName="Vat" />
@@ -3170,6 +3210,10 @@
           <EntitySetMapping Name="MyBusinessInfoes">
             <EntityTypeMapping TypeName="Models.MyBusinessInfo">
               <MappingFragment StoreEntitySet="MyBusinessInfo">
+                <ScalarProperty Name="CompanyTaxNumber" ColumnName="CompanyTaxNumber" />
+                <ScalarProperty Name="CompanyAddress" ColumnName="CompanyAddress" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="VatNumber" ColumnName="VatNumber" />
                 <ScalarProperty Name="Tagline" ColumnName="Tagline" />
                 <ScalarProperty Name="Website" ColumnName="Website" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -3410,6 +3454,8 @@
           <EntitySetMapping Name="SOes">
             <EntityTypeMapping TypeName="Models.SO">
               <MappingFragment StoreEntitySet="SO">
+                <ScalarProperty Name="VatNumber" ColumnName="VatNumber" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="BillPaidByCash" ColumnName="BillPaidByCash" />
                 <ScalarProperty Name="StoreId" ColumnName="StoreId" />
                 <ScalarProperty Name="Quotation" ColumnName="Quotation" />
@@ -3457,6 +3503,8 @@
           <EntitySetMapping Name="Stores">
             <EntityTypeMapping TypeName="Models.Store">
               <MappingFragment StoreEntitySet="Store">
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="DateModified" ColumnName="DateModified" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />

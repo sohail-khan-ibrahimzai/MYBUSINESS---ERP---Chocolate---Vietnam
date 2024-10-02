@@ -18,5 +18,11 @@ namespace MYBUSINESS.Models
         public string Name { get; set; }
         public Nullable<decimal> ExchangeRate { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public string Symbol { get; set; }
+        public string Country { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<int> UpdatedBy { get; set; }
     }
 }
