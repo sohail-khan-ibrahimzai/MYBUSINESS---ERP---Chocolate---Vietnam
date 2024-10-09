@@ -23,26 +23,47 @@
                             <div class="box-body">
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                                <div class="form-group">
+                                <div class="form-group" style="display:none">
                                     @Html.LabelFor(model => model.BizName, htmlAttributes: new { @class = "control-label" })
 
                                     @Html.EditorFor(model => model.BizName, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.BizName, "", new { @class = "text-danger" })
 
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" style="display:none">
                                     @Html.LabelFor(model => model.Tagline, htmlAttributes: new { @class = "control-label" })
 
                                     @Html.EditorFor(model => model.Tagline, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.Tagline, "", new { @class = "text-danger" })
 
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" style="display:none">
                                     @Html.LabelFor(model => model.BizAddress, htmlAttributes: new { @class = "control-label" })
 
                                     @Html.EditorFor(model => model.BizAddress, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.BizAddress, "", new { @class = "text-danger" })
 
+                                </div>
+
+                                <div class="form-group" style="display:none">
+                                    @Html.LabelFor(model => model.Website, htmlAttributes: new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.Website, new { htmlAttributes = new { @class = "form-control" } })
+                                    @*@Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })*@
+                                </div>
+                                <div class="form-group">
+                                    <label>Company Name</label>
+                                    @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @*@Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })*@
+                                </div>
+                                <div class="form-group">
+                                    <label>Company Address</label>
+                                    @Html.EditorFor(model => model.CompanyAddress, new { htmlAttributes = new { @class = "form-control" } })
+                                   d @Html.ValidationMessageFor(model => model.CompanyAddress, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.Mobile, htmlAttributes: new { @class = "control-label" })
@@ -51,34 +72,19 @@
                                     @*@Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })*@
                                 </div>
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
-                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                                    @*@Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })*@
-                                </div>
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.Website, htmlAttributes: new { @class = "control-label" })
-                                    @Html.EditorFor(model => model.Website, new { htmlAttributes = new { @class = "form-control" } })
-                                    @*@Html.ValidationMessageFor(model => model.Balance, "", new { @class = "text-danger" })*@
-                                </div> 
-                                <div class="form-group">
                                     <label>Vat Number</label>
-                                        @Html.EditorFor(model => model.VatNumber, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.ValidationMessageFor(model => model.VatNumber, "", new { @class = "text-danger" })
-                                </div>
-                                <div class="form-group">
-                                    <label>Company Name</label>
-                                        @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
-                                </div>
-                                <div class="form-group">
-                                    <label>Company Address</label>
-                                        @Html.EditorFor(model => model.CompanyAddress, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.ValidationMessageFor(model => model.CompanyAddress, "", new { @class = "text-danger" })
+                                    @Html.EditorFor(model => model.VatNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.VatNumber, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="form-group">
                                     <label>Company Tax Number</label>
-                                        @Html.EditorFor(model => model.CompanyTaxNumber, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.ValidationMessageFor(model => model.CompanyTaxNumber, "", new { @class = "text-danger" })
+                                    @Html.EditorFor(model => model.CompanyTaxNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CompanyTaxNumber, "", new { @class = "text-danger" })
+                                </div>  
+                                <div class="form-group">
+                                    <label>Tax in %</label>
+                                    @Html.EditorFor(model => model.TaxInPercent, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.TaxInPercent, "", new { @class = "text-danger" })
                                 </div>
 
                             </div>

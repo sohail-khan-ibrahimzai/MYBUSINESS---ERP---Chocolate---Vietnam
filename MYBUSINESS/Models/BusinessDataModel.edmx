@@ -220,6 +220,7 @@
           <Property Name="CompanyName" Type="nvarchar" MaxLength="500" />
           <Property Name="CompanyAddress" Type="nvarchar" MaxLength="500" />
           <Property Name="CompanyTaxNumber" Type="nvarchar" MaxLength="500" />
+          <Property Name="TaxInPercent" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -301,6 +302,14 @@
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
           <Property Name="StoreId" Type="int" />
           <Property Name="Category" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ProductCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Category" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="ProductDetail">
           <Key>
@@ -465,6 +474,7 @@
           <Property Name="BillPaidByCash" Type="decimal" Precision="18" Scale="2" />
           <Property Name="UserId" Type="int" />
           <Property Name="VatNumber" Type="nvarchar" MaxLength="200" />
+          <Property Name="VatAmountInPercent" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="SOD">
           <Key>
@@ -521,6 +531,16 @@
           <Property Name="Type" Type="int" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
           <Property Name="StoreId" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="UserAuthorization">
           <Key>
@@ -759,6 +779,18 @@
             </Principal>
             <Dependent Role="Product">
               <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductCategory_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="ProductCategory" Type="Self.ProductCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductCategory">
+              <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1086,6 +1118,7 @@
           <EntitySet Name="PO" EntityType="Self.PO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="POD" EntityType="Self.POD" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductCategory" EntityType="Self.ProductCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductDetail" EntityType="Self.ProductDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductionOrder" EntityType="Self.ProductionOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductionOrderDetail" EntityType="Self.ProductionOrderDetail" Schema="dbo" store:Type="Tables" />
@@ -1098,6 +1131,7 @@
           <EntitySet Name="Store" EntityType="Self.Store" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StoreProduct" EntityType="Self.StoreProduct" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAuthorization" EntityType="Self.UserAuthorization" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Customer_Business" Association="Self.FK_Customer_Business">
             <End Role="BusinessInfo" EntitySet="BusinessInfo" />
@@ -1174,6 +1208,10 @@
           <AssociationSet Name="FK_Product_Location" Association="Self.FK_Product_Location">
             <End Role="Location" EntitySet="Location" />
             <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductCategory_Product" Association="Self.FK_ProductCategory_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ProductCategory" EntitySet="ProductCategory" />
           </AssociationSet>
           <AssociationSet Name="FK_ProductDetail_Product" Association="Self.FK_ProductDetail_Product">
             <End Role="Product" EntitySet="Product" />
@@ -1295,27 +1333,6 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
-          <FunctionImport Name="spExpenseReport" ReturnType="Collection(Models.spExpenseReport_Result)">
-          <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="spLoanReport" ReturnType="Collection(Models.spLoanReport_Result)">
-          <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="spPOReport" ReturnType="Collection(Models.spPOReport_Result)">
-          <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="spRentReport" ReturnType="Collection(Models.spRentReport_Result)">
-          <Parameter Name="SaleOrderID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="spServiceReport" ReturnType="Collection(Models.spServiceReport_Result)">
-          <Parameter Name="SaleOrderID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="spSOReport" ReturnType="Collection(Models.spSOReport_Result)">
-          <Parameter Name="SaleOrderID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="spTest" ReturnType="Collection(Models.spTest_Result)">
-          <Parameter Name="Param1" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="BankAccounts" EntityType="Models.BankAccount" />
           <EntitySet Name="BusinessInfoes" EntityType="Models.BusinessInfo" />
           <EntitySet Name="Currencies" EntityType="Models.Currency" />
@@ -1333,6 +1350,7 @@
           <EntitySet Name="POes" EntityType="Models.PO" />
           <EntitySet Name="PODs" EntityType="Models.POD" />
           <EntitySet Name="Products" EntityType="Models.Product" />
+          <EntitySet Name="ProductCategories" EntityType="Models.ProductCategory" />
           <EntitySet Name="ProductDetails" EntityType="Models.ProductDetail" />
           <EntitySet Name="ProductionOrders" EntityType="Models.ProductionOrder" />
           <EntitySet Name="ProductionOrderDetails" EntityType="Models.ProductionOrderDetail" />
@@ -1345,6 +1363,7 @@
           <EntitySet Name="Stores" EntityType="Models.Store" />
           <EntitySet Name="StoreProducts" EntityType="Models.StoreProduct" />
           <EntitySet Name="Suppliers" EntityType="Models.Supplier" />
+          <EntitySet Name="sysdiagrams" EntityType="Models.sysdiagram" />
           <EntitySet Name="UserAuthorizations" EntityType="Models.UserAuthorization" />
           <AssociationSet Name="FK_PO_Account" Association="Models.FK_PO_Account">
             <End Role="BankAccount" EntitySet="BankAccounts" />
@@ -1458,6 +1477,10 @@
             <End Role="Product" EntitySet="Products" />
             <End Role="POD" EntitySet="PODs" />
           </AssociationSet>
+          <AssociationSet Name="FK_ProductCategory_Product" Association="Models.FK_ProductCategory_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ProductCategory" EntitySet="ProductCategories" />
+          </AssociationSet>
           <AssociationSet Name="FK_ProductDetail_Product" Association="Models.FK_ProductDetail_Product">
             <End Role="Product" EntitySet="Products" />
             <End Role="ProductDetail" EntitySet="ProductDetails" />
@@ -1506,6 +1529,27 @@
             <End Role="Store" EntitySet="Stores" />
             <End Role="StoreProduct" EntitySet="StoreProducts" />
           </AssociationSet>
+          <FunctionImport Name="spExpenseReport" ReturnType="Collection(Models.spExpenseReport_Result)">
+            <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spLoanReport" ReturnType="Collection(Models.spLoanReport_Result)">
+            <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spPOReport" ReturnType="Collection(Models.spPOReport_Result)">
+            <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spRentReport" ReturnType="Collection(Models.spRentReport_Result)">
+            <Parameter Name="SaleOrderID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spServiceReport" ReturnType="Collection(Models.spServiceReport_Result)">
+            <Parameter Name="SaleOrderID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spSOReport" ReturnType="Collection(Models.spSOReport_Result)">
+            <Parameter Name="SaleOrderID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spTest" ReturnType="Collection(Models.spTest_Result)">
+            <Parameter Name="Param1" Mode="In" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1517,170 +1561,6 @@
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
-        </ComplexType>
-        <ComplexType Name="spExpenseReport_Result">
-          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
-          <Property Type="Decimal" Name="POSerial" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="PurchaseOrderQty" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="300" />
-          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="300" />
-          <Property Type="Decimal" Name="PurchasePrice" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Int32" Name="Quantity" Nullable="true" />
-          <Property Type="Decimal" Name="PerPack" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Boolean" Name="IsPack" Nullable="true" />
-          <Property Type="String" Name="BizName" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="BizAddress" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Email" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Website" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Tagline" Nullable="true" MaxLength="500" />
-          <Property Type="Decimal" Name="ItemTotal" Nullable="true" Precision="38" Scale="2" />
-          <Property Type="String" Name="SaleType" Nullable="false" MaxLength="1" />
-          <Property Type="Decimal" Name="PurchaseOrderAmount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="BillPaid" Nullable="false" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="PrevBalance" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="500" />
-        </ComplexType>
-        <ComplexType Name="spLoanReport_Result">
-          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
-          <Property Type="Decimal" Name="POSerial" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="PurchaseOrderQty" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="300" />
-          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="300" />
-          <Property Type="Decimal" Name="PurchasePrice" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Int32" Name="Quantity" Nullable="true" />
-          <Property Type="Decimal" Name="PerPack" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Boolean" Name="IsPack" Nullable="true" />
-          <Property Type="String" Name="BizName" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="BizAddress" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Email" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Website" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Tagline" Nullable="true" MaxLength="500" />
-          <Property Type="Decimal" Name="ItemTotal" Nullable="true" Precision="38" Scale="2" />
-          <Property Type="String" Name="SaleType" Nullable="false" MaxLength="1" />
-          <Property Type="Decimal" Name="PurchaseOrderAmount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="BillPaid" Nullable="false" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="PrevBalance" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="500" />
-        </ComplexType>
-        <ComplexType Name="spPOReport_Result">
-          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
-          <Property Type="Decimal" Name="POSerial" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="PurchaseOrderQty" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="300" />
-          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="300" />
-          <Property Type="Decimal" Name="PurchasePrice" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Int32" Name="Quantity" Nullable="true" />
-          <Property Type="Decimal" Name="PerPack" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Boolean" Name="IsPack" Nullable="true" />
-          <Property Type="String" Name="BizName" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="BizAddress" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Email" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Website" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Tagline" Nullable="true" MaxLength="500" />
-          <Property Type="Decimal" Name="ItemTotal" Nullable="true" Precision="38" Scale="2" />
-          <Property Type="String" Name="SaleType" Nullable="false" MaxLength="1" />
-          <Property Type="Decimal" Name="PurchaseOrderAmount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="BillPaid" Nullable="false" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="PrevBalance" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="500" />
-        </ComplexType>
-        <ComplexType Name="spRentReport_Result">
-          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
-          <Property Type="Decimal" Name="SOSerial" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="SaleOrderQty" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="300" />
-          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="300" />
-          <Property Type="Decimal" Name="SalePrice" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Int32" Name="Quantity" Nullable="true" />
-          <Property Type="Decimal" Name="PerPack" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Boolean" Name="IsPack" Nullable="true" />
-          <Property Type="String" Name="BizName" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="BizAddress" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Email" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Website" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Tagline" Nullable="true" MaxLength="500" />
-          <Property Type="Decimal" Name="ItemTotal" Nullable="true" Precision="38" Scale="2" />
-          <Property Type="String" Name="SaleType" Nullable="false" MaxLength="1" />
-          <Property Type="Decimal" Name="SaleOrderAmount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="BillPaid" Nullable="false" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="PrevBalance" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="500" />
-        </ComplexType>
-        <ComplexType Name="spServiceReport_Result">
-          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
-          <Property Type="Decimal" Name="SOSerial" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="SaleOrderQty" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="300" />
-          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="300" />
-          <Property Type="Decimal" Name="SalePrice" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Int32" Name="Quantity" Nullable="true" />
-          <Property Type="Decimal" Name="PerPack" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Boolean" Name="IsPack" Nullable="true" />
-          <Property Type="String" Name="BizName" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="BizAddress" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Email" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Website" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Tagline" Nullable="true" MaxLength="500" />
-          <Property Type="Decimal" Name="ItemTotal" Nullable="true" Precision="38" Scale="2" />
-          <Property Type="String" Name="SaleType" Nullable="false" MaxLength="1" />
-          <Property Type="Decimal" Name="SaleOrderAmount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="BillPaid" Nullable="false" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="PrevBalance" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="500" />
-        </ComplexType>
-        <ComplexType Name="spSOReport_Result">
-          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
-          <Property Type="Decimal" Name="SOSerial" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="SaleOrderQty" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="String" Name="PaymentMethod" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="300" />
-          <Property Type="String" Name="Address" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="CustomerRemarks" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="300" />
-          <Property Type="Decimal" Name="SalePrice" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Int32" Name="Quantity" Nullable="true" />
-          <Property Type="Decimal" Name="PerPack" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Boolean" Name="IsPack" Nullable="true" />
-          <Property Type="String" Name="BizName" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="BizAddress" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Email" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Website" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Tagline" Nullable="true" MaxLength="500" />
-          <Property Type="Decimal" Name="ItemTotal" Nullable="true" Precision="38" Scale="2" />
-          <Property Type="String" Name="SaleType" Nullable="false" MaxLength="1" />
-          <Property Type="Decimal" Name="SaleOrderAmount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="BillPaid" Nullable="false" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="BillPaidByCash" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="PrevBalance" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="500" />
-        </ComplexType>
-        <ComplexType Name="spTest_Result">
-          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
-          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
         </ComplexType>
         <EntityType Name="BankAccount">
           <Key>
@@ -1715,10 +1595,10 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ExchangeRate" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="IsActive" Type="Boolean" />
           <Property Name="Symbol" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ExchangeRate" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IsActive" Type="Boolean" />
           <Property Name="CreatedAt" Type="DateTime" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" />
@@ -1741,12 +1621,12 @@
           <Property Name="Vat" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="CompanyName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerCode" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="BusinessInfo" Relationship="Models.FK_Customer_Business" FromRole="Customer" ToRole="BusinessInfo" />
           <NavigationProperty Name="Rents" Relationship="Models.FK_Rent_Customer" FromRole="Customer" ToRole="Rent" />
           <NavigationProperty Name="Services" Relationship="Models.FK_Service_Customer" FromRole="Customer" ToRole="Service" />
           <NavigationProperty Name="SOes" Relationship="Models.FK_SO_Customer" FromRole="Customer" ToRole="SO" />
-          <Property Name="CompanyAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerCode" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DailyBalanceVnd">
           <Key>
@@ -1929,6 +1809,7 @@
           <Property Name="CompanyName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="CompanyAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="CompanyTaxNumber" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TaxInPercent" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -2021,12 +1902,22 @@
           <NavigationProperty Name="LoanDetails" Relationship="Models.FK_LoanDetail_Product" FromRole="Product" ToRole="LoanDetail" />
           <NavigationProperty Name="Location" Relationship="Models.FK_Product_Location" FromRole="Product" ToRole="Location" />
           <NavigationProperty Name="PODs" Relationship="Models.FK_POD_Product" FromRole="Product" ToRole="POD" />
+          <NavigationProperty Name="ProductCategories" Relationship="Models.FK_ProductCategory_Product" FromRole="Product" ToRole="ProductCategory" />
           <NavigationProperty Name="ProductDetails" Relationship="Models.FK_ProductDetail_Product" FromRole="Product" ToRole="ProductDetail" />
           <NavigationProperty Name="ProductionOrderDetails" Relationship="Models.FK_ProductionOrderDetail_Product" FromRole="Product" ToRole="ProductionOrderDetail" />
           <NavigationProperty Name="RentDetails" Relationship="Models.FK_RentDetail_Product" FromRole="Product" ToRole="RentDetail" />
           <NavigationProperty Name="ServiceDetails" Relationship="Models.FK_ServiceDetail_Product" FromRole="Product" ToRole="ServiceDetail" />
           <NavigationProperty Name="SODs" Relationship="Models.FK_SOD_Product" FromRole="Product" ToRole="SOD" />
           <NavigationProperty Name="StoreProducts" Relationship="Models.FK_StoreProduct_Product" FromRole="Product" ToRole="StoreProduct" />
+        </EntityType>
+        <EntityType Name="ProductCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Category" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Product" Relationship="Models.FK_ProductCategory_Product" FromRole="ProductCategory" ToRole="Product" />
         </EntityType>
         <EntityType Name="ProductDetail">
           <Key>
@@ -2206,13 +2097,14 @@
           <Property Name="Quotation" Type="Boolean" />
           <Property Name="StoreId" Type="Int32" />
           <Property Name="BillPaidByCash" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="VatNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VatAmountInPercent" Type="Decimal" Precision="18" Scale="2" />
           <NavigationProperty Name="BankAccount" Relationship="Models.FK_SO_Account" FromRole="SO" ToRole="BankAccount" />
           <NavigationProperty Name="Customer" Relationship="Models.FK_SO_Customer" FromRole="SO" ToRole="Customer" />
           <NavigationProperty Name="Employee" Relationship="Models.FK_SO_Employee" FromRole="SO" ToRole="Employee" />
           <NavigationProperty Name="Payments" Relationship="Models.FK_Payment_SO" FromRole="SO" ToRole="Payment" />
           <NavigationProperty Name="SODs" Relationship="Models.FK_SOD_SO" FromRole="SO" ToRole="SOD" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="VatNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SOD">
           <Key>
@@ -2244,9 +2136,9 @@
           <Property Name="DateCreated" Type="DateTime" Precision="3" />
           <Property Name="DateModified" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="StoreProducts" Relationship="Models.FK_StoreProduct_Store" FromRole="Store" ToRole="StoreProduct" />
           <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="PhoneNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="StoreProducts" Relationship="Models.FK_StoreProduct_Store" FromRole="Store" ToRole="StoreProduct" />
         </EntityType>
         <EntityType Name="StoreProduct">
           <Key>
@@ -2278,6 +2170,16 @@
           <NavigationProperty Name="Expenses" Relationship="Models.FK_Expense_Supplier" FromRole="Supplier" ToRole="Expense" />
           <NavigationProperty Name="Loans" Relationship="Models.FK_Loan_Supplier" FromRole="Supplier" ToRole="Loan" />
           <NavigationProperty Name="POes" Relationship="Models.FK_PO_Supplier" FromRole="Supplier" ToRole="PO" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="UserAuthorization">
           <Key>
@@ -2629,6 +2531,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ProductCategory_Product">
+          <End Type="Models.Product" Role="Product" Multiplicity="0..1" />
+          <End Type="Models.ProductCategory" Role="ProductCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductCategory">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ProductDetail_Product">
           <End Type="Models.Product" Role="Product" Multiplicity="0..1" />
           <End Type="Models.ProductDetail" Role="ProductDetail" Multiplicity="*" />
@@ -2773,6 +2687,175 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="spExpenseReport_Result">
+          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="POSerial" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="PurchaseOrderQty" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="300" />
+          <Property Type="Decimal" Name="PurchasePrice" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="Decimal" Name="PerPack" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="IsPack" Nullable="true" />
+          <Property Type="String" Name="BizName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BizAddress" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Website" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Tagline" Nullable="true" MaxLength="500" />
+          <Property Type="Decimal" Name="ItemTotal" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="SaleType" Nullable="false" MaxLength="1" />
+          <Property Type="Decimal" Name="PurchaseOrderAmount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="BillPaid" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="PrevBalance" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="spLoanReport_Result">
+          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="POSerial" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="PurchaseOrderQty" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="300" />
+          <Property Type="Decimal" Name="PurchasePrice" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="Decimal" Name="PerPack" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="IsPack" Nullable="true" />
+          <Property Type="String" Name="BizName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BizAddress" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Website" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Tagline" Nullable="true" MaxLength="500" />
+          <Property Type="Decimal" Name="ItemTotal" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="SaleType" Nullable="false" MaxLength="1" />
+          <Property Type="Decimal" Name="PurchaseOrderAmount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="BillPaid" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="PrevBalance" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="spPOReport_Result">
+          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="POSerial" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="PurchaseOrderQty" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="300" />
+          <Property Type="Decimal" Name="PurchasePrice" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="Decimal" Name="PerPack" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="IsPack" Nullable="true" />
+          <Property Type="String" Name="BizName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BizAddress" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Website" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Tagline" Nullable="true" MaxLength="500" />
+          <Property Type="Decimal" Name="ItemTotal" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="SaleType" Nullable="false" MaxLength="1" />
+          <Property Type="Decimal" Name="PurchaseOrderAmount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="BillPaid" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="PrevBalance" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="spRentReport_Result">
+          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="SOSerial" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="SaleOrderQty" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="300" />
+          <Property Type="Decimal" Name="SalePrice" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="Decimal" Name="PerPack" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="IsPack" Nullable="true" />
+          <Property Type="String" Name="BizName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BizAddress" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Website" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Tagline" Nullable="true" MaxLength="500" />
+          <Property Type="Decimal" Name="ItemTotal" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="SaleType" Nullable="false" MaxLength="1" />
+          <Property Type="Decimal" Name="SaleOrderAmount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="BillPaid" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="PrevBalance" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="spServiceReport_Result">
+          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="SOSerial" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="SaleOrderQty" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="300" />
+          <Property Type="Decimal" Name="SalePrice" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="Decimal" Name="PerPack" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="IsPack" Nullable="true" />
+          <Property Type="String" Name="BizName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BizAddress" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Website" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Tagline" Nullable="true" MaxLength="500" />
+          <Property Type="Decimal" Name="ItemTotal" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="SaleType" Nullable="false" MaxLength="1" />
+          <Property Type="Decimal" Name="SaleOrderAmount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="BillPaid" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="PrevBalance" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="spSOReport_Result">
+          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="SOSerial" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="SaleOrderQty" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="PaymentMethod" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="CustomerRemarks" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="300" />
+          <Property Type="Decimal" Name="SalePrice" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="Decimal" Name="PerPack" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="IsPack" Nullable="true" />
+          <Property Type="String" Name="BizName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="BizAddress" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Website" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Tagline" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="CompanyName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="CompanyAddress" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="VatNumber" Nullable="true" MaxLength="500" />
+          <Property Type="Decimal" Name="TaxInPercent" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="ItemTotal" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="SaleType" Nullable="false" MaxLength="1" />
+          <Property Type="Decimal" Name="SaleOrderAmount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="BillPaid" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="BillPaidByCash" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Discount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="PrevBalance" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="spTest_Result">
+          <Property Type="String" Name="Id" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="18" Scale="2" />
+        </ComplexType>
+        
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2803,198 +2886,6 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="Models.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="Models.Store.sp_upgraddiagrams" />
-          <FunctionImportMapping FunctionImportName="spExpenseReport" FunctionName="Models.Store.spExpenseReport">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Models.spExpenseReport_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="POSerial" ColumnName="POSerial" />
-                <ScalarProperty Name="PurchaseOrderQty" ColumnName="PurchaseOrderQty" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="PerPack" ColumnName="PerPack" />
-                <ScalarProperty Name="IsPack" ColumnName="IsPack" />
-                <ScalarProperty Name="BizName" ColumnName="BizName" />
-                <ScalarProperty Name="BizAddress" ColumnName="BizAddress" />
-                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Website" ColumnName="Website" />
-                <ScalarProperty Name="Tagline" ColumnName="Tagline" />
-                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
-                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
-                <ScalarProperty Name="PurchaseOrderAmount" ColumnName="PurchaseOrderAmount" />
-                <ScalarProperty Name="BillPaid" ColumnName="BillPaid" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="Balance" ColumnName="Balance" />
-                <ScalarProperty Name="PrevBalance" ColumnName="PrevBalance" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="spLoanReport" FunctionName="Models.Store.spLoanReport">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Models.spLoanReport_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="POSerial" ColumnName="POSerial" />
-                <ScalarProperty Name="PurchaseOrderQty" ColumnName="PurchaseOrderQty" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="PerPack" ColumnName="PerPack" />
-                <ScalarProperty Name="IsPack" ColumnName="IsPack" />
-                <ScalarProperty Name="BizName" ColumnName="BizName" />
-                <ScalarProperty Name="BizAddress" ColumnName="BizAddress" />
-                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Website" ColumnName="Website" />
-                <ScalarProperty Name="Tagline" ColumnName="Tagline" />
-                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
-                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
-                <ScalarProperty Name="PurchaseOrderAmount" ColumnName="PurchaseOrderAmount" />
-                <ScalarProperty Name="BillPaid" ColumnName="BillPaid" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="Balance" ColumnName="Balance" />
-                <ScalarProperty Name="PrevBalance" ColumnName="PrevBalance" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="spPOReport" FunctionName="Models.Store.spPOReport">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Models.spPOReport_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="POSerial" ColumnName="POSerial" />
-                <ScalarProperty Name="PurchaseOrderQty" ColumnName="PurchaseOrderQty" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="PerPack" ColumnName="PerPack" />
-                <ScalarProperty Name="IsPack" ColumnName="IsPack" />
-                <ScalarProperty Name="BizName" ColumnName="BizName" />
-                <ScalarProperty Name="BizAddress" ColumnName="BizAddress" />
-                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Website" ColumnName="Website" />
-                <ScalarProperty Name="Tagline" ColumnName="Tagline" />
-                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
-                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
-                <ScalarProperty Name="PurchaseOrderAmount" ColumnName="PurchaseOrderAmount" />
-                <ScalarProperty Name="BillPaid" ColumnName="BillPaid" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="Balance" ColumnName="Balance" />
-                <ScalarProperty Name="PrevBalance" ColumnName="PrevBalance" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="spRentReport" FunctionName="Models.Store.spRentReport">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Models.spRentReport_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="SOSerial" ColumnName="SOSerial" />
-                <ScalarProperty Name="SaleOrderQty" ColumnName="SaleOrderQty" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="PerPack" ColumnName="PerPack" />
-                <ScalarProperty Name="IsPack" ColumnName="IsPack" />
-                <ScalarProperty Name="BizName" ColumnName="BizName" />
-                <ScalarProperty Name="BizAddress" ColumnName="BizAddress" />
-                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Website" ColumnName="Website" />
-                <ScalarProperty Name="Tagline" ColumnName="Tagline" />
-                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
-                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
-                <ScalarProperty Name="SaleOrderAmount" ColumnName="SaleOrderAmount" />
-                <ScalarProperty Name="BillPaid" ColumnName="BillPaid" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="Balance" ColumnName="Balance" />
-                <ScalarProperty Name="PrevBalance" ColumnName="PrevBalance" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="spServiceReport" FunctionName="Models.Store.spServiceReport">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Models.spServiceReport_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="SOSerial" ColumnName="SOSerial" />
-                <ScalarProperty Name="SaleOrderQty" ColumnName="SaleOrderQty" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="PerPack" ColumnName="PerPack" />
-                <ScalarProperty Name="IsPack" ColumnName="IsPack" />
-                <ScalarProperty Name="BizName" ColumnName="BizName" />
-                <ScalarProperty Name="BizAddress" ColumnName="BizAddress" />
-                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Website" ColumnName="Website" />
-                <ScalarProperty Name="Tagline" ColumnName="Tagline" />
-                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
-                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
-                <ScalarProperty Name="SaleOrderAmount" ColumnName="SaleOrderAmount" />
-                <ScalarProperty Name="BillPaid" ColumnName="BillPaid" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="Balance" ColumnName="Balance" />
-                <ScalarProperty Name="PrevBalance" ColumnName="PrevBalance" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="spSOReport" FunctionName="Models.Store.spSOReport">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Models.spSOReport_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="SOSerial" ColumnName="SOSerial" />
-                <ScalarProperty Name="SaleOrderQty" ColumnName="SaleOrderQty" />
-                <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="CustomerRemarks" ColumnName="CustomerRemarks" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="PerPack" ColumnName="PerPack" />
-                <ScalarProperty Name="IsPack" ColumnName="IsPack" />
-                <ScalarProperty Name="BizName" ColumnName="BizName" />
-                <ScalarProperty Name="BizAddress" ColumnName="BizAddress" />
-                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Website" ColumnName="Website" />
-                <ScalarProperty Name="Tagline" ColumnName="Tagline" />
-                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
-                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
-                <ScalarProperty Name="SaleOrderAmount" ColumnName="SaleOrderAmount" />
-                <ScalarProperty Name="BillPaid" ColumnName="BillPaid" />
-                <ScalarProperty Name="BillPaidByCash" ColumnName="BillPaidByCash" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="Balance" ColumnName="Balance" />
-                <ScalarProperty Name="PrevBalance" ColumnName="PrevBalance" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="spTest" FunctionName="Models.Store.spTest">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Models.spTest_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Balance" ColumnName="Balance" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="BankAccounts">
             <EntityTypeMapping TypeName="Models.BankAccount">
               <MappingFragment StoreEntitySet="BankAccount">
@@ -3025,10 +2916,10 @@
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -3210,6 +3101,7 @@
           <EntitySetMapping Name="MyBusinessInfoes">
             <EntityTypeMapping TypeName="Models.MyBusinessInfo">
               <MappingFragment StoreEntitySet="MyBusinessInfo">
+                <ScalarProperty Name="TaxInPercent" ColumnName="TaxInPercent" />
                 <ScalarProperty Name="CompanyTaxNumber" ColumnName="CompanyTaxNumber" />
                 <ScalarProperty Name="CompanyAddress" ColumnName="CompanyAddress" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
@@ -3305,6 +3197,15 @@
                 <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
                 <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductCategories">
+            <EntityTypeMapping TypeName="Models.ProductCategory">
+              <MappingFragment StoreEntitySet="ProductCategory">
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3454,6 +3355,7 @@
           <EntitySetMapping Name="SOes">
             <EntityTypeMapping TypeName="Models.SO">
               <MappingFragment StoreEntitySet="SO">
+                <ScalarProperty Name="VatAmountInPercent" ColumnName="VatAmountInPercent" />
                 <ScalarProperty Name="VatNumber" ColumnName="VatNumber" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="BillPaidByCash" ColumnName="BillPaidByCash" />
@@ -3541,6 +3443,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Models.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="UserAuthorizations">
             <EntityTypeMapping TypeName="Models.UserAuthorization">
               <MappingFragment StoreEntitySet="UserAuthorization">
@@ -3552,6 +3465,203 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spExpenseReport" FunctionName="Models.Store.spExpenseReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Models.spExpenseReport_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="POSerial" ColumnName="POSerial" />
+                <ScalarProperty Name="PurchaseOrderQty" ColumnName="PurchaseOrderQty" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PerPack" ColumnName="PerPack" />
+                <ScalarProperty Name="IsPack" ColumnName="IsPack" />
+                <ScalarProperty Name="BizName" ColumnName="BizName" />
+                <ScalarProperty Name="BizAddress" ColumnName="BizAddress" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Tagline" ColumnName="Tagline" />
+                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
+                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
+                <ScalarProperty Name="PurchaseOrderAmount" ColumnName="PurchaseOrderAmount" />
+                <ScalarProperty Name="BillPaid" ColumnName="BillPaid" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="PrevBalance" ColumnName="PrevBalance" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spLoanReport" FunctionName="Models.Store.spLoanReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Models.spLoanReport_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="POSerial" ColumnName="POSerial" />
+                <ScalarProperty Name="PurchaseOrderQty" ColumnName="PurchaseOrderQty" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PerPack" ColumnName="PerPack" />
+                <ScalarProperty Name="IsPack" ColumnName="IsPack" />
+                <ScalarProperty Name="BizName" ColumnName="BizName" />
+                <ScalarProperty Name="BizAddress" ColumnName="BizAddress" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Tagline" ColumnName="Tagline" />
+                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
+                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
+                <ScalarProperty Name="PurchaseOrderAmount" ColumnName="PurchaseOrderAmount" />
+                <ScalarProperty Name="BillPaid" ColumnName="BillPaid" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="PrevBalance" ColumnName="PrevBalance" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spPOReport" FunctionName="Models.Store.spPOReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Models.spPOReport_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="POSerial" ColumnName="POSerial" />
+                <ScalarProperty Name="PurchaseOrderQty" ColumnName="PurchaseOrderQty" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PerPack" ColumnName="PerPack" />
+                <ScalarProperty Name="IsPack" ColumnName="IsPack" />
+                <ScalarProperty Name="BizName" ColumnName="BizName" />
+                <ScalarProperty Name="BizAddress" ColumnName="BizAddress" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Tagline" ColumnName="Tagline" />
+                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
+                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
+                <ScalarProperty Name="PurchaseOrderAmount" ColumnName="PurchaseOrderAmount" />
+                <ScalarProperty Name="BillPaid" ColumnName="BillPaid" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="PrevBalance" ColumnName="PrevBalance" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spRentReport" FunctionName="Models.Store.spRentReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Models.spRentReport_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SOSerial" ColumnName="SOSerial" />
+                <ScalarProperty Name="SaleOrderQty" ColumnName="SaleOrderQty" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PerPack" ColumnName="PerPack" />
+                <ScalarProperty Name="IsPack" ColumnName="IsPack" />
+                <ScalarProperty Name="BizName" ColumnName="BizName" />
+                <ScalarProperty Name="BizAddress" ColumnName="BizAddress" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Tagline" ColumnName="Tagline" />
+                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
+                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
+                <ScalarProperty Name="SaleOrderAmount" ColumnName="SaleOrderAmount" />
+                <ScalarProperty Name="BillPaid" ColumnName="BillPaid" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="PrevBalance" ColumnName="PrevBalance" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spServiceReport" FunctionName="Models.Store.spServiceReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Models.spServiceReport_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SOSerial" ColumnName="SOSerial" />
+                <ScalarProperty Name="SaleOrderQty" ColumnName="SaleOrderQty" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PerPack" ColumnName="PerPack" />
+                <ScalarProperty Name="IsPack" ColumnName="IsPack" />
+                <ScalarProperty Name="BizName" ColumnName="BizName" />
+                <ScalarProperty Name="BizAddress" ColumnName="BizAddress" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Tagline" ColumnName="Tagline" />
+                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
+                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
+                <ScalarProperty Name="SaleOrderAmount" ColumnName="SaleOrderAmount" />
+                <ScalarProperty Name="BillPaid" ColumnName="BillPaid" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="PrevBalance" ColumnName="PrevBalance" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spSOReport" FunctionName="Models.Store.spSOReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Models.spSOReport_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SOSerial" ColumnName="SOSerial" />
+                <ScalarProperty Name="SaleOrderQty" ColumnName="SaleOrderQty" />
+                <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CustomerRemarks" ColumnName="CustomerRemarks" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PerPack" ColumnName="PerPack" />
+                <ScalarProperty Name="IsPack" ColumnName="IsPack" />
+                <ScalarProperty Name="BizName" ColumnName="BizName" />
+                <ScalarProperty Name="BizAddress" ColumnName="BizAddress" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Tagline" ColumnName="Tagline" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="CompanyAddress" ColumnName="CompanyAddress" />
+                <ScalarProperty Name="VatNumber" ColumnName="VatNumber" />
+                <ScalarProperty Name="TaxInPercent" ColumnName="TaxInPercent" />
+                <ScalarProperty Name="ItemTotal" ColumnName="ItemTotal" />
+                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
+                <ScalarProperty Name="SaleOrderAmount" ColumnName="SaleOrderAmount" />
+                <ScalarProperty Name="BillPaid" ColumnName="BillPaid" />
+                <ScalarProperty Name="BillPaidByCash" ColumnName="BillPaidByCash" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="PrevBalance" ColumnName="PrevBalance" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spTest" FunctionName="Models.Store.spTest">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Models.spTest_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

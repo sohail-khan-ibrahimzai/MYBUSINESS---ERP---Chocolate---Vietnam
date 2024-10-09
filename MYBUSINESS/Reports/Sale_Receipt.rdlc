@@ -89,6 +89,22 @@
           <DataField>Tagline</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="CompanyName">
+          <DataField>CompanyName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CompanyAddress">
+          <DataField>CompanyAddress</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="VatNumber">
+          <DataField>VatNumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TaxInPercent">
+          <DataField>TaxInPercent</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
         <Field Name="ItemTotal">
           <DataField>ItemTotal</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
@@ -105,6 +121,10 @@
           <DataField>BillPaid</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="BillPaidByCash">
+          <DataField>BillPaidByCash</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
         <Field Name="Discount">
           <DataField>Discount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
@@ -119,15 +139,11 @@
         </Field>
         <Field Name="Date">
           <DataField>Date</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Remarks">
           <DataField>Remarks</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="BillPaidByCash">
-          <DataField>BillPaidByCash</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
@@ -476,7 +492,7 @@
             </TablixRowHierarchy>
             <DataSetName>DataSet1</DataSetName>
             <Top>0.02281in</Top>
-            <Left>0.38561in</Left>
+            <Left>0.08561in</Left>
             <Height>0.29088in</Height>
             <Width>3.22652in</Width>
             <Style>
@@ -507,7 +523,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox30</rd:DefaultName>
             <Top>0.33313in</Top>
-            <Left>0.3808in</Left>
+            <Left>0.0808in</Left>
             <Height>0.15337in</Height>
             <Width>1.09752in</Width>
             <ZIndex>1</ZIndex>
@@ -545,7 +561,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox30</rd:DefaultName>
             <Top>0.50733in</Top>
-            <Left>0.3808in</Left>
+            <Left>0.0808in</Left>
             <Height>0.13274in</Height>
             <Width>0.51272in</Width>
             <ZIndex>2</ZIndex>
@@ -582,9 +598,9 @@
             </Paragraphs>
             <rd:DefaultName>SaleOrderAmount</rd:DefaultName>
             <Top>0.34225in</Top>
-            <Left>3.07277in</Left>
+            <Left>2.77277in</Left>
             <Height>0.14425in</Height>
-            <Width>0.65031in</Width>
+            <Width>0.52531in</Width>
             <ZIndex>3</ZIndex>
             <Visibility>
               <Hidden>=IIF(First(Fields!SaleOrderQty.Value, "DataSet1") &gt; "0", False, True)</Hidden>
@@ -619,7 +635,7 @@
             </Paragraphs>
             <rd:DefaultName>SaleType1</rd:DefaultName>
             <Top>0.34781in</Top>
-            <Left>2.32956in</Left>
+            <Left>2.02956in</Left>
             <Height>0.14425in</Height>
             <Width>0.72932in</Width>
             <ZIndex>4</ZIndex>
@@ -656,7 +672,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox30</rd:DefaultName>
             <Top>0.50594in</Top>
-            <Left>2.32956in</Left>
+            <Left>2.02956in</Left>
             <Height>0.13333in</Height>
             <Width>0.72932in</Width>
             <ZIndex>5</ZIndex>
@@ -694,7 +710,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox30</rd:DefaultName>
             <Top>0.67063in</Top>
-            <Left>0.3808in</Left>
+            <Left>0.0808in</Left>
             <Height>0.13542in</Height>
             <Width>0.7497in</Width>
             <ZIndex>6</ZIndex>
@@ -732,9 +748,9 @@
             </Paragraphs>
             <rd:DefaultName>Textbox30</rd:DefaultName>
             <Top>0.65753in</Top>
-            <Left>2.19414in</Left>
+            <Left>1.89414in</Left>
             <Height>0.1375in</Height>
-            <Width>1.12478in</Width>
+            <Width>1.01228in</Width>
             <ZIndex>7</ZIndex>
             <Visibility>
               <Hidden>true</Hidden>
@@ -749,9 +765,9 @@
           </Textbox>
           <Line Name="Line3">
             <Top>0.85in</Top>
-            <Left>0.3433in</Left>
+            <Left>0.0433in</Left>
             <Height>0in</Height>
-            <Width>3.70526in</Width>
+            <Width>3.26883in</Width>
             <ZIndex>8</ZIndex>
             <Style>
               <Border>
@@ -766,7 +782,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Tổng tiền khách trả ( Thẻ ngân hàng)</Value>
+                    <Value EvaluationMode="Constant">Tổng tiền khách trả ( Thẻ ngân hàng)</Value>
                     <Style>
                       <FontFamily />
                       <FontSize>6pt</FontSize>
@@ -780,7 +796,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>0.89444in</Top>
-            <Left>0.34598in</Left>
+            <Left>0.07098in</Left>
             <Height>0.15in</Height>
             <Width>2.29353in</Width>
             <ZIndex>9</ZIndex>
@@ -816,9 +832,9 @@
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
             <Top>0.89028in</Top>
-            <Left>2.91706in</Left>
+            <Left>2.50456in</Left>
             <Height>0.125in</Height>
-            <Width>1.0815in</Width>
+            <Width>0.8065in</Width>
             <ZIndex>10</ZIndex>
             <Visibility>
               <Hidden>=IIF(First(Fields!BillPaid.Value, "DataSet1")&gt;"0",false,true)</Hidden>
@@ -839,7 +855,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Tổng tiền khách trả (Tiền mặt)</Value>
+                    <Value EvaluationMode="Constant">Tổng tiền khách trả (Tiền mặt)</Value>
                     <Style>
                       <FontFamily />
                       <FontSize>5pt</FontSize>
@@ -853,7 +869,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>1.08486in</Top>
-            <Left>0.3433in</Left>
+            <Left>0.0683in</Left>
             <Height>0.125in</Height>
             <Width>2.29353in</Width>
             <ZIndex>11</ZIndex>
@@ -889,9 +905,9 @@
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
             <Top>1.0557in</Top>
-            <Left>2.91706in</Left>
+            <Left>2.50456in</Left>
             <Height>0.125in</Height>
-            <Width>1.0815in</Width>
+            <Width>0.8065in</Width>
             <ZIndex>12</ZIndex>
             <Visibility>
               <Hidden>=IIF(First(Fields!BillPaidByCash.Value, "DataSet1")&gt;"0",false,true)</Hidden>
@@ -912,7 +928,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Tổng tiền khách trả</Value>
+                    <Value EvaluationMode="Constant">Tổng tiền khách trả</Value>
                     <Style>
                       <FontFamily />
                       <FontSize>5pt</FontSize>
@@ -926,7 +942,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>1.25465in</Top>
-            <Left>0.3433in</Left>
+            <Left>0.0683in</Left>
             <Height>0.125in</Height>
             <Width>2.29353in</Width>
             <ZIndex>13</ZIndex>
@@ -959,9 +975,9 @@
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
             <Top>1.23799in</Top>
-            <Left>2.91706in</Left>
+            <Left>2.50456in</Left>
             <Height>0.12361in</Height>
-            <Width>1.0815in</Width>
+            <Width>0.8065in</Width>
             <ZIndex>14</ZIndex>
             <Style>
               <Border />
@@ -993,9 +1009,9 @@
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
             <Top>1.41438in</Top>
-            <Left>2.91706in</Left>
+            <Left>2.50456in</Left>
             <Height>0.12811in</Height>
-            <Width>1.0815in</Width>
+            <Width>0.8065in</Width>
             <ZIndex>15</ZIndex>
             <Style>
               <Border />
@@ -1027,7 +1043,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>1.41854in</Top>
-            <Left>0.3433in</Left>
+            <Left>0.0683in</Left>
             <Height>0.12811in</Height>
             <Width>2.29353in</Width>
             <ZIndex>16</ZIndex>
@@ -1041,9 +1057,9 @@
           </Textbox>
           <Line Name="Line4">
             <Top>1.77964in</Top>
-            <Left>0.3433in</Left>
+            <Left>0.0433in</Left>
             <Height>0in</Height>
-            <Width>3.70526in</Width>
+            <Width>3.26883in</Width>
             <ZIndex>17</ZIndex>
             <Style>
               <Border>
@@ -1072,7 +1088,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>1.57894in</Top>
-            <Left>1.43664in</Left>
+            <Left>1.13664in</Left>
             <Height>0.13542in</Height>
             <Width>1.45621in</Width>
             <ZIndex>18</ZIndex>
@@ -1107,7 +1123,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>1.81158in</Top>
-            <Left>1.43664in</Left>
+            <Left>1.13664in</Left>
             <Height>0.13542in</Height>
             <Width>1.45621in</Width>
             <ZIndex>19</ZIndex>
@@ -1140,8 +1156,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
-            <Top>2.00256in</Top>
-            <Left>0.3433in</Left>
+            <Top>1.97756in</Top>
+            <Left>0.0683in</Left>
             <Height>0.13542in</Height>
             <Width>0.82262in</Width>
             <ZIndex>20</ZIndex>
@@ -1173,8 +1189,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
-            <Top>2.16298in</Top>
-            <Left>0.3433in</Left>
+            <Top>2.13798in</Top>
+            <Left>0.0683in</Left>
             <Height>0.13264in</Height>
             <Width>0.50064in</Width>
             <ZIndex>21</ZIndex>
@@ -1208,8 +1224,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
-            <Top>2.33313in</Top>
-            <Left>0.3433in</Left>
+            <Top>2.30813in</Top>
+            <Left>0.0683in</Left>
             <Height>0.12709in</Height>
             <Width>0.3368in</Width>
             <ZIndex>22</ZIndex>
@@ -1243,8 +1259,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
-            <Top>2.33313in</Top>
-            <Left>0.6926in</Left>
+            <Top>2.30813in</Top>
+            <Left>0.4176in</Left>
             <Height>0.12709in</Height>
             <Width>1.14836in</Width>
             <ZIndex>23</ZIndex>
@@ -1278,8 +1294,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
-            <Top>2.16298in</Top>
-            <Left>0.85783in</Left>
+            <Top>2.13798in</Top>
+            <Left>0.58283in</Left>
             <Height>0.13264in</Height>
             <Width>1.15813in</Width>
             <ZIndex>24</ZIndex>
@@ -1313,8 +1329,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
-            <Top>2.00256in</Top>
-            <Left>1.14092in</Left>
+            <Top>1.97756in</Top>
+            <Left>0.86592in</Left>
             <Height>0.13542in</Height>
             <Width>1.03754in</Width>
             <ZIndex>25</ZIndex>
@@ -1333,7 +1349,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Tên đơn vị mua hàng: </Value>
+                    <Value EvaluationMode="Constant">Tên đơn vị mua hàng:</Value>
                     <Style>
                       <FontSize>5pt</FontSize>
                     </Style>
@@ -1346,7 +1362,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>2.6873in</Top>
-            <Left>0.33209in</Left>
+            <Left>0.05709in</Left>
             <Height>0.14792in</Height>
             <Width>0.83383in</Width>
             <ZIndex>26</ZIndex>
@@ -1368,7 +1384,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Mã số thuế: </Value>
+                    <Value EvaluationMode="Constant">Mã số thuế:</Value>
                     <Style>
                       <FontFamily />
                       <FontSize>5pt</FontSize>
@@ -1382,7 +1398,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>2.88522in</Top>
-            <Left>0.33209in</Left>
+            <Left>0.05709in</Left>
             <Height>0.13264in</Height>
             <Width>0.59657in</Width>
             <ZIndex>27</ZIndex>
@@ -1404,7 +1420,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Địa chỉ:</Value>
+                    <Value EvaluationMode="Constant">Địa chỉ:</Value>
                     <Style>
                       <FontFamily />
                       <FontSize>5pt</FontSize>
@@ -1418,7 +1434,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>3.05537in</Top>
-            <Left>0.33209in</Left>
+            <Left>0.05709in</Left>
             <Height>0.12709in</Height>
             <Width>0.5868in</Width>
             <ZIndex>28</ZIndex>
@@ -1454,7 +1470,7 @@
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
             <Top>3.05537in</Top>
-            <Left>0.91889in</Left>
+            <Left>0.64389in</Left>
             <Height>0.12709in</Height>
             <Width>1.17643in</Width>
             <ZIndex>29</ZIndex>
@@ -1490,7 +1506,7 @@
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
             <Top>2.8866in</Top>
-            <Left>0.95124in</Left>
+            <Left>0.67624in</Left>
             <Height>0.13126in</Height>
             <Width>1.15082in</Width>
             <ZIndex>30</ZIndex>
@@ -1526,7 +1542,7 @@
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
             <Top>2.6873in</Top>
-            <Left>1.16592in</Left>
+            <Left>0.89092in</Left>
             <Height>0.14792in</Height>
             <Width>1.50979in</Width>
             <ZIndex>31</ZIndex>
@@ -1562,7 +1578,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>3.40051in</Top>
-            <Left>0.3433in</Left>
+            <Left>0.0558in</Left>
             <Height>0.13542in</Height>
             <Width>0.60069in</Width>
             <ZIndex>32</ZIndex>
@@ -1598,7 +1614,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>3.58593in</Top>
-            <Left>0.3433in</Left>
+            <Left>0.0558in</Left>
             <Height>0.13264in</Height>
             <Width>0.62044in</Width>
             <ZIndex>33</ZIndex>
@@ -1634,7 +1650,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>3.76858in</Top>
-            <Left>0.3433in</Left>
+            <Left>0.0558in</Left>
             <Height>0.13037in</Height>
             <Width>0.69762in</Width>
             <ZIndex>34</ZIndex>
@@ -1670,7 +1686,7 @@
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
             <Top>3.76857in</Top>
-            <Left>1.05481in</Left>
+            <Left>0.76731in</Left>
             <Height>0.13038in</Height>
             <Width>1.04in</Width>
             <ZIndex>35</ZIndex>
@@ -1706,7 +1722,7 @@
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
             <Top>3.58593in</Top>
-            <Left>0.99152in</Left>
+            <Left>0.70402in</Left>
             <Height>0.13264in</Height>
             <Width>1.10329in</Width>
             <ZIndex>36</ZIndex>
@@ -1742,7 +1758,7 @@
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
             <Top>3.40051in</Top>
-            <Left>0.97177in</Left>
+            <Left>0.68427in</Left>
             <Height>0.13542in</Height>
             <Width>1.12499in</Width>
             <ZIndex>37</ZIndex>
@@ -1764,7 +1780,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Số bảo mật (Mã tra cứu): </Value>
+                    <Value EvaluationMode="Constant">Số bảo mật (Mã tra cứu):</Value>
                     <Style>
                       <FontFamily />
                       <FontSize>5pt</FontSize>
@@ -1778,7 +1794,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>3.94895in</Top>
-            <Left>0.3433in</Left>
+            <Left>0.0558in</Left>
             <Height>0.13264in</Height>
             <Width>0.96244in</Width>
             <ZIndex>38</ZIndex>
@@ -1815,7 +1831,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>4.1191in</Top>
-            <Left>0.34331in</Left>
+            <Left>0.05581in</Left>
             <Height>0.13037in</Height>
             <Width>0.69761in</Width>
             <ZIndex>39</ZIndex>
@@ -1851,7 +1867,7 @@
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
             <Top>3.94895in</Top>
-            <Left>1.30574in</Left>
+            <Left>1.01824in</Left>
             <Height>0.13264in</Height>
             <Width>1.03907in</Width>
             <ZIndex>40</ZIndex>
@@ -1887,7 +1903,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>3.22343in</Top>
-            <Left>0.34598in</Left>
+            <Left>0.04598in</Left>
             <Height>0.13264in</Height>
             <Width>0.44263in</Width>
             <ZIndex>41</ZIndex>
@@ -1923,7 +1939,7 @@
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
             <Top>3.22343in</Top>
-            <Left>0.81639in</Left>
+            <Left>0.51639in</Left>
             <Height>0.13264in</Height>
             <Width>1.27893in</Width>
             <ZIndex>42</ZIndex>
@@ -1945,7 +1961,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Họ và tên người mua hàng:</Value>
+                    <Value EvaluationMode="Constant">Họ và tên người mua hàng:</Value>
                     <Style>
                       <FontStyle>Normal</FontStyle>
                       <FontSize>5pt</FontSize>
@@ -1962,7 +1978,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox31</rd:DefaultName>
             <Top>2.50049in</Top>
-            <Left>0.33208in</Left>
+            <Left>0.05708in</Left>
             <Height>0.14792in</Height>
             <Width>1.10804in</Width>
             <ZIndex>43</ZIndex>
@@ -1998,7 +2014,7 @@
             </Paragraphs>
             <rd:DefaultName>BillPaid</rd:DefaultName>
             <Top>2.50049in</Top>
-            <Left>1.37206in</Left>
+            <Left>1.09706in</Left>
             <Height>0.14792in</Height>
             <Width>1.16615in</Width>
             <ZIndex>44</ZIndex>
@@ -2020,7 +2036,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=8</Value>
+                    <Value>=Fields!TaxInPercent.Value</Value>
                     <Style>
                       <FontFamily />
                       <FontSize>5pt</FontSize>
@@ -2034,7 +2050,7 @@
             </Paragraphs>
             <rd:DefaultName>SaleOrderAmount</rd:DefaultName>
             <Top>0.50594in</Top>
-            <Left>0.90713in</Left>
+            <Left>0.60713in</Left>
             <Height>0.14583in</Height>
             <Width>0.88686in</Width>
             <ZIndex>45</ZIndex>
@@ -2071,9 +2087,9 @@
             </Paragraphs>
             <rd:DefaultName>SaleOrderAmount</rd:DefaultName>
             <Top>0.50753in</Top>
-            <Left>3.07277in</Left>
+            <Left>2.77277in</Left>
             <Height>0.14424in</Height>
-            <Width>0.63642in</Width>
+            <Width>0.52392in</Width>
             <ZIndex>46</ZIndex>
             <Visibility>
               <Hidden>=IIF(First(Fields!SaleOrderQty.Value, "DataSet1") &gt; "0", False, True)</Hidden>
@@ -2108,9 +2124,9 @@
             </Paragraphs>
             <rd:DefaultName>SaleOrderAmount</rd:DefaultName>
             <Top>0.65753in</Top>
-            <Left>3.33559in</Left>
+            <Left>2.90642in</Left>
             <Height>0.1375in</Height>
-            <Width>0.55672in</Width>
+            <Width>0.39839in</Width>
             <ZIndex>47</ZIndex>
             <Visibility>
               <Hidden>true</Hidden>
@@ -2130,7 +2146,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=FormatNumber(Fields!SaleOrderAmount.Value, 5) * 8 / 100</Value>
+                    <Value>=FormatNumber(Fields!SaleOrderAmount.Value * (Fields!TaxInPercent.Value / 100), 5)</Value>
                     <Style>
                       <FontFamily />
                       <FontSize>5pt</FontSize>
@@ -2144,9 +2160,9 @@
             </Paragraphs>
             <rd:DefaultName>SaleOrderAmount</rd:DefaultName>
             <Top>0.67122in</Top>
-            <Left>1.14439in</Left>
+            <Left>0.84439in</Left>
             <Height>0.13542in</Height>
-            <Width>0.63571in</Width>
+            <Width>0.71967in</Width>
             <ZIndex>48</ZIndex>
             <Visibility>
               <Hidden>=IIF(First(Fields!SaleOrderQty.Value, "DataSet1") &gt; "0", False, True)</Hidden>
@@ -2187,7 +2203,7 @@
               </Actions>
             </ActionInfo>
             <Top>4.12048in</Top>
-            <Left>1.05481in</Left>
+            <Left>0.76731in</Left>
             <Height>0.14149in</Height>
             <Width>1.165in</Width>
             <ZIndex>49</ZIndex>
@@ -2205,12 +2221,11 @@
         <Height>4.34164in</Height>
         <Style />
       </Body>
-      <Width>102.83342mm</Width>
+      <Width>85.44154mm</Width>
       <Page>
         <PageHeader>
-          <Height>1.24493in</Height>
+          <Height>1.21319in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
-          <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
             <Textbox Name="Textbox41">
               <CanGrow>true</CanGrow>
@@ -2236,10 +2251,10 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox31</rd:DefaultName>
-              <Top>0.92152in</Top>
-              <Left>0.38561in</Left>
+              <Top>0.90902in</Top>
+              <Left>0.21061in</Left>
               <Height>0.13334in</Height>
-              <Width>0.50521in</Width>
+              <Width>0.54281in</Width>
               <Style>
                 <Border />
                 <VerticalAlign>Middle</VerticalAlign>
@@ -2254,7 +2269,7 @@
               <Value>PhevaImg</Value>
               <Sizing>FitProportional</Sizing>
               <Top>0.0125in</Top>
-              <Left>1.78031in</Left>
+              <Left>1.60531in</Left>
               <Height>0.33333in</Height>
               <Width>0.51944in</Width>
               <ZIndex>1</ZIndex>
@@ -2289,7 +2304,7 @@
               </Paragraphs>
               <rd:DefaultName>Textbox31</rd:DefaultName>
               <Top>1.06944in</Top>
-              <Left>0.38561in</Left>
+              <Left>0.21061in</Left>
               <Height>0.14375in</Height>
               <Width>0.46771in</Width>
               <ZIndex>2</ZIndex>
@@ -2327,9 +2342,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox31</rd:DefaultName>
               <Top>0.95902in</Top>
-              <Left>2.83279in</Left>
+              <Left>2.35779in</Left>
               <Height>0.14584in</Height>
-              <Width>0.58859in</Width>
+              <Width>0.47609in</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <Border />
@@ -2365,9 +2380,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox31</rd:DefaultName>
               <Top>0.95902in</Top>
-              <Left>3.42138in</Left>
+              <Left>2.86027in</Left>
               <Height>0.14584in</Height>
-              <Width>0.37371in</Width>
+              <Width>0.44732in</Width>
               <ZIndex>4</ZIndex>
               <Style>
                 <Border />
@@ -2401,7 +2416,7 @@
               </Paragraphs>
               <rd:DefaultName>Textbox31</rd:DefaultName>
               <Top>0.70367in</Top>
-              <Left>1.43664in</Left>
+              <Left>1.26164in</Left>
               <Height>0.13542in</Height>
               <Width>1.18425in</Width>
               <ZIndex>5</ZIndex>
@@ -2434,7 +2449,7 @@
               </Paragraphs>
               <rd:DefaultName>SaleOrderAmount</rd:DefaultName>
               <Top>1.06944in</Top>
-              <Left>0.86939in</Left>
+              <Left>0.69439in</Left>
               <Height>0.14375in</Height>
               <Width>0.63571in</Width>
               <ZIndex>6</ZIndex>
@@ -2456,7 +2471,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Fields!Date.Value</Value>
+                      <Value>=Format(Fields!Date.Value, "dd/MM/yyyy hh:mm tt")</Value>
                       <Style>
                         <FontFamily />
                         <FontSize>5pt</FontSize>
@@ -2469,10 +2484,10 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>SaleOrderAmount</rd:DefaultName>
-              <Top>0.92083in</Top>
-              <Left>0.89082in</Left>
-              <Height>0.13403in</Height>
-              <Width>0.58107in</Width>
+              <Top>0.90833in</Top>
+              <Left>0.75342in</Left>
+              <Height>0.15903in</Height>
+              <Width>0.74057in</Width>
               <ZIndex>7</ZIndex>
               <Visibility>
                 <Hidden>=IIF(First(Fields!SaleOrderQty.Value, "DataSet1") &gt; "0", False, True)</Hidden>
@@ -2506,7 +2521,7 @@
               </Paragraphs>
               <rd:DefaultName>BillPaid</rd:DefaultName>
               <Top>0.38056in</Top>
-              <Left>1.50809in</Left>
+              <Left>1.33309in</Left>
               <Height>0.13542in</Height>
               <Width>1.03754in</Width>
               <ZIndex>8</ZIndex>
@@ -2540,7 +2555,7 @@
               </Paragraphs>
               <rd:DefaultName>BillPaid</rd:DefaultName>
               <Top>0.53497in</Top>
-              <Left>1.50551in</Left>
+              <Left>1.33051in</Left>
               <Height>0.13542in</Height>
               <Width>1.03754in</Width>
               <ZIndex>9</ZIndex>
@@ -2571,7 +2586,7 @@
           </Style>
         </PageFooter>
         <PageHeight>6.1in</PageHeight>
-        <PageWidth>4.1in</PageWidth>
+        <PageWidth>3.34in</PageWidth>
         <InteractiveHeight>5.845in</InteractiveHeight>
         <InteractiveWidth>4.135in</InteractiveWidth>
         <Style />

@@ -31,10 +31,6 @@ namespace MYBUSINESS.Models
         public string Email { get; set; }
         public string Website { get; set; }
         public string Tagline { get; set; }
-        public string CompanyName { get; set; }
-        public string CompanyAddress { get; set; }
-        public string VatNumber { get; set; }
-        public Nullable<decimal> TaxInPercent { get; set; }
         public Nullable<decimal> ItemTotal { get; set; }
         public string SaleType { get; set; }
         public Nullable<decimal> SaleOrderAmount { get; set; }

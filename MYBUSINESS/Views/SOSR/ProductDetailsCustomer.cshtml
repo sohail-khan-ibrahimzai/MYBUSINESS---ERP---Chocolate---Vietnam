@@ -1,0 +1,45 @@
+﻿@using MYBUSINESS.Models
+@model List<CustomerDetailsViewModel> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+</head>
+<body>
+    <h1>Selected Products</h1>
+    <table id="productDetailsTable">
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Product Name</th> 
+                <th>Sale Price</th> 
+                <th>Purchase Price</th> 
+                <th>Quantity</th> 
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var product in Model)
+                {
+                    <tr>
+                        <td>@product.ProductId</td>
+                        <td>@product.ProductName</td>
+                        <td>@product.SalePrice</td>
+                        <td>@product.PurchasePrice</td>
+                        <td>@product.Quantity</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">No products selected.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

@@ -20,7 +20,6 @@ namespace MYBUSINESS.Models
             this.ExpenseDetails = new HashSet<ExpenseDetail>();
             this.LoanDetails = new HashSet<LoanDetail>();
             this.PODs = new HashSet<POD>();
-            this.ProductCategories = new HashSet<ProductCategory>();
             this.ProductDetails = new HashSet<ProductDetail>();
             this.ProductionOrderDetails = new HashSet<ProductionOrderDetail>();
             this.RentDetails = new HashSet<RentDetail>();
@@ -59,8 +58,6 @@ namespace MYBUSINESS.Models
         public virtual Location Location { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<POD> PODs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductCategory> ProductCategories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductDetail> ProductDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

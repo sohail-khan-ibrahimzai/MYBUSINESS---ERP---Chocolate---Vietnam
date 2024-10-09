@@ -21,5 +21,10 @@ namespace MYBUSINESS.Models
         public string Email { get; set; }
         public string Website { get; set; }
         public string Tagline { get; set; }
+        public string VatNumber { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyAddress { get; set; }
+        public string CompanyTaxNumber { get; set; }
+        public Nullable<decimal> TaxInPercent { get; set; }
     }
 }

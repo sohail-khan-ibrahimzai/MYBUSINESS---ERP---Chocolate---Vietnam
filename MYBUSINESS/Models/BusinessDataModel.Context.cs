@@ -44,6 +44,7 @@ namespace MYBUSINESS.Models
         public virtual DbSet<PO> POes { get; set; }
         public virtual DbSet<POD> PODs { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductCategory> ProductCategories { get; set; }
         public virtual DbSet<ProductDetail> ProductDetails { get; set; }
         public virtual DbSet<ProductionOrder> ProductionOrders { get; set; }
         public virtual DbSet<ProductionOrderDetail> ProductionOrderDetails { get; set; }
@@ -56,6 +57,7 @@ namespace MYBUSINESS.Models
         public virtual DbSet<Store> Stores { get; set; }
         public virtual DbSet<StoreProduct> StoreProducts { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<UserAuthorization> UserAuthorizations { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)

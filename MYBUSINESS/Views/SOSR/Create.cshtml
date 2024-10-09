@@ -22,20 +22,13 @@
     //var productListJson = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ProductList, settingss);
 }
 
-
-
-
-
 <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-timepicker-addon.css">
-
 
 <script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-sliderAccess.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-timepicker-addon.js"></script>
-
-
 
 @*<link href="@Url.Content("~/Content/custom/custom.css")" rel="stylesheet" type="text/css" />*@
 <script src="~/Content/custom/customerSOSR.js"></script>
@@ -47,11 +40,15 @@
 
 <!-- Latest compiled JavaScript -->
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+<script src="~/Content/custom/menuHide.js"></script>
 @*<link href="@Url.Content("~/Content/custom/downloads/datetimepicker-master/jquery.datetimepicker.css")" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/Content/custom/downloads/datetimepicker-master/jquery.datetimepicker.js"></script>*@
 
+<!-- Load jQuery -->
+@*<script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>*@
+<script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
+<script src="~/signalr/hubs"></script>
 <style>
     .table-wrapper2 {
         margin: 30px auto;
@@ -215,6 +212,7 @@
         z-index: 1000;
         padding: 10px;
     }
+
     .highlight {
         background-color: yellow;
     }
@@ -586,14 +584,14 @@
                                                     <button type="button" class="form-control styled-input quickAmountAdd" value="200000" readonly>200 000 ₫</button><br />
                                                     <button type="button" class="form-control styled-input quickAmountAdd" value="500000" readonly>500 000 ₫</button><br />
                                                     @*<input type="text" class="form-control styled-input quickAmountAdd" value="2000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="3000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="5000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="10 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="20 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="50 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="100 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="200 000 ₫" readonly><br />
-                                                    <input type="text" class="form-control styled-input quickAmountAdd" value="500 000 ₫" readonly><br />*@
+                                                        <input type="text" class="form-control styled-input quickAmountAdd" value="3000 ₫" readonly><br />
+                                                        <input type="text" class="form-control styled-input quickAmountAdd" value="5000 ₫" readonly><br />
+                                                        <input type="text" class="form-control styled-input quickAmountAdd" value="10 000 ₫" readonly><br />
+                                                        <input type="text" class="form-control styled-input quickAmountAdd" value="20 000 ₫" readonly><br />
+                                                        <input type="text" class="form-control styled-input quickAmountAdd" value="50 000 ₫" readonly><br />
+                                                        <input type="text" class="form-control styled-input quickAmountAdd" value="100 000 ₫" readonly><br />
+                                                        <input type="text" class="form-control styled-input quickAmountAdd" value="200 000 ₫" readonly><br />
+                                                        <input type="text" class="form-control styled-input quickAmountAdd" value="500 000 ₫" readonly><br />*@
                                                 </div>
                                             </div>
                                             <div class="col-md-5">
@@ -621,7 +619,7 @@
                                                     </div>
                                                     <div class="form-group hiddenCurrencyInputs" style="display:none;">
                                                         <label for="inputField">Cash USD($)</label>
-                                                        <input type="text" autocomplete="off" class="form-control" name="cashUsd" id="cashUsd"  value="">
+                                                        <input type="text" autocomplete="off" class="form-control" name="cashUsd" id="cashUsd" value="">
                                                         <b><span id="totalDollarsToVnd"></span>(₫)</b>
                                                     </div>
 
@@ -895,7 +893,7 @@
                                                                data-placement="top"
                                                                title="Type quantity"
                                                                maxlength="10"
-                                                               oninput="validateQuantityInput(event)"/>
+                                                               oninput="validateQuantityInput(event)" />
                                                         @*<input type="number" autocomplete="off" class="form-control" name="productQuantity" id="productQuantity" value="1" placeholder="Type quantity" data-toggle="tooltip" data-placement="top" title="Type quantity" maxlength="10">*@
                                                     </div>
                                                 </form>
@@ -970,12 +968,109 @@
         </div>
     </div>
 
-
 }
 <script>
-
     $(document).ready(function () {
         document.getElementById('SOCreate').reset(); // has to be handle
+        //const connection = $.hubConnection();
+        //const phevaHub = connection.createHubProxy('PhevaHub');
+
+        //connection.start({ transport: ['webSockets', 'serverSentEvents', 'longPolling'] }) // Enable different transports
+        //    .done(function () {
+        //        console.log("Connected to SignalR hub");
+        //    })
+        //    .fail(function (error) {
+        //        console.error("Could not connect to SignalR hub:", error);
+        //    });
+
+        //// Listen for the product updates
+        //phevaHub.on('ReceiveProductUpdate', function (productDetails) {
+        //    console.log('Received product update:', productDetails);
+        //    // Here you can update your UI based on productDetails
+        //});
+        //$.signalR.hub.logging = true; // Enable SignalR logging
+        //const connection = $.hubConnection();
+        debugger;
+        //const connection = $.connection.phevaHub;
+        //var name = "sdadsdsa";
+        //var message = "dsadasdsadsa";
+        //// This function is called when a new message is received
+        //connection.client.addNewMessageToPage = function (name, message) {
+        //    debugger;
+        //    console.log("Received message:", name, message);
+        //    // You can update your UI here
+        //    // For example, append to a list
+        //    //$('#messagesList').append('<li><strong>' + name + ':</strong> ' + message + '</li>');
+        //};
+
+        //// Start the connection
+        //$.connection.hubs.start({ transport: 'longPolling' }, function () {
+        //    console.log('connection started!');
+        //});
+
+// Start the connection working //////////////////////////////////
+        //const connection = $.connection.phevaHub;
+        ////$.connection.hub.start({ transport: 'longPolling' })
+        //$.connection.hub.start({ transport: ['webSockets', 'longPolling', 'serverSentEvents'] })
+        //    .done(function () {
+        //        console.log('Connection started!');
+        //        // Call the hub method once the connection is established
+        //        //const name = "John Doe";  // Example name
+        //        //const message = "Hello, world!"; // Example message
+        //        // Call the server-side method
+        //        const ok = "John Doe";
+        //        connection.server.getCustomerProductDetails(ok);
+        //    })
+        //    .fail(function (error) {
+        //        console.error('Could not connect to SignalR hub:', error);
+        //    });
+
+////////////////////////////////////////////////////
+        // Define the client method for receiving messages
+        //connection.client.addNewMessageToPage = function (name, message) {
+        //    console.log("Received message:", name, message);
+        //    // You can update your UI here
+        //    // For example, append to a list
+        //    // $('#messagesList').append('<li><strong>' + name + ':</strong> ' + message + '</li>');
+        //};
+
+        //// Start the connection
+        //$.connection.hub.start({ transport: 'longPolling' })
+        //    .done(function () {
+        //        console.log('Connection started!');
+        //    })
+        //    .fail(function (error) {
+        //        console.error('Could not connect to SignalR hub:', error);
+        //    });
+
+        //connection.start({ transport: ['webSockets', 'longPolling', 'serverSentEvents'] })
+        //    .done(function () {
+        //        console.log("Connected to SignalR hub");
+        //        console.log("Using transport:", connection.transport.name); // Check the active transport
+        //    })
+        //    .fail(function (error) {
+        //        console.error("Could not connect to SignalR hub:", error);
+        //    });
+
+        // Listen for the ReceiveProductUpdate method
+        //phevaHub.on('ReceiveProductUpdate', function (productDetails) {
+        //    console.log('Product updated:', productDetails);
+        //});
+        // Start the connection and enable multiple transport methods
+        //connection.start({ transport: ['webSockets', 'serverSentEvents', 'longPolling'] })
+        //    .done(function () {
+        //        console.log('Connected to SignalR hub');
+        //    })
+        //    .fail(function (error) {
+        //        console.error('Error connecting to SignalR hub:', error);
+        //    });
+        //// Listen for messages from the server
+        //phevaHub.on('GetMessage', function () {
+        //    debugger;
+        //    console.log('Product updated:');
+        //    debugger;
+        //    // You can update your UI with the received productDetails here
+        //});
     });
     //$("[id^='quantity'],#salePrice").keyup(function () {
     //    //alert("afasf");
@@ -1043,8 +1138,8 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 
-
 <script type="text/javascript">
+
     //document.getElementById('barcodeInput').focus();
     //document.getElementById('barcodeInput').addEventListener('keyup', function (event) {
     //    if (event.key === 'Enter') {
@@ -1096,7 +1191,8 @@
            @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
       }
       }
-else {
+      else {
+          @:window.open('ProductDetailsCustomer', '_blank');
           @:console.log("Report can not be null");
       }
           @*if(ViewBag.WebserviceDownError!= null) {

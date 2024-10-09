@@ -26,6 +26,8 @@ namespace MYBUSINESS.Models
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
         public string Status { get; set; }
+        public string Address { get; set; }
+        public string PhoneNumber { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StoreProduct> StoreProducts { get; set; }

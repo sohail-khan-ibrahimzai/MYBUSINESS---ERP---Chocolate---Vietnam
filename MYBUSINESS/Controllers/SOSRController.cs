@@ -25,6 +25,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Web.Helpers;
 using Newtonsoft.Json.Linq;
 using System.Data.Entity.Core.Metadata.Edm;
+using Microsoft.AspNet.SignalR;
+using MYBUSINESS.HubConnection;
 
 namespace MYBUSINESS.Controllers
 {
@@ -898,6 +900,7 @@ namespace MYBUSINESS.Controllers
             //var parseId = int.Parse(storeId);
 
             var getStoreName = db.Stores.FirstOrDefault(x => x.Id == storeId);
+            var getVatTaxInPercent = db.MyBusinessInfoes.FirstOrDefault().TaxInPercent;
 
             string SOId = string.Empty;
             //SO sO = new SO();
@@ -982,6 +985,7 @@ namespace MYBUSINESS.Controllers
                 sO.EmployeeId = emp.Id;
                 //StoreId 
                 //sO.StoreId = parseId; commented due to session issue
+                sO.StoreId = storeId;
 
                 db.SOes.Add(sO);
                 //db.SaveChanges();
@@ -2204,7 +2208,7 @@ namespace MYBUSINESS.Controllers
             string _customerPosPhoneNumber = TempData["_POSPhoneNumber"] as string;
             string _customerVatNumber = TempData["_CustomerVatNumber"] as string;
 
-            string _invoiceSeries = TempData["_InvoiceSeries"]  as string;
+            string _invoiceSeries = TempData["_InvoiceSeries"] as string;
             string _invoiceNumber = TempData["_InvoiceNumber"] as string;
             string _macqt = TempData["_Macqt"] as string;
             string _sobmaomat = TempData["_Sobaomat"] as string;
@@ -2289,7 +2293,6 @@ namespace MYBUSINESS.Controllers
             if (FileTempered(viewer.LocalReport.ReportPath) == true)
             {
                 bytes = Encoding.ASCII.GetBytes("Report not found. Contact +92 300 88 55 011");
-
             }
             else
             { bytes = viewer.LocalReport.Render("PDF"); }//, null, out mimeType, out encoding, out extension, out streamIds, out warnings);}
@@ -2985,7 +2988,32 @@ namespace MYBUSINESS.Controllers
             }
             db.SaveChanges();
         }
+        public ActionResult ProductDetailsCustomer()
+        {
+            // Retrieve the cookie
+            var cookie = Request.Cookies["selectedProducts"];
+            var products = new List<CustomerDetailsViewModel>();
 
+            if (cookie != null)
+            {
+                // Parse the cookie value (assuming it is a JSON string)
+                var cookieValue = cookie.Value;
+
+                // Deserialize the JSON string into a list of CustomerDetailsViewModel objects
+                products = JsonConvert.DeserializeObject<List<CustomerDetailsViewModel>>(cookieValue);
+            }
+
+            // Pass the product list to the view
+            return View(products);
+        }
+        public ActionResult SendProductUpdate(string productDetails)
+        {
+            var context = GlobalHost.ConnectionManager.GetHubContext<PhevaHub>();
+            context.Clients.All.ReceiveProductUpdate(productDetails);  // Broadcast to all clients
+            return Json(new { success = true });
+        }
     }
+    // Product model for deserialization
+    
 
 }

@@ -24,17 +24,19 @@
     <!-- jQuery 3 -->
     <script src="~/bower_components/jquery/dist/jquery.min.js"></script>
 
-    @*<script src="~/dist/js/adminlte.min.js"></script>*@
+    <script src="~/dist/js/adminlte.min.js"></script>
     <script>
         $.widget.bridge('uibutton', $.ui.button);
     </script>
     <!-- AdminLTE App -->
     <!-- Latest compiled JavaScript -->
     <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>*@
 
     <script src="~/Content/custom/shared.js"></script>
+    <script src="~/Content/custom/menuHide.js"></script>
     <style>
         .form-group {
             margin-bottom: 15px; /* Add some spacing between form groups */
@@ -73,7 +75,7 @@
                 </a>
 
                 <script>
-                   
+
                 </script>
 
                 <div class="navbar-custom-menu">
@@ -137,20 +139,20 @@
                     <li><a href="/Products/Create"><i class="fa fa-sparkles"></i> <span>New Product</span></a></li>
                     <li><a href="/Products/Index"><i class="fa fa-gift"></i> <span>Products/Services List</span></a></li>
                     <li><a href="/StockTransections/Summary"><i class="fa fa-list"></i> <span>Stock Summary</span></a></li>
-                    
+
                     <li><a href="#"><i class=""></i> <span><b>Customers</b></span></a></li>
                     <li><a href="/Customers/Create"><i class="fa fa-sparkles"></i> <span>New Customer</span></a></li>
                     <li><a href="/Customers/Index"><i class="fa fa-search"></i> <span>Customers List</span></a></li>
-                    
+
                     <li><a href="#"><i class=""></i> <span><b>Suppliers</b></span></a></li>
                     <li><a href="/Suppliers/Create"><i class="fa fa-sparkles"></i> <span>New Supplier</span></a></li>
                     <li><a href="/Suppliers/Index"><i class="fa fa-search"></i> <span>Suppliers List</span></a></li>
-                    
+
                     <li><a href="#"><i class=""></i> <span><b>Stores</b></span></a></li>
                     <li><a href="/Stores/Create?IsReturn=false"><i class="fa fa-sparkles"></i> <span>New Store</span></a></li>
                     <li><a href="/Stores/Index"><i class="fa fa-search"></i> <span>Stores History</span></a></li>
-                    <li><a href="/Stores/GetStoreVndBalance"><i class="fa fa-sparkles"></i> <span>Balance History</span></a></li>    
-                    
+                    <li><a href="/Stores/GetStoreVndBalance"><i class="fa fa-sparkles"></i> <span>Balance History</span></a></li>
+
                     <li><a href="#"><i class=""></i> <span><b>Currency</b></span></a></li>
                     <li><a href="/Currencies/Create?IsReturn=false"><i class="fa fa-sparkles"></i> <span>New Currency</span></a></li>
                     <li><a href="/Currencies/Index"><i class="fa fa-money"></i> <span>Currency History</span></a></li>
@@ -184,12 +186,15 @@
             <strong>Copyright &copy; @DateTime.Now.Year <a href="#">Hans Corp Abwabal</a>.</strong> All rights
             reserved.
         </footer>
-        <script>
-            
-        </script>
+        @*<script>
+            $(document).ready(function () {
+                $('#menuToggle').trigger('click');
+            });
+        </script>*@
+
         <!-- /.control-sidebar -->
         <!-- Add the sidebar's background. This div must be placed
-         immediately after the control sidebar -->
+     immediately after the control sidebar -->
         <div class="control-sidebar-bg"></div>
     </div>
     @RenderSection("scripts", required: false)

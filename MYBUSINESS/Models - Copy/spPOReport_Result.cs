@@ -11,17 +11,14 @@ namespace MYBUSINESS.Models
 {
     using System;
     
-    public partial class spSOReport_Result
+    public partial class spPOReport_Result
     {
         public string Id { get; set; }
-        public Nullable<decimal> SOSerial { get; set; }
-        public Nullable<decimal> SaleOrderQty { get; set; }
-        public string PaymentMethod { get; set; }
+        public Nullable<decimal> POSerial { get; set; }
+        public Nullable<decimal> PurchaseOrderQty { get; set; }
         public string Name { get; set; }
-        public string Address { get; set; }
-        public string CustomerRemarks { get; set; }
         public string ProductName { get; set; }
-        public Nullable<decimal> SalePrice { get; set; }
+        public Nullable<decimal> PurchasePrice { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<decimal> PerPack { get; set; }
         public Nullable<bool> IsPack { get; set; }
@@ -31,15 +28,10 @@ namespace MYBUSINESS.Models
         public string Email { get; set; }
         public string Website { get; set; }
         public string Tagline { get; set; }
-        public string CompanyName { get; set; }
-        public string CompanyAddress { get; set; }
-        public string VatNumber { get; set; }
-        public Nullable<decimal> TaxInPercent { get; set; }
         public Nullable<decimal> ItemTotal { get; set; }
         public string SaleType { get; set; }
-        public Nullable<decimal> SaleOrderAmount { get; set; }
+        public Nullable<decimal> PurchaseOrderAmount { get; set; }
         public decimal BillPaid { get; set; }
-        public Nullable<decimal> BillPaidByCash { get; set; }
         public Nullable<decimal> Discount { get; set; }
         public Nullable<decimal> Balance { get; set; }
         public Nullable<decimal> PrevBalance { get; set; }

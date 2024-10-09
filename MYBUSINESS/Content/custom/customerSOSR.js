@@ -745,7 +745,7 @@ function addProduct(encodedProductJson) {
         }
         else { debugger; handleProductAddition(encodedProductJson, quantityFromModal, false); }
         // Find the row for the existing product based on the product name
-       
+
     });
 
 }
@@ -1289,7 +1289,6 @@ function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate
         qtyInput.value = quantityFromScanner;
         qtyInput.className = 'form-control';
         qtyInput.style.width = '60px'; // Adjust width as needed
-
         // Listen for changes in the quantity input (on key press)
         qtyInput.addEventListener('input', function () {
             var newQty = parseInt(qtyInput.value, 10);
@@ -1304,7 +1303,7 @@ function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate
 
             // Update hidden quantity input
             hiddenQuantityInput.value = newQty;
-
+            //localStorage.setItem('selectedProducts', JSON.stringify(product));
             // Recalculate total balance
             updatePayButton();
         });
@@ -1323,7 +1322,7 @@ function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate
             //    $(this).select(); // Highlight the text in the input
             //});
             isPupdateQuantity = true;
-            $('#quantityAddpopup').data('productDetails', JSON.stringify(product));
+            //$('#quantityAddpopup').data('productDetails', JSON.stringify(product));
         });
 
         // Append the input to the qtyCell
@@ -1398,12 +1397,90 @@ function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate
 
         // Update row indices
         updateRowIndices();
+
+        // After adding the row, store all selected products in localStorage
+        saveSelectedProductsToLocalStorage();
     }
 
     // Update the total amount for the "Pay" button
     updatePayButton();
 }
+// Utility function to set a cookie
+function setCookie(name, value, days) {
+    debugger;
+    let expires = "";
+    if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Convert days to milliseconds
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
 
+// Utility function to get a cookie by name
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+// Function to remove a cookie by setting its expiration to the past
+function deleteCookie(name) {
+    setCookie(name, "", -1);  // Setting the expiration date to the past
+}
+function saveSelectedProductsToLocalStorage() {
+    debugger;
+    const rows = document.querySelectorAll('#selectedProducts tbody tr');
+    const allProducts = [];
+
+    // Loop through each row
+    rows.forEach((row, index) => {
+        // Get hidden input values for each product
+        const productId = row.querySelector(`input[name='SaleOrderDetail[${index}].ProductId']`).value;
+        const productName = row.querySelector(`input[name='SaleOrderDetail[${index}].Product.Name']`).value;
+        const salePrice = row.querySelector(`input[name='SaleOrderDetail[${index}].SalePrice']`).value;
+        const purchasePrice = row.querySelector(`input[name='SaleOrderDetail[${index}].PurchasePrice']`).value;
+        const quantity = row.querySelector(`input[name='SaleOrderDetail[${index}].Quantity']`).value;
+
+        // Push product details into the allProducts array
+        allProducts.push({
+            productId,
+            productName,
+            salePrice,
+            purchasePrice,
+            quantity
+        });
+    });
+
+    // Log all products to the console
+    //console.log(allProducts);
+    // Store the array of selected products in localStorage as a JSON string
+    // Return the array of all products
+    //localStorage.setItem('selectedProducts', JSON.stringify(allProducts));
+    const productsJSON = JSON.stringify(allProducts);
+    setCookie('selectedProducts', productsJSON, 1);  // 1 day expiration
+    const connection = $.connection.phevaHub;
+    //$.connection.hub.start({ transport: 'longPolling' })
+    $.connection.hub.start({ transport: ['webSockets', 'longPolling', 'serverSentEvents'] })
+        .done(function () {
+            console.log('Connection started!');
+            // Call the hub method once the connection is established
+            //const name = "John Doe";  // Example name
+            //const message = "Hello, world!"; // Example message
+            // Call the server-side method
+            const ok = "John Doe";
+            connection.server.getCustomerProductDetails(productsJSON);
+        })
+        .fail(function (error) {
+            console.error('Could not connect to SignalR hub:', error);
+        });
+    //window.location.href = 'ProductDetailsCustomer'; 
+    return allProducts;
+}
 
 //function handleProductAddition(encodedProductJson, quantityFromScanner) {
 //    var product = JSON.parse(encodedProductJson);
@@ -1725,6 +1802,8 @@ function findProductRow(productName) {
 //    updatePayButton();
 //}
 
+
+
 //Function to remove Entire row
 function removeProductsEntireRow(row, pricePerUnit) {
     // Regardless of quantity, remove the entire row
@@ -1735,6 +1814,10 @@ function removeProductsEntireRow(row, pricePerUnit) {
 
     // Update the total amount for the "Pay" button
     updatePayButton();
+    saveSelectedProductsToLocalStorage();
+    //setCookie('selectedProducts', productsJSON, 1);
+    //deleteCookie('selectedProducts');
+    //localStorage.removeItem('selectedProducts');
 }
 
 // Function to update the total amount for the "Pay" button
@@ -1862,8 +1945,6 @@ $(function () {
 });
 
 var _keybuffer = "";
-
-
 
 $(document).ready(function () {
     //alert(products);
@@ -2322,6 +2403,7 @@ $(document).ready(function () {
             $('#payModal').on('shown.bs.modal', function () {
                 $('#cashvnd').focus();
             });
+            
         }
         else {
             alert('please select product first');
@@ -2347,7 +2429,40 @@ $(document).ready(function () {
         $('#productQuantity').val('1');
     });
     $('#payallbycard').click(function () {
+
+        //const connection = $.connection.phevaHub;
+        //// Start the connection
+        ////$.connection.hub.start({ transport: 'longPolling' })
+        //const getStoredCookies = getCookie('selectedProducts');
+        //$.connection.hub.start({ transport: ['webSockets', 'longPolling', 'serverSentEvents'] })
+        //    .done(function () {
+        //        console.log('Connection started!');
+        //        connection.server.getCustomerProductDetails(getStoredCookies);
+        //    })
+        //    .fail(function (error) {
+        //        console.error('Could not connect to SignalR hub:', error);
+        //    });
+
+
         //debugger;
+        // Get the stored cookie value
+        //const getStoredCookies = getCookie('selectedProducts');
+
+        //// Check if the cookie exists
+        //if (getStoredCookies) {
+        //    // Parse the JSON string to an array of objects
+        //    const productsArray = JSON.parse(getStoredCookies);
+
+        //    // Loop through the products array and access the productId for each
+        //    productsArray.forEach(product => {
+        //        console.log('Product ID:', product.productId);
+        //        console.log('Product Name:', product.productName);
+        //        // Access other properties like productName, salePrice, etc.
+        //    });
+        //} else {
+        //    console.log('No products found in the cookie.');
+        //}
+
         if (totalAmountForSelectedProduct != 0) {
             debugger;
             $('#lefttopayvnd').val('0');

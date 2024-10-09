@@ -43,6 +43,9 @@ namespace MYBUSINESS.Models
         public Nullable<bool> Quotation { get; set; }
         public Nullable<int> StoreId { get; set; }
         public Nullable<decimal> BillPaidByCash { get; set; }
+        public Nullable<int> UserId { get; set; }
+        public string VatNumber { get; set; }
+        public Nullable<decimal> VatAmountInPercent { get; set; }
     
         public virtual BankAccount BankAccount { get; set; }
         public virtual Customer Customer { get; set; }
