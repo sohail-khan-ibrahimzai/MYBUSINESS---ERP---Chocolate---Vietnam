@@ -104,7 +104,7 @@
             //:
             //"0106026495-999"
             // Append payment details below the table
-            $('#paymentDetails').append(
+            $('#customerDetails').append(
              `<div>
             <p><strong>Your VAT Invoice information:</strong></p>
             <p><strong>Customer name:</strong> ${customers.CustomerName}</p>
@@ -113,6 +113,10 @@
             <p><strong>Tax code:</strong> ${customers.VatNumber}</p>
         </div>`
             );
+            setTimeout(function () {
+                location.reload();
+            }, 60000);
+
         };
         //////Payment Details
         //connection.client.broadcastPaymentDetails = function (payments) {
