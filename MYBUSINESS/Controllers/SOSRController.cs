@@ -2242,6 +2242,7 @@ namespace MYBUSINESS.Controllers
             if (emp.Login == "LahoreKarachi")
             { viewer.LocalReport.ReportPath = Server.MapPath("~/Reports/Sale_LahoreKarachi.rdlc"); }
             else
+            //{ viewer.LocalReport.ReportPath = Server.MapPath("~/Reports/Sale_Receipt.rdlc"); }
             { viewer.LocalReport.ReportPath = Server.MapPath("~/Reports/Sale_Receipt.rdlc"); }
 
 
@@ -2261,6 +2262,7 @@ namespace MYBUSINESS.Controllers
         //new ReportParameter("POSName",  "N/A"),   // Pass POS Name
         //new ReportParameter("CustomerVatNumber", "N/A")   // Pass POS Name 
         new ReportParameter("SaleOrderID", id),
+
         new ReportParameter("CustomerName", _customerName ?? "-"),  //// Pass Customer Name
         //new ReportParameter("CustomerEmail", _customerEmail ?? "N/A"), //// Pass Customer Email
         new ReportParameter("CustomerEmail", _customerEmail ?? "-"), //// Pass Customer Email
@@ -2991,27 +2993,28 @@ namespace MYBUSINESS.Controllers
         public ActionResult ProductDetailsCustomer()
         {
             // Retrieve the cookie
-            var cookie = Request.Cookies["selectedProducts"];
-            var products = new List<CustomerDetailsViewModel>();
+            //var cookie = Request.Cookies["selectedProducts"];
+            //var products = new List<CustomerDetailsViewModel>();
 
-            if (cookie != null)
-            {
-                // Parse the cookie value (assuming it is a JSON string)
-                var cookieValue = cookie.Value;
+            //if (cookie != null)
+            //{
+            //    // Parse the cookie value (assuming it is a JSON string)
+            //    var cookieValue = cookie.Value;
 
-                // Deserialize the JSON string into a list of CustomerDetailsViewModel objects
-                products = JsonConvert.DeserializeObject<List<CustomerDetailsViewModel>>(cookieValue);
-            }
+            //    // Deserialize the JSON string into a list of CustomerDetailsViewModel objects
+            //    products = JsonConvert.DeserializeObject<List<CustomerDetailsViewModel>>(cookieValue);
+            //}
 
             // Pass the product list to the view
-            return View(products);
+            //return View(products);
+            return View();
         }
-        public ActionResult SendProductUpdate(string productDetails)
-        {
-            var context = GlobalHost.ConnectionManager.GetHubContext<PhevaHub>();
-            context.Clients.All.ReceiveProductUpdate(productDetails);  // Broadcast to all clients
-            return Json(new { success = true });
-        }
+        //public ActionResult SendProductUpdate(string productDetails)
+        //{
+        //    var context = GlobalHost.ConnectionManager.GetHubContext<PhevaHub>();
+        //    context.Clients.All.ReceiveProductUpdate(productDetails);  // Broadcast to all clients
+        //    return Json(new { success = true });
+        //}
     }
     // Product model for deserialization
     

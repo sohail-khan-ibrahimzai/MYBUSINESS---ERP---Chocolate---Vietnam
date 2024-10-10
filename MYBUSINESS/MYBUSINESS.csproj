@@ -3665,7 +3665,7 @@
     <Content Include="Reports\Sale_Receipt-Latest.rdlc" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\Sale_Receipt - Copy %282%29.rdlc" />
+    <Content Include="Reports\Sale_Receipt 011.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Reports\Sale_Receipt-Copy001.rdlc" />

@@ -972,43 +972,8 @@
 <script>
     $(document).ready(function () {
         document.getElementById('SOCreate').reset(); // has to be handle
-        //const connection = $.hubConnection();
-        //const phevaHub = connection.createHubProxy('PhevaHub');
-
-        //connection.start({ transport: ['webSockets', 'serverSentEvents', 'longPolling'] }) // Enable different transports
-        //    .done(function () {
-        //        console.log("Connected to SignalR hub");
-        //    })
-        //    .fail(function (error) {
-        //        console.error("Could not connect to SignalR hub:", error);
-        //    });
-
-        //// Listen for the product updates
-        //phevaHub.on('ReceiveProductUpdate', function (productDetails) {
-        //    console.log('Received product update:', productDetails);
-        //    // Here you can update your UI based on productDetails
-        //});
-        //$.signalR.hub.logging = true; // Enable SignalR logging
-        //const connection = $.hubConnection();
         debugger;
-        //const connection = $.connection.phevaHub;
-        //var name = "sdadsdsa";
-        //var message = "dsadasdsadsa";
-        //// This function is called when a new message is received
-        //connection.client.addNewMessageToPage = function (name, message) {
-        //    debugger;
-        //    console.log("Received message:", name, message);
-        //    // You can update your UI here
-        //    // For example, append to a list
-        //    //$('#messagesList').append('<li><strong>' + name + ':</strong> ' + message + '</li>');
-        //};
-
-        //// Start the connection
-        //$.connection.hubs.start({ transport: 'longPolling' }, function () {
-        //    console.log('connection started!');
-        //});
-
-// Start the connection working //////////////////////////////////
+         // Start the connection working //////////////////////////////////
         //const connection = $.connection.phevaHub;
         ////$.connection.hub.start({ transport: 'longPolling' })
         //$.connection.hub.start({ transport: ['webSockets', 'longPolling', 'serverSentEvents'] })
@@ -1024,53 +989,7 @@
         //    .fail(function (error) {
         //        console.error('Could not connect to SignalR hub:', error);
         //    });
-
-////////////////////////////////////////////////////
-        // Define the client method for receiving messages
-        //connection.client.addNewMessageToPage = function (name, message) {
-        //    console.log("Received message:", name, message);
-        //    // You can update your UI here
-        //    // For example, append to a list
-        //    // $('#messagesList').append('<li><strong>' + name + ':</strong> ' + message + '</li>');
-        //};
-
-        //// Start the connection
-        //$.connection.hub.start({ transport: 'longPolling' })
-        //    .done(function () {
-        //        console.log('Connection started!');
-        //    })
-        //    .fail(function (error) {
-        //        console.error('Could not connect to SignalR hub:', error);
-        //    });
-
-        //connection.start({ transport: ['webSockets', 'longPolling', 'serverSentEvents'] })
-        //    .done(function () {
-        //        console.log("Connected to SignalR hub");
-        //        console.log("Using transport:", connection.transport.name); // Check the active transport
-        //    })
-        //    .fail(function (error) {
-        //        console.error("Could not connect to SignalR hub:", error);
-        //    });
-
-        // Listen for the ReceiveProductUpdate method
-        //phevaHub.on('ReceiveProductUpdate', function (productDetails) {
-        //    console.log('Product updated:', productDetails);
-        //});
-        // Start the connection and enable multiple transport methods
-        //connection.start({ transport: ['webSockets', 'serverSentEvents', 'longPolling'] })
-        //    .done(function () {
-        //        console.log('Connected to SignalR hub');
-        //    })
-        //    .fail(function (error) {
-        //        console.error('Error connecting to SignalR hub:', error);
-        //    });
-        //// Listen for messages from the server
-        //phevaHub.on('GetMessage', function () {
-        //    debugger;
-        //    console.log('Product updated:');
-        //    debugger;
-        //    // You can update your UI with the received productDetails here
-        //});
+       ////////////////////////////////////////////////////
     });
     //$("[id^='quantity'],#salePrice").keyup(function () {
     //    //alert("afasf");

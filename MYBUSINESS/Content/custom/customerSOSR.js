@@ -1235,7 +1235,7 @@ function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate
         // Update the totalVndBalanceHeader by adding the difference in price
         var oldTotalPrice = currentQty * product.SalePrice;
         totalVndBalanceHeader += newTotalPrice - oldTotalPrice;
-
+        saveSelectedProductsToLocalStorage();
         isPupdateQuantity = false;
 
     } else if (existingRow && !isUpdate) {
@@ -1261,7 +1261,7 @@ function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate
         // Update the totalVndBalanceHeader by adding the difference in price
         var oldTotalPrice = currentQty * product.SalePrice;
         totalVndBalanceHeader += newTotalPrice - oldTotalPrice;
-
+        saveSelectedProductsToLocalStorage();
     } else {
         // Create a new row if the product does not exist
         var newRow = document.createElement('tr');
@@ -1462,18 +1462,37 @@ function saveSelectedProductsToLocalStorage() {
     // Return the array of all products
     //localStorage.setItem('selectedProducts', JSON.stringify(allProducts));
     const productsJSON = JSON.stringify(allProducts);
-    setCookie('selectedProducts', productsJSON, 1);  // 1 day expiration
+    //setCookie('selectedProducts', productsJSON, 1);  // 1 day expiration commented just for testing
     const connection = $.connection.phevaHub;
+    //connection.client.broadcastProductUpdate = function (productsJSON) {
+    //    debugger;
+    //    console.log('Received product update in Detail view:', productsJSON);
+    //    ////var products = JSON.parse(productsJSON);
+    //    //debugger;
+    //    //$('#productDetailsTable tbody').empty();
+
+    //    //// Populate the table with new data
+    //    //productsJSON.forEach(function (product) {
+    //    //    $('#productDetailsTable tbody').append(
+    //    //        `<tr>
+    //    //            <td>${product.ProductId}</td>
+    //    //            <td>${product.ProductName}</td>
+    //    //            <td>${product.SalePrice}</td>
+    //    //            <td>${product.PurchasePrice}</td>
+    //    //            <td>${product.Quantity}</td>
+    //    //        </tr>`
+    //    //    );
+    //    //});
+    //    // Call the function to update the table with the received data
+    //    //updateProductTable(productsJSON);
+    //};
     //$.connection.hub.start({ transport: 'longPolling' })
-    $.connection.hub.start({ transport: ['webSockets', 'longPolling', 'serverSentEvents'] })
+    //$.connection.hub.start({ transport: ['webSockets', 'longPolling', 'serverSentEvents'] })
+    //////Payment Details
+    $.connection.hub.start({ transport: ['webSockets','longPolling', , 'serverSentEvents'] })
         .done(function () {
             console.log('Connection started!');
-            // Call the hub method once the connection is established
-            //const name = "John Doe";  // Example name
-            //const message = "Hello, world!"; // Example message
-            // Call the server-side method
-            const ok = "John Doe";
-            connection.server.getCustomerProductDetails(productsJSON);
+            connection.server.broadcastProductUpdate(productsJSON);
         })
         .fail(function (error) {
             console.error('Could not connect to SignalR hub:', error);
@@ -1481,6 +1500,30 @@ function saveSelectedProductsToLocalStorage() {
     //window.location.href = 'ProductDetailsCustomer'; 
     return allProducts;
 }
+// Function to update the product details table
+//function updateProductTable(products) {
+//    var tableBody = $('#productDetailsTable tbody');
+//    tableBody.empty(); // Clear existing rows
+
+//    // Check if products is an array
+//    if (Array.isArray(products) && products.length > 0) {
+//        products.forEach(function (product) {
+//            $('#testInput').val(product.ProductName);
+//            // Create a new row for each product
+//            var row = `<tr>
+//                <td>${product.ProductId}</td>
+//                <td>${product.ProductName}</td>
+//                <td>${product.SalePrice}</td>
+//                <td>${product.PurchasePrice}</td>
+//                <td>${product.Quantity}</td>
+//            </tr>`;
+//            tableBody.append(row); // Append the new row to the table body
+//        });
+//    } else {
+//        // If no products are available, show a message
+//        tableBody.append('<tr><td colspan="5">No products available.</td></tr>');
+//    }
+//}
 
 //function handleProductAddition(encodedProductJson, quantityFromScanner) {
 //    var product = JSON.parse(encodedProductJson);
@@ -2527,6 +2570,41 @@ $(document).ready(function () {
     });
     $('#validatepyment').click(function () {
         debugger;
+        var cardVndAmount = $('#cardvnd').val();
+        var leftToPayVndBalance = $('#lefttopayvnd').val();
+
+        var paymenDetails = {
+            CardVndAmount: cardVndAmount,
+            CeftToPayVndBalance: leftToPayVndBalance,
+        }
+        const paymentJSON = JSON.stringify(paymenDetails);
+        const connection = $.connection.phevaHub;
+        ///Post paymentData
+        connection.client.broadcastPaymentDetails = function (payments) {
+            console.log('Received payment details in Detail view:', payments);
+            $('#paymentDetails').empty(); // assuming you have an element to show payment details
+            debugger;
+            payments.forEach(function (payment) {
+                debugger;
+                $('#paymentDetails').append(
+                    `<div>
+                Card VND Amount: ${formatNumberWithDotss(payment.CardVndAmount)}<br />
+                Left to Pay VND Balance: ${formatNumberWithDotss(payment.LeftToPayVndBalance)}
+            </div>`
+                );
+            });
+        };
+          connection.server.broadcastPaymentDetails(paymentJSON);
+
+        //$.connection.hub.start({ transport: ['webSockets', 'longPolling', , 'serverSentEvents'] })
+        //    .done(function () {
+        //        console.log('Connection started!');
+                
+        //    })
+        //    .fail(function (error) {
+        //        console.error('Could not connect to SignalR hub:', error);
+        //    });
+
         // Make the GET request Working Code
         //$.ajax({
         //    url: '/SOSR/USRLWB', // Ensure this matches your route
