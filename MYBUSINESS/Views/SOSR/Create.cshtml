@@ -1,26 +1,29 @@
 ﻿@model MYBUSINESS.Models.SaleOrderViewModel
 @{
     // Cast ViewBag.ProductListss to the correct type
+    ViewBag.Title = "Create SO";
+    Layout = "~/Views/Shared/_Layout.cshtml";
     var groupedProductLists = ViewBag.SelectedProductListByCategory as Dictionary<string, List<MYBUSINESS.Models.Product>>;
 }
-@{
-    ViewBag.Title = "Create SO";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
+@*@{
 
-    var categoryColors = new Dictionary<string, string>
+    }*@
+@{ var categoryColors = new Dictionary<string, string>
 {
-        { "Box", "#ec8a5f" },
-        { "Bar", "#2fda90" },
-        { "Bag", "#66ddf4" },
-        { "Miscellanous", "#fff3cd" },
-        // Add more categories and their corresponding colors as needed
+    { "Box", "#ec8a5f" },
+    { "Bar", "#2fda90" },
+    { "Bag", "#66ddf4" },
+    { "Miscellanous", "#fff3cd" },
+    // Add more categories and their corresponding colors as needed
     };
     //var settingss = new Newtonsoft.Json.JsonSerializerSettings
     //{
     //    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
     //};
     //var productListJson = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ProductList, settingss);
+
 }
+
 
 <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-timepicker-addon.css">
@@ -29,7 +32,6 @@
 <script type="text/javascript" src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-sliderAccess.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-timepicker-addon.js"></script>
-
 @*<link href="@Url.Content("~/Content/custom/custom.css")" rel="stylesheet" type="text/css" />*@
 <script src="~/Content/custom/customerSOSR.js"></script>
 <script src="~/Content/custom/downloads/jquery.mcautocomplete.js"></script>
@@ -40,7 +42,7 @@
 
 <!-- Latest compiled JavaScript -->
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="~/Content/custom/menuHide.js"></script>
+@*<script src="~/Content/custom/menuHide.js"></script>*@
 @*<link href="@Url.Content("~/Content/custom/downloads/datetimepicker-master/jquery.datetimepicker.css")" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/Content/custom/downloads/datetimepicker-master/jquery.datetimepicker.js"></script>*@
@@ -63,11 +65,11 @@
         padding: 0; /* Optional: remove padding */
     }
         /*.scrollable-div {
-            max-height: 400px;*/ /* Adjust as needed */
+                max-height: 400px;*/ /* Adjust as needed */
         /*overflow-y: auto;
-            padding: 0;*/ /* Remove padding to align items correctly */
+                padding: 0;*/ /* Remove padding to align items correctly */
         /*display: flex;
-            flex-wrap: wrap;*/ /* Allow wrapping of items */
+                flex-wrap: wrap;*/ /* Allow wrapping of items */
         /*}*/
 
         .scrollable-div .col-md-3 {
@@ -119,18 +121,18 @@
             outline: none; /* Remove the focus outline */
         }
     /*.table-wrapper2 {
-            margin: 30px auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
-        }
+                margin: 30px auto;
+                background: #fff;
+                padding: 20px;
+                box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+            }
 
-        .scrollable-div {
-            max-height: 400px;
-            overflow-y: scroll;
-        }
+            .scrollable-div {
+                max-height: 400px;
+                overflow-y: scroll;
+            }
 
-        .scrollable-container {*/
+            .scrollable-container {*/
     /*max-height: 100px !important;*/ /* Set desired height */
     /*height: 100px !important;*/ /* Set desired height */
     /*overflow-y: auto;*/ /* Enable vertical scrolling */
@@ -141,20 +143,20 @@
     /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/ /* Optional: box shadow */
     /*}
 
-        .small-box {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100px;*/ /* Optional: set a fixed height for each box */
+            .small-box {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: 100px;*/ /* Optional: set a fixed height for each box */
     /*}
 
-        .inner {
-            flex: 1;*/ /* Ensure the content takes available space */
+            .inner {
+                flex: 1;*/ /* Ensure the content takes available space */
     /*}
 
-        .icon {
-            text-align: center;
-        }*/
+            .icon {
+                text-align: center;
+            }*/
     /* Default product name styling */
     .product-box .product-name {
         font-weight: normal;
@@ -187,7 +189,7 @@
 
     /* Ensure button size remains the same */
     /*#customerByTaxCode {
-    width: 100%;*/ /* Ensure full width */
+        width: 100%;*/ /* Ensure full width */
     /*height: 40px;*/ /* Fixed height to prevent resizing */
     /*padding-left: 35px;*/ /* Add space for the spinner */
     /*padding-right: 35px;*/ /* Optional if needed for alignment */
@@ -971,6 +973,8 @@
 }
 <script>
     $(document).ready(function () {
+        // Check if the menu toggle button exists
+       /* $('#menuToggle').hide();*/
         document.getElementById('SOCreate').reset(); // has to be handle
         debugger;
          // Start the connection working //////////////////////////////////

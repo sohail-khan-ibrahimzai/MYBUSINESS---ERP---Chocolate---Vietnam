@@ -16,9 +16,15 @@ namespace MYBUSINESS.HubConnection
         } 
         public void BroadcastPaymentDetails(string paymenDetails)
         {
-            var payments = new List<CustomerDetailsViewModel>();
-            payments = JsonConvert.DeserializeObject<List<CustomerDetailsViewModel>>(paymenDetails);
-            Clients.All.BroadcastPaymentDetails(payments);
+            var payment = JsonConvert.DeserializeObject<PaymentDetailsViewModel>(paymenDetails);
+            // Broadcast the deserialized payment details to all connected clients
+            Clients.All.BroadcastPaymentDetails(payment);
+        } 
+        public void broadcastCustomerDetails(string customerUpdateJSON)
+        {
+            var payment = JsonConvert.DeserializeObject<CustomerUpdateModel>(customerUpdateJSON);
+            // Broadcast the deserialized payment details to all connected clients
+            Clients.All.BroadcastCustomerDetails(payment);
         }
         public void BroadcastProductUpdates()
         {

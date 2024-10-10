@@ -2272,6 +2272,17 @@ $(document).ready(function () {
         $('#paid').val(cardVndBalance);
         $('#paidByCash').val(cashVndBalance);
 
+        var customerUpdateModel = {
+            VatNumber: customerVat,
+            CustomerName: customerName,
+            CompanyName: customerCompany,
+            CustomerAddress: customerAddress,
+        };
+        const customerUpdateJSON = JSON.stringify(customerUpdateModel);
+        const connection = $.connection.phevaHub;
+        ///Post paymentData
+        connection.server.broadcastCustomerDetails(customerUpdateJSON);
+
         //const cardVnd = $('#cardvnd').val(cardVndBalance);
         //const cashvnd = $('#cashvnd').val(cashVndBalance);
         //const itemsTotal = $('#ItemsTotal').val(totalPayableBill);
@@ -2575,26 +2586,12 @@ $(document).ready(function () {
 
         var paymenDetails = {
             CardVndAmount: cardVndAmount,
-            CeftToPayVndBalance: leftToPayVndBalance,
+            LeftToPayVndBalance: leftToPayVndBalance,
         }
         const paymentJSON = JSON.stringify(paymenDetails);
         const connection = $.connection.phevaHub;
         ///Post paymentData
-        connection.client.broadcastPaymentDetails = function (payments) {
-            console.log('Received payment details in Detail view:', payments);
-            $('#paymentDetails').empty(); // assuming you have an element to show payment details
-            debugger;
-            payments.forEach(function (payment) {
-                debugger;
-                $('#paymentDetails').append(
-                    `<div>
-                Card VND Amount: ${formatNumberWithDotss(payment.CardVndAmount)}<br />
-                Left to Pay VND Balance: ${formatNumberWithDotss(payment.LeftToPayVndBalance)}
-            </div>`
-                );
-            });
-        };
-          connection.server.broadcastPaymentDetails(paymentJSON);
+        connection.server.broadcastPaymentDetails(paymentJSON);
 
         //$.connection.hub.start({ transport: ['webSockets', 'longPolling', , 'serverSentEvents'] })
         //    .done(function () {

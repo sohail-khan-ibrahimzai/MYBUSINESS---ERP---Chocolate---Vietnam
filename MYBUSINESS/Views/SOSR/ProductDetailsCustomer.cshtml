@@ -7,9 +7,10 @@
     </style>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-3"></div>
+        <div class="col-md-5"></div>
         <div class="col-md-6">
-            <h1>Selected Products</h1>
+            @*<h1>Selected Products</h1>*@
+            <img src="~/dist/img/PhevaImg.png" alt="Selected Products" style="max-width: 100%; height: auto;" />
             <table id="productDetailsTable">
                 <thead>
                     <tr>
@@ -25,11 +26,14 @@
                     <!-- This tbody will be dynamically populated -->
                 </tbody>
             </table>
-        </div>
-        <div id="paymentDetails">
+            <div id="paymentDetails">
 
+            </div>
+            <div id="customerDetails">
+
+            </div>
         </div>
-        <div class="col-md-3"></div>
+        <div class="col-md-1"></div>
     </div>
 </div>
 
@@ -62,21 +66,67 @@
             </tr>`
             );
         };
-        //////Payment Details
+        // Payment details handler
         connection.client.broadcastPaymentDetails = function (payments) {
             console.log('Received payment details in Detail view:', payments);
-            $('#paymentDetails').empty(); // assuming you have an element to show payment details
-            debugger;
-            payments.forEach(function (payment) {
-                debugger;
-                $('#paymentDetails').append(
-                    `<div>
-                Card VND Amount: ${formatNumberWithDotss(payment.CardVndAmount)}<br />
-                Left to Pay VND Balance: ${formatNumberWithDotss(payment.LeftToPayVndBalance)}
-            </div>`
-                );
-            });
+
+            // Ensure `payments.LeftToPayVndBalance` is valid; set to 0 if NaN
+            const leftToPay = isNaN(payments.LeftToPayVndBalance) ? 0 : payments.LeftToPayVndBalance;
+
+            // Clear previous payment details if present
+            $('#paymentDetails').empty();
+
+            // Append payment details below the table
+            $('#paymentDetails').append(
+                `<div>
+            <p><strong>Credit Card:</strong> ${payments.CardVndAmount} VND</p>
+            <p><strong>Change due:</strong> ${leftToPay} VND</p>
+        </div>`
+            );
         };
+        // Customer details handler
+        connection.client.broadcastCustomerDetails = function (customers) {
+            console.log('Received customers details in Detail view:', customers);
+
+            // Ensure `payments.LeftToPayVndBalance` is valid; set to 0 if NaN
+            // Clear previous payment details if present
+            $('#customerDetails').empty();
+            //CompanyName
+            //:
+            //"M-INVOICE - KIỂM THỬ HĐĐT CÓ MÃ"
+            //CustomerAddress
+            //:
+            //"Số nhà 16, ngõ 269/1, đường Giáp Bát, Phường Giáp Bát, Quận Hoàng Mai, Hà Nội"
+            //CustomerName
+            //:
+            //"Người mua không lấy hóa đơn"
+            //VatNumber
+            //:
+            //"0106026495-999"
+            // Append payment details below the table
+            $('#paymentDetails').append(
+             `<div>
+            <p><strong>Your VAT Invoice information:</strong></p>
+            <p><strong>Customer name:</strong> ${customers.CustomerName}</p>
+            <p><strong>Company:</strong> ${customers.CompanyName}</p>
+            <p><strong>Address:</strong> ${customers.CustomerAddress}</p>
+            <p><strong>Tax code:</strong> ${customers.VatNumber}</p>
+        </div>`
+            );
+        };
+        //////Payment Details
+        //connection.client.broadcastPaymentDetails = function (payments) {
+        //    debugger;
+        //    console.log('Received payment details in Detail view:', payments);
+        //    $('#paymentDetails').empty(); // assuming you have an element to show payment details
+        //    debugger;
+        //    $('#paymentDetails').append(
+        //        `<div>
+        //    Card VND Amount: ${formatNumberWithDotss(payments.CardVndAmount)}<br />
+        //    Left to Pay VND Balance: ${formatNumberWithDotss(payments.LeftToPayVndBalance)}
+        //    </div>`
+        //    );
+        //};
         ///Start connection
         $.connection.hub.start({ transport: ['webSockets', 'longPolling', 'serverSentEvents'] })
             .done(function () {

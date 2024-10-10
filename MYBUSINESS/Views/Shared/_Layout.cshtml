@@ -36,7 +36,7 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>*@
 
     <script src="~/Content/custom/shared.js"></script>
-    <script src="~/Content/custom/menuHide.js"></script>
+    @*<script src="~/Content/custom/menuHide.js"></script>*@
     <style>
         .form-group {
             margin-bottom: 15px; /* Add some spacing between form groups */
@@ -186,11 +186,11 @@
             <strong>Copyright &copy; @DateTime.Now.Year <a href="#">Hans Corp Abwabal</a>.</strong> All rights
             reserved.
         </footer>
-        @*<script>
+        <script>
             $(document).ready(function () {
-                $('#menuToggle').trigger('click');
+                $('#menuToggle').trigger('click'); 
             });
-        </script>*@
+        </script>
 
         <!-- /.control-sidebar -->
         <!-- Add the sidebar's background. This div must be placed

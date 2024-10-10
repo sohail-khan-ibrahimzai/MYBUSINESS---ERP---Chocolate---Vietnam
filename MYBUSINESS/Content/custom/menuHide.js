@@ -1,3 +1,3 @@
-﻿$(document).ready(function () {
-    $('#menuToggle').trigger('click');
-});
+﻿//$(document).ready(function () {
+//    $('#menuToggle').trigger('click');
+//});
