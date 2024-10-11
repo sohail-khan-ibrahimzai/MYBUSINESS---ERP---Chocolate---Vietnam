@@ -56,9 +56,7 @@ var formattedStringYens = "";
 var storeName = "";
 let activeInput = null;
 document.querySelectorAll('.storeids').forEach(function (element) {
-    debugger;
     element.addEventListener('click', function () {
-        debugger;
         // Get the value of data-storeid from the clicked element
         const storeIds = this.getAttribute('data-storeid');
         console.log(storeIds);
@@ -529,7 +527,6 @@ function updateOverallDollarsTotal() {
     let totalValue = 0;
     openingCurrencyDetalInDollar = [];
     const usdToVnd = availableCurrencies.find(currency => currency.Name === 'USD');
-    debugger;
     if (usdToVnd) {
         const usdToVndExchangeRate = usdToVnd.ExchangeRate;  // Get the exchange rate for USD to VND
 

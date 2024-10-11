@@ -41,7 +41,6 @@
 <script src="~/signalr/hubs"></script>
 <script>
     $(document).ready(function () {
-        debugger;
         const connection = $.connection.phevaHub;
         connection.client.broadcastProductUpdate = function (products) {
             console.log('Received product update in Detail view:', products);
@@ -59,12 +58,14 @@
                 );
             });
             // Append the overall total row
+            if (overallTotal !== 0) { 
             $('#productDetailsTable tbody').append(
                 `<tr>
                 <td colspan="1"></td>
                 <td style="font-weight: bold;">${formatNumberWithDotss(overallTotal)} ₫</td> <!-- Display overall total -->
             </tr>`
-            );
+                );
+            }
         };
         // Payment details handler
         connection.client.broadcastPaymentDetails = function (payments) {
@@ -113,9 +114,9 @@
             <p><strong>Tax code:</strong> ${customers.VatNumber}</p>
         </div>`
             );
-            setTimeout(function () {
-                location.reload();
-            }, 60000);
+            //setTimeout(function () {
+            //    location.reload();
+            //}, 60000);
 
         };
         //////Payment Details

@@ -980,7 +980,6 @@
         // Check if the menu toggle button exists
        /* $('#menuToggle').hide();*/
         document.getElementById('SOCreate').reset(); // has to be handle
-        debugger;
          // Start the connection working //////////////////////////////////
         //const connection = $.connection.phevaHub;
         ////$.connection.hub.start({ transport: 'longPolling' })
@@ -1104,7 +1103,7 @@
      if (product) {
          handleProductAddition(encodedProductJson, 1,false);
      } else {
-         alert('Product not found');
+         console.log('Product not found');
      }
     }
 

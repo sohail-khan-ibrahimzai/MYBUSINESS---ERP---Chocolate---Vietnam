@@ -55,7 +55,6 @@ function getAll_AvailableCurrencies() {
     });
 }
 function OnTypeCustomerName(param) {
-    debugger;
     //debugger;
     $(param).mcautocomplete({
         showHeader: true,
@@ -65,6 +64,8 @@ function OnTypeCustomerName(param) {
             //debugger;
             this.value = (ui.item ? ui.item[1] : '');
             //productName = this.value;
+
+            $('#customerId').val(ui.item ? ui.item[0] : '');
             $('#vndCustomer').val(ui.item ? ui.item[1] : '');
             //$('#idnCustomer').val(ui.item ? ui.item[0] : '');
             //$('#vndCustomerCompany').val(ui.item ? ui.item[1] : '');
@@ -650,7 +651,6 @@ let focusedInput = null;
 let isFirstEntry = true;
 var isPupdateQuantity = false;
 function validateQuantityInput(event) {
-    debugger;
     // Allow only numeric values
     const value = event.target.value;
 
@@ -672,8 +672,6 @@ function validateQuantityInput(event) {
     //}
 }
 function addProduct(encodedProductJson) {
-    debugger;
-
     // Show the modal and set up the event listener for quantity validation
     $('#quantityAddpopup').modal('show');
     $('#quantityAddpopup').on('shown.bs.modal', function () {
@@ -710,7 +708,6 @@ function addProduct(encodedProductJson) {
     //    handleProductAddition(encodedProductJson, quantityFromModal, true);
     //});
     $('#validateQuantity').off('click').on('click', function (e) {
-        debugger;
         var quantityFromModal = parseInt($('#productQuantity').val(), 10) || 0; // Ensure it's a number and default to 0 if invalid
         if (quantityFromModal == 0) {
             return;
@@ -728,7 +725,6 @@ function addProduct(encodedProductJson) {
                 if (product != undefined) {
                     var existingRow = findProductRow(product.Name);
                     if (existingRow) {
-                        debugger;
                         // If the product row exists, update it directly
                         handleProductAddition(productJsonString, quantityFromModal, true);
                         isPupdateQuantity = false;
@@ -743,14 +739,13 @@ function addProduct(encodedProductJson) {
             }
             else { handleProductAddition(encodedProductJson, quantityFromModal, false); }
         }
-        else { debugger; handleProductAddition(encodedProductJson, quantityFromModal, false); }
+        else { handleProductAddition(encodedProductJson, quantityFromModal, false); }
         // Find the row for the existing product based on the product name
 
     });
 
 }
 function findProductRow(productName) {
-    debugger
     var rows = document.querySelectorAll('#selectedProducts tbody tr');
     for (var i = 0; i < rows.length; i++) {
         var nameCell = rows[i].cells[1]; // Assuming the product name is in the second cell
@@ -1205,7 +1200,6 @@ function findProductRow(productName) {
 //    updatePayButton();
 //}
 function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate = false) {
-    debugger;
     var product = JSON.parse(encodedProductJson);
     var rowIndex = document.querySelectorAll('#selectedProducts tbody tr').length; // Zero-based index
     var suggestedNewProductId = document.getElementById('suggestedNewProductId').value;
@@ -1309,7 +1303,6 @@ function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate
         });
 
         qtyInput.addEventListener('click', function () {
-            debugger;
             $('#quantityAddpopup').modal('show');
             //$('#quantityAddpopup').on('shown.bs.modal', function () {
             //    //$('#productQuantity').focus().select();
@@ -1407,7 +1400,6 @@ function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate
 }
 // Utility function to set a cookie
 function setCookie(name, value, days) {
-    debugger;
     let expires = "";
     if (days) {
         const date = new Date();
@@ -1433,7 +1425,6 @@ function deleteCookie(name) {
     setCookie(name, "", -1);  // Setting the expiration date to the past
 }
 function saveSelectedProductsToLocalStorage() {
-    debugger;
     const rows = document.querySelectorAll('#selectedProducts tbody tr');
     const allProducts = [];
 
@@ -2232,13 +2223,11 @@ $(document).ready(function () {
         //$('#payallbycard').text('Pay all by card');
     });
     $('#CreateSO').keydown(function (event) {
-        debugger;
         if (event.keyCode == 13) {
             $('#CreateSO').trigger('click');
         }
     });
     $('#saveSales').click(function (event) {
-        debugger;
         const customerId = $('#customerId').val();
         const vndCustomer = $('#vndCustomer').val();
         const customerName = $('#vndCustomerName').val();
@@ -2314,7 +2303,6 @@ $(document).ready(function () {
     });
 
     $('#CreateSO').click(function () {
-        debugger;
         $('#ItemsTotal').val(totalPayableBill);
         //$('#ItemsTotal1').val(totalPayableBill);
         //console.log('BillAmount:', $('#ItemsTotal').val());
@@ -2447,7 +2435,6 @@ $(document).ready(function () {
             //$('#lefttotalvnd').val(storedTotal);
             $('#totalitsmspan').text(storedTotal);
             //set total in header title
-            debugger;
             if (storedTotal == 0) {
                 return;
             }
@@ -2467,7 +2454,6 @@ $(document).ready(function () {
 
     });
     $('.cancelPaymentButton').on('click', function (e) {
-        debugger;
         $('#lefttopayvnd').val('0');
         $('#cashvnd').val('0');
         $('#cardvnd').val('0');
@@ -2518,7 +2504,6 @@ $(document).ready(function () {
         //}
 
         if (totalAmountForSelectedProduct != 0) {
-            debugger;
             $('#lefttopayvnd').val('0');
             $('#cashvnd').val('0');
             $('#cashUsd').val('0');
@@ -2580,7 +2565,6 @@ $(document).ready(function () {
         //$('#lefttotalvnd').val('');
     });
     $('#validatepyment').click(function () {
-        debugger;
         var cardVndAmount = $('#cardvnd').val();
         var leftToPayVndBalance = $('#lefttopayvnd').val();
 
@@ -2666,7 +2650,6 @@ $(document).ready(function () {
     });
     // Function to rotate the loader
     function rotateLoader($loader) {
-        debugger;
         let rotation = 0;
         const interval = setInterval(function () {
             rotation += 10; // Increment rotation by 10 degrees each time
@@ -2678,10 +2661,8 @@ $(document).ready(function () {
         // Return the interval ID so we can stop the rotation later
         return interval;
     }
-    debugger;
     $('#customerByTaxCode').on('click', function () {
         var customerTaxCode = $('#vndCustomerVat').val();
-        debugger;
         // Disable the button and show the loader
         var $button = $(this);
         $button.prop('disabled', true).find('i').hide(); // Hide the search icon
@@ -2811,7 +2792,6 @@ $(document).ready(function () {
     //});
     // Example: Runs when a button is clicked
     $('.quickAmountAdd').on('click', function () {
-        debugger;
         // Step 1: Get the value from .quickAmountAdd
         var aa = $(this).val();
 
@@ -2925,7 +2905,6 @@ function barcodeEntered(value) {
 //    JSON.parse(productsList);
 //}
 function TriggerBodyEvents() {
-    //debugger;
     OnTypeName('#name' + txtSerialNum);
     $('#name' + txtSerialNum).on("keyup", function (e) {
         //alert('#name' + txtSerialNum);
@@ -3431,7 +3410,6 @@ function showHiddenInputs() {
 //    // }
 //}
 function calculateLeftToPay() {
-    debugger;
     // Get VND values for card and cash payments from the customer (remove dots and convert to numbers)
     var cdVnd = parseFloat($('#cardvnd').val().replace(/\./g, '')) || 0;
     var cashVnd = parseFloat($('#cashvnd').val().replace(/\./g, '')) || 0;

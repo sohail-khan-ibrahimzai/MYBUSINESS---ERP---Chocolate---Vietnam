@@ -986,6 +986,7 @@ namespace MYBUSINESS.Controllers
                 //StoreId 
                 //sO.StoreId = parseId; commented due to session issue
                 sO.StoreId = storeId;
+                sO.CustomerId = Customer.Id;
 
                 db.SOes.Add(sO);
                 //db.SaveChanges();

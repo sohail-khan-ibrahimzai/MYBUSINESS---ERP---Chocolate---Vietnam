@@ -12,7 +12,6 @@ var availableCurrenciesCloseStore = [];
 //}
 
 $(document).ready(function () {
-    debugger;
     getAllAvailableCurrenciesCloseStore();
 });
 
