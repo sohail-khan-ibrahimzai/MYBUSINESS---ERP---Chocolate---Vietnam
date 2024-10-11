@@ -14,8 +14,9 @@
             </div>
         </div>
     </div>*@
+<link href="~/Content/custom/mediapopupclose.css" rel="stylesheet" />
 <style>
-    .calculator-container {
+    .calculator-container-closeshop {
         position: fixed;
         top: 126px;
         right: 45px;
@@ -25,6 +26,16 @@
         z-index: 1000;
         padding: 10px;
     }
+    /*.calculator-container {
+        position: fixed;
+        top: 126px;
+        right: 45px;
+        width: 38%;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        padding: 10px;
+    }*/
 </style>
 <div class="modal fade bd-tax-modal-lg" id="storeClosingModal" tabindex="-1" role="dialog" aria-labelledby="storeClosingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
@@ -101,7 +112,8 @@
                                         </div>
                                         <div class="col-md-6">
                                             @*Calculator buttons*@
-                                            <div class="calculator-container">
+                                            @*<div class="calculator-container">*@
+                                            <div class="calculator-container-closeshop">
                                                 <div class="calculator">
                                                     <div class="row">
                                                         <div class="col-md-4">
@@ -153,7 +165,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        </div>
+                                    </div>
 
                                     <hr />
 

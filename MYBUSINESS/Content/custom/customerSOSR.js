@@ -720,6 +720,7 @@ function addProduct(encodedProductJson) {
         // Get the product name stored in the modal
         if (isPupdateQuantity) {
             var productJsonString = $('#quantityAddpopup').data('productDetails');
+            /*var productJsonStrings = $(this).data('productDetails');*/
             if (productJsonString != undefined) {
                 var product = JSON.parse(productJsonString);
                 if (product != undefined) {
@@ -1207,6 +1208,7 @@ function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate
     var existingRow = findProductRow(product.Name); // Find if product already exists in the table
 
     if (existingRow && isUpdate) {
+        debugger;
         // Existing product logic, used for updating quantity
         var qtyInput = existingRow.cells[3].querySelector('input'); // Select input from qtyCell
         var totalCell = existingRow.cells[5]; // Assuming total price is the 6th cell (index 5)
@@ -1224,7 +1226,7 @@ function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate
 
         // Update hidden inputs
         var hiddenQtyInput = existingRow.querySelector("[name^='SaleOrderDetail'][name$='Quantity']");
-        hiddenQtyInput.value = newQty;
+        hiddenQtyInput.value = newQty;  
 
         // Update the totalVndBalanceHeader by adding the difference in price
         var oldTotalPrice = currentQty * product.SalePrice;
@@ -1303,6 +1305,8 @@ function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate
         });
 
         qtyInput.addEventListener('click', function () {
+            debugger;
+            $('#quantityAddpopup').data('productDetails', JSON.stringify(product));
             $('#quantityAddpopup').modal('show');
             //$('#quantityAddpopup').on('shown.bs.modal', function () {
             //    //$('#productQuantity').focus().select();

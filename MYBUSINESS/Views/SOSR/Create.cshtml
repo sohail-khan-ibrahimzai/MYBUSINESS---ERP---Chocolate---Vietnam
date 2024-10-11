@@ -24,21 +24,22 @@
 
 }
 
-
+<link href="~/Content/custom/mediapopup.css" rel="stylesheet" />
+@*<link href="@Url.Content("~/Content/custom/mediapopup.css")" rel="stylesheet" type="text/css" />*@
 @*<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-timepicker-addon.css">*@
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-timepicker-addon.css">*@
 
 @*<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
-<script type="text/javascript" src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>*@
+    <script type="text/javascript" src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>*@
 
 @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-sliderAccess.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-timepicker-addon.js"></script>*@
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-timepicker-addon.js"></script>*@
 
 @*<link href="@Url.Content("~/Content/custom/custom.css")" rel="stylesheet" type="text/css" />*@
 <script src="~/Content/custom/customerSOSR.js"></script>
 
 @*<script src="~/Content/custom/downloads/jquery.mcautocomplete.js"></script>
-<script src="~/Content/custom/downloads/jquery.scannerdetection.js"></script>*@
+    <script src="~/Content/custom/downloads/jquery.scannerdetection.js"></script>*@
 
 <!-- jQuery library -->
 @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>*@
@@ -63,8 +64,8 @@
     }
 
     .scrollable-div {
-        max-height: 400px; /* Adjust as needed */
-        overflow-y: auto; /* Enable vertical scrolling */
+        /*max-height: 400px;*/ /* Adjust as needed */
+        /*overflow-y: auto;*/ /* Enable vertical scrolling */
         padding: 0; /* Optional: remove padding */
     }
         /*.scrollable-div {
@@ -164,12 +165,14 @@
     .product-box .product-name {
         font-weight: normal;
         color: inherit;
+        font-size: 13px !important;
     }
 
     /* Styling when the product box is hovered over */
     .product-box:hover .product-name {
         font-weight: bold;
         color: black;
+        font-size:11px !important;
     }
 
     /* Ensure smooth transition */
@@ -209,19 +212,18 @@
         padding: 10px;
     }
 
-    .quantity-calculator-container {
+    /* .quantity-calculator-container {
         right: 14px;
         width: 100%;
         background-color: white;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         z-index: 1000;
         padding: 10px;
-    }
+    }*/
 
     .highlight {
         background-color: yellow;
     }
-    
 </style>
 @*<h2>Create</h2>*@
 
@@ -510,7 +512,8 @@
                                 </tr>
                                 <tr>
                                     @*<td colspan="2" rowspan="2"><button type="button" id="CreateSO" class="btn btn-primary" style="background-color: #2bbdb9; width: 300px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 32px;">Pay</button></td>*@
-                                    <td colspan="2" rowspan="2"><button type="button" id="CreateSO" class="btn btn-primary" style="background-color: #2bbdb9; width: 300px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 32px;">Pay</button></td>
+                                    @*<td colspan="2" rowspan="2"><button type="button" id="CreateSO" class="btn btn-primary" style="background-color: #2bbdb9; width: 300px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 32px;">Pay</button></td>*@
+                                    <td><button type="button" id="CreateSO" class="btn btn-primary saveSalesOrder" style="background-color: #2bbdb9; width: 300px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 32px;">Pay</button></td>
                                     <td style="width: 20px;"></td>
                                     <td colspan="2" rowspan="2"><button type="button" id="totalofAllSelecteProducts" class="btn btn-primary" style="width: 91px; height: 40px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 13px">Total</button></td>
                                     <td style="width: 20px;"></td>
@@ -572,7 +575,8 @@
                 <div class="modal-body">
                     <div class="container mt-5">
                         <div class="row justify-content-center">
-                            <div class="col-md-9">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-8">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row">
@@ -724,8 +728,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary cancelPaymentButton" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" name="validatepyment" id="validatepyment" disabled>Validate</button>
+                    <div class="validate-payment-div">
+                        <button type="button" class="btn btn-secondary cancelPaymentButton" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" name="validatepyment" id="validatepyment" disabled>Validate</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -744,19 +750,20 @@
                 <div class="modal-body">
                     <div class="container mt-5">
                         <div class="row justify-content-center">
-                            <div class="col-md-6">
+                            <div class="col-md-4"></div>
+                                <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="row"></div><div class="col-md-6"></div><div class="col-md-5">
                                             <div class="d-flex justify-content-center justify-content-md-end">
-                                                <button type="button" class="card-title btn btn-primary" id="individualWithoutVAT">Individual without VAT number</button>
+                                                <button type="button" class="card-title btn btn-primary individualWithoutVAT-s" id="individualWithoutVAT">Individual without VAT number</button>
                                             </div>
                                         </div><div class="col-md-1"></div>
 
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-10">
+                                                <div class="col-md-10">
                                                 <form>
                                                     <div class="form-group">
                                                         <input type="text" autocomplete="off" class="form-control" name="Customer.Id" id="customerId" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" style="display:none;">
@@ -768,7 +775,8 @@
                                                             <input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat" placeholder="VAT Number">
                                                         </div>
                                                         <div class="col-sm-2">
-                                                            <button type="button" class="btn btn-primary btn-block position-relative" id="customerByTaxCode" style="margin-left: -19px; width: 94px;">
+                                                            @*<button type="button" class="btn btn-primary btn-block position-relative" id="customerByTaxCode" style="margin-left: -19px; width: 94px;">*@
+                                                            <button type="button" class="btn btn-primary position-relative" id="customerByTaxCode" style="margin-left: -19px; width: 94px;">
                                                                 <i class="fa fa-search"></i>
                                                                 <span class="loader" style="margin-left: 20px;"></span>
                                                                 <span class="loading-text" style="display:none;">.</span>
@@ -864,7 +872,7 @@
 
 
     <!--Quantity Modal-->
-    <div class="modal fade bd-pay-modal-lg" id="quantityAddpopup" tabindex="-1" role="dialog" aria-labelledby="quantityAddpopupLabel" aria-hidden="true">
+    <div class="modal fade bd-quantity-modal-lg" id="quantityAddpopup" tabindex="-1" role="dialog" aria-labelledby="quantityAddpopupLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -876,7 +884,8 @@
                 <div class="modal-body">
                     <div class="container mt-5">
                         <div class="row justify-content-center">
-                            <div class="col-md-9">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header">
                                         @*<h4 class="card-title">Total</h4>*@
@@ -908,7 +917,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="quantity-calculator-container">
-                                                    <div class="calculator">
+                                                    <div class="quantity-calculator">
                                                         <div class="row">
                                                             <div class="col-md-4">
                                                                 <button class="btn btn-secondary btn-block" type="button" onclick="appendQuantityNumber(1)">1</button>
@@ -967,10 +976,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary cancelQuantitButton" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" name="validateQuantity" id="validateQuantity">Validate</button>
+                    <div style="margin-right: 28px;">
+                        <button type="button" class="btn btn-secondary cancelQuantitButton" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" name="validateQuantity" id="validateQuantity">Validate</button>
+                    </div>
+                    </div>
                 </div>
-            </div>
         </div>
     </div>
 

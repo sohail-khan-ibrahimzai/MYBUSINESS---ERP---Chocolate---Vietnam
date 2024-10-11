@@ -4,7 +4,7 @@
     ViewBag.Title = "Stores Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<link href="~/Content/custom/mediapopupopen.css" rel="stylesheet" />
 <style>
     .form-group {
         margin-bottom: 15px; /* Add some spacing between form groups */
@@ -24,7 +24,7 @@
             flex: 1; /* Allow input to take up remaining space */
         }
 
-    .calculator-container {
+    .calculator-container-openshop {
         position: fixed;
         top: 126px;
         right: 45px;
@@ -35,6 +35,16 @@
         padding: 10px;
     }
     /*.calculator-container {
+        position: fixed;
+        top: 126px;
+        right: 45px;
+        width: 38%;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        padding: 10px;
+    }
+*/    /*.calculator-container {
         position: fixed;
         bottom: 0;
         left: 0;
@@ -167,7 +177,8 @@
                                         <div class="col-md-6">
                                             <!-- Content for the third column (4 columns wide) -->
                                             <!-- Calculator buttons -->
-                                            <div class="calculator-container">
+                                            @*<div class="calculator-container">*@
+                                            <div class="calculator-container-openshop">
                                                 <div class="calculator">
                                                     <div class="row">
                                                         <div class="col-md-4">

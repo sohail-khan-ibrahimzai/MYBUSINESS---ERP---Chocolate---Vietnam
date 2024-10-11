@@ -1,0 +1,53 @@
+﻿/* Styles for screens smaller than or equal to 1024px (e.g., tablets, small laptops) */
+@media (max-width: 1024px) {
+    .calculator-container-openshop {
+        right: 228px !important;
+        width: 30% !important;
+    }
+}
+
+/* Styles for screens larger than 1024px (e.g., desktops, large laptops) */
+/*@media (min-width: 1024px) {
+    .saveSalesOrder {
+        width: 206px !important;
+    }
+
+    .small-box > .inner {
+        position: absolute;
+    }
+
+    .modal-dialog {
+        width: 1024px !important;
+        height: auto !important;
+        margin: auto !important;
+        max-height: 768px !important;*/ /* Set a max height for modals on larger screens */
+    /*}
+
+    .modal-content {*/
+        /*height: 600px !important;*/
+        /*overflow: auto !important;*/ /* Ensure content can scroll if necessary */
+    /*}
+
+    .quantity-calculator button {
+        width: 100px !important;*/ /* Fix button width to maintain alignment on larger screens */
+        /*height: 40px !important;*/ /* Set a consistent height for buttons */
+        /*margin: 5px 0;*/ /* Add space between buttons */
+    /*}
+
+    .btn-block {
+        height: 40px;
+        width: 120px;*/ /* Slightly larger buttons on desktop */
+        /*margin-bottom: 10px;
+    }*/
+
+    /* Align the buttons in the calculator */
+    /*.quantity-calculator .row {
+        display: flex !important;
+        justify-content: center !important;
+    }
+}*/
+
+/*.calculator-container {
+    right: 324px !important;
+    width: 30% !important;
+}*/

@@ -1,0 +1,177 @@
+﻿/* styles.css */
+/*@media (max-width: 1024px) {*/
+    /*.modal-dialog {
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        max-width: none !important;
+    }*/
+
+    /*.modal-content {
+        height: 100% !important;
+        overflow: auto !important;
+    }*/
+/*}
+
+@media (min-width: 1024px) {
+    .saveSalesOrder {
+        width: 206px !important;
+    }
+    .small-box > .inner {
+        position: absolute;
+    }
+    .modal-dialog {
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        max-width: none !important;
+    }
+
+    .modal-content {
+        height: 100% !important;
+        overflow: auto !important;
+    }*/
+        /*.modal-dialog {
+        width: 1024px !important;
+        height: 768px !important;
+        margin: auto !important;
+    }*/
+
+    /*.modal-content {
+        height: 600px !important;
+        overflow: auto !important;
+    }*/
+/*}*/
+/*.btn-block {
+    height: 31px;
+    width: 101px;
+    margin-bottom: 10px;
+}
+*/
+/*.quantity-calculator .row {
+    display: flex !important;
+    justify-content: center !important;
+}*/
+/* styles.css */
+
+/* Styles for screens smaller than or equal to 1024px (e.g., tablets, small laptops) */
+@media (max-width: 1024px) {
+    #quantityAddpopup {
+        margin-top: 15px !important;
+    }
+
+    .saveSalesOrder {
+        width: 206px !important;
+    }
+
+    /* Adjust modal to avoid touching screen edges */
+    .modal-dialog {
+        width: 100% !important; /* Reduce width to 90% to prevent touching edges */
+        height: 100% !important;
+        /*margin: 15px auto !important;*/ /* Add margin to center the modal */
+        max-width: none !important;
+    }
+
+    .modal-content {
+        height: auto !important;
+        overflow: auto !important;
+    }
+
+    .quantity-calculator button {
+        width: 100% !important; /* Ensure buttons span the full width on smaller screens */
+        margin-bottom: 10px; /* Add margin to separate buttons vertically */
+    }
+
+    .btn-block {
+        width: 100% !important; /* Buttons take full width */
+        height: 40px; /* Slightly larger buttons for easier tapping on mobile */
+    }
+
+    .validate-payment-div {
+        margin-right: 10px !important;
+    }
+    .small-box:last-child {
+        height: 134px !important;
+    }
+    .individualWithoutVAT-s {
+        margin-left:-165px !important;
+    } 
+    }
+/*@media (max-width: 1024px) {
+    #quantityAddpopup {
+        margin-top: 15px !important;
+    }
+    .saveSalesOrder {
+        width: 206px !important;
+    }
+    .modal-dialog {
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        max-width: none !important;
+    }
+
+    .modal-content {
+        height: auto !important;
+        overflow: auto !important;
+    }
+
+    .quantity-calculator button {
+        width: 100% !important;*/ /* Ensure buttons span the full width on smaller screens */
+        /*margin-bottom: 10px;*/ /* Add margin to separate buttons vertically */
+    /*}
+
+    .btn-block {
+        width: 100% !important;*/ /* Buttons take full width */
+        /*height: 40px;*/ /* Slightly larger buttons for easier tapping on mobile */
+    /*}
+    .validate-payment-div {
+    margin-right:10px !important;
+    }
+}*/
+
+/* Styles for screens larger than 1024px (e.g., desktops, large laptops) */
+/*@media (min-width: 1024px) {
+    .saveSalesOrder {
+        width: 206px !important;
+    }
+
+    .small-box > .inner {
+        position: absolute;
+    }
+
+    .modal-dialog {
+        width: 1024px !important;
+        height: auto !important;
+        margin: auto !important;
+        max-height: 768px !important;*/ /* Set a max height for modals on larger screens */
+    /*}
+
+    .modal-content {*/
+        /*height: 600px !important;*/
+        /*overflow: auto !important;*/ /* Ensure content can scroll if necessary */
+    /*}
+
+    .quantity-calculator button {
+        width: 100px !important;*/ /* Fix button width to maintain alignment on larger screens */
+        /*height: 40px !important;*/ /* Set a consistent height for buttons */
+        /*margin: 5px 0;*/ /* Add space between buttons */
+    /*}
+
+    .btn-block {
+        height: 40px;
+        width: 120px;*/ /* Slightly larger buttons on desktop */
+        /*margin-bottom: 10px;
+    }*/
+
+    /* Align the buttons in the calculator */
+    /*.quantity-calculator .row {
+        display: flex !important;
+        justify-content: center !important;
+    }
+}*/
+
+/*.calculator-container {
+    right: 324px !important;
+    width: 30% !important;
+}*/
