@@ -1208,7 +1208,6 @@ function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate
     var existingRow = findProductRow(product.Name); // Find if product already exists in the table
 
     if (existingRow && isUpdate) {
-        debugger;
         // Existing product logic, used for updating quantity
         var qtyInput = existingRow.cells[3].querySelector('input'); // Select input from qtyCell
         var totalCell = existingRow.cells[5]; // Assuming total price is the 6th cell (index 5)
@@ -1305,7 +1304,6 @@ function handleProductAddition(encodedProductJson, quantityFromScanner, isUpdate
         });
 
         qtyInput.addEventListener('click', function () {
-            debugger;
             $('#quantityAddpopup').data('productDetails', JSON.stringify(product));
             $('#quantityAddpopup').modal('show');
             //$('#quantityAddpopup').on('shown.bs.modal', function () {
