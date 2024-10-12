@@ -2,4 +2,29 @@
     .med-800 {
         margin-left: 38% !important;
     }
+
+    .pdetailstablemed {
+        margin-left: -189px !important;
+    }
+
+    .paymentdetailsmed {
+        margin-left: -183px !important;
+    }
+
+    .customerdetailsmed {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Align all items to the start */
+        margin-left: -180px !important; /* Adjust as needed */
+    }
+
+        .customerdetailsmed p {
+            margin: 0; /* Reset margins */
+        }
+    /*.customerdetailsmed p {
+        margin: 0;*/ /* Reset margins */
+    /*}
+    .customerdetailsmed {
+        margin-left: -180px !important;
+    }*/
 }

@@ -4,15 +4,28 @@
         #productDetailsTable td {
             padding: 10px; /* Adjust the value as needed */
         }
+        .overall-total {
+            background-color: #585555;
+            color: white;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .change-due {
+            background-color: lightgreen;
+            font-weight: bold;
+            text-align: right;
+            float: left;
+        }
     </style>
 <link href="~/Content/custom/media800.css" rel="stylesheet" />
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-5"></div>
-        <div class="col-md-6 med-800">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 med-800">
             @*<h1>Selected Products</h1>*@
             <img src="~/dist/img/PhevaImg.png" alt="Selected Products" style="max-width: 100%; height: auto;" />
-            <table id="productDetailsTable">
+            <table class="pdetailstablemed" id="productDetailsTable">
                 <thead>
                     <tr>
                         @*<th>Product ID</th>*@
@@ -27,10 +40,12 @@
                     <!-- This tbody will be dynamically populated -->
                 </tbody>
             </table>
-            <div id="paymentDetails">
+            <div class="paymentdetailsmed" id="paymentDetails">
 
             </div>
-            <div id="customerDetails">
+            <br/>
+            <br/>
+            <div class="customerdetailsmed" id="customerDetails">
 
             </div>
         </div>
@@ -52,8 +67,8 @@
                 overallTotal += totalPrice;
                 $('#productDetailsTable tbody').append(
                     `<tr>
-                        <td>${product.ProductName}</td>
-                        <td>${product.Quantity}</td>
+                        <td style="width: 34%;">${product.ProductName}</td>
+                        <td>${product.Quantity} x</td>
                        <td>${formatNumberWithDotss(totalPrice)}</td>
                     </tr>`
                 );
@@ -63,7 +78,7 @@
             $('#productDetailsTable tbody').append(
                 `<tr>
                 <td colspan="1"></td>
-                <td style="font-weight: bold;">${formatNumberWithDotss(overallTotal)} ₫</td> <!-- Display overall total -->
+                <td class="overall-total" style="font-weight: bold;text-align: center;">${formatNumberWithDotss(overallTotal)} ₫</td> <!-- Display overall total -->
             </tr>`
                 );
             }
@@ -82,7 +97,7 @@
             $('#paymentDetails').append(
                 `<div>
             <p><strong>Credit Card:</strong> ${payments.CardVndAmount} VND</p>
-            <p><strong>Change due:</strong> ${leftToPay} VND</p>
+            <p class="change-due"><strong>Change due:</strong> ${leftToPay} VND</p>
         </div>`
             );
         };

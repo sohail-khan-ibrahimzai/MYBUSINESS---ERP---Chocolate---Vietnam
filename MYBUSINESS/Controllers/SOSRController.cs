@@ -84,7 +84,7 @@ namespace MYBUSINESS.Controllers
 
 
                 //itm.Id = Encryption.Encrypt(itm.Id, "BZNS");
-                itm.Id = string.Join("-", ASCIIEncoding.ASCII.GetBytes(Encryption.Encrypt(itm.Id, "BZNS")));
+                //itm.Id = string.Join("-", ASCIIEncoding.ASCII.GetBytes(Encryption.Encrypt(itm.Id, "BZNS"))); //commented for print error
             }
 
             ViewBag.LstMaxSerialno = LstMaxSerialNo;
