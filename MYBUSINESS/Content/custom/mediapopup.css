@@ -108,7 +108,14 @@
     }
 
     .validate-payment-div {
-        margin-right: 10px !important;
+        position: relative !important;
+        margin-right: 15px !important;
+        margin-top: -232px !important;
+    }
+    .cistomer-med-btton {
+        position: relative !important;
+        margin-right: 15px !important;
+        margin-top: -78px !important;
     }
 
     .small-box:last-child {
@@ -116,7 +123,7 @@
     }
 
     .individualWithoutVAT-s {
-        margin-left: -165px !important;
+        margin-left: -27px !important;
     }
 
     .customerbytaxcodes {

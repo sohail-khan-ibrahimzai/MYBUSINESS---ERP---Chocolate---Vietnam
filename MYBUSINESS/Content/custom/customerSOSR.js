@@ -1426,6 +1426,7 @@ function getCookie(name) {
 function deleteCookie(name) {
     setCookie(name, "", -1);  // Setting the expiration date to the past
 }
+////////Function to add product list for Customer view using signal R do not confuse about the name localStorage....//////
 function saveSelectedProductsToLocalStorage() {
     const rows = document.querySelectorAll('#selectedProducts tbody tr');
     const allProducts = [];
@@ -2223,6 +2224,7 @@ $(document).ready(function () {
         totalAmountForSelectedProduct = 0;
         totalVndBalanceHeader = 0;
         //$('#payallbycard').text('Pay all by card');
+        saveSelectedProductsToLocalStorage();
     });
     $('#CreateSO').keydown(function (event) {
         if (event.keyCode == 13) {

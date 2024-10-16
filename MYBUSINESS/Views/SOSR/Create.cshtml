@@ -577,7 +577,7 @@
                 <div class="modal-body paymodalbody-med">
                     <div class="container mt-5">
                         <div class="row justify-content-center">
-                            <div class="col-md-3"></div>
+                            @*<div class="col-md-3"></div>*@
                             <div class="col-md-8">
                                 <div class="card">
                                     <div class="card-body">
@@ -734,7 +734,13 @@
                         <button type="button" class="btn btn-secondary cancelPaymentButton" data-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary" name="validatepyment" id="validatepyment" disabled>Validate</button>
                     </div>
-                </div>
+                </div> 
+                @*<div class="modal-footer">
+                    <div class="validate-payment-div">
+                        <button type="button" class="btn btn-secondary cancelPaymentButton" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" name="validatepyment" id="validatepyment" disabled>Validate</button>
+                    </div>
+                </div>*@
             </div>
         </div>
     </div>
@@ -752,8 +758,8 @@
                 <div class="modal-body">
                     <div class="container mt-5">
                         <div class="row justify-content-center">
-                            <div class="col-md-4"></div>
-                                <div class="col-md-6">
+                            @*<div class="col-md-4"></div>*@
+                                <div class="col-md-8">
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="row"></div><div class="col-md-6"></div><div class="col-md-5">
@@ -765,7 +771,8 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                                <div class="col-md-10">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-8">
                                                 <form>
                                                     <div class="form-group">
                                                         <input type="text" autocomplete="off" class="form-control" name="Customer.Id" id="customerId" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" style="display:none;">
@@ -785,9 +792,9 @@
                                                             </button>
                                                         </div>
                                                         @*<div class="col-sm-2">
-                                                                <button type="button" class="btn btn-primary btn-block" id="customerByTaxCode"><i class="fa fa-search"></i></button>
-                                                                <span class="loader" style="display: none;"></span>
-                                                            </div>*@
+                        <button type="button" class="btn btn-primary btn-block" id="customerByTaxCode"><i class="fa fa-search"></i></button>
+                        <span class="loader" style="display: none;"></span>
+                    </div>*@
                                                         <!--<label for="field4">VAT Number</label>-->
                                                         @*<input type="text" class="form-control" name="vndCustomerVat" id="vndCustomerVat" placeholder="VAT Number">*@
                                                         <!--<input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat" placeholder="VAT Number">-->
@@ -803,14 +810,14 @@
                                                         @*<input type="hidden" name="Customer.Name" id="customer1" value="@Model.Customer.Name" />*@
                                                     </div>
                                                     @*<div class="form-group">
-                                                            <label for="dropdown">Customer</label>
-                                                            <select class="form-control" id="dropdown">
-                                                                <option value="">Select customer</option>
-                                                                <option value="1">Option 1</option>
-                                                                <option value="2">Option 2</option>
-                                                                <option value="3">Option 3</option>
-                                                            </select>
-                                                        </div>*@
+                    <label for="dropdown">Customer</label>
+                    <select class="form-control" id="dropdown">
+                        <option value="">Select customer</option>
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                    </select>
+                </div>*@
                                                     <div class="form-group">
                                                         <label for="field1">Customer Name</label>
                                                         <input type="text" class="form-control" name="Customer.Name" id="vndCustomerName" placeholder="Cutomer name">
@@ -861,10 +868,12 @@
                         </div>
                     </div>
                 </div>-->
-                <div class="modal-footer">
+            <div class="modal-footer">
+                <div class="cistomer-med-btton">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary" name="saveSales" id="saveSales">Save</button>
                 </div>
+            </div>
             </div>
         </div>
     </div>
@@ -1124,14 +1133,15 @@
       @if (ViewBag.ReportId != null)
       {
           if (ViewBag.WebserviceDownError != null) {
-          @:alert("Server is down VAT Invoice cannot print at this time");
+          @:alert(@Html.Raw(Json.Encode(ViewBag.WebserviceDownError)));
+          @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
           }
           else {
            @:window.open("PrintSO3/@(ViewBag.ReportId)", "_blank");
       }
       }
       else {
-          @:window.open('ProductDetailsCustomer', '_blank');
+          @*@:window.open('ProductDetailsCustomer', '_blank');*@
           @:console.log("Report can not be null");
       }
           @*if(ViewBag.WebserviceDownError!= null) {

@@ -27,6 +27,7 @@ using Newtonsoft.Json.Linq;
 using System.Data.Entity.Core.Metadata.Edm;
 using Microsoft.AspNet.SignalR;
 using MYBUSINESS.HubConnection;
+using System.Threading;
 
 namespace MYBUSINESS.Controllers
 {
@@ -861,6 +862,7 @@ namespace MYBUSINESS.Controllers
             TempData["_CustomerEmail"] = TempData["CustomerEmail"] as string;
             TempData["_CustomerAddress"] = TempData["CustomerAddress"] as string;
             TempData["_POSName"] = TempData["POSName"] as string;
+            TempData["_CompanyName"] = TempData["CompanyName"] as string;
             TempData["_POSAddress"] = TempData["POSAddress"] as string;
             TempData["_POSPhoneNumber"] = TempData["POSPhoneNumber"] as string;
             TempData["_CustomerVatNumber"] = TempData["CustomerVatNumber"] as string;
@@ -986,7 +988,8 @@ namespace MYBUSINESS.Controllers
                 //StoreId 
                 //sO.StoreId = parseId; commented due to session issue
                 sO.StoreId = storeId;
-                sO.CustomerId = Customer.Id;
+                sO.CustomerId = (Customer.Id != null && Customer.Id != 0) ? Customer.Id : 1;
+                //sO.CustomerId = Customer.Id;
 
                 db.SOes.Add(sO);
                 //db.SaveChanges();
@@ -1128,67 +1131,96 @@ namespace MYBUSINESS.Controllers
                     // Call the web service login function synchronously
 
                     //var loginToWebService = LoginToWebService();
-                    var loginToWebService = await LoginToWebServiceAsync();
-                    if (loginToWebService == null || loginToWebService.Data == null)
+                    bool isWebserviceDown = false;
+                    using (var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(15)))
                     {
-                        return Json(new { Success = false, Messsag = "Invalid Login attempt to web service,please use correct credentials" });
-                    }
-                    // Convert Data property to JSON string
-                    string dataString = JsonConvert.SerializeObject(loginToWebService.Data);
-                    // Deserialize the JSON string to get the token
-                    dynamic jsonResponse = JsonConvert.DeserializeObject(dataString);
-                    string authToken = jsonResponse?.Token;  // Make sure the key name matches exactly with the response
+                        try
+                        {
+                            var loginToWebService = await LoginToWebServiceAsync();
+                            if (loginToWebService == null || loginToWebService.Data == null)
+                            {
+                                return Json(new { Success = false, Messsag = "Invalid Login attempt to web service,please use correct credentials" });
+                            }
+                            // Convert Data property to JSON string
+                            string dataString = JsonConvert.SerializeObject(loginToWebService.Data);
+                            // Deserialize the JSON string to get the token
+                            dynamic jsonResponse = JsonConvert.DeserializeObject(dataString);
+                            string authToken = jsonResponse?.Token;  // Make sure the key name matches exactly with the response
+                            if (authToken != null && jsonResponse.Success == true)
+                            {
+                                var webServiceResponse = await AddWebServiceCustomerDetails(authToken, Customer, sO, sOD);
+                                if (webServiceResponse == null || !webServiceResponse.Success)
+                                {
+                                    return Json(new { Success = false, Messsag = "Web service not responding" });
+                                }
+                                var dataType = webServiceResponse.Data.GetType();
+                                if (dataType == typeof(JObject))
+                                {
+                                    JObject dataObject = (JObject)webServiceResponse.Data;
+                                    string code = dataObject["code"]?.ToString();
+                                    string nestedDataObjects = dataObject["data"].ToString();
+                                    Console.WriteLine($"Code: {code}");
+                                    JObject nestedDataObject = dataObject["data"] as JObject;
+                                    if (nestedDataObject != null)
+                                    {
+                                        // Example of accessing a value within the nested 'data'
+                                        string invoiceSeries = nestedDataObject["inv_invoiceSeries"]?.ToString();
+                                        string invoiceNumber = nestedDataObject["inv_invoiceNumber"]?.ToString();
+                                        string macqt = nestedDataObject["macqt"]?.ToString();
+                                        string sobaomat = nestedDataObject["sobaomat"]?.ToString();
+                                        TempData["InvoiceSeries"] = invoiceSeries;
+                                        TempData["InvoiceNumber"] = invoiceNumber;
+                                        TempData["Macqt"] = macqt;
+                                        TempData["Sobaomat"] = sobaomat;
+                                    }
+                                }
+                                if (webServiceResponse.Success)
+                                {
+                                    // Use the response data as needed
+                                    TempData["WebServiceMessage"] = webServiceResponse.Message;
+                                    // Proceed with further logic
+                                }
+                                else
+                                {
+                                    // Handle the error case
+                                    ViewBag.ErrorMessage = webServiceResponse.Message;
+                                    return View("Error"); // or any error handling view
+                                }
+                            }
+                            else
+                            {
+                                isWebserviceDown = true;
+                            }
+                        }
+                        catch (TaskCanceledException)
+                        {
 
+                            return Json(new { Success = false, Message = "Login attempt timed out. Please try again." });
+
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log the exception or handle it as needed
+                            System.Diagnostics.Debug.WriteLine("Exception occurred in YourMethod: " + ex.Message);
+                            return Json(new { Success = false, Message = $"An error occurred: {ex.Message}" });
+                        }
+                    }
                     //dynamic jsonResponse = JsonConvert.DeserializeObject(loginToWebService.ContentType);
                     //string authToken = jsonResponse.token;
 
                     //if (loginToWebService == null)
                     //    return Json(new { Success = false, Messsag = "Invalid Login attempt to web service,please use correct credentials" });
-
-                    var webServiceResponse = await AddWebServiceCustomerDetails(authToken, Customer, sO, sOD);
-                    if (webServiceResponse == null || !webServiceResponse.Success)
-                    {
-                        return Json(new { Success = false, Messsag = "Web service not responding" });
-                    }
-                    var dataType = webServiceResponse.Data.GetType();
-                    if (dataType == typeof(JObject))
-                    {
-                        JObject dataObject = (JObject)webServiceResponse.Data;
-                        string code = dataObject["code"]?.ToString();
-                        string nestedDataObjects = dataObject["data"].ToString();
-                        Console.WriteLine($"Code: {code}");
-                        JObject nestedDataObject = dataObject["data"] as JObject;
-                        if (nestedDataObject != null)
-                        {
-                            // Example of accessing a value within the nested 'data'
-                            string invoiceSeries = nestedDataObject["inv_invoiceSeries"]?.ToString();
-                            string invoiceNumber = nestedDataObject["inv_invoiceNumber"]?.ToString();
-                            string macqt = nestedDataObject["macqt"]?.ToString();
-                            string sobaomat = nestedDataObject["sobaomat"]?.ToString();
-                            TempData["InvoiceSeries"] = invoiceSeries;
-                            TempData["InvoiceNumber"] = invoiceNumber;
-                            TempData["Macqt"] = macqt;
-                            TempData["Sobaomat"] = sobaomat;
-                        }
-                    }
-                    if (webServiceResponse.Success)
-                    {
-                        // Use the response data as needed
-                        TempData["WebServiceMessage"] = webServiceResponse.Message;
-                        // Proceed with further logic
-                    }
-                    else
-                    {
-                        // Handle the error case
-                        ViewBag.ErrorMessage = webServiceResponse.Message;
-                        return View("Error"); // or any error handling view
-                    }
                     //var addWebServiceCustomerDetails = await AddWebServiceCustomerDetails(authToken, Customer, sO, sOD);
                     ///////////////////////
+                    if (isWebserviceDown == true)
+                        TempData["WebserviceDownError"] = "Sever is down VAT Invoice cannot print at this time";
+                    else
+                        TempData["WebserviceDownError"] = null;
 
                     TempData["CustomerName"] = Customer.Name;
                     TempData["CustomerEmail"] = Customer.Email;
                     TempData["CustomerAddress"] = Customer.Address;
+                    TempData["CompanyName"] = Customer.CompanyName;
                     TempData["POSName"] = getStoreName.Name;
                     TempData["POSAddress"] = getStoreName.Address;
                     TempData["POSPhoneNumber"] = getStoreName.PhoneNumber;
@@ -1212,8 +1244,6 @@ namespace MYBUSINESS.Controllers
 
                     //}
                     sO.Profit -= (decimal)sO.Discount;
-
-
                     db.SODs.AddRange(sOD);
                 }
             }
@@ -1308,7 +1338,8 @@ namespace MYBUSINESS.Controllers
             catch (Exception ex)
             {
                 // Log the exception or handle it as needed
-                System.Diagnostics.Debug.WriteLine("Exception occurred in LoginToWebService: " + ex.Message);
+                //System.Diagnostics.Debug.WriteLine("Exception occurred in LoginToWebService: " + ex.Message);
+                TempData["WebserviceDownError"] = "Sever is down VAT Invoice cannot print at this time";
                 return Json(new { Success = false, Message = $"An error occurred: {ex.Message}" });
             }
         }
@@ -2205,6 +2236,7 @@ namespace MYBUSINESS.Controllers
             string _customerEmail = TempData["_CustomerEmail"] as string;
             string _customerAddress = TempData["_CustomerAddress"] as string;
             string _customerPosName = TempData["_POSName"] as string;
+            string _companyName = TempData["_CompanyName"] as string;
             string _customerPosAddress = TempData["_POSAddress"] as string;
             string _customerPosPhoneNumber = TempData["_POSPhoneNumber"] as string;
             string _customerVatNumber = TempData["_CustomerVatNumber"] as string;
@@ -2271,6 +2303,7 @@ namespace MYBUSINESS.Controllers
         new ReportParameter("POSName", _customerPosName ?? "-"),   // Pass POS Name
         new ReportParameter("POSAddress", _customerPosAddress ?? "-"),   // Pass POS Name
         new ReportParameter("POSPhoneNumber", _customerPosPhoneNumber ?? "-"),   // Pass POS Name
+        new ReportParameter("CompanyName", _companyName ?? "-"),   // Pass POS Name
         new ReportParameter("CustomerVatNumber", _customerVatNumber ?? "-"),  // Pass POS Name
 
         new ReportParameter("InvoiceSeries", _invoiceSeries ?? "-"),  // Pass POS Name
@@ -3018,6 +3051,6 @@ namespace MYBUSINESS.Controllers
         //}
     }
     // Product model for deserialization
-    
+
 
 }

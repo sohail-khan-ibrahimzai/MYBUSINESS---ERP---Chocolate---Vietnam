@@ -1,24 +1,37 @@
 ﻿@using MYBUSINESS.Models
 @model List<CustomerDetailsViewModel>
-    <style>
-        #productDetailsTable td {
-            padding: 10px; /* Adjust the value as needed */
-        }
-        .overall-total {
-            background-color: #585555;
-            color: white;
-            font-weight: bold;
-            text-align: right;
-        }
+@{
+    Layout = null;
+}
+<style>
+    #productDetailsTable td {
+        padding: 10px; /* Adjust the value as needed */
+    }
 
-        .change-due {
-            background-color: lightgreen;
-            font-weight: bold;
-            text-align: right;
-            float: left;
-        }
-    </style>
+    .overall-total {
+        background-color: #585555;
+        color: white;
+        font-weight: bold;
+        text-align: right;
+    }
+
+    .change-due {
+        background-color: lightgreen;
+        font-weight: bold;
+        text-align: right;
+        float: left;
+    }
+</style>
+<!-- jQuery 3 -->
+<script src="~/bower_components/jquery/dist/jquery.min.js"></script>
+<!--Global scripts-->
+@*<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script src="~/Content/custom/downloads/jquery.mcautocomplete.js"></script>
+    <script src="~/Content/custom/downloads/jquery.scannerdetection.js"></script>*@
 <link href="~/Content/custom/media800.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
+<script src="~/signalr/hubs"></script>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4"></div>
@@ -43,8 +56,8 @@
             <div class="paymentdetailsmed" id="paymentDetails">
 
             </div>
-            <br/>
-            <br/>
+            <br />
+            <br />
             <div class="customerdetailsmed" id="customerDetails">
 
             </div>
@@ -74,9 +87,9 @@
                 );
             });
             // Append the overall total row
-            if (overallTotal !== 0) { 
-            $('#productDetailsTable tbody').append(
-                `<tr>
+            if (overallTotal !== 0) {
+                $('#productDetailsTable tbody').append(
+                    `<tr>
                 <td colspan="1"></td>
                 <td class="overall-total" style="font-weight: bold;text-align: center;">${formatNumberWithDotss(overallTotal)} ₫</td> <!-- Display overall total -->
             </tr>`
@@ -122,7 +135,7 @@
             //"0106026495-999"
             // Append payment details below the table
             $('#customerDetails').append(
-             `<div>
+                `<div>
             <p><strong>Your VAT Invoice information:</strong></p>
             <p><strong>Customer name:</strong> ${customers.CustomerName}</p>
             <p><strong>Company:</strong> ${customers.CompanyName}</p>
@@ -130,10 +143,9 @@
             <p><strong>Tax code:</strong> ${customers.VatNumber}</p>
         </div>`
             );
-            //setTimeout(function () {
-            //    location.reload();
-            //}, 60000);
-
+            setTimeout(function () {
+                clearAllData();
+            }, 15000);
         };
         //////Payment Details
         //connection.client.broadcastPaymentDetails = function (payments) {
@@ -148,6 +160,7 @@
         //    </div>`
         //    );
         //};
+
         ///Start connection
         $.connection.hub.start({ transport: ['webSockets', 'longPolling', 'serverSentEvents'] })
             .done(function () {
@@ -160,6 +173,11 @@
         function formatNumberWithDotss(number) {
             var numberStr = Math.floor(number).toString();
             return numberStr.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+        function clearAllData() {
+            $('#productDetailsTable tbody').empty(); // Clear product details
+            $('#paymentDetails').empty(); // Clear payment details
+            $('#customerDetails').empty(); // Clear customer details
         }
     });
 
