@@ -234,153 +234,118 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
     @*<input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat1" value="abcd" placeholder="VAT Number">*@
-    <div class="container" id="container">
-        <div class="table-wrapper2">
-            <div class="table-title">
-                <div class="row">
-                    @*<div id="saleOrder" class="col-sm-offset-5"><h2>Sale <b>Order</b></h2></div>*@
-                    @*<div id="saleReturn" class="col-sm-offset-5"><h2>Sale <b>Return</b></h2></div>*@
-                </div>
-                <!--hidden fields customer data-->
-                <input type="text" autocomplete="off" class="form-control" name="Customer.Id" id="customerId1" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" style="display:none;">
-                <input type="text" class="form-control" name="Customer.Name" id="vndCustomer1" placeholder="Customer" style="display:none;">
-                <input type="text" class="form-control" name="Customer.CompanyName" id="vndCustomerCompany1" placeholder="Customer company" style="display:none;">
-                <input type="text" class="form-control" name="Customer.Name" id="vndCustomerName1" placeholder="Customer name" style="display:none;">
-                <input type="text" class="form-control" name="Customer.Address" id="vndCustomerAddress1" placeholder="Customer address" style="display:none;">
-                <input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat1" placeholder="Customer Vat" style="display:none;">
-                <input type="text" class="form-control" name="Customer.Email" id="vndCustomerEmail1" placeholder="Customer email" style="display:none;">
-                <!--hidden fields customer data-->
-                <input type="hidden" name="SaleOrder.SaleReturn" id="saleReturn" value=@ViewBag.IsReturn />
+<div class="container" id="container">
+    <div class="customerDisplayScreen"><a href="/SOSR/ProductDetailsCustomer" target="_blank">Open Customer Screen</a></div>
+    
+    <div class="table-wrapper2">
+        <div class="table-title">
+            <div class="row">
+                @*<div id="saleOrder" class="col-sm-offset-5"><h2>Sale <b>Order</b></h2></div>*@
+                @*<div id="saleReturn" class="col-sm-offset-5"><h2>Sale <b>Return</b></h2></div>*@
+            </div>
+            <!--hidden fields customer data-->
+            <input type="text" autocomplete="off" class="form-control" name="Customer.Id" id="customerId1" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" style="display:none;">
+            <input type="text" class="form-control" name="Customer.Name" id="vndCustomer1" placeholder="Customer" style="display:none;">
+            <input type="text" class="form-control" name="Customer.CompanyName" id="vndCustomerCompany1" placeholder="Customer company" style="display:none;">
+            <input type="text" class="form-control" name="Customer.Name" id="vndCustomerName1" placeholder="Customer name" style="display:none;">
+            <input type="text" class="form-control" name="Customer.Address" id="vndCustomerAddress1" placeholder="Customer address" style="display:none;">
+            <input type="text" class="form-control" name="Customer.Vat" id="vndCustomerVat1" placeholder="Customer Vat" style="display:none;">
+            <input type="text" class="form-control" name="Customer.Email" id="vndCustomerEmail1" placeholder="Customer email" style="display:none;">
+            <!--hidden fields customer data-->
+            <input type="hidden" name="SaleOrder.SaleReturn" id="saleReturn" value=@ViewBag.IsReturn />
 
-                <input type="hidden" name="SaleOrder.CustomerId" id="idnCustomer" value="" />
-                <div class="row">
-                    <div class="col-md-6">
-
-                    </div>
-
-                    <div class="col-md-6">
-
-                    </div>
-
+            <input type="hidden" name="SaleOrder.CustomerId" id="idnCustomer" value="" />
+            <div class="row">
+                <div class="col-md-6">
 
                 </div>
 
-            </div>
-            @*<div style="margin-top: -55px;">*@
-            <div>
-                @{
-                    var storeName = Session["storeName"] as string;
-                    if (storeName != null)
-                    {
-                        @*<p style="display: inline-block; color: #ffffff; background-color: #007bff; padding: 5px; border-radius: 11px;">
-                        *@<p>
-                            <b>
-                                @storeName
-                            </b>
-                        </p>
-                    }
-                }
-            </div>
+                <div class="col-md-6">
 
-            @*Start function for formating numbers in thousands*@
-            @functions {
-                // Helper method to format numbers with dots instead of commas
-                public string FormatNumberWithDots(decimal number)
+                </div>
+
+
+            </div>
+        </div>
+        @*<div style="margin-top: -55px;">*@
+        <div>
+            @{
+                var storeName = Session["storeName"] as string;
+                if (storeName != null)
                 {
-                    // Format number with comma as thousands separator
-                    var formattedNumber = number.ToString("N0");
-                    // Replace commas with dots
-                    return formattedNumber.Replace(",", ".");
+                    @*<p style="display: inline-block; color: #ffffff; background-color: #007bff; padding: 5px; border-radius: 11px;">
+                    *@<p>
+                        <b>
+                            @storeName
+                        </b>
+                    </p>
                 }
             }
-            @*End function for formating numbers in thousands*@
+        </div>
 
-            @* input type for Barcode *@
-            @*<div>
-                    <input type="text" id="barcodeInput" placeholder="Scan or type the barcode here" />
-                </div>*@
+        @*Start function for formating numbers in thousands*@
+        @functions {
+            // Helper method to format numbers with dots instead of commas
+            public string FormatNumberWithDots(decimal number)
+            {
+                // Format number with comma as thousands separator
+                var formattedNumber = number.ToString("N0");
+                // Replace commas with dots
+                return formattedNumber.Replace(",", ".");
+            }
+        }
+        @*End function for formating numbers in thousands*@
+
+        @* input type for Barcode *@
+        @*<div>
+                <input type="text" id="barcodeInput" placeholder="Scan or type the barcode here" />
+            </div>*@
 
 
-            <div class="row">
-                <div class="col-md-8 scrollable-div">
+        <div class="row">
+            <div class="col-md-8 scrollable-div">
                 @*<div class="col-md-6 scrollable-div">*@
-                    @*@foreach (var product in Model.ProductList)
+                @*@foreach (var product in Model.ProductList)
+                    {
+                        var settings = new Newtonsoft.Json.JsonSerializerSettings
                         {
-                            var settings = new Newtonsoft.Json.JsonSerializerSettings
-                            {
-                                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                            };
-                            var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
-                            var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
+                            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                        };
+                        var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
+                        var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
 
-                            string formattedPrice = FormatNumberWithDots(product.SalePrice);
-                            <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
-                                <div class="small-box bg-info text-black p-3 scrollable-box">
-                                    <div class="inner">
-                                        <h4 class="product-name">@product.Name</h4>
-                                        <p class="product-name">₫ @formattedPrice</p>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="ion ion-bag"></i>
-                                    </div>
+                        string formattedPrice = FormatNumberWithDots(product.SalePrice);
+                        <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
+                            <div class="small-box bg-info text-black p-3 scrollable-box">
+                                <div class="inner">
+                                    <h4 class="product-name">@product.Name</h4>
+                                    <p class="product-name">₫ @formattedPrice</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
                                 </div>
                             </div>
-                        }*@
-                    @if (groupedProductLists != null)
+                        </div>
+                    }*@
+                @if (groupedProductLists != null)
+                {
+                    foreach (var group in groupedProductLists)
                     {
-                        foreach (var group in groupedProductLists)
+
+                        foreach (var product in group.Value)
                         {
-
-                            foreach (var product in group.Value)
-                            {
-                                // Serialize the product object to JSON
-                                var settings = new Newtonsoft.Json.JsonSerializerSettings
-                                {
-                                    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                                };
-                                var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
-                                var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
-                                var categoryColor = categoryColors.ContainsKey(product.Category)
-                                    ? categoryColors[product.Category]
-                                    : "#ffffff"; // Default color if the category is not found
-                                string formattedPrice = FormatNumberWithDots(product.SalePrice);
-
-                                <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
-                                    <div class="small-box" style="background-color: @categoryColor; color: black; padding: 15px;">
-                                        <div class="inner">
-                                            <h4 class="product-name">@product.Name</h4>
-                                            <p class="product-name">₫ @formattedPrice</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="ion ion-bag"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        }
-                    }
-                    else
-                    {
-                        <p>No products found.</p>
-                    }
-
-
-                    @*Old working code to bind Products*@
-                    @*@foreach (var product in Model.ProductList)
-                        {
+                            // Serialize the product object to JSON
                             var settings = new Newtonsoft.Json.JsonSerializerSettings
                             {
                                 ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                             };
                             var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
                             var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
-                            var productLists = @Html.Raw(encodedProductJson);
-                            // Retrieve the color for the product's category directly
                             var categoryColor = categoryColors.ContainsKey(product.Category)
-                                    ? categoryColors[product.Category]
-                                    : "#ffffff"; // Default color if the category is not found
-
+                                ? categoryColors[product.Category]
+                                : "#ffffff"; // Default color if the category is not found
                             string formattedPrice = FormatNumberWithDots(product.SalePrice);
+
                             <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
                                 <div class="small-box" style="background-color: @categoryColor; color: black; padding: 15px;">
                                     <div class="inner">
@@ -392,177 +357,213 @@
                                     </div>
                                 </div>
                             </div>
-                        }*@
-                </div>
+                        }
+                    }
+                }
+                else
+                {
+                    <p>No products found.</p>
+                }
 
-                <div class="col-md-4">
-                @*<div class="col-md-6">*@
-                    <!-- Hidden input field for SuggestedNewProductId -->
-                    <input type="hidden" id="suggestedNewProductId" value="@ViewBag.SuggestedNewProductId" />
-                    @*<div style="display:flex; margin-top: -31px;">*@
-                    <div style="display: flex; margin-top: 0px;">
-                        <label style="width: 127px;">Bill Number:</label>
-                        @*<label name="SaleOrder.Id">@ViewBag.SuggestedNewProductIds</label>*@
-                        <input type="text" name="SaleOrder.Id" class="form-control label-like-input" value="@ViewBag.SuggestedNewProductIds" />
-                    </div>
-                    <br /> <br />
-                    <table id="selectedProducts" class="table table-bordered" style="margin-top: -34px !important;">
-                        <thead>
-                            <tr>
-                                <th style="width:5%;">#</th>
-                                <th style="width:25%;">Name</th>
-                                <th style="display:none;">Price</th>
-                                <th>Qty</th>
-                                <th style="display:none;">Bill Number</th>
-                                <th style="width: auto;">Total</th>
-                                <th style="display:none;">Type</th>
-                                <th style="width: 62px;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Add your rows here -->
-                        </tbody>
-                    </table>
-                </div>
+
+                @*Old working code to bind Products*@
+                @*@foreach (var product in Model.ProductList)
+                    {
+                        var settings = new Newtonsoft.Json.JsonSerializerSettings
+                        {
+                            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                        };
+                        var productJson = Newtonsoft.Json.JsonConvert.SerializeObject(product, settings);
+                        var encodedProductJson = System.Web.HttpUtility.JavaScriptStringEncode(productJson);
+                        var productLists = @Html.Raw(encodedProductJson);
+                        // Retrieve the color for the product's category directly
+                        var categoryColor = categoryColors.ContainsKey(product.Category)
+                                ? categoryColors[product.Category]
+                                : "#ffffff"; // Default color if the category is not found
+
+                        string formattedPrice = FormatNumberWithDots(product.SalePrice);
+                        <div class="col-md-3 col-sm-6 mb-3 product-box" onclick="addProduct('@encodedProductJson')">
+                            <div class="small-box" style="background-color: @categoryColor; color: black; padding: 15px;">
+                                <div class="inner">
+                                    <h4 class="product-name">@product.Name</h4>
+                                    <p class="product-name">₫ @formattedPrice</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                            </div>
+                        </div>
+                    }*@
             </div>
 
+            <div class="col-md-4">
+                @*<div class="col-md-6">*@
+                <!-- Hidden input field for SuggestedNewProductId -->
+                <input type="hidden" id="suggestedNewProductId" value="@ViewBag.SuggestedNewProductId" />
+                @*<div style="display:flex; margin-top: -31px;">*@
+                <div style="display: flex; margin-top: 0px;">
+                    <label style="width: 127px;">Bill Number:</label>
+                    @*<label name="SaleOrder.Id">@ViewBag.SuggestedNewProductIds</label>*@
+                    <input type="text" name="SaleOrder.Id" class="form-control label-like-input" value="@ViewBag.SuggestedNewProductIds" />
+                </div>
+                <br /> <br />
+                <table id="selectedProducts" class="table table-bordered" style="margin-top: -34px !important;">
+                    <thead>
+                        <tr>
+                            <th style="width:5%;">#</th>
+                            <th style="width:25%;">Name</th>
+                            <th style="display:none;">Price</th>
+                            <th>Qty</th>
+                            <th style="display:none;">Bill Number</th>
+                            <th style="width: auto;">Total</th>
+                            <th style="display:none;">Type</th>
+                            <th style="width: 62px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Add your rows here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
 
 
-            <div class="table-title" style="display:none;">
+
+        <div class="table-title" style="display:none;">
+            <div class="row">
+                <div class="col-sm-2">
+                    <button type="button" id="addNewRow" class="btn btn-primary add-new" style="background-color: #2bbdb9;"><i class="fa fa-plus"></i> New Row</button>
+                </div>
+            </div>
+        </div>
+        @*<div class="table-title">
                 <div class="row">
                     <div class="col-sm-2">
                         <button type="button" id="addNewRow" class="btn btn-primary add-new" style="background-color: #2bbdb9;"><i class="fa fa-plus"></i> New Row</button>
                     </div>
                 </div>
-            </div>
-            @*<div class="table-title">
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <button type="button" id="addNewRow" class="btn btn-primary add-new" style="background-color: #2bbdb9;"><i class="fa fa-plus"></i> New Row</button>
-                        </div>
-                    </div>
-                </div>*@
+            </div>*@
 
-            <div style="display:inline" id="dvCalculations">
-                <div class="row" style="margin-top:30px;">
-                    <div class="col-md-6">
-                        @Html.DropDownList("SaleOrder.BankAccountId", (IEnumerable<SelectListItem>)ViewBag.BankAccounts, null, new { @class = "form-control", @style = "display:none" })
-                        @*<select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method">
-                                <option value="Cash" selected>Cash</option>
-                                <option value="Online">Online</option>
-                                <option value="Cheque">Cheque</option>
-                                <option value="Other">Other</option>
-                            </select>*@
-                        @*<input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
-                            <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
-                            <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea>
-                            <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea>*@
-
-                        <select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method" style="display:none;">
+        <div style="display:inline" id="dvCalculations">
+            <div class="row" style="margin-top:30px;">
+                <div class="col-md-6">
+                    @Html.DropDownList("SaleOrder.BankAccountId", (IEnumerable<SelectListItem>)ViewBag.BankAccounts, null, new { @class = "form-control", @style = "display:none" })
+                    @*<select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method">
                             <option value="Cash" selected>Cash</option>
                             <option value="Online">Online</option>
                             <option value="Cheque">Cheque</option>
                             <option value="Other">Other</option>
-                        </select>
+                        </select>*@
+                    @*<input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
+                        <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
+                        <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea>
+                        <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea>*@
 
-                        <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want" style="display:none;">
-                        <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want" style="display:none;">
-                        <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill" style="display:none;"></textarea>
-                        <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill" style="display:none;"></textarea>
+                    <select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method" style="display:none;">
+                        <option value="Cash" selected>Cash</option>
+                        <option value="Online">Online</option>
+                        <option value="Cheque">Cheque</option>
+                        <option value="Other">Other</option>
+                    </select>
+
+                    <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want" style="display:none;">
+                    <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want" style="display:none;">
+                    <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill" style="display:none;"></textarea>
+                    <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill" style="display:none;"></textarea>
+                </div>
+                <div class="col-md-6" style="margin-top:20px;">
+
+                    <table>
+                        <thead></thead>
+                        <tbody>
+                            <tr style="display:none;">
+                                <td><input type="text" readonly class="form-control classBorder0" name="OrderTotal" id="OrderTotal" value="Order Total" tabindex="-1"></td>
+                                <td><input type="text" readonly class="form-control classBorder0" name="SaleOrder.BillAmount" id="ItemsTotal" value="0" tabindex="-1"></td>
+                            </tr>
+                            @*<tr>
+                                    <td><input type="text" readonly class="form-control classBorder0" name="ReturnTotal" id="ReturnTotal" value="Return Total" tabindex="-1"></td>
+                                    <td><input type="text" readonly class="form-control classBorder0" name="ReturnItemsTotal" id="ReturnItemsTotal" value="0" tabindex="-1"></td>
+                                </tr>*@
+                            <tr style="display:none;">
+                                <td><input type="text" readonly class="form-control classBorder0" name="dc3" id="dc3" value="Order Discount" tabindex="-1"></td>
+                                <td><input type="text" autocomplete="off" class="form-control" name="SaleOrder.Discount" id="discount" value="0"></td>
+                            </tr>
+                            <tr class="text-bold" style="display:none;">
+                                <td><b><input type="text" readonly class="form-control classBorder0" name="st3" id="st3" value="Sub Total" tabindex="-1"></b></td>
+                                <td><b><input type="text" readonly class="form-control classBorder0" name="subtotal" id="subtotal" value="0" tabindex="-1"></b></td>
+                            </tr>
+                            <tr style="display:none;">
+                                <td><input type="text" readonly class="form-control classBorder0" name="pb3" id="pb3" value="Prev.Balance" tabindex="-1"></td>
+                                <td><input readonly type="text" autocomplete="off" class="form-control" name="SaleOrder.PrevBalance" id="PreviousBalance" value="0" tabindex="-1"></td>
+                            </tr>
+                            <tr class="text-bold" style="display:none;">
+                                <td><b><input type="text" readonly class="form-control classBorder0" name="tt3" id="tt3" value="Total" tabindex="-1"></b></td>
+                                <td><b><input type="text" readonly class="form-control classBorder0" name="total" id="total" value="0" tabindex="-1"></b></td>
+                            </tr>
+                            <tr style="display:none;">
+                                <td style="background-color: #c5deed;"><input type="text" readonly class="form-control classBorder0" name="pd3" id="pd3" value="Paid" tabindex="-1"></td>
+                                <td style="background-color: #c5deed;"><input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaid" id="paid" value="0"></td>
+                            </tr>
+                            <tr style="display:none;">
+                                <td style="background-color: #c5deed;"><input type="text" readonly class="form-control classBorder0" name="pdc3" id="pdc3" value="Bill Paid By Cash" tabindex="-1"></td>
+                                <td style="background-color: #c5deed;"><input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaidByCash" id="paidByCash" value="0"></td>
+                            </tr>
+                            <tr style="display:none;">
+                                <td><input type="text" readonly class="form-control classBorder0" name="bl3" id="bl3" value="Balance" tabindex="-1"></td>
+                                <td><input readonly type="text" autocomplete="off" class="form-control" name="SaleOrder.Balance" id="balance" value="0" tabindex="-1"></td>
+                            </tr>
+                            <tr>
+                                @*<td colspan="2" rowspan="2"><button type="button" id="CreateSO" class="btn btn-primary" style="background-color: #2bbdb9; width: 300px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 32px;">Pay</button></td>*@
+                                @*<td colspan="2" rowspan="2"><button type="button" id="CreateSO" class="btn btn-primary" style="background-color: #2bbdb9; width: 300px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 32px;">Pay</button></td>*@
+                                <td><button type="button" id="CreateSO" class="btn btn-primary saveSalesOrder" style="background-color: #2bbdb9; width: 300px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 32px;">Pay</button></td>
+                                <td style="width: 20px;"></td>
+                                <td colspan="2" rowspan="2"><button type="button" id="totalofAllSelecteProducts" class="btn btn-primary" style="width: 91px; height: 40px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 13px">Total</button></td>
+                                <td style="width: 20px;"></td>
+                                <td colspan="2" rowspan="2"><button type="button" id="deleteAllProducts" class="btn btn-danger" style="width: 126px; height: 40px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 13px ">Delete All Products</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="table-title">
+                <div class="row">
+                    @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
+                    <div class="col-sm-3">
                     </div>
-                    <div class="col-md-6" style="margin-top:20px;">
-
-                        <table>
-                            <thead></thead>
-                            <tbody>
-                                <tr style="display:none;">
-                                    <td><input type="text" readonly class="form-control classBorder0" name="OrderTotal" id="OrderTotal" value="Order Total" tabindex="-1"></td>
-                                    <td><input type="text" readonly class="form-control classBorder0" name="SaleOrder.BillAmount" id="ItemsTotal" value="0" tabindex="-1"></td>
-                                </tr>
-                                @*<tr>
-                                        <td><input type="text" readonly class="form-control classBorder0" name="ReturnTotal" id="ReturnTotal" value="Return Total" tabindex="-1"></td>
-                                        <td><input type="text" readonly class="form-control classBorder0" name="ReturnItemsTotal" id="ReturnItemsTotal" value="0" tabindex="-1"></td>
-                                    </tr>*@
-                                <tr style="display:none;">
-                                    <td><input type="text" readonly class="form-control classBorder0" name="dc3" id="dc3" value="Order Discount" tabindex="-1"></td>
-                                    <td><input type="text" autocomplete="off" class="form-control" name="SaleOrder.Discount" id="discount" value="0"></td>
-                                </tr>
-                                <tr class="text-bold" style="display:none;">
-                                    <td><b><input type="text" readonly class="form-control classBorder0" name="st3" id="st3" value="Sub Total" tabindex="-1"></b></td>
-                                    <td><b><input type="text" readonly class="form-control classBorder0" name="subtotal" id="subtotal" value="0" tabindex="-1"></b></td>
-                                </tr>
-                                <tr style="display:none;">
-                                    <td><input type="text" readonly class="form-control classBorder0" name="pb3" id="pb3" value="Prev.Balance" tabindex="-1"></td>
-                                    <td><input readonly type="text" autocomplete="off" class="form-control" name="SaleOrder.PrevBalance" id="PreviousBalance" value="0" tabindex="-1"></td>
-                                </tr>
-                                <tr class="text-bold" style="display:none;">
-                                    <td><b><input type="text" readonly class="form-control classBorder0" name="tt3" id="tt3" value="Total" tabindex="-1"></b></td>
-                                    <td><b><input type="text" readonly class="form-control classBorder0" name="total" id="total" value="0" tabindex="-1"></b></td>
-                                </tr>
-                                <tr style="display:none;">
-                                    <td style="background-color: #c5deed;"><input type="text" readonly class="form-control classBorder0" name="pd3" id="pd3" value="Paid" tabindex="-1"></td>
-                                    <td style="background-color: #c5deed;"><input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaid" id="paid" value="0"></td>
-                                </tr>
-                                <tr style="display:none;">
-                                    <td style="background-color: #c5deed;"><input type="text" readonly class="form-control classBorder0" name="pdc3" id="pdc3" value="Bill Paid By Cash" tabindex="-1"></td>
-                                    <td style="background-color: #c5deed;"><input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaidByCash" id="paidByCash" value="0"></td>
-                                </tr>
-                                <tr style="display:none;">
-                                    <td><input type="text" readonly class="form-control classBorder0" name="bl3" id="bl3" value="Balance" tabindex="-1"></td>
-                                    <td><input readonly type="text" autocomplete="off" class="form-control" name="SaleOrder.Balance" id="balance" value="0" tabindex="-1"></td>
-                                </tr>
-                                <tr>
-                                    @*<td colspan="2" rowspan="2"><button type="button" id="CreateSO" class="btn btn-primary" style="background-color: #2bbdb9; width: 300px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 32px;">Pay</button></td>*@
-                                    @*<td colspan="2" rowspan="2"><button type="button" id="CreateSO" class="btn btn-primary" style="background-color: #2bbdb9; width: 300px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 32px;">Pay</button></td>*@
-                                    <td><button type="button" id="CreateSO" class="btn btn-primary saveSalesOrder" style="background-color: #2bbdb9; width: 300px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 32px;">Pay</button></td>
-                                    <td style="width: 20px;"></td>
-                                    <td colspan="2" rowspan="2"><button type="button" id="totalofAllSelecteProducts" class="btn btn-primary" style="width: 91px; height: 40px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 13px">Total</button></td>
-                                    <td style="width: 20px;"></td>
-                                    <td colspan="2" rowspan="2"><button type="button" id="deleteAllProducts" class="btn btn-danger" style="width: 126px; height: 40px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 13px ">Delete All Products</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="col-sm-7">
+                        @*<textarea name="SaleOrder.PaymentMethod" rows="1" cols="100" class="form-control" placeholder="Payment method..."></textarea>*@
                     </div>
                 </div>
+                <div class="row">
+                    @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
+                    <div class="col-sm-3">
 
-                <div class="table-title">
-                    <div class="row">
-                        @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
-                        <div class="col-sm-3">
-                        </div>
-                        <div class="col-sm-7">
-                            @*<textarea name="SaleOrder.PaymentMethod" rows="1" cols="100" class="form-control" placeholder="Payment method..."></textarea>*@
-                        </div>
                     </div>
-                    <div class="row">
-                        @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
-                        <div class="col-sm-3">
-
-                        </div>
-                        <div class="col-sm-7">
-                        </div>
+                    <div class="col-sm-7">
                     </div>
-                    <div class="row">
-                        @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
-                        <div class="col-sm-3">
-                        </div>
-                        <div class="col-sm-7">
-                        </div>
+                </div>
+                <div class="row">
+                    @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
+                    <div class="col-sm-3">
                     </div>
-                    <div class="row">
-                        @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
-                        <div class="col-sm-3">
-                        </div>
-                        <div class="col-sm-7">
-                        </div>
-                        <div class="col-sm-2">
-                        </div>
+                    <div class="col-sm-7">
+                    </div>
+                </div>
+                <div class="row">
+                    @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
+                    <div class="col-sm-3">
+                    </div>
+                    <div class="col-sm-7">
+                    </div>
+                    <div class="col-sm-2">
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Pay Modal -->
     <div class="modal fade bd-pay-modal-lg paymodal-med" id="payModal" tabindex="-1" role="dialog" aria-labelledby="payModalLabel" aria-hidden="true">

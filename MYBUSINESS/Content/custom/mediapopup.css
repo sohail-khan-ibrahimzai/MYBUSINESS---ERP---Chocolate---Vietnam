@@ -110,12 +110,14 @@
     .validate-payment-div {
         position: relative !important;
         margin-right: 15px !important;
-        margin-top: -232px !important;
+        /*margin-top: -232px !important;*/
+        margin-top: -372px !important;
     }
     .cistomer-med-btton {
         position: relative !important;
         margin-right: 15px !important;
-        margin-top: -78px !important;
+        margin-top: -245px !important;
+        /*margin-top: -78px !important;*/
     }
 
     .small-box:last-child {
@@ -128,6 +130,10 @@
 
     .customerbytaxcodes {
         width: 78px !important;
+    }
+    .customerDisplayScreen {
+        float: right !important;
+        margin-right: 4px !important;
     }
     /*.payModal-med {
         margin-top: 28px !important;

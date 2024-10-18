@@ -74,6 +74,8 @@
         connection.client.broadcastProductUpdate = function (products) {
             console.log('Received product update in Detail view:', products);
             $('#productDetailsTable tbody').empty();
+            //First clear all data when adding new entries
+            clearAllData();
             let overallTotal = 0;
             products.forEach(function (product) {
                 const totalPrice = product.SalePrice * product.Quantity;
@@ -143,9 +145,9 @@
             <p><strong>Tax code:</strong> ${customers.VatNumber}</p>
         </div>`
             );
-            setTimeout(function () {
-                clearAllData();
-            }, 15000);
+            //setTimeout(function () {
+            //    clearAllData();
+            //}, 15000);
         };
         //////Payment Details
         //connection.client.broadcastPaymentDetails = function (payments) {

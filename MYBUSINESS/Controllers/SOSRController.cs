@@ -870,6 +870,7 @@ namespace MYBUSINESS.Controllers
             TempData["_InvoiceNumber"] = TempData["InvoiceNumber"] as string;
             TempData["_Macqt"] = TempData["Macqt"] as string;
             TempData["_Sobaomat"] = TempData["Sobaomat"] as string;
+            TempData["_WebserviceDownError"] = TempData["WebserviceDownError"] as string;
 
 
             //var jsonResponseWebservicess1 = TempData["JsonResponseWebservice"] as string;
@@ -1213,7 +1214,8 @@ namespace MYBUSINESS.Controllers
                     //var addWebServiceCustomerDetails = await AddWebServiceCustomerDetails(authToken, Customer, sO, sOD);
                     ///////////////////////
                     if (isWebserviceDown == true)
-                        TempData["WebserviceDownError"] = "Sever is down VAT Invoice cannot print at this time";
+                        //TempData["WebserviceDownError"] = "Sever is down VAT Invoice cannot print at this time";
+                        TempData["WebserviceDownError"] = "Chưa nhận thông tin hóa đơn điện tử.";
                     else
                         TempData["WebserviceDownError"] = null;
 
@@ -2245,6 +2247,7 @@ namespace MYBUSINESS.Controllers
             string _invoiceNumber = TempData["_InvoiceNumber"] as string;
             string _macqt = TempData["_Macqt"] as string;
             string _sobmaomat = TempData["_Sobaomat"] as string;
+            string _webserviceDownError = TempData["_WebserviceDownError"] as string;
             //dynamic tempDataResponse1 = JsonConvert.DeserializeObject(TempData["JsonResponseWebservice"].ToString());
 
             //string _jsonResponseWebservice = TempData["_JsonResponseWebservice"] as string;
@@ -2310,6 +2313,7 @@ namespace MYBUSINESS.Controllers
         new ReportParameter("InvoiceNumber", _invoiceNumber ?? "-"),  // Pass POS Name
         new ReportParameter("Macqt", _macqt ?? "-"),  // Pass POS Name
         new ReportParameter("Sobaomat", _sobmaomat ?? "-"),  // Pass POS Name
+        new ReportParameter("WebServiceDownError", _webserviceDownError ?? "-"),  // Pass POS Name
        
         //new ReportParameter("SaleOrderID", id),
         //new ReportParameter("CustomerName", _customerName ?? "N/A"),  //// Pass Customer Name

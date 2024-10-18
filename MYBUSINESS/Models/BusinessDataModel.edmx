@@ -452,17 +452,17 @@
           </Key>
           <Property Name="Id" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="SOSerial" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="BillAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="BillPaid" Type="decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Balance" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="PrevBalance" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="BillAmount" Type="decimal" Precision="18" Scale="8" Nullable="false" />
+          <Property Name="BillPaid" Type="decimal" Precision="18" Scale="8" Nullable="false" />
+          <Property Name="Discount" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="Balance" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="PrevBalance" Type="decimal" Precision="18" Scale="8" />
           <Property Name="Date" Type="datetime" />
           <Property Name="SaleReturn" Type="bit" Nullable="false" />
           <Property Name="CustomerId" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="SaleOrderAmount" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="SaleOrderQty" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Profit" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="SaleOrderAmount" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="SaleOrderQty" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="Profit" Type="decimal" Precision="18" Scale="8" />
           <Property Name="PaymentMethod" Type="nvarchar" MaxLength="100" />
           <Property Name="PaymentDetail" Type="nvarchar" MaxLength="500" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="500" />
@@ -471,10 +471,10 @@
           <Property Name="BankAccountId" Type="nvarchar" MaxLength="36" />
           <Property Name="Quotation" Type="bit" />
           <Property Name="StoreId" Type="int" />
-          <Property Name="BillPaidByCash" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="BillPaidByCash" Type="decimal" Precision="18" Scale="8" />
           <Property Name="UserId" Type="int" />
           <Property Name="VatNumber" Type="nvarchar" MaxLength="200" />
-          <Property Name="VatAmountInPercent" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="VatAmountInPercent" Type="decimal" Precision="18" Scale="8" />
         </EntityType>
         <EntityType Name="SOD">
           <Key>
@@ -1530,25 +1530,25 @@
             <End Role="StoreProduct" EntitySet="StoreProducts" />
           </AssociationSet>
           <FunctionImport Name="spExpenseReport" ReturnType="Collection(Models.spExpenseReport_Result)">
-            <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
+          <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spLoanReport" ReturnType="Collection(Models.spLoanReport_Result)">
-            <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
+          <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spPOReport" ReturnType="Collection(Models.spPOReport_Result)">
-            <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
+          <Parameter Name="PurchaseOrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spRentReport" ReturnType="Collection(Models.spRentReport_Result)">
-            <Parameter Name="SaleOrderID" Mode="In" Type="String" />
+          <Parameter Name="SaleOrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spServiceReport" ReturnType="Collection(Models.spServiceReport_Result)">
-            <Parameter Name="SaleOrderID" Mode="In" Type="String" />
+          <Parameter Name="SaleOrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spSOReport" ReturnType="Collection(Models.spSOReport_Result)">
-            <Parameter Name="SaleOrderID" Mode="In" Type="String" />
+          <Parameter Name="SaleOrderID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spTest" ReturnType="Collection(Models.spTest_Result)">
-            <Parameter Name="Param1" Mode="In" Type="String" />
+          <Parameter Name="Param1" Mode="In" Type="String" />
           </FunctionImport>
           </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
@@ -2077,17 +2077,17 @@
           </Key>
           <Property Name="Id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="SOSerial" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="BillAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="BillPaid" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Balance" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="PrevBalance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="BillAmount" Type="Decimal" Nullable="false" Precision="18" Scale="8" />
+          <Property Name="BillPaid" Type="Decimal" Nullable="false" Precision="18" Scale="8" />
+          <Property Name="Discount" Type="Decimal" Precision="18" Scale="8" />
+          <Property Name="Balance" Type="Decimal" Precision="18" Scale="8" />
+          <Property Name="PrevBalance" Type="Decimal" Precision="18" Scale="8" />
           <Property Name="Date" Type="DateTime" Precision="3" />
           <Property Name="SaleReturn" Type="Boolean" Nullable="false" />
           <Property Name="CustomerId" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="SaleOrderAmount" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="SaleOrderQty" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Profit" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="SaleOrderAmount" Type="Decimal" Precision="18" Scale="8" />
+          <Property Name="SaleOrderQty" Type="Decimal" Precision="18" Scale="8" />
+          <Property Name="Profit" Type="Decimal" Precision="18" Scale="8" />
           <Property Name="PaymentMethod" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="PaymentDetail" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
@@ -2096,10 +2096,10 @@
           <Property Name="BankAccountId" Type="String" MaxLength="36" FixedLength="false" Unicode="true" />
           <Property Name="Quotation" Type="Boolean" />
           <Property Name="StoreId" Type="Int32" />
-          <Property Name="BillPaidByCash" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="BillPaidByCash" Type="Decimal" Precision="18" Scale="8" />
           <Property Name="UserId" Type="Int32" />
           <Property Name="VatNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="VatAmountInPercent" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="VatAmountInPercent" Type="Decimal" Precision="18" Scale="8" />
           <NavigationProperty Name="BankAccount" Relationship="Models.FK_SO_Account" FromRole="SO" ToRole="BankAccount" />
           <NavigationProperty Name="Customer" Relationship="Models.FK_SO_Customer" FromRole="SO" ToRole="Customer" />
           <NavigationProperty Name="Employee" Relationship="Models.FK_SO_Employee" FromRole="SO" ToRole="Employee" />
